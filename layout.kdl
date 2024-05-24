@@ -1,0 +1,31 @@
+layout {
+  tab {
+    pane size=1 borderless=true {
+      plugin location="zellij:compact-bar"
+    }
+    pane {
+      command "nvim"
+      args "src/app/layout.tsx"
+    }
+    pane size=1 borderless=true {
+      plugin location="zellij:status-bar"
+    }
+
+  }
+  tab {
+    pane size=1 borderless=true {
+      plugin location="zellij:compact-bar"
+    }
+    pane split_direction="vertical" {
+      pane size="40%"
+      pane {
+          command "pnpm"
+          args "run" "dev"
+          start_suspended true
+      }
+    }
+    pane size=1 borderless=true {
+      plugin location="zellij:status-bar"
+    }
+  }
+}
