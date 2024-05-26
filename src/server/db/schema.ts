@@ -13,10 +13,13 @@ import { index, int, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
 export const createTable = sqliteTableCreator((name) => `${name}`);
 
 export const posts = createTable(
-  "post",
+  "post_1",
   {
     id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     name: text("name", { length: 256 }),
+    msg: text("msg"),
+    more_msg: text("more_msg"),
+    another_msg: text("another_msg"),
     createdAt: int("created_at", { mode: "timestamp" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -26,3 +29,4 @@ export const posts = createTable(
     nameIndex: index("name_idx").on(example.name),
   })
 );
+
