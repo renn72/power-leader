@@ -10,7 +10,7 @@ import { index, int, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = sqliteTableCreator((name) => `power-leader_${name}`);
+export const createTable = sqliteTableCreator((name) => `${name}`);
 
 export const posts = createTable(
   "post",

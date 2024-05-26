@@ -1,0 +1,20 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1716688223821,
+      "tag": "0000_public_tinkerer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1716688542017,
+      "tag": "0001_common_sphinx",
+      "breakpoints": true
+    }
+  ]
+}
