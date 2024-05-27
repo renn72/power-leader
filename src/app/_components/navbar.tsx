@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ModeToggle } from './mode-toggle'
 
 const Navbar = () => {
   return (
@@ -15,13 +16,16 @@ const Navbar = () => {
           </SignedIn>
         </li>
       </ul>
-      <div className='flex items-center'>
+      <div className='flex items-center gap-4'>
+        <ModeToggle />
+        <div className='w-8 flex items-center'>
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
           <UserButton />
         </SignedIn>
+        </div>
       </div>
     </nav>
   )

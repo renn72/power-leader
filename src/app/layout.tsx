@@ -4,9 +4,10 @@ import { GeistSans } from 'geist/font/sans'
 
 import { TRPCReactProvider } from '~/trpc/react'
 
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
+
+import { ThemeProvider } from '~/app/_components/theme-provider'
+import Navbar from './_components/navbar'
 
 export const metadata = {
   title: 'Scoreboard',
@@ -23,10 +24,27 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang='en'
-        className={`${GeistSans.variable} dark min-h-screen`}
+        className={`${GeistSans.variable}`}
       >
         <body>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main
+                className='flex flex-col min-h-screen'
+              >
+                <Navbar />
+                {children}
+                <footer className='flex justify-center items-center h-16'>
+                  footer
+                </footer>
+              </main>
+            </ThemeProvider>
+          </TRPCReactProvider>
         </body>
       </html>
     </ClerkProvider>
