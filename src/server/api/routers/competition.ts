@@ -22,8 +22,8 @@ export const competitionRouter = createTRPCRouter({
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const res = await ctx.db.query.posts.findMany({
-      orderBy: (posts, { desc }) => [desc(posts.createdAt)],
+    const res = await ctx.db.query.competitions.findMany({
+      orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
     });
     return res;
   }),

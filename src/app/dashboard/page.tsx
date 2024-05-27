@@ -12,11 +12,17 @@ export const dynamic = 'force-dynamic'
 export default function Dashboard() {
   const [text, setText] = useState('')
 
+  const context = api.useUtils()
+
   const { mutate: createPost } = api.competition.create.useMutation({
     onSettled: () => {
       setText('')
+      context.competition.invalidate()
     },
   })
+
+  const { data: competitions } = api.competition.getAll.useQuery()
+
 
   return (
     <section className='mt-8 flex h-full grow flex-col'>
@@ -46,6 +52,16 @@ export default function Dashboard() {
             <div
               className='flex flex-col gap-2'
             >
+              {
+                competitions?.map((competition) => (
+                  <div
+                    key={competition.id}
+                    className='flex justify-between'
+                  >
+                    <span>{competition.name}</span>
+                  </div>
+                ))
+              }
             </div>
             <Input
               type='text'
@@ -54,7 +70,9 @@ export default function Dashboard() {
               value={text}
               onChange={(e) => setText(e.target.value)}
             />
-            <Button>Create</Button>
+            <Button
+              onClick={() => createPost({ name: text })}
+            >Create</Button>
           </section>
         </TabsContent>
         <TabsContent value='password'>Change your password here.</TabsContent>
