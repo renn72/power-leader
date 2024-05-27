@@ -23,7 +23,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang='en'
-        className={`${GeistSans.variable}`}
+        className={`${GeistSans.variable} dark min-h-screen`}
       >
         <body>
           <TRPCReactProvider>{children}</TRPCReactProvider>

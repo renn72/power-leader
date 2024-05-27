@@ -23,7 +23,7 @@ export default function Home() {
   const { data: post } = api.post.getLatest.useQuery()
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-center bg-black text-white'>
+    <main className='flex flex-col items-center justify-center'>
       <Navbar />
       <section className='relative flex h-[80vh] w-full flex-col items-center justify-center gap-8 overflow-hidden'>
         <div className='relative z-10 max-w-3xl px-4 text-center sm:px-6 lg:px-8'>
@@ -32,11 +32,11 @@ export default function Home() {
           </h1>
         </div>
         <div className='inset-0 z-0 flex flex-col items-center justify-center gap-2'>
-          <h2 className='text-2xl font-bold text-white'>
+          <h2 className='text-2xl font-bold'>
             {post && post.name ? post.name : '...'}
           </h2>
           <Input
-            className='w-full max-w-md text-black'
+            className='w-full max-w-md'
             placeholder='text'
             type='text'
             value={text}
