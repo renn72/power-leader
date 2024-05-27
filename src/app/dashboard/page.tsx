@@ -1,4 +1,6 @@
 'use client'
+import { useState } from 'react'
+
 import { api } from '~/trpc/react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
@@ -8,6 +10,14 @@ import { Button } from '~/components/ui/button'
 export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
+  const [text, setText] = useState('')
+
+  const { mutate: createPost } = api.competition.create.useMutation({
+    onSettled: () => {
+      setText('')
+    },
+  })
+
   return (
     <section className='mt-8 flex h-full grow flex-col'>
       <Tabs
@@ -41,6 +51,8 @@ export default function Dashboard() {
               type='text'
               placeholder='Name'
               className='w-full'
+              value={text}
+              onChange={(e) => setText(e.target.value)}
             />
             <Button>Create</Button>
           </section>

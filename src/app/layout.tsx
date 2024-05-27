@@ -24,7 +24,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang='en'
-        className={`${GeistSans.variable}`}
+        className={``}
       >
         <body>
           <TRPCReactProvider>
@@ -35,11 +35,12 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <main
-                className='flex flex-col min-h-screen'
+                className={`flex flex-col min-h-screen dark ${GeistSans.variable}`}
               >
                 <Navbar />
                 {children}
-                <footer className='flex justify-center items-center h-16'>
+                <footer
+                  className='h-16'>
                   footer
                 </footer>
               </main>
