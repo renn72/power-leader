@@ -2,31 +2,48 @@
 import { api } from '~/trpc/react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { Input } from '~/components/ui/input'
+import { Button } from '~/components/ui/button'
 
 export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
   return (
-    <section className='flex h-full grow flex-col mt-8'>
+    <section className='mt-8 flex h-full grow flex-col'>
       <Tabs
-        defaultValue='account'
+        defaultValue='competition'
         orientation='vertical'
         className='flex h-full grow space-x-2'
       >
-        <div className='min-h-[calc(100vh - 10rem)] bg-muted p-2 rounded-md'>
-          <TabsList className='flex h-full flex-col justify-start space-x-2 w-36'>
+        <div className='min-h-[calc(100vh - 10rem)] rounded-md bg-muted p-2'>
+          <TabsList className='flex h-full w-36 flex-col justify-start space-x-2'>
             <TabsTrigger
-              value='account'
+              value='competition'
               className='w-28'
-            >Account</TabsTrigger>
+            >
+              Competition
+            </TabsTrigger>
             <TabsTrigger
               value='password'
               className='w-28'
-            >Pasword</TabsTrigger>
+            >
+              Pasword
+            </TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value='account'>
-          Make changes to your account here.
+        <TabsContent value='competition'>
+          <section className='flex flex-col gap-4'>
+            <div
+              className='flex flex-col gap-2'
+            >
+            </div>
+            <Input
+              type='text'
+              placeholder='Name'
+              className='w-full'
+            />
+            <Button>Create</Button>
+          </section>
         </TabsContent>
         <TabsContent value='password'>Change your password here.</TabsContent>
       </Tabs>
