@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1716865171024,
-      "tag": "0000_superb_menace",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1716865742957,
-      "tag": "0001_chilly_penance",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1716866357636,
-      "tag": "0002_powerful_roulette",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1716868823298,
-      "tag": "0003_third_gorilla_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1716869009406,
-      "tag": "0004_tired_ares",
+      "when": 1716883487237,
+      "tag": "0000_furry_stone_men",
       "breakpoints": true
     }
   ]

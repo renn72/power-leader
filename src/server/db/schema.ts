@@ -56,22 +56,36 @@ export const compEntryRelations = relations(compEntry, ({ one }) => ({
   }),
 }))
 
-export const divisions = createTable('division', {
+export const weightClasses = createTable('weight_classes', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
-  name: text('name'),
-  age: text('age'),
-  gender: text('gender'),
-  weight: text('weight'),
-  equipment: text('equipment'),
-  info: text('info'),
+  name: text('name').notNull(),
+  weight: text('weight').notNull(),
+  info: text('info').notNull(),
   createdAt: int('created_at', { mode: 'timestamp' })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: int('updatedAt', { mode: 'timestamp' }),
 })
-export const insertDivisionSchema = createInsertSchema(divisions)
+export const insertWeightClassSchema = createInsertSchema(weightClasses)
 
-export const divisionsRelations = relations(divisions, ({ many }) => ({
+export const weightClassesRelations = relations(weightClasses, ({ many }) => ({
+  competitions: many(competitionsToWeightClass),
+}))
+
+export const ageDivisions = createTable('age_divisions', {
+  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  age: text('age').notNull(),
+  gender: text('gender').notNull(),
+  info: text('info').notNull(),
+  createdAt: int('created_at', { mode: 'timestamp' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+})
+export const insertDivisionSchema = createInsertSchema(ageDivisions)
+
+export const divisionsRelations = relations(ageDivisions, ({ many }) => ({
   competitions: many(competitionToDivision),
 }))
 
@@ -106,6 +120,7 @@ export const competitionsRelations = relations(
     }),
     entries: many(compEntry),
     divisions: many(competitionToDivision),
+    weightClasses: many(competitionsToWeightClass),
   }),
 )
 
@@ -115,7 +130,7 @@ export const competitionToDivision = createTable('competition_to_division', {
     .references(() => competitions.id),
   divisionId: int('division_id', { mode: 'number' })
     .notNull()
-    .references(() => divisions.id),
+    .references(() => ageDivisions.id),
 })
 
 export const competitionToDivisionRelations = relations(
@@ -125,9 +140,32 @@ export const competitionToDivisionRelations = relations(
       fields: [competitionToDivision.competitionId],
       references: [competitions.id],
     }),
-    division: one(divisions, {
+    division: one(ageDivisions, {
       fields: [competitionToDivision.divisionId],
-      references: [divisions.id],
+      references: [ageDivisions.id],
+    }),
+  }),
+)
+
+export const competitionsToWeightClass = createTable('competitions_to_weight_class', {
+  competitionId: int('competition_id', { mode: 'number' })
+    .notNull()
+    .references(() => competitions.id),
+  weightClassId: int('weight_class_id', { mode: 'number' })
+    .notNull()
+    .references(() => weightClasses.id),
+})
+
+export const competitionsToWeightClassRelations = relations(
+  competitionsToWeightClass,
+  ({ one }) => ({
+    competition: one(competitions, {
+      fields: [competitionsToWeightClass.competitionId],
+      references: [competitions.id],
+    }),
+    weightClass: one(weightClasses, {
+      fields: [competitionsToWeightClass.weightClassId],
+      references: [weightClasses.id],
     }),
   }),
 )

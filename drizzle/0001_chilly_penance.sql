@@ -1,1 +1,0 @@
-DROP TABLE `pb-competition_to_entry`;
