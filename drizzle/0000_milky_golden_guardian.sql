@@ -4,8 +4,8 @@ CREATE TABLE `pb-age_divisions` (
 	`age` text NOT NULL,
 	`gender` text NOT NULL,
 	`info` text NOT NULL,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text
 );
 --> statement-breakpoint
 CREATE TABLE `pb-comp_entry` (
@@ -17,8 +17,8 @@ CREATE TABLE `pb-comp_entry` (
 	`gender` text,
 	`weight` text,
 	`division` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text,
 	FOREIGN KEY (`user_id`) REFERENCES `pb-user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`comp_id`) REFERENCES `pb-competition`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -43,8 +43,8 @@ CREATE TABLE `pb-competition` (
 	`rules` text,
 	`events` text,
 	`notes` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text,
 	FOREIGN KEY (`creator_id`) REFERENCES `pb-user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -59,8 +59,8 @@ CREATE TABLE `pb-user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`clerk_id` text,
 	`name` text(256),
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text
 );
 --> statement-breakpoint
 CREATE TABLE `pb-weight_classes` (
@@ -68,6 +68,6 @@ CREATE TABLE `pb-weight_classes` (
 	`name` text NOT NULL,
 	`weight` text NOT NULL,
 	`info` text NOT NULL,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`updatedAt` text
 );

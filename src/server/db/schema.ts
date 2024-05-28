@@ -19,10 +19,10 @@ export const users = createTable('user', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   clerkId: text('clerk_id'),
   name: text('name', { length: 256 }),
-  createdAt: int('created_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+  updatedAt: text('updatedAt'),
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -39,10 +39,10 @@ export const compEntry = createTable('comp_entry', {
   gender: text('gender'),
   weight: text('weight'),
   division: text('division'),
-  createdAt: int('created_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+  updatedAt: text('updatedAt'),
 })
 
 export const compEntryRelations = relations(compEntry, ({ one }) => ({
@@ -61,10 +61,10 @@ export const weightClasses = createTable('weight_classes', {
   name: text('name').notNull(),
   weight: text('weight').notNull(),
   info: text('info').notNull(),
-  createdAt: int('created_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+  updatedAt: text('updatedAt'),
 })
 export const insertWeightClassSchema = createInsertSchema(weightClasses)
 
@@ -78,10 +78,10 @@ export const ageDivisions = createTable('age_divisions', {
   age: text('age').notNull(),
   gender: text('gender').notNull(),
   info: text('info').notNull(),
-  createdAt: int('created_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+  updatedAt: text('updatedAt'),
 })
 export const insertDivisionSchema = createInsertSchema(ageDivisions)
 
@@ -104,10 +104,10 @@ export const competitions = createTable('competition', {
   rules: text('rules'),
   events: text('events'),
   notes: text('notes'),
-  createdAt: int('created_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+  updatedAt: text('updatedAt'),
 })
 export const insertCompetitionSchema = createInsertSchema(competitions)
 

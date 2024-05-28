@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { api } from '~/trpc/react'
 
-import { cn, getDate } from '~/lib/utils'
+import { cn, getDateFromString } from '~/lib/utils'
 import { toast } from 'sonner'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
@@ -21,13 +21,15 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '~/components/ui/card'
 
+import { ageDivisionsData } from '~/lib/store'
+
 import { insertDivisionSchema } from '~/server/db/schema'
+import { XIcon } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,6 +40,49 @@ export default function Divisions() {
     onSettled: () => {
       context.division.getAll.invalidate()
     },
+    onSuccess: () => {
+      toast('Division created')
+    },
+    onError: (error) => {
+      toast(error.message)
+    }
+
+  })
+
+  const { mutate: generateDivision } = api.division.generate.useMutation({
+    onSettled: () => {
+      context.division.getAll.invalidate()
+    },
+    onSuccess: () => {
+      toast('Division created')
+    },
+    onError: (error) => {
+      toast(error.message)
+    }
+  })
+
+  const { mutate: deleteAllDivisions } = api.division.deleteAll.useMutation({
+    onSettled: () => {
+      context.division.getAll.invalidate()
+    },
+    onSuccess: () => {
+      toast('All Divisions deleted')
+    },
+    onError: (error) => {
+      toast(error.message)
+    }
+  })
+
+  const { mutate: deleteDivision } = api.division.delete.useMutation({
+    onSettled: () => {
+      context.division.getAll.invalidate()
+    },
+    onSuccess: () => {
+      toast('Division deleted')
+    },
+    onError: (error) => {
+      toast(error.message)
+    }
   })
 
   const { data: divisions } = api.division.getAll.useQuery()
@@ -53,8 +98,12 @@ export default function Divisions() {
     },
   })
 
+  const generateDivisions = () => {
+    generateDivision(ageDivisionsData as z.infer<typeof insertDivisionSchema>[])
+  }
+
+
   const onSubmit = (data: z.infer<typeof insertDivisionSchema>) => {
-    toast(JSON.stringify(data, null, 2))
     createDivision(data)
   }
 
@@ -148,11 +197,22 @@ export default function Divisions() {
           </form>
         </Form>
       </div>
-      <div className=''>
+      <div className='flex gap-2 flex-wrap justify-center'>
         {divisions?.map((division) => (
-          <Card className='w-[380px]'>
-            <CardHeader>
+          <Card
+            key={division.id}
+            className='w-[380px]'>
+            <CardHeader className='relative'>
               <CardTitle>{division.name}</CardTitle>
+              <XIcon
+                onClick={() => {
+                  deleteDivision(division.id)
+                }}
+                className={cn(
+                  'absolute top-2 right-2 cursor-pointer',
+                  'text-muted-foreground hover:text-destructive-foreground',
+                )}
+              />
             </CardHeader>
             <CardContent className='grid gap-4'>
               <div className=' flex flex-col items-start gap-4 rounded-md border p-4'>
@@ -178,10 +238,23 @@ export default function Divisions() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>{getDate(division.createdAt)}</CardFooter>
+            <CardFooter className='text-muted-foreground text-xs font-lightest'>{getDateFromString(division.createdAt)}</CardFooter>
           </Card>
         ))}
       </div>
+      <Button
+        onClick={generateDivisions}
+        className='w-40'
+      >
+        Generate
+      </Button>
+      <Button
+        variant='destructive'
+        onClick={() => deleteAllDivisions()}
+        className='w-40'
+      >
+        Delete All
+      </Button>
     </section>
   )
 }
