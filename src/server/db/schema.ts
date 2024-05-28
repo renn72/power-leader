@@ -2,14 +2,10 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { sql } from 'drizzle-orm'
-import {
-  index,
-  int,
-  sqliteTableCreator,
-  text,
-  primaryKey,
-} from 'drizzle-orm/sqlite-core'
+import { int, sqliteTableCreator, text } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
+
+import { createInsertSchema } from 'drizzle-zod'
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -18,22 +14,6 @@ import { relations } from 'drizzle-orm'
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = sqliteTableCreator((name) => `pb-${name}`)
-
-export const posts = createTable(
-  'post',
-  {
-    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
-    name: text('name', { length: 256 }),
-    msg: text('msg'),
-    createdAt: int('created_at', { mode: 'timestamp' })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: int('updatedAt', { mode: 'timestamp' }),
-  },
-  (example) => ({
-    nameIndex: index('name_idx').on(example.name),
-  }),
-)
 
 export const users = createTable('user', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -46,10 +26,37 @@ export const users = createTable('user', {
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
-  competitions: many(competitions),
+  entry: many(compEntry),
+  competition: many(competitions),
 }))
 
-export const divisions = createTable('other_division', {
+export const compEntry = createTable('comp_entry', {
+  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  userId: int('user_id', { mode: 'number' }).references(() => users.id),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
+  birthDate: int('birth_date', { mode: 'timestamp' }),
+  equipment: text('equipment'),
+  gender: text('gender'),
+  weight: text('weight'),
+  division: text('division'),
+  createdAt: int('created_at', { mode: 'timestamp' })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: int('updatedAt', { mode: 'timestamp' }),
+})
+
+export const compEntryRelations = relations(compEntry, ({ one }) => ({
+  user: one(users, {
+    fields: [compEntry.userId],
+    references: [users.id],
+  }),
+  competition: one(competitions, {
+    fields: [compEntry.compId],
+    references: [competitions.id],
+  }),
+}))
+
+export const divisions = createTable('division', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text('name'),
   age: text('age'),
@@ -62,9 +69,10 @@ export const divisions = createTable('other_division', {
     .notNull(),
   updatedAt: int('updatedAt', { mode: 'timestamp' }),
 })
+export const insertDivisionSchema = createInsertSchema(divisions)
 
 export const divisionsRelations = relations(divisions, ({ many }) => ({
-  competitions: many(competitions),
+  competitions: many(competitionToDivision),
 }))
 
 export const competitions = createTable('competition', {
@@ -80,65 +88,46 @@ export const competitions = createTable('competition', {
   date: int('date', { mode: 'timestamp' }),
   daysOfCompetition: int('days_of_competition'),
   rules: text('rules'),
+  events: text('events'),
+  notes: text('notes'),
   createdAt: int('created_at', { mode: 'timestamp' })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: int('updatedAt', { mode: 'timestamp' }),
 })
+export const insertCompetitionSchema = createInsertSchema(competitions)
 
 export const competitionsRelations = relations(
   competitions,
   ({ one, many }) => ({
-    creator: one(users),
-    competitors: many(users),
-    divisions: many(divisions),
+    creator: one(users, {
+      fields: [competitions.creatorId],
+      references: [users.id],
+    }),
+    entries: many(compEntry),
+    divisions: many(competitionToDivision),
   }),
 )
 
-export const competitionToDivision = createTable(
-  'competition_to_division',
-  {
-    competitionId: int('competition_id', { mode: 'number' })
-      .notNull()
-      .references(() => competitions.id),
-    divisionId: int('division_id', { mode: 'number' })
-      .notNull()
-      .references(() => divisions.id),
-    createdAt: int('created_at', { mode: 'timestamp' })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: int('updatedAt', { mode: 'timestamp' }),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.competitionId, t.divisionId] }),
-  }),
-)
+export const competitionToDivision = createTable('competition_to_division', {
+  competitionId: int('competition_id', { mode: 'number' })
+    .notNull()
+    .references(() => competitions.id),
+  divisionId: int('division_id', { mode: 'number' })
+    .notNull()
+    .references(() => divisions.id),
+})
 
 export const competitionToDivisionRelations = relations(
   competitionToDivision,
   ({ one }) => ({
-    competition: one(competitions),
-    division: one(divisions),
-  }),
-)
-
-export const competitionToCompetitor = createTable('competition_to_competitor', {
-  competitionId: int('competition_id', { mode: 'number' })
-    .notNull()
-    .references(() => competitions.id),
-  competitorId: int('competitor_id', { mode: 'number' })
-    .notNull()
-    .references(() => users.id),
-  createdAt: int('created_at', { mode: 'timestamp' })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: int('updatedAt', { mode: 'timestamp' }),
-})
-
-export const competitionToCompetitorRelations = relations(
-  competitionToCompetitor,
-  ({ one }) => ({
-    competition: one(competitions),
-    competitor: one(users),
+    competition: one(competitions, {
+      fields: [competitionToDivision.competitionId],
+      references: [competitions.id],
+    }),
+    division: one(divisions, {
+      fields: [competitionToDivision.divisionId],
+      references: [divisions.id],
+    }),
   }),
 )

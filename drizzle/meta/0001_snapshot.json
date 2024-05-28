@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "42b04960-e151-47d2-a1cc-c73a58edcc10",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "7c64016c-cf59-4bad-9829-0154af5f22fa",
+  "prevId": "42b04960-e151-47d2-a1cc-c73a58edcc10",
   "tables": {
     "pb-comp_entry": {
       "name": "pb-comp_entry",
@@ -158,70 +158,6 @@
           "tableTo": "pb-division",
           "columnsFrom": [
             "division_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "pb-competition_to_entry": {
-      "name": "pb-competition_to_entry",
-      "columns": {
-        "competition_id": {
-          "name": "competition_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "entry_id": {
-          "name": "entry_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "pb-competition_to_entry_competition_id_pb-competition_id_fk": {
-          "name": "pb-competition_to_entry_competition_id_pb-competition_id_fk",
-          "tableFrom": "pb-competition_to_entry",
-          "tableTo": "pb-competition",
-          "columnsFrom": [
-            "competition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pb-competition_to_entry_entry_id_pb-comp_entry_id_fk": {
-          "name": "pb-competition_to_entry_entry_id_pb-comp_entry_id_fk",
-          "tableFrom": "pb-competition_to_entry",
-          "tableTo": "pb-comp_entry",
-          "columnsFrom": [
-            "entry_id"
           ],
           "columnsTo": [
             "id"

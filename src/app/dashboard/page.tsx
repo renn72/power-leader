@@ -6,23 +6,12 @@ import { api } from '~/trpc/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
-  const [text, setText] = useState('')
-
-  const context = api.useUtils()
-
-  const { mutate: createPost } = api.competition.create.useMutation({
-    onSettled: () => {
-      setText('')
-      context.competition.invalidate()
-    },
-  })
-
   const { data: competitions } = api.competition.getAll.useQuery()
-
 
   return (
     <section className='mt-8 flex h-full grow flex-col'>
@@ -49,30 +38,19 @@ export default function Dashboard() {
         </div>
         <TabsContent value='competition'>
           <section className='flex flex-col gap-4'>
-            <div
-              className='flex flex-col gap-2'
-            >
-              {
-                competitions?.map((competition) => (
-                  <div
-                    key={competition.id}
-                    className='flex justify-between'
-                  >
-                    <span>{competition.name}</span>
-                  </div>
-                ))
-              }
+            <div className='flex flex-col gap-2'>
+              {competitions?.map((competition) => (
+                <div
+                  key={competition.id}
+                  className='flex justify-between'
+                >
+                  <span>{competition.name}</span>
+                </div>
+              ))}
             </div>
-            <Input
-              type='text'
-              placeholder='Name'
-              className='w-full'
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-            <Button
-              onClick={() => createPost({ name: text })}
-            >Create</Button>
+            <Link href='/dashboard/create'>
+              <Button>Create</Button>
+            </Link>
           </section>
         </TabsContent>
         <TabsContent value='password'>Change your password here.</TabsContent>
