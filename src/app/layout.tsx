@@ -8,6 +8,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 
 import { ThemeProvider } from '~/app/_components/theme-provider'
 import Navbar from './_components/navbar'
+import { Toaster } from "~/components/ui/sonner"
 
 export const metadata = {
   title: 'Scoreboard',
@@ -43,6 +44,7 @@ export default function RootLayout({
                   className='h-16'>
                   footer
                 </footer>
+                <Toaster />
               </main>
             </ThemeProvider>
           </TRPCReactProvider>

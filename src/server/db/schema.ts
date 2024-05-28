@@ -80,7 +80,7 @@ export const competitions = createTable('competition', {
   creatorId: int('creator_id', { mode: 'number' })
     .notNull()
     .references(() => users.id),
-  name: text('name'),
+  name: text('name').notNull(),
   federation: text('federation'),
   country: text('country'),
   state: text('state'),
