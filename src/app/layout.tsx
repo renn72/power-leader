@@ -1,7 +1,5 @@
 import '~/styles/globals.css'
 
-import { GeistSans } from 'geist/font/sans'
-
 import { TRPCReactProvider } from '~/trpc/react'
 
 import { ClerkProvider } from '@clerk/nextjs'
@@ -25,7 +23,6 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang='en'
-        className={``}
       >
         <body>
           <TRPCReactProvider>
@@ -36,7 +33,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <main
-                className={`flex flex-col min-h-screen dark ${GeistSans.variable}`}
+                className={`flex flex-col min-h-screen dark `}
               >
                 <Navbar />
                 {children}

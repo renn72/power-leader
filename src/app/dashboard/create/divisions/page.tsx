@@ -29,7 +29,15 @@ import {
 import { ageDivisionsData } from '~/lib/store'
 
 import { insertDivisionSchema } from '~/server/db/schema'
-import { XIcon } from 'lucide-react'
+import { Minus, XIcon } from 'lucide-react'
+
+const divisionSchema = z.object({
+  name: z.string(),
+  minAge: z.string(),
+  maxAge: z.string(),
+  info: z.string(),
+})
+
 
 export const dynamic = 'force-dynamic'
 
@@ -88,12 +96,12 @@ export default function Divisions() {
   const { data: divisions } = api.division.getAll.useQuery()
   console.log(divisions)
 
-  const form = useForm<z.infer<typeof insertDivisionSchema>>({
-    resolver: zodResolver(insertDivisionSchema),
+  const form = useForm<z.infer<typeof divisionSchema>>({
+    resolver: zodResolver(divisionSchema),
     defaultValues: {
       name: '',
-      age: '',
-      gender: '',
+      minAge: '',
+      maxAge: '',
       info: '',
     },
   })
@@ -103,8 +111,15 @@ export default function Divisions() {
   }
 
 
-  const onSubmit = (data: z.infer<typeof insertDivisionSchema>) => {
-    createDivision(data)
+  const onSubmit = (data: z.infer<typeof divisionSchema>) => {
+    createDivision(
+      {
+        name: data.name,
+        minAge: Number(data.minAge),
+        maxAge: Number(data.maxAge),
+        info: data.info,
+      }
+      )
   }
 
   return (
@@ -135,17 +150,17 @@ export default function Divisions() {
                 </FormItem>
               )}
             />
+            <div className='flex justify-between gap-4 items-end'>
             <FormField
               control={form.control}
-              name='age'
-              rules={{ required: true }}
+              name='minAge'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Age</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='age'
-                      type='text'
+                     placeholder='min'
+                      type='number'
                       {...field}
                     />
                   </FormControl>
@@ -154,17 +169,16 @@ export default function Divisions() {
                 </FormItem>
               )}
             />
+              <Minus className='text-muted-foreground mb-4' />
             <FormField
               control={form.control}
-              name='gender'
-              rules={{ required: true }}
+              name='maxAge'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Gender</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='gender'
-                      type='text'
+                      placeholder='max'
+                      type='number'
                       {...field}
                     />
                   </FormControl>
@@ -173,6 +187,7 @@ export default function Divisions() {
                 </FormItem>
               )}
             />
+            </div>
             <FormField
               control={form.control}
               name='info'

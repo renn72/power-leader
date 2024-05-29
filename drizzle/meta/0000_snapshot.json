@@ -1,70 +1,11 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "76df5964-3654-472b-aead-968ebbaf2594",
+  "id": "ebf3f85c-aea7-422f-a0bc-82afcdc37a36",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "pb-age_divisions": {
-      "name": "pb-age_divisions",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "age": {
-          "name": "age",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gender": {
-          "name": "gender",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "info": {
-          "name": "info",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "pb-comp_entry": {
-      "name": "pb-comp_entry",
+    "pb_comp_entry": {
+      "name": "pb_comp_entry",
       "columns": {
         "id": {
           "name": "id",
@@ -140,10 +81,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "pb-comp_entry_user_id_pb-user_id_fk": {
-          "name": "pb-comp_entry_user_id_pb-user_id_fk",
-          "tableFrom": "pb-comp_entry",
-          "tableTo": "pb-user",
+        "pb_comp_entry_user_id_pb_user_id_fk": {
+          "name": "pb_comp_entry_user_id_pb_user_id_fk",
+          "tableFrom": "pb_comp_entry",
+          "tableTo": "pb_user",
           "columnsFrom": [
             "user_id"
           ],
@@ -153,10 +94,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "pb-comp_entry_comp_id_pb-competition_id_fk": {
-          "name": "pb-comp_entry_comp_id_pb-competition_id_fk",
-          "tableFrom": "pb-comp_entry",
-          "tableTo": "pb-competition",
+        "pb_comp_entry_comp_id_pb_competition_id_fk": {
+          "name": "pb_comp_entry_comp_id_pb_competition_id_fk",
+          "tableFrom": "pb_comp_entry",
+          "tableTo": "pb_competition",
           "columnsFrom": [
             "comp_id"
           ],
@@ -170,58 +111,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pb-competition_to_division": {
-      "name": "pb-competition_to_division",
-      "columns": {
-        "competition_id": {
-          "name": "competition_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "division_id": {
-          "name": "division_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "pb-competition_to_division_competition_id_pb-competition_id_fk": {
-          "name": "pb-competition_to_division_competition_id_pb-competition_id_fk",
-          "tableFrom": "pb-competition_to_division",
-          "tableTo": "pb-competition",
-          "columnsFrom": [
-            "competition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pb-competition_to_division_division_id_pb-age_divisions_id_fk": {
-          "name": "pb-competition_to_division_division_id_pb-age_divisions_id_fk",
-          "tableFrom": "pb-competition_to_division",
-          "tableTo": "pb-age_divisions",
-          "columnsFrom": [
-            "division_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "pb-competition": {
-      "name": "pb-competition",
+    "pb_competition": {
+      "name": "pb_competition",
       "columns": {
         "id": {
           "name": "id",
@@ -325,10 +216,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "pb-competition_creator_id_pb-user_id_fk": {
-          "name": "pb-competition_creator_id_pb-user_id_fk",
-          "tableFrom": "pb-competition",
-          "tableTo": "pb-user",
+        "pb_competition_creator_id_pb_user_id_fk": {
+          "name": "pb_competition_creator_id_pb_user_id_fk",
+          "tableFrom": "pb_competition",
+          "tableTo": "pb_user",
           "columnsFrom": [
             "creator_id"
           ],
@@ -342,45 +233,75 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pb-competitions_to_weight_class": {
-      "name": "pb-competitions_to_weight_class",
+    "pb_age_divisions": {
+      "name": "pb_age_divisions",
       "columns": {
-        "competition_id": {
-          "name": "competition_id",
+        "id": {
+          "name": "id",
           "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "weight_class_id": {
-          "name": "weight_class_id",
+        "min_age": {
+          "name": "min_age",
           "type": "integer",
           "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "max_age": {
+          "name": "max_age",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "info": {
+          "name": "info",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "comp_id": {
+          "name": "comp_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "pb-competitions_to_weight_class_competition_id_pb-competition_id_fk": {
-          "name": "pb-competitions_to_weight_class_competition_id_pb-competition_id_fk",
-          "tableFrom": "pb-competitions_to_weight_class",
-          "tableTo": "pb-competition",
+        "pb_age_divisions_comp_id_pb_competition_id_fk": {
+          "name": "pb_age_divisions_comp_id_pb_competition_id_fk",
+          "tableFrom": "pb_age_divisions",
+          "tableTo": "pb_competition",
           "columnsFrom": [
-            "competition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pb-competitions_to_weight_class_weight_class_id_pb-weight_classes_id_fk": {
-          "name": "pb-competitions_to_weight_class_weight_class_id_pb-weight_classes_id_fk",
-          "tableFrom": "pb-competitions_to_weight_class",
-          "tableTo": "pb-weight_classes",
-          "columnsFrom": [
-            "weight_class_id"
+            "comp_id"
           ],
           "columnsTo": [
             "id"
@@ -392,8 +313,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pb-user": {
-      "name": "pb-user",
+    "pb_user": {
+      "name": "pb_user",
       "columns": {
         "id": {
           "name": "id",
@@ -437,8 +358,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pb-weight_classes": {
-      "name": "pb-weight_classes",
+    "pb_weight_classes": {
+      "name": "pb_weight_classes",
       "columns": {
         "id": {
           "name": "id",
@@ -461,11 +382,25 @@
           "notNull": true,
           "autoincrement": false
         },
+        "gender": {
+          "name": "gender",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "info": {
           "name": "info",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "comp_id": {
+          "name": "comp_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "created_at": {
@@ -485,7 +420,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "pb_weight_classes_comp_id_pb_competition_id_fk": {
+          "name": "pb_weight_classes_comp_id_pb_competition_id_fk",
+          "tableFrom": "pb_weight_classes",
+          "tableTo": "pb_competition",
+          "columnsFrom": [
+            "comp_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }

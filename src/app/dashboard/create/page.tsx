@@ -29,6 +29,9 @@ import {
   PopoverTrigger,
 } from '~/components/ui/popover'
 import { Checkbox } from '~/components/ui/checkbox'
+import { Textarea } from '~/components/ui/textarea'
+import { Separator } from "~/components/ui/separator"
+import { eventsData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,11 +45,20 @@ const formSchema = z.object({
   city: z.string(),
   date: z.date(),
   daysOfCompetition: z.number(),
+  platforms: z.number(),
   rules: z.string(),
   events: z.string(),
   notes: z.string(),
-  items: z.array(z.string()),
-  divisions: z.array(z.number()),
+  events: z.array(z.string()),
+  divisions: z.array(z.object(
+    {
+      name: z.string(),
+      minAge: z.number(),
+      maxAge: z.number(),
+      info: z.string(),
+    },
+  )),
+
 })
 
 export default function Dashboard() {
@@ -68,10 +80,10 @@ export default function Dashboard() {
       city: '',
       date: new Date(),
       daysOfCompetition: 1,
+      platforms: 1,
       rules: '',
-      events: '',
+      events: [],
       notes: '',
-      items: [],
       divisions: [],
     },
   })
@@ -82,167 +94,258 @@ export default function Dashboard() {
   }
 
   return (
-    <section className='m-8 flex h-full grow flex-col'>
-      create
+    <section className='font-xl my-8 flex h-full w-full grow flex-col items-center'>
+      <h1 className='text-4xl font-bold'>Create Event</h1>
+      <h2 className='text-lg font-normal text-muted-foreground '>
+        Fill out the form to set up your powerlifting competition.
+      </h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-8'
+          className='flex w-full max-w-2xl flex-col gap-2'
         >
-          <FormField
-            control={form.control}
-            name='name'
-            rules={{ required: true }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='federation'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Federation</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='country'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='state'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>State</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='city'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='date'
-            render={({ field }) => (
-              <FormItem className='flex flex-col'>
-                <FormLabel>Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-[240px] pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground',
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className='w-auto p-0'
-                    align='start'
-                  >
-                    <Calendar
-                      mode='single'
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
+          <div className='flex w-full items-end gap-4'>
+            <FormField
+              control={form.control}
+              name='name'
+              rules={{ required: true }}
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='text'
+                      {...field}
                     />
-                  </PopoverContent>
-                </Popover>
-                <FormDescription>description</FormDescription>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='date'
+              render={({ field }) => (
+                <FormItem className='flex w-full flex-col'>
+                  <FormLabel>Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'min-w-[240px] pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground',
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, 'PPP')
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className='w-auto p-0'
+                      align='start'
+                    >
+                      <Calendar
+                        mode='single'
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date('1900-01-01')
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className='flex w-full items-end gap-4'>
+            <FormField
+              control={form.control}
+              name='city'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>City</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='state'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>State</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className='flex w-full items-end gap-4'>
+            <FormField
+              control={form.control}
+              name='country'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Country</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='federation'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Federation</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name='notes'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Event Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder='dexscription'
+                    {...field}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          <br />
+
+          <div className='flex w-full items-end gap-4'>
           <FormField
             control={form.control}
             name='daysOfCompetition'
             render={({ field }) => (
-              <FormItem>
+              <FormItem className='w-full'>
                 <FormLabel>Days of Competition</FormLabel>
                 <FormControl>
                   <Input
                     placeholder='event name'
-                    type='text'
+                    type='number'
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>description</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name='platforms'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+                <FormLabel>Platfroms</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='event name'
+                    type='number'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          </div>
+
+          <br />
+
+          <FormField
+            control={form.control}
+            name='events'
+            render={() => (
+              <FormItem className='rounded-lg border py-2 px-3'>
+                  <FormLabel className='text-base'>Events</FormLabel>
+                <div className='flex gap-4 flex-wrap'>
+                  {eventsData.map((item) => (
+                    <FormField
+                      key={item}
+                      control={form.control}
+                      name='events'
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={item}
+                            className={`flex items-end gap-4 rounded-md border space-y-0 py-4 px-4 ${field.value?.includes(item) ? 'bg-muted' : 'bg-background' } `}
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(item)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, item])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item,
+                                        ),
+                                      )
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className='font-normal space-y-0'>
+                              {item}
+                            </FormLabel>
+                          </FormItem>
+                        )
+                      }}
+                    />
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name='rules'
@@ -257,91 +360,6 @@ export default function Dashboard() {
                   />
                 </FormControl>
                 <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='events'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Events</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='notes'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Notes</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='items'
-            render={() => (
-              <FormItem>
-                <div className='mb-4'>
-                  <FormLabel className='text-base'>Lifts</FormLabel>
-                  <FormDescription>
-                  </FormDescription>
-                </div>
-                <div className='flex gap-4' >
-                {['sbd','s', 'b', 'd',  'sb', 'sd', 'bd'].map((item) => (
-                  <FormField
-                    key={item}
-                    control={form.control}
-                    name='items'
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          key={item}
-                          className='flex flex-col items-center space-y-1'
-                        >
-                          <FormLabel className='font-normal'>
-                            {item}
-                          </FormLabel>
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(item)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([...field.value, item])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item,
-                                      ),
-                                    )
-                              }}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )
-                    }}
-                  />
-                ))}
-                </div>
                 <FormMessage />
               </FormItem>
             )}

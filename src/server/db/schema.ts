@@ -1,19 +1,10 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
 import { sql } from 'drizzle-orm'
-import { int, sqliteTableCreator, text } from 'drizzle-orm/sqlite-core'
+import { int, sqliteTableCreator, text, integer } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
 
 import { createInsertSchema } from 'drizzle-zod'
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = sqliteTableCreator((name) => `pb-${name}`)
+export const createTable = sqliteTableCreator((name) => `pb_${name}`)
 
 export const users = createTable('user', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -60,7 +51,9 @@ export const weightClasses = createTable('weight_classes', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
   weight: text('weight').notNull(),
+  gender: text('gender'),
   info: text('info').notNull(),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
@@ -68,25 +61,32 @@ export const weightClasses = createTable('weight_classes', {
 })
 export const insertWeightClassSchema = createInsertSchema(weightClasses)
 
-export const weightClassesRelations = relations(weightClasses, ({ many }) => ({
-  competitions: many(competitionsToWeightClass),
+export const weightClassesRelations = relations(weightClasses, ({ one }) => ({
+  competitions: one(competitions, {
+    fields: [weightClasses.compId],
+    references: [competitions.id],
+  }),
 }))
 
-export const ageDivisions = createTable('age_divisions', {
+export const divisions = createTable('age_divisions', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
-  age: text('age').notNull(),
-  gender: text('gender').notNull(),
+  minAge: integer('min_age'),
+  maxAge: integer('max_age'),
   info: text('info').notNull(),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
   updatedAt: text('updatedAt'),
 })
-export const insertDivisionSchema = createInsertSchema(ageDivisions)
+export const insertDivisionSchema = createInsertSchema(divisions)
 
-export const divisionsRelations = relations(ageDivisions, ({ many }) => ({
-  competitions: many(competitionToDivision),
+export const divisionsRelations = relations(divisions, ({ one }) => ({
+  competitions: one(competitions, {
+    fields: [divisions.compId],
+    references: [competitions.id],
+  }),
 }))
 
 export const competitions = createTable('competition', {
@@ -101,6 +101,7 @@ export const competitions = createTable('competition', {
   city: text('city'),
   date: int('date', { mode: 'timestamp' }),
   daysOfCompetition: int('days_of_competition'),
+  platforms: text('platforms'),
   rules: text('rules'),
   events: text('events'),
   notes: text('notes'),
@@ -119,53 +120,8 @@ export const competitionsRelations = relations(
       references: [users.id],
     }),
     entries: many(compEntry),
-    divisions: many(competitionToDivision),
-    weightClasses: many(competitionsToWeightClass),
+    divisions: many(divisions),
+    weightClasses: many(weightClasses),
   }),
 )
 
-export const competitionToDivision = createTable('competition_to_division', {
-  competitionId: int('competition_id', { mode: 'number' })
-    .notNull()
-    .references(() => competitions.id),
-  divisionId: int('division_id', { mode: 'number' })
-    .notNull()
-    .references(() => ageDivisions.id),
-})
-
-export const competitionToDivisionRelations = relations(
-  competitionToDivision,
-  ({ one }) => ({
-    competition: one(competitions, {
-      fields: [competitionToDivision.competitionId],
-      references: [competitions.id],
-    }),
-    division: one(ageDivisions, {
-      fields: [competitionToDivision.divisionId],
-      references: [ageDivisions.id],
-    }),
-  }),
-)
-
-export const competitionsToWeightClass = createTable('competitions_to_weight_class', {
-  competitionId: int('competition_id', { mode: 'number' })
-    .notNull()
-    .references(() => competitions.id),
-  weightClassId: int('weight_class_id', { mode: 'number' })
-    .notNull()
-    .references(() => weightClasses.id),
-})
-
-export const competitionsToWeightClassRelations = relations(
-  competitionsToWeightClass,
-  ({ one }) => ({
-    competition: one(competitions, {
-      fields: [competitionsToWeightClass.competitionId],
-      references: [competitions.id],
-    }),
-    weightClass: one(weightClasses, {
-      fields: [competitionsToWeightClass.weightClassId],
-      references: [weightClasses.id],
-    }),
-  }),
-)
