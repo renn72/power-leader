@@ -234,13 +234,13 @@ export default function Divisions() {
                 <div className='flex items-baseline gap-4'>
                   <p className='text-sm font-medium leading-none'>Age Range</p>
                   <p className='text-sm text-muted-foreground'>
-                    {division.age}
+                    {division.minAge}
                   </p>
                 </div>
                 <div className='flex items-baseline gap-4'>
                   <p className='text-sm font-medium leading-none'>Gender</p>
                   <p className='text-sm text-muted-foreground'>
-                    {division.gender}
+                    {division.maxAge}
                   </p>
                 </div>
                 <div className='flex items-baseline gap-4'>
