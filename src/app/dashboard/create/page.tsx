@@ -301,7 +301,7 @@ export default function Dashboard() {
             control={form.control}
             name='events'
             render={() => (
-              <FormItem className='rounded-lg border py-2 px-3'>
+              <FormItem className='rounded-lg border py-2 px-3 cursor-default'>
                   <FormLabel className='text-base'>Events</FormLabel>
                 <div className='flex gap-4 flex-wrap'>
                   {eventsData.map((item) => (
@@ -313,7 +313,7 @@ export default function Dashboard() {
                         return (
                           <FormItem
                             key={item}
-                            className={`flex items-end gap-4 rounded-md border space-y-0 py-4 px-4 ${field.value?.includes(item) ? 'bg-muted' : 'bg-background' } `}
+                            className={`flex items-end gap-4 rounded-md border space-y-0 py-4 px-4 cursor-pointer ${field.value?.includes(item) ? 'bg-muted' : 'bg-background' } `}
                           >
                             <FormControl>
                               <Checkbox
