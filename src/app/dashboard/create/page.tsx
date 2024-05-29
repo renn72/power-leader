@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -30,7 +29,6 @@ import {
 } from '~/components/ui/popover'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Textarea } from '~/components/ui/textarea'
-import { Separator } from "~/components/ui/separator"
 import { eventsData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
@@ -47,7 +45,6 @@ const formSchema = z.object({
   daysOfCompetition: z.number(),
   platforms: z.number(),
   rules: z.string(),
-  events: z.string(),
   notes: z.string(),
   events: z.array(z.string()),
   divisions: z.array(z.object(
