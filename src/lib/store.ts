@@ -1,60 +1,11 @@
 import { z } from 'zod'
 
 export const ageDivisionsData = [
-  {
-    name: 'Teen Boys',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: 'Teen Girls',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: 'Open Men',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: 'Open Women',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: '50+ Male',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: '50+ Women',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: 'Team Battle',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: 'Novice',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
-  {
-    name: 'First Timers',
-    minAge: '',
-    maxAge: '',
-    info: '',
-  },
+  { name: 'Open', minAge: null, maxAge: null, info: 'Open' },
+  { name: 'Teen', minAge: 13, maxAge: 19, info: 'Teen' },
+  { name: 'Master', minAge: 50, maxAge: null, info: 'Masters' },
+  { name: 'First Timers', minAge: null, maxAge: null, info: 'First powerlifting event' },
+  { name: 'Novice', minAge: null, maxAge: null, info: 'Second powerlifting event' },
 ]
 
 export const eventsData = [
