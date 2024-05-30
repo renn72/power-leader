@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
 export const ageDivisionsData = [
-  { name: 'Open', minAge: null, maxAge: null, info: 'Open' },
+  { name: 'Open', minAge: '', maxAge: '', info: 'Open' },
   { name: 'Teen', minAge: 13, maxAge: 19, info: 'Teen' },
-  { name: 'Master', minAge: 50, maxAge: null, info: 'Masters' },
-  { name: 'First Timers', minAge: null, maxAge: null, info: 'First powerlifting event' },
-  { name: 'Novice', minAge: null, maxAge: null, info: 'Second powerlifting event' },
+  { name: 'Master', minAge: 50, maxAge: '', info: 'Masters' },
+  { name: 'First Timers', minAge: '', maxAge: '', info: 'First powerlifting event' },
+  { name: 'Novice', minAge: '', maxAge: '', info: 'Second powerlifting event' },
 ]
 
 export const eventsData = [

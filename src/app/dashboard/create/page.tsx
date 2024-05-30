@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { api } from '~/trpc/react'
 
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, XCircle } from 'lucide-react'
 import { cn } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
 
@@ -30,7 +30,7 @@ import {
 import { Textarea } from '~/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
 
-import { eventsData } from '~/lib/store'
+import { ageDivisionsData, eventsData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,16 +43,16 @@ const formSchema = z.object({
   state: z.string(),
   city: z.string(),
   date: z.date(),
-  daysOfCompetition: z.number(),
-  platforms: z.number(),
+  daysOfCompetition: z.number().nonnegative().int().min(1),
+  platforms: z.number().nonnegative().int().min(1),
   rules: z.string(),
   notes: z.string(),
   events: z.array(z.string()),
   divisions: z.array(
     z.object({
       name: z.string(),
-      minAge: z.number(),
-      maxAge: z.number(),
+      minAge: z.number().positive().or(z.string()),
+      maxAge: z.number().positive().or(z.string()),
       info: z.string(),
     }),
   ),
@@ -92,7 +92,7 @@ export default function Dashboard() {
 
   return (
     <section className='font-xl my-8 flex h-full w-full grow flex-col items-center'>
-      <h1 className='text-4xl font-bold'>Create Event</h1>
+      <h1 className='text-4xl font-bold'>Create Your Event</h1>
       <h2 className='text-lg font-normal text-muted-foreground '>
         Fill out the form to set up your powerlifting competition.
       </h2>
@@ -258,7 +258,7 @@ export default function Dashboard() {
 
           <br />
 
-          <div className='flex w-full items-end gap-4'>
+          <div className='flex w-full items-center gap-4'>
             <FormField
               control={form.control}
               name='daysOfCompetition'
@@ -270,6 +270,9 @@ export default function Dashboard() {
                       placeholder='event name'
                       type='number'
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value))
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -287,6 +290,9 @@ export default function Dashboard() {
                       placeholder='event name'
                       type='number'
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value))
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -339,26 +345,132 @@ export default function Dashboard() {
             )}
           />
 
+          <br />
+
           <FormField
             control={form.control}
-            name='rules'
+            name='divisions'
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Rules</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='text'
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>description</FormDescription>
+              <FormItem className='cursor-auto rounded-lg border px-6 py-4'>
+                <div className='flex items-center justify-between'>
+                  <FormLabel>Divsions</FormLabel>
+                  <Button
+                    variant='outline'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      field.onChange([...ageDivisionsData])
+                    }}
+                  >
+                    defaults
+                  </Button>
+                </div>
+                <div className='flex flex-col gap-1'>
+                  <div className='grid grid-cols-9 gap-2'>
+                    <div className='col-span-2'>
+                      <FormLabel>Name</FormLabel>
+                    </div>
+                    <div>
+                      <FormLabel>Min Age</FormLabel>
+                    </div>
+                    <div>
+                      <FormLabel>Max Age</FormLabel>
+                    </div>
+                    <div className='col-span-4'>
+                      <FormLabel>Info</FormLabel>
+                    </div>
+                  </div>
+                  {field.value?.map((division, index) => (
+                    <div
+                      key={index}
+                      className='grid grid-cols-9 items-center gap-2'
+                    >
+                      <FormField
+                        control={form.control}
+                        name={`divisions.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className='col-span-2'>
+                            <FormControl>
+                              <Input
+                                placeholder='name'
+                                type='text'
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`divisions.${index}.minAge`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                placeholder='min'
+                                type='number'
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`divisions.${index}.maxAge`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                placeholder='max'
+                                type='number'
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`divisions.${index}.info`}
+                        render={({ field }) => (
+                          <FormItem className='col-span-4'>
+                            <FormControl>
+                              <Input
+                                placeholder='info'
+                                type='text'
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <XCircle
+                        className='cursor-pointer place-self-center hover:text-destructive-foreground'
+                        onClick={() => {
+                          field.onChange(
+                            field.value.filter((_, i) => i !== index),
+                          )
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <FormControl></FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
+          <br />
+
           <Button type='submit'>Submit</Button>
+          <Button
+            className='w-min'
+            onClick={(e) => {
+              e.preventDefault()
+              console.log(form.getValues())
+            }}
+          >Data</Button>
         </form>
       </Form>
     </section>
