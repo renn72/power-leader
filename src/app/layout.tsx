@@ -33,7 +33,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <main
-                className={`flex flex-col min-h-screen dark `}
+                className={`flex flex-col min-h-screen `}
               >
                 <Navbar />
                 {children}

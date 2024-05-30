@@ -27,8 +27,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover'
-import { Checkbox } from '~/components/ui/checkbox'
 import { Textarea } from '~/components/ui/textarea'
+import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
+
 import { eventsData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
@@ -47,15 +48,14 @@ const formSchema = z.object({
   rules: z.string(),
   notes: z.string(),
   events: z.array(z.string()),
-  divisions: z.array(z.object(
-    {
+  divisions: z.array(
+    z.object({
       name: z.string(),
       minAge: z.number(),
       maxAge: z.number(),
       info: z.string(),
-    },
-  )),
-
+    }),
+  ),
 })
 
 export default function Dashboard() {
@@ -247,7 +247,7 @@ export default function Dashboard() {
                 <FormLabel>Event Description</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder='dexscription'
+                    placeholder='description'
                     {...field}
                   />
                 </FormControl>
@@ -259,40 +259,40 @@ export default function Dashboard() {
           <br />
 
           <div className='flex w-full items-end gap-4'>
-          <FormField
-            control={form.control}
-            name='daysOfCompetition'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Days of Competition</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='number'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='platforms'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Platfroms</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='event name'
-                    type='number'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='daysOfCompetition'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Days of Competition</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='number'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='platforms'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormLabel>Platfroms</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='event name'
+                      type='number'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <br />
@@ -300,44 +300,40 @@ export default function Dashboard() {
           <FormField
             control={form.control}
             name='events'
-            render={() => (
-              <FormItem className='rounded-lg border py-2 px-3 cursor-default'>
-                  <FormLabel className='text-base'>Events</FormLabel>
-                <div className='flex gap-4 flex-wrap'>
-                  {eventsData.map((item) => (
-                    <FormField
-                      key={item}
-                      control={form.control}
-                      name='events'
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={item}
-                            className={`flex items-end gap-4 rounded-md border space-y-0 py-4 px-4 cursor-pointer ${field.value?.includes(item) ? 'bg-muted' : 'bg-background' } `}
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(item)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...field.value, item])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== item,
-                                        ),
-                                      )
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className='font-normal space-y-0'>
-                              {item}
-                            </FormLabel>
-                          </FormItem>
-                        )
-                      }}
-                    />
-                  ))}
-                </div>
+            render={({ field }) => (
+              <FormItem className='cursor-auto rounded-lg border px-6 py-4'>
+                <FormLabel className='text-base'>Events</FormLabel>
+                <ToggleGroup
+                  type='multiple'
+                  onValueChange={(value) => {
+                    console.log(value)
+                    field.onChange(value)
+                  }}
+                >
+                  <div className='flex flex-wrap justify-around gap-2'>
+                    {eventsData.map((item) => (
+                      <FormField
+                        key={item}
+                        control={form.control}
+                        name='events'
+                        render={() => {
+                          return (
+                            <FormItem key={item}>
+                              <FormControl>
+                                <ToggleGroupItem
+                                  className='rounded-md border border-input'
+                                  value={item}
+                                >
+                                  {item}
+                                </ToggleGroupItem>
+                              </FormControl>
+                            </FormItem>
+                          )
+                        }}
+                      />
+                    ))}
+                  </div>
+                </ToggleGroup>
                 <FormMessage />
               </FormItem>
             )}
