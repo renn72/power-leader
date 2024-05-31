@@ -29,7 +29,7 @@ import {
 import { Textarea } from '~/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
 
-import { ageDivisionsData, eventsData } from '~/lib/store'
+import { ageDivisionsData, eventsData, wcFData, wcMData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,25 +56,13 @@ const formSchema = z.object({
     }),
   ),
   wc_male: z.array(
-    z.object({
-      name: z.string(),
-      weight: z.number().positive().or(z.string()),
-      info: z.string(),
-    }),
+    z.number().positive().or(z.string()),
   ),
   wc_female: z.array(
-    z.object({
-      name: z.string(),
-      weight: z.number().positive().or(z.string()),
-      info: z.string(),
-    }),
+    z.number().positive().or(z.string()),
   ),
   wc_mix: z.array(
-    z.object({
-      name: z.string(),
-      weight: z.number().positive().or(z.string()),
-      info: z.string(),
-    }),
+    z.number().positive().or(z.string()),
   ),
 })
 
@@ -107,21 +95,9 @@ export default function Dashboard() {
         maxAge: '',
         info: '',
       }],
-      wc_male: [{
-        name: '',
-        weight: '',
-        info: '',
-      }],
-      wc_female: [{
-        name: '',
-        weight: '',
-        info: '',
-      }],
-      wc_mix: [{
-        name: '',
-        weight: '',
-        info: '',
-      }],
+      wc_male: [...wcMData],
+      wc_female: [...wcFData],
+      wc_mix: [...wcMData],
     },
   })
 
@@ -349,7 +325,7 @@ export default function Dashboard() {
             name='events'
             render={({ field }) => (
               <FormItem className='cursor-auto rounded-lg border px-6 pt-5 pb-6 bg-card'>
-                <FormLabel className='text-base'>Events</FormLabel>
+                <FormLabel className='text-base'>BuildingEvents</FormLabel>
                 <ToggleGroup
                   type='multiple'
                   onValueChange={(value) => {
@@ -530,68 +506,12 @@ export default function Dashboard() {
                     defaults
                   </Button>
                 </div>
-                <div className='flex flex-col gap-1'>
-                  <div className='grid grid-cols-9 gap-2'>
-                    <div className='col-span-2'>
-                      <FormLabel>Name</FormLabel>
-                    </div>
-                    <div>
-                      <FormLabel>Weight</FormLabel>
-                    </div>
-                    <div className='col-span-4'>
-                      <FormLabel>Info</FormLabel>
-                    </div>
-                  </div>
-                  {field.value?.map((_wc, index) => (
+                  {field.value?.map((wc, index) => (
                     <div
                       key={index}
                       className='grid grid-cols-9 items-center gap-2'
                     >
-                      <FormField
-                        control={form.control}
-                        name={`wc_male.${index}.name`}
-                        render={({ field }) => (
-                          <FormItem className='col-span-2'>
-                            <FormControl>
-                              <Input
-                                placeholder='name'
-                                type='text'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`wc_male.${index}.weight`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder='weight'
-                                type='number'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`wc_male.${index}.info`}
-                        render={({ field }) => (
-                          <FormItem className='col-span-4'>
-                            <FormControl>
-                              <Input
-                                placeholder='info'
-                                type='text'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
+                      <div>{wc}</div>
                       <XCircle
                         className='cursor-pointer place-self-center hover:text-destructive'
                         onClick={() => {
@@ -607,11 +527,7 @@ export default function Dashboard() {
                     onClick={() => {
                       field.onChange([
                         ...field.value,
-                        {
-                          name: '',
-                          weight: '',
-                          info: '',
-                        },
+                        '',
                       ])
                     }}
                   />

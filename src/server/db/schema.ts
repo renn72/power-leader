@@ -47,60 +47,6 @@ export const compEntryRelations = relations(compEntry, ({ one }) => ({
   }),
 }))
 
-export const weightClassesM = createTable('weight_classes_m', {
-  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  weight: text('weight').notNull(),
-  info: text('info').notNull(),
-  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
-  createdAt: text('created_at')
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-})
-
-export const weightClasseaMsRelations = relations(weightClassesM, ({ one }) => ({
-  competitions: one(competitions, {
-    fields: [weightClassesM.compId],
-    references: [competitions.id],
-  }),
-}))
-
-export const weightClassesF = createTable('weight_classes_f', {
-  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  weight: text('weight').notNull(),
-  info: text('info').notNull(),
-  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
-  createdAt: text('created_at')
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-})
-
-export const weightClassesFRelations = relations(weightClassesF, ({ one }) => ({
-  competitions: one(competitions, {
-    fields: [weightClassesF.compId],
-    references: [competitions.id],
-  }),
-}))
-
-export const weightClassesMix = createTable('weight_classes_mix', {
-  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  weight: text('weight').notNull(),
-  info: text('info').notNull(),
-  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
-  createdAt: text('created_at')
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-})
-
-export const weightClassesMixRelations = relations(weightClassesMix, ({ one }) => ({
-  competitions: one(competitions, {
-    fields: [weightClassesMix.compId],
-    references: [competitions.id],
-  }),
-}))
-
 export const divisions = createTable('age_divisions', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
@@ -137,6 +83,9 @@ export const competitions = createTable('competition', {
   platforms: text('platforms'),
   rules: text('rules'),
   events: text('events'),
+  wc_male: text('wc_male'),
+  wc_female: text('wc_female'),
+  wc_mix: text('wc_mix'),
   notes: text('notes'),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
@@ -154,7 +103,6 @@ export const competitionsRelations = relations(
     }),
     entries: many(compEntry),
     divisions: many(divisions),
-    weightClasses: many(weightClasses),
   }),
 )
 
