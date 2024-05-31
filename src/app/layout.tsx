@@ -20,7 +20,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorPrimary: 'hsl(217, 5%, 95%)',
+        }
+      }}
+    >
       <html
         lang='en'
       >
