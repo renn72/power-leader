@@ -47,23 +47,56 @@ export const compEntryRelations = relations(compEntry, ({ one }) => ({
   }),
 }))
 
-export const weightClasses = createTable('weight_classes', {
+export const weightClassesM = createTable('weight_classes_m', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
   weight: text('weight').notNull(),
-  gender: text('gender'),
   info: text('info').notNull(),
   compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
-  updatedAt: text('updatedAt'),
 })
-export const insertWeightClassSchema = createInsertSchema(weightClasses)
 
-export const weightClassesRelations = relations(weightClasses, ({ one }) => ({
+export const weightClasseaMsRelations = relations(weightClassesM, ({ one }) => ({
   competitions: one(competitions, {
-    fields: [weightClasses.compId],
+    fields: [weightClassesM.compId],
+    references: [competitions.id],
+  }),
+}))
+
+export const weightClassesF = createTable('weight_classes_f', {
+  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  weight: text('weight').notNull(),
+  info: text('info').notNull(),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+})
+
+export const weightClassesFRelations = relations(weightClassesF, ({ one }) => ({
+  competitions: one(competitions, {
+    fields: [weightClassesF.compId],
+    references: [competitions.id],
+  }),
+}))
+
+export const weightClassesMix = createTable('weight_classes_mix', {
+  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  weight: text('weight').notNull(),
+  info: text('info').notNull(),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+})
+
+export const weightClassesMixRelations = relations(weightClassesMix, ({ one }) => ({
+  competitions: one(competitions, {
+    fields: [weightClassesMix.compId],
     references: [competitions.id],
   }),
 }))
