@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -28,8 +29,19 @@ import {
 } from '~/components/ui/popover'
 import { Textarea } from '~/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "~/components/ui/dialog"
 
 import { ageDivisionsData, eventsData, wcFData, wcMData } from '~/lib/store'
+
+import type { Control } from 'react-hook-form'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,6 +78,126 @@ const formSchema = z.object({
   ),
 })
 
+const WC_Field = ({ control, label, data, name } :
+  { control : Control<z.infer<typeof formSchema>>,
+    label : string,
+    data : number[]
+    name : 'wc_male' | 'wc_female' | 'wc_mix'
+  }) => {
+  const [value, setValue] = useState<number | string>()
+  const [index, setIndex] = useState<number>(0)
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card flex flex-col gap-2'>
+          <div className='flex items-center justify-between'>
+            <FormLabel>{label}</FormLabel>
+            <div className='flex gap-2'>
+              <Button
+                variant='outline_card'
+                onClick={(e) => {
+                  e.preventDefault()
+                  field.onChange([])
+                }}
+              >
+                Clear
+              </Button>
+              <Button
+                variant='outline_card'
+                onClick={(e) => {
+                  e.preventDefault()
+                  field.onChange([...data])
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
+          <Dialog>
+          <div className='flex flex-wrap gap-4'>
+              {field.value?.map((wc, index) => (
+
+                <DialogTrigger
+                  key={index}
+                  asChild
+                  onClick={() => {
+                    setValue(wc)
+                    setIndex(index)
+                  }}
+                >
+                  <div
+                    className='flex items-center gap-2 border border-border rounded-full px-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-foreground'
+                  >
+                    <div>{wc}</div>
+                    <XCircle
+                      className='cursor-pointer place-self-center hover:text-destructive'
+                      strokeWidth={1}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        field.onChange(
+                          field.value.filter((_, i) => i !== index),
+                        )
+                      }}
+                    />
+                  </div>
+                </DialogTrigger>
+              ))}
+            </div>
+            <DialogContent
+              className='max-w-[240px] w-full place-items-center'
+            >
+              <DialogHeader>
+              </DialogHeader>
+              <DialogDescription
+                asChild
+              >
+                <FormField
+                  control={control}
+                  name={`${name}.${index}`}
+                  render={({ field }) => (
+                    <FormItem className='flex flex-col gap-4'>
+                      <FormControl>
+                        <Input
+                          placeholder='name'
+                          type='number'
+                          {...field}
+                        />
+                      </FormControl>
+                      <DialogClose asChild>
+                        <Button
+                          className='w-full'
+                          type="button" variant="secondary">
+                          Set
+                        </Button>
+                      </DialogClose>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </DialogDescription>
+            </DialogContent>
+
+          </Dialog>
+          <PlusCircle
+            className='cursor-pointer w-full center hover:text-secondary'
+            onClick={() => {
+              field.onChange([
+                ...field.value,
+                '',
+              ])
+            }}
+          />
+          <FormControl></FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
 export default function Dashboard() {
   const context = api.useUtils()
 
@@ -89,12 +221,7 @@ export default function Dashboard() {
       rules: '',
       events: [],
       notes: '',
-      divisions: [{
-        name: '',
-        minAge: '',
-        maxAge: '',
-        info: '',
-      }],
+      divisions: [...ageDivisionsData],
       wc_male: [...wcMData],
       wc_female: [...wcFData],
       wc_mix: [...wcMData],
@@ -276,48 +403,48 @@ export default function Dashboard() {
 
 
           <div className='flex flex-col gap-2 bg-card border rounded-lg px-6 py-4'>
-          <div className='flex w-full items-center gap-4'>
-            <FormField
-              control={form.control}
-              name='daysOfCompetition'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormLabel>Days of Competition</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='event name'
-                      type='number'
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(parseInt(e.target.value))
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='platforms'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormLabel>Platfroms</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='event name'
-                      type='number'
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(parseInt(e.target.value))
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+            <div className='flex w-full items-center gap-4'>
+              <FormField
+                control={form.control}
+                name='daysOfCompetition'
+                render={({ field }) => (
+                  <FormItem className='w-full'>
+                    <FormLabel>Days of Competition</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='event name'
+                        type='number'
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(parseInt(e.target.value))
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='platforms'
+                render={({ field }) => (
+                  <FormItem className='w-full'>
+                    <FormLabel>Platfroms</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='event name'
+                        type='number'
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(parseInt(e.target.value))
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
           <FormField
@@ -344,6 +471,7 @@ export default function Dashboard() {
                             <FormItem key={item}>
                               <FormControl>
                                 <ToggleGroupItem
+                                  variant='secondary'
                                   className='rounded-md border border-input'
                                   value={item}
                                 >
@@ -369,15 +497,26 @@ export default function Dashboard() {
               <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card'>
                 <div className='flex items-center justify-between'>
                   <FormLabel>Divsions</FormLabel>
-                  <Button
-                    variant='outline_card'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      field.onChange([...ageDivisionsData])
-                    }}
-                  >
-                    defaults
-                  </Button>
+                  <div className='flex gap-2'>
+                    <Button
+                      variant='outline_card'
+                      onClick={(e) => {
+                        e.preventDefault()
+                        field.onChange([])
+                      }}
+                    >
+                      Clear
+                    </Button>
+                    <Button
+                      variant='outline_card'
+                      onClick={(e) => {
+                        e.preventDefault()
+                        field.onChange([...ageDivisionsData])
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </div>
                 </div>
                 <div className='flex flex-col gap-1'>
                   <div className='grid grid-cols-9 gap-2'>
@@ -490,58 +629,32 @@ export default function Dashboard() {
             )}
           />
 
-          <FormField
+          <WC_Field
             control={form.control}
+            label='Male Weight Classes'
+            data={wcMData}
             name='wc_male'
-            render={({ field }) => (
-              <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card flex flex-col gap-2'>
-                <div className='flex items-center justify-between'>
-                  <FormLabel>Male Weight Class</FormLabel>
-                  <Button
-                    variant='outline_card'
-                    onClick={(e) => {
-                      e.preventDefault()
-                    }}
-                  >
-                    defaults
-                  </Button>
-                </div>
-                <div className='flex flex-wrap gap-2'>
-                  {field.value?.map((wc, index) => (
-                    <div
-                      key={index}
-                      className='flex items-center gap-2 border border-border rounded-full px-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-foreground'
-                    >
-                      <div>{wc}</div>
-                      <XCircle
-                        className='cursor-pointer place-self-center hover:text-destructive'
-                        onClick={() => {
-                          field.onChange(
-                            field.value.filter((_, i) => i !== index),
-                          )
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-                  <PlusCircle
-                    className='cursor-pointer w-full center hover:text-secondary'
-                    onClick={() => {
-                      field.onChange([
-                        ...field.value,
-                        '',
-                      ])
-                    }}
-                  />
-                <FormControl></FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
           />
 
-          <br />
+          <WC_Field
+            control={form.control}
+            label='Female Weight Classes'
+            data={wcFData}
+            name='wc_female'
+          />
 
-          <Button type='submit'>Submit</Button>
+          <WC_Field
+            control={form.control}
+            label='Mixed Weight Classes'
+            data={wcMData}
+            name='wc_mix'
+          />
+
+
+
+          <Button
+            className='mt-4 w-min'
+            type='submit'>Submit</Button>
           <Button
             className='w-min'
             onClick={(e) => {
