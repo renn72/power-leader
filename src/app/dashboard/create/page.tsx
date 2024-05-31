@@ -494,7 +494,7 @@ export default function Dashboard() {
             control={form.control}
             name='wc_male'
             render={({ field }) => (
-              <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card'>
+              <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card flex flex-col gap-2'>
                 <div className='flex items-center justify-between'>
                   <FormLabel>Male Weight Class</FormLabel>
                   <Button
@@ -506,10 +506,11 @@ export default function Dashboard() {
                     defaults
                   </Button>
                 </div>
+                <div className='flex flex-wrap gap-2'>
                   {field.value?.map((wc, index) => (
                     <div
                       key={index}
-                      className='grid grid-cols-9 items-center gap-2'
+                      className='flex items-center gap-2 border border-border rounded-full px-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-foreground'
                     >
                       <div>{wc}</div>
                       <XCircle
@@ -522,8 +523,9 @@ export default function Dashboard() {
                       />
                     </div>
                   ))}
+                </div>
                   <PlusCircle
-                    className='cursor-pointer place-self-center hover:text-secondary mt-4'
+                    className='cursor-pointer w-full center hover:text-secondary'
                     onClick={() => {
                       field.onChange([
                         ...field.value,
@@ -531,7 +533,6 @@ export default function Dashboard() {
                       ])
                     }}
                   />
-                </div>
                 <FormControl></FormControl>
                 <FormMessage />
               </FormItem>
