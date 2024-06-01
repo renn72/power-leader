@@ -12,6 +12,7 @@ import { Calendar } from '~/components/ui/calendar'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'
+import { Card, CardContent, CardTitle, CardHeader } from '~/components/ui/card'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import {
@@ -34,7 +35,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
   DialogClose,
 } from "~/components/ui/dialog"
@@ -59,6 +59,7 @@ const formSchema = z.object({
   rules: z.string(),
   notes: z.string(),
   events: z.array(z.string()),
+  equipment: z.string(),
   divisions: z.array(
     z.object({
       name: z.string(),
@@ -88,113 +89,117 @@ const WC_Field = ({ control, label, data, name } :
   const [index, setIndex] = useState<number>(0)
 
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card flex flex-col gap-2'>
-          <div className='flex items-center justify-between'>
-            <FormLabel>{label}</FormLabel>
-            <div className='flex gap-2'>
-              <Button
-                variant='outline_card'
-                onClick={(e) => {
-                  e.preventDefault()
-                  field.onChange([])
-                }}
-              >
-                Clear
-              </Button>
-              <Button
-                variant='outline_card'
-                onClick={(e) => {
-                  e.preventDefault()
-                  field.onChange([...data])
-                }}
-              >
-                Reset
-              </Button>
-            </div>
-          </div>
-          <Dialog>
-          <div className='flex flex-wrap gap-4'>
-              {field.value?.map((wc, index) => (
-
-                <DialogTrigger
-                  key={index}
-                  asChild
-                  onClick={() => {
-                    setValue(wc)
-                    setIndex(index)
-                  }}
-                >
-                  <div
-                    className='flex items-center gap-2 border border-border rounded-full px-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-foreground'
+    <Card>
+      <CardContent>
+        <FormField
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <FormItem className='mt-6'>
+              <div className='flex items-center justify-between'>
+                <FormLabel>{label}</FormLabel>
+                <div className='flex gap-2'>
+                  <Button
+                    variant='outline_card'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      field.onChange([])
+                    }}
                   >
-                    <div>{wc}</div>
-                    <XCircle
-                      className='cursor-pointer place-self-center hover:text-destructive'
-                      strokeWidth={1}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        field.onChange(
-                          field.value.filter((_, i) => i !== index),
-                        )
-                      }}
-                    />
-                  </div>
-                </DialogTrigger>
-              ))}
-            </div>
-            <DialogContent
-              className='max-w-[240px] w-full place-items-center'
-            >
-              <DialogHeader>
-              </DialogHeader>
-              <DialogDescription
-                asChild
-              >
-                <FormField
-                  control={control}
-                  name={`${name}.${index}`}
-                  render={({ field }) => (
-                    <FormItem className='flex flex-col gap-4'>
-                      <FormControl>
-                        <Input
-                          placeholder='name'
-                          type='number'
-                          {...field}
-                        />
-                      </FormControl>
-                      <DialogClose asChild>
-                        <Button
-                          className='w-full'
-                          type="button" variant="secondary">
-                          Set
-                        </Button>
-                      </DialogClose>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </DialogDescription>
-            </DialogContent>
+                    Clear
+                  </Button>
+                  <Button
+                    variant='outline_card'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      field.onChange([...data])
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </div>
+              </div>
+              <Dialog>
+                <div className='flex flex-wrap gap-4'>
+                  {field.value?.map((wc, index) => (
 
-          </Dialog>
-          <PlusCircle
-            className='cursor-pointer w-full center hover:text-secondary'
-            onClick={() => {
-              field.onChange([
-                ...field.value,
-                '',
-              ])
-            }}
-          />
-          <FormControl></FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+                    <DialogTrigger
+                      key={index}
+                      asChild
+                      onClick={() => {
+                        setValue(wc)
+                        setIndex(index)
+                      }}
+                    >
+                      <div
+                        className='flex items-center gap-2 border border-border rounded-full px-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-foreground'
+                      >
+                        <div>{wc}</div>
+                        <XCircle
+                          className='cursor-pointer place-self-center hover:text-destructive'
+                          strokeWidth={1}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            field.onChange(
+                              field.value.filter((_, i) => i !== index),
+                            )
+                          }}
+                        />
+                      </div>
+                    </DialogTrigger>
+                  ))}
+                </div>
+                <DialogContent
+                  className='max-w-[240px] w-full place-items-center'
+                >
+                  <DialogHeader>
+                  </DialogHeader>
+                  <DialogDescription
+                    asChild
+                  >
+                    <FormField
+                      control={control}
+                      name={`${name}.${index}`}
+                      render={({ field }) => (
+                        <FormItem className='flex flex-col gap-4'>
+                          <FormControl>
+                            <Input
+                              placeholder='name'
+                              type='number'
+                              {...field}
+                            />
+                          </FormControl>
+                          <DialogClose asChild>
+                            <Button
+                              className='w-full'
+                              type="button" variant="secondary">
+                              Set
+                            </Button>
+                          </DialogClose>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </DialogDescription>
+                </DialogContent>
+
+              </Dialog>
+              <PlusCircle
+                className='cursor-pointer w-full center hover:text-secondary'
+                onClick={() => {
+                  field.onChange([
+                    ...field.value,
+                    '',
+                  ])
+                }}
+              />
+              <FormControl></FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </CardContent>
+    </Card>
   )
 }
 
@@ -244,8 +249,9 @@ export default function Dashboard() {
           onSubmit={form.handleSubmit(onSubmit)}
           className='flex w-full max-w-2xl flex-col gap-2'
         >
-          <div className='flex flex-col gap-2 bg-card border rounded-lg px-6 py-4'>
-            <div className='flex w-full items-end gap-4'>
+          <Card>
+            <CardContent className='flex flex-col gap-2'>
+            <div className='flex w-full items-end gap-4 mt-8'>
               <FormField
                 control={form.control}
                 name='name'
@@ -399,11 +405,13 @@ export default function Dashboard() {
                 </FormItem>
               )}
             />
-          </div>
+              </CardContent>
+          </Card>
 
 
-          <div className='flex flex-col gap-2 bg-card border rounded-lg px-6 py-4'>
-            <div className='flex w-full items-center gap-4'>
+          <Card>
+            <CardContent>
+            <div className='flex w-full items-center gap-4 mt-4'>
               <FormField
                 control={form.control}
                 name='daysOfCompetition'
@@ -445,14 +453,17 @@ export default function Dashboard() {
                 )}
               />
             </div>
-          </div>
+            </CardContent>
+          </Card>
 
+          <Card>
+            <CardContent>
           <FormField
             control={form.control}
             name='events'
             render={({ field }) => (
-              <FormItem className='cursor-auto rounded-lg border px-6 pt-5 pb-6 bg-card'>
-                <FormLabel className='text-base'>BuildingEvents</FormLabel>
+              <FormItem className='mt-6'>
+                <FormLabel className='text-base'>Events</FormLabel>
                 <ToggleGroup
                   type='multiple'
                   onValueChange={(value) => {
@@ -489,12 +500,16 @@ export default function Dashboard() {
               </FormItem>
             )}
           />
+          </CardContent>
+          </Card>
 
+          <Card>
+            <CardContent>
           <FormField
             control={form.control}
             name='divisions'
             render={({ field }) => (
-              <FormItem className='cursor-auto rounded-lg border px-6 py-4 bg-card'>
+              <FormItem className='mt-6'>
                 <div className='flex items-center justify-between'>
                   <FormLabel>Divsions</FormLabel>
                   <div className='flex gap-2'>
@@ -628,6 +643,8 @@ export default function Dashboard() {
               </FormItem>
             )}
           />
+          </CardContent>
+          </Card>
 
           <WC_Field
             control={form.control}

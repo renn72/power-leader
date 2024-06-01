@@ -3,6 +3,7 @@ import '~/styles/globals.css'
 import { TRPCReactProvider } from '~/trpc/react'
 
 import { ClerkProvider } from '@clerk/nextjs'
+import { dark } from '@clerk/themes'
 
 import { ThemeProvider } from '~/app/_components/theme-provider'
 import Navbar from './_components/navbar'
@@ -22,9 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider
       appearance={{
-        variables: {
-          colorPrimary: 'hsl(217, 5%, 95%)',
-        }
+        baseTheme: dark,
       }}
     >
       <html
