@@ -37,9 +37,9 @@ import {
   DialogHeader,
   DialogTrigger,
   DialogClose,
-} from "~/components/ui/dialog"
+} from '~/components/ui/dialog'
 
-import { ageDivisionsData, eventsData, wcFData, wcMData } from '~/lib/store'
+import { ageDivisionsData, eventsData, wcFData, wcMData, equipmentData } from '~/lib/store'
 
 import type { Control } from 'react-hook-form'
 
@@ -68,25 +68,24 @@ const formSchema = z.object({
       info: z.string(),
     }),
   ),
-  wc_male: z.array(
-    z.number().positive().or(z.string()),
-  ),
-  wc_female: z.array(
-    z.number().positive().or(z.string()),
-  ),
-  wc_mix: z.array(
-    z.number().positive().or(z.string()),
-  ),
+  wc_male: z.array(z.number().positive().or(z.string())),
+  wc_female: z.array(z.number().positive().or(z.string())),
+  wc_mix: z.array(z.number().positive().or(z.string())),
 })
 
-const WC_Field = ({ control, label, data, name } :
-  { control : Control<z.infer<typeof formSchema>>,
-    label : string,
-    data : number[]
-    name : 'wc_male' | 'wc_female' | 'wc_mix'
-  }) => {
-  const [value, setValue] = useState<number | string>()
+const WC_Field = ({
+  control,
+  label,
+  data,
+  name,
+}: {
+  control: Control<z.infer<typeof formSchema>>
+  label: string
+  data: number[]
+  name: 'wc_male' | 'wc_female' | 'wc_mix'
+}) => {
   const [index, setIndex] = useState<number>(0)
+  const [open, setOpen] = useState<boolean>(false)
 
   return (
     <Card>
@@ -119,21 +118,20 @@ const WC_Field = ({ control, label, data, name } :
                   </Button>
                 </div>
               </div>
-              <Dialog>
+              <Dialog
+                open={open}
+                onOpenChange={setOpen}
+              >
                 <div className='flex flex-wrap gap-4'>
                   {field.value?.map((wc, index) => (
-
                     <DialogTrigger
                       key={index}
                       asChild
                       onClick={() => {
-                        setValue(wc)
                         setIndex(index)
                       }}
                     >
-                      <div
-                        className='flex items-center gap-2 border border-border rounded-full px-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-foreground'
-                      >
+                      <div className='flex cursor-pointer items-center gap-2 rounded-full border border-border px-2 py-1 hover:bg-secondary hover:text-secondary-foreground'>
                         <div>{wc}</div>
                         <XCircle
                           className='cursor-pointer place-self-center hover:text-destructive'
@@ -149,14 +147,9 @@ const WC_Field = ({ control, label, data, name } :
                     </DialogTrigger>
                   ))}
                 </div>
-                <DialogContent
-                  className='max-w-[240px] w-full place-items-center'
-                >
-                  <DialogHeader>
-                  </DialogHeader>
-                  <DialogDescription
-                    asChild
-                  >
+                <DialogContent className='w-full max-w-[240px] place-items-center'>
+                  <DialogHeader></DialogHeader>
+                  <DialogDescription asChild>
                     <FormField
                       control={control}
                       name={`${name}.${index}`}
@@ -167,12 +160,15 @@ const WC_Field = ({ control, label, data, name } :
                               placeholder='name'
                               type='number'
                               {...field}
+                              onChange={(e) => {field.onChange(parseInt(e.target.value))}}
                             />
                           </FormControl>
                           <DialogClose asChild>
                             <Button
                               className='w-full'
-                              type="button" variant="secondary">
+                              type='button'
+                              variant='secondary'
+                            >
                               Set
                             </Button>
                           </DialogClose>
@@ -182,15 +178,13 @@ const WC_Field = ({ control, label, data, name } :
                     />
                   </DialogDescription>
                 </DialogContent>
-
               </Dialog>
               <PlusCircle
-                className='cursor-pointer w-full center hover:text-secondary'
+                className='center w-full cursor-pointer hover:text-secondary'
                 onClick={() => {
-                  field.onChange([
-                    ...field.value,
-                    '',
-                  ])
+                  field.onChange([...field.value, 60])
+                  setOpen(true)
+                  setIndex(field.value.length)
                 }}
               />
               <FormControl></FormControl>
@@ -226,6 +220,7 @@ export default function Dashboard() {
       rules: '',
       events: [],
       notes: '',
+      equipment: 'raw',
       divisions: [...ageDivisionsData],
       wc_male: [...wcMData],
       wc_female: [...wcFData],
@@ -251,82 +246,153 @@ export default function Dashboard() {
         >
           <Card>
             <CardContent className='flex flex-col gap-2'>
-            <div className='flex w-full items-end gap-4 mt-8'>
-              <FormField
-                control={form.control}
-                name='name'
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='text'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='date'
-                render={({ field }) => (
-                  <FormItem className='flex w-full flex-col'>
-                    <FormLabel>Date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={'outline'}
-                            className={cn(
-                              'min-w-[240px] pl-3 text-left font-normal',
-                              !field.value && 'text-muted-foreground',
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, 'PPP')
-                            ) : (
+              <div className='mt-8 flex w-full items-end gap-4'>
+                <FormField
+                  control={form.control}
+                  name='name'
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='text'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='date'
+                  render={({ field }) => (
+                    <FormItem className='flex w-full flex-col'>
+                      <FormLabel>Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={'outline'}
+                              className={cn(
+                                'min-w-[240px] pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground',
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
                                 <span>Pick a date</span>
                               )}
-                            <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className='w-auto p-0'
-                        align='start'
-                      >
-                        <Calendar
-                          mode='single'
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date('1900-01-01')
-                          }
-                          initialFocus
+                              <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className='w-auto p-0'
+                          align='start'
+                        >
+                          <Calendar
+                            mode='single'
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date('1900-01-01')
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className='flex w-full items-end gap-4'>
+                <FormField
+                  control={form.control}
+                  name='city'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>City</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='text'
+                          {...field}
                         />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='state'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>State</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='text'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className='flex w-full items-end gap-4'>
+                <FormField
+                  control={form.control}
+                  name='country'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Country</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='text'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='federation'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Federation</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='text'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <div className='flex w-full items-end gap-4'>
               <FormField
                 control={form.control}
-                name='city'
+                name='notes'
                 render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>City</FormLabel>
+                  <FormItem>
+                    <FormLabel>Event Description</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='text'
+                      <Textarea
+                        placeholder='description'
                         {...field}
                       />
                     </FormControl>
@@ -334,316 +400,289 @@ export default function Dashboard() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name='state'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>State</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='text'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className='flex w-full items-end gap-4'>
-              <FormField
-                control={form.control}
-                name='country'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Country</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='text'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='federation'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Federation</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='text'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name='notes'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Event Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder='description'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-              </CardContent>
-          </Card>
-
-
-          <Card>
-            <CardContent>
-            <div className='flex w-full items-center gap-4 mt-4'>
-              <FormField
-                control={form.control}
-                name='daysOfCompetition'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Days of Competition</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='number'
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(parseInt(e.target.value))
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='platforms'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Platfroms</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='event name'
-                        type='number'
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(parseInt(e.target.value))
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardContent>
-          <FormField
-            control={form.control}
-            name='events'
-            render={({ field }) => (
-              <FormItem className='mt-6'>
-                <FormLabel className='text-base'>Events</FormLabel>
-                <ToggleGroup
-                  type='multiple'
-                  onValueChange={(value) => {
-                    console.log(value)
-                    field.onChange(value)
-                  }}
-                >
-                  <div className='flex flex-wrap justify-around gap-2'>
-                    {eventsData.map((item) => (
-                      <FormField
-                        key={item}
-                        control={form.control}
-                        name='events'
-                        render={() => {
-                          return (
-                            <FormItem key={item}>
-                              <FormControl>
-                                <ToggleGroupItem
-                                  variant='secondary'
-                                  className='rounded-md border border-input'
-                                  value={item}
-                                >
-                                  {item}
-                                </ToggleGroupItem>
-                              </FormControl>
-                            </FormItem>
-                          )
-                        }}
-                      />
-                    ))}
-                  </div>
-                </ToggleGroup>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          </CardContent>
+              <div className='mt-4 flex w-full items-center gap-4'>
+                <FormField
+                  control={form.control}
+                  name='daysOfCompetition'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Days of Competition</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='number'
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(parseInt(e.target.value))
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='platforms'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Platfroms</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='event name'
+                          type='number'
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(parseInt(e.target.value))
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
           </Card>
 
           <Card>
             <CardContent>
-          <FormField
-            control={form.control}
-            name='divisions'
-            render={({ field }) => (
-              <FormItem className='mt-6'>
-                <div className='flex items-center justify-between'>
-                  <FormLabel>Divsions</FormLabel>
-                  <div className='flex gap-2'>
-                    <Button
-                      variant='outline_card'
-                      onClick={(e) => {
-                        e.preventDefault()
-                        field.onChange([])
+              <FormField
+                control={form.control}
+                name='events'
+                render={({ field }) => (
+                  <FormItem className='mt-6'>
+                    <FormLabel className='text-base'>Events</FormLabel>
+                    <ToggleGroup
+                      type='multiple'
+                      onValueChange={(value) => {
+                        field.onChange(value)
                       }}
                     >
-                      Clear
-                    </Button>
-                    <Button
-                      variant='outline_card'
-                      onClick={(e) => {
-                        e.preventDefault()
-                        field.onChange([...ageDivisionsData])
+                      <div className='flex flex-wrap justify-around gap-2 px-6'>
+                        {eventsData.map((item) => (
+                          <FormField
+                            key={item}
+                            control={form.control}
+                            name='events'
+                            render={() => {
+                              return (
+                                <FormItem key={item}>
+                                  <FormControl>
+                                    <ToggleGroupItem
+                                      variant='secondary'
+                                      className='rounded-md border border-input'
+                                      value={item}
+                                    >
+                                      {item}
+                                    </ToggleGroupItem>
+                                  </FormControl>
+                                </FormItem>
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </ToggleGroup>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name='equipment'
+                render={({ field }) => (
+                  <FormItem className='mt-6'>
+                    <FormLabel className='text-base'>Equipment</FormLabel>
+                    <ToggleGroup
+                      type='multiple'
+                      onValueChange={(value) => {
+                        field.onChange(value)
                       }}
                     >
-                      Reset
-                    </Button>
-                  </div>
-                </div>
-                <div className='flex flex-col gap-1'>
-                  <div className='grid grid-cols-9 gap-2'>
-                    <div className='col-span-2'>
-                      <FormLabel>Name</FormLabel>
+                      <div className='flex flex-wrap justify-around gap-2 px-6'>
+                        {equipmentData.map((item) => (
+                          <FormField
+                            key={item}
+                            control={form.control}
+                            name='events'
+                            render={() => {
+                              return (
+                                <FormItem key={item}>
+                                  <FormControl>
+                                    <ToggleGroupItem
+                                      variant='secondary'
+                                      className='rounded-md border border-input'
+                                      value={item}
+                                    >
+                                      {item}
+                                    </ToggleGroupItem>
+                                  </FormControl>
+                                </FormItem>
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </ToggleGroup>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name='divisions'
+                render={({ field }) => (
+                  <FormItem className='mt-6'>
+                    <div className='flex items-center justify-between'>
+                      <FormLabel>Divsions</FormLabel>
+                      <div className='flex gap-2'>
+                        <Button
+                          variant='outline_card'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            field.onChange([])
+                          }}
+                        >
+                          Clear
+                        </Button>
+                        <Button
+                          variant='outline_card'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            field.onChange([...ageDivisionsData])
+                          }}
+                        >
+                          Reset
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <FormLabel>Min Age</FormLabel>
-                    </div>
-                    <div>
-                      <FormLabel>Max Age</FormLabel>
-                    </div>
-                    <div className='col-span-4'>
-                      <FormLabel>Info</FormLabel>
-                    </div>
-                  </div>
-                  {field.value?.map((_division, index) => (
-                    <div
-                      key={index}
-                      className='grid grid-cols-9 items-center gap-2'
-                    >
-                      <FormField
-                        control={form.control}
-                        name={`divisions.${index}.name`}
-                        render={({ field }) => (
-                          <FormItem className='col-span-2'>
-                            <FormControl>
-                              <Input
-                                placeholder='name'
-                                type='text'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`divisions.${index}.minAge`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder='min'
-                                type='number'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`divisions.${index}.maxAge`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder='max'
-                                type='number'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`divisions.${index}.info`}
-                        render={({ field }) => (
-                          <FormItem className='col-span-4'>
-                            <FormControl>
-                              <Input
-                                placeholder='info'
-                                type='text'
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <XCircle
-                        className='cursor-pointer place-self-center hover:text-destructive'
+                    <div className='flex flex-col gap-1'>
+                      <div className='grid grid-cols-9 gap-2'>
+                        <div className='col-span-2'>
+                          <FormLabel>Name</FormLabel>
+                        </div>
+                        <div>
+                          <FormLabel>Min Age</FormLabel>
+                        </div>
+                        <div>
+                          <FormLabel>Max Age</FormLabel>
+                        </div>
+                        <div className='col-span-4'>
+                          <FormLabel>Info</FormLabel>
+                        </div>
+                      </div>
+                      {field.value?.map((_division, index) => (
+                        <div
+                          key={index}
+                          className='grid grid-cols-9 items-center gap-2'
+                        >
+                          <FormField
+                            control={form.control}
+                            name={`divisions.${index}.name`}
+                            render={({ field }) => (
+                              <FormItem className='col-span-2'>
+                                <FormControl>
+                                  <Input
+                                    placeholder='name'
+                                    type='text'
+                                    {...field}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`divisions.${index}.minAge`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    placeholder='min'
+                                    type='number'
+                                    {...field}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`divisions.${index}.maxAge`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    placeholder='max'
+                                    type='number'
+                                    {...field}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`divisions.${index}.info`}
+                            render={({ field }) => (
+                              <FormItem className='col-span-4'>
+                                <FormControl>
+                                  <Input
+                                    placeholder='info'
+                                    type='text'
+                                    {...field}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <XCircle
+                            className='cursor-pointer place-self-center hover:text-destructive'
+                            onClick={() => {
+                              field.onChange(
+                                field.value.filter((_, i) => i !== index),
+                              )
+                            }}
+                          />
+                        </div>
+                      ))}
+                      <PlusCircle
+                        className='mt-4 cursor-pointer place-self-center hover:text-secondary'
                         onClick={() => {
-                          field.onChange(
-                            field.value.filter((_, i) => i !== index),
-                          )
+                          field.onChange([
+                            ...field.value,
+                            {
+                              name: '',
+                              minAge: '',
+                              maxAge: '',
+                              info: '',
+                            },
+                          ])
                         }}
                       />
                     </div>
-                  ))}
-                  <PlusCircle
-                    className='cursor-pointer place-self-center hover:text-secondary mt-4'
-                    onClick={() => {
-                      field.onChange([
-                        ...field.value,
-                        {
-                          name: '',
-                          minAge: '',
-                          maxAge: '',
-                          info: '',
-                        },
-                      ])
-                    }}
-                  />
-                </div>
-                <FormControl></FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          </CardContent>
+                    <FormControl></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
           </Card>
 
           <WC_Field
@@ -667,18 +706,21 @@ export default function Dashboard() {
             name='wc_mix'
           />
 
-
-
           <Button
             className='mt-4 w-min'
-            type='submit'>Submit</Button>
+            type='submit'
+          >
+            Submit
+          </Button>
           <Button
             className='w-min'
             onClick={(e) => {
               e.preventDefault()
               console.log(form.getValues())
             }}
-          >Data</Button>
+          >
+            Data
+          </Button>
         </form>
       </Form>
     </section>

@@ -19,6 +19,15 @@ export const eventsData = [
   'Team Battle',
 ]
 
+export const equipmentData = [
+  'Bare',
+  'Sleeeves',
+  'Wraps',
+  'Single Ply',
+  'Multi Ply',
+  'Unlimited',
+]
+
 export const wcMData = [
   52, 56, 60, 67.5, 75, 82.5, 90, 100, 110, 125, 140,
 ]
