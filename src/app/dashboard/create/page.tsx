@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 
 import { api } from '~/trpc/react'
@@ -41,7 +41,7 @@ import {
 
 import { ageDivisionsData, eventsData, wcFData, wcMData, equipmentData } from '~/lib/store'
 
-import type { Control } from 'react-hook-form'
+import type { Control, UseFormReturn } from 'react-hook-form'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,18 +74,24 @@ const formSchema = z.object({
 })
 
 const WC_Field = ({
-  control,
+  form,
   label,
   data,
   name,
 }: {
-  control: Control<z.infer<typeof formSchema>>
+  form: UseFormReturn<z.infer<typeof formSchema>>
   label: string
   data: number[]
   name: 'wc_male' | 'wc_female' | 'wc_mix'
 }) => {
   const [index, setIndex] = useState<number>(0)
   const [open, setOpen] = useState<boolean>(false)
+
+  const watch = useWatch({
+    control: form.control,
+    name: name,
+  })
+  const control = form.control
 
   return (
     <Card>
@@ -123,7 +129,7 @@ const WC_Field = ({
                 onOpenChange={setOpen}
               >
                 <div className='flex flex-wrap gap-4'>
-                  {field.value?.map((wc, index) => (
+                  {watch?.map((_, index) => (
                     <DialogTrigger
                       key={index}
                       asChild
@@ -132,7 +138,7 @@ const WC_Field = ({
                       }}
                     >
                       <div className='flex cursor-pointer items-center gap-2 rounded-full border border-border px-2 py-1 hover:bg-secondary hover:text-secondary-foreground'>
-                        <div>{wc}</div>
+                        <div>{field.value[index]}</div>
                         <XCircle
                           className='cursor-pointer place-self-center hover:text-destructive'
                           strokeWidth={1}
@@ -686,21 +692,21 @@ export default function Dashboard() {
           </Card>
 
           <WC_Field
-            control={form.control}
+            form={form}
             label='Male Weight Classes'
             data={wcMData}
             name='wc_male'
           />
 
           <WC_Field
-            control={form.control}
+            form={form}
             label='Female Weight Classes'
             data={wcFData}
             name='wc_female'
           />
 
           <WC_Field
-            control={form.control}
+            form={form}
             label='Mixed Weight Classes'
             data={wcMData}
             name='wc_mix'
