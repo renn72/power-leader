@@ -97,6 +97,7 @@ const WC_Field = ({
 
   const { fields, append, remove, replace } = useFieldArray({
     control: control,
+    // @ts-expect-error
     name: name,
   })
 
@@ -120,6 +121,7 @@ const WC_Field = ({
               variant='outline_card'
               onClick={(e) => {
                 e.preventDefault()
+                // @ts-expect-error
                 replace(data)
               }}
             >
@@ -140,9 +142,20 @@ const WC_Field = ({
                   setIndex(index)
                 }}
               >
-                <div className={cn('flex cursor-pointer items-center gap-2 rounded-full border border-border px-2 py-1 hover:bg-secondary hover:text-secondary-foreground',
-                  form.getValues(name).reduce((a,c,i) => i == index || c !== form.getValues(`${name}.${index}`) ? a : true, false) && 'border-destructive'
-                )}>
+                <div
+                  className={cn(
+                    'flex cursor-pointer items-center gap-2 rounded-full border border-border px-2 py-1 hover:bg-secondary hover:text-secondary-foreground',
+                    form
+                      .getValues(name)
+                      .reduce(
+                        (a, c, i) =>
+                          i == index || c !== form.getValues(`${name}.${index}`)
+                            ? a
+                            : true,
+                        false,
+                      ) && 'border-destructive',
+                  )}
+                >
                   <FormField
                     control={control}
                     name={`${name}.${index}`}
@@ -170,7 +183,7 @@ const WC_Field = ({
                   <FormItem className='flex flex-col gap-4'>
                     <FormControl>
                       <Input
-                        placeholder='name'
+                        placeholder='weight class'
                         type='number'
                         {...field}
                         onChange={(e) => {
@@ -186,8 +199,8 @@ const WC_Field = ({
                         autoFocus
                         onClick={() => {
                           const values = form.getValues(name) as number[]
+                          // @ts-expect-error
                           replace(values.sort((a, b) => a - b))
-
                         }}
                       >
                         Set
@@ -204,7 +217,8 @@ const WC_Field = ({
           className='center w-full cursor-pointer hover:text-secondary'
           onClick={() => {
             setOpen(true)
-            append(60)
+            // @ts-expect-error
+            append('')
             setIndex(fields.length)
           }}
         />
