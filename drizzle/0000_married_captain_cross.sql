@@ -23,8 +23,14 @@ CREATE TABLE `pb_competition` (
 	`city` text,
 	`date` integer,
 	`days_of_competition` integer,
+	`platforms` integer,
 	`rules` text,
 	`events` text,
+	`wc_male` text,
+	`wc_female` text,
+	`wc_mix` text,
+	`equipment` text,
+	`formular` text,
 	`notes` text,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text,
@@ -49,16 +55,4 @@ CREATE TABLE `pb_user` (
 	`name` text(256),
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text
-);
---> statement-breakpoint
-CREATE TABLE `pb_weight_classes` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`name` text NOT NULL,
-	`weight` text NOT NULL,
-	`gender` text,
-	`info` text NOT NULL,
-	`comp_id` integer,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`updatedAt` text,
-	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE no action
 );

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { competitions, } from "~/server/db/schema";
+import { competitions, insertCompetitionSchema } from "~/server/db/schema";
 
 export const competitionRouter = createTRPCRouter({
   hello: publicProcedure
@@ -13,12 +13,11 @@ export const competitionRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(insertCompetitionSchema)
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.insert(competitions).values({
-        name: input.name,
-        creatorId: 1,
-      });
+      console.log("input", input);
+
+      return true
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {

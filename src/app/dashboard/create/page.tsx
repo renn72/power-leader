@@ -38,6 +38,13 @@ import {
   DialogTrigger,
   DialogClose,
 } from '~/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 
 import {
   ageDivisionsData,
@@ -45,6 +52,7 @@ import {
   wcFData,
   wcMData,
   equipmentData,
+  winnerFormular,
 } from '~/lib/store'
 
 import type { Control, UseFormReturn } from 'react-hook-form'
@@ -64,17 +72,22 @@ const formSchema = z.object({
   platforms: z.number().nonnegative().int().min(1),
   rules: z.string(),
   notes: z.string(),
-  events: z.array(z.string()),
-  equipment: z.string(),
+  events: z.array(z.string()).nonempty({
+    message: 'Please select at least one event.',
+  }),
+  equipment: z.array(z.string()),
+  formular: z.string(),
   wc_male: z.array(z.number().positive().or(z.string())),
-  divisions: z.array(
-    z.object({
-      name: z.string(),
-      minAge: z.number().positive().or(z.string()),
-      maxAge: z.number().positive().or(z.string()),
-      info: z.string(),
-    }),
-  ),
+  divisions: z
+    .array(
+      z.object({
+        name: z.string(),
+        minAge: z.number().positive().or(z.string()),
+        maxAge: z.number().positive().or(z.string()),
+        info: z.string(),
+      }),
+    )
+    .nonempty({ message: 'Please add at least one division.' }),
   wc_female: z.array(z.number().positive().or(z.string())),
   wc_mix: z.array(z.number().positive().or(z.string())),
 })
@@ -236,6 +249,8 @@ export default function Dashboard() {
     },
   })
 
+  const { data: user } = api.user.getCurrentUser.useQuery()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -248,9 +263,10 @@ export default function Dashboard() {
       daysOfCompetition: 1,
       platforms: 1,
       rules: '',
-      events: [],
+      events: ['Squat, Bench, Deadlift'],
       notes: '',
-      equipment: 'raw',
+      equipment: ['Bare'],
+      formular: 'Total',
       divisions: [...ageDivisionsData],
       wc_male: [...wcMData],
       wc_female: [...wcFData],
@@ -260,7 +276,30 @@ export default function Dashboard() {
 
   // 2. Define a submit handler.
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    toast(JSON.stringify(data, null, 2))
+    if (!user || !user?.id) {
+      return
+    }
+    const input = {
+      name: data.name,
+      creatorId: user.id,
+      federation: data.federation,
+      country: data.country,
+      state: data.state,
+      city: data.city,
+      date: data.date,
+      daysOfCompetition: data.daysOfCompetition,
+      platforms: data.platforms,
+      rules: data.rules,
+      events: data.events.join('/'),
+      notes: data.notes,
+      equipment: data.equipment.join('/'),
+      formular: data.formular,
+      divisions: data.divisions,
+      wc_male: data.wc_male.map((item) => item.toString()).join('/'),
+      wc_female: data.wc_female.map((item) => item.toString()).join('/'),
+      wc_mix: data.wc_mix.map((item) => item.toString()).join('/'),
+    }
+    createComp(input)
   }
 
   return (
@@ -275,8 +314,9 @@ export default function Dashboard() {
           className='flex w-full max-w-2xl flex-col gap-2'
         >
           <Card>
+            <CardHeader></CardHeader>
             <CardContent className='flex flex-col gap-2'>
-              <div className='mt-8 flex w-full items-end gap-4'>
+              <div className='flex w-full items-end gap-4'>
                 <FormField
                   control={form.control}
                   name='name'
@@ -435,7 +475,8 @@ export default function Dashboard() {
 
           <Card>
             <CardContent>
-              <div className='mt-4 flex w-full items-center gap-4'>
+              <CardHeader></CardHeader>
+              <div className='flex w-full items-center gap-4'>
                 <FormField
                   control={form.control}
                   name='daysOfCompetition'
@@ -481,15 +522,17 @@ export default function Dashboard() {
           </Card>
 
           <Card>
+            <CardHeader></CardHeader>
             <CardContent>
               <FormField
                 control={form.control}
                 name='events'
                 render={({ field }) => (
-                  <FormItem className='mt-6'>
+                  <FormItem>
                     <FormLabel className='text-base'>Events</FormLabel>
                     <ToggleGroup
                       type='multiple'
+                      defaultValue={['Squat, Bench, Deadlift']}
                       onValueChange={(value) => {
                         field.onChange(value)
                       }}
@@ -527,15 +570,17 @@ export default function Dashboard() {
           </Card>
 
           <Card>
+            <CardHeader></CardHeader>
             <CardContent>
               <FormField
                 control={form.control}
                 name='equipment'
                 render={({ field }) => (
-                  <FormItem className='mt-6'>
+                  <FormItem>
                     <FormLabel className='text-base'>Equipment</FormLabel>
                     <ToggleGroup
                       type='multiple'
+                      defaultValue={['Bare']}
                       onValueChange={(value) => {
                         field.onChange(value)
                       }}
@@ -573,12 +618,13 @@ export default function Dashboard() {
           </Card>
 
           <Card>
+            <CardHeader></CardHeader>
             <CardContent>
               <FormField
                 control={form.control}
                 name='divisions'
                 render={({ field }) => (
-                  <FormItem className='mt-6'>
+                  <FormItem>
                     <div className='flex items-center justify-between'>
                       <FormLabel>Divsions</FormLabel>
                       <div className='flex gap-2'>
@@ -735,6 +781,42 @@ export default function Dashboard() {
             data={wcMData}
             name='wc_mix'
           />
+
+          <Card>
+            <CardHeader></CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name='formular'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Formula</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Winner Formula' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {winnerFormular.map((item) => (
+                          <SelectItem
+                            key={item}
+                            value={item}
+                          >
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
 
           <Button
             className='mt-4 w-min'

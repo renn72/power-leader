@@ -1,1 +1,0 @@
-ALTER TABLE `pb_competition` ADD `equipment` text;

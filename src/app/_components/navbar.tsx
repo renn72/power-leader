@@ -17,6 +17,9 @@ const Navbar = () => {
         </li>
       </ul>
       <div className='flex items-center gap-4'>
+          <SignedIn>
+            <Link href='/admin'>Admin</Link>
+          </SignedIn>
         <ModeToggle />
         <div className='w-8 flex items-center'>
         <SignedOut>

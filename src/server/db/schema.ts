@@ -23,8 +23,8 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const compEntry = createTable('comp_entry', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
-  userId: int('user_id', { mode: 'number' }).references(() => users.id),
-  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
+  userId: int('user_id', { mode: 'number' }).references(() => users.id, { onDelete: 'cascade' }),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id, { onDelete: 'cascade' }),
   birthDate: int('birth_date', { mode: 'timestamp' }),
   equipment: text('equipment'),
   gender: text('gender'),
@@ -53,7 +53,7 @@ export const divisions = createTable('age_divisions', {
   minAge: integer('min_age'),
   maxAge: integer('max_age'),
   info: text('info').notNull(),
-  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id),
+  compId: int('comp_id', { mode: 'number' }).references(() => competitions.id, { onDelete: 'cascade' }),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
@@ -80,13 +80,14 @@ export const competitions = createTable('competition', {
   city: text('city'),
   date: int('date', { mode: 'timestamp' }),
   daysOfCompetition: int('days_of_competition'),
-  platforms: text('platforms'),
+  platforms: int('platforms'),
   rules: text('rules'),
   events: text('events'),
   wc_male: text('wc_male'),
   wc_female: text('wc_female'),
   wc_mix: text('wc_mix'),
   equipment: text('equipment'),
+  formular: text('formular'),
   notes: text('notes'),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
