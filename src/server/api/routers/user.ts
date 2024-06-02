@@ -15,7 +15,7 @@ export const userRouter = createTRPCRouter({
       where: (users, { eq }) => eq(users.clerkId, user.id),
     })
     if (!res) {
-      return { clerkId: user.id, }
+      return { clerkId: user.id, id: 0}
     }
     return res
   }),

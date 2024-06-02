@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "2d424045-86d1-417a-9e69-002308b4f937",
+  "id": "8a39b015-4b2c-46b4-b945-d136e936d95e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "pb_comp_entry": {
@@ -91,7 +91,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "pb_comp_entry_comp_id_pb_competition_id_fk": {
@@ -104,7 +104,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -348,7 +348,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },

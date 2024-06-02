@@ -9,8 +9,8 @@ CREATE TABLE `pb_comp_entry` (
 	`division` text,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text,
-	FOREIGN KEY (`user_id`) REFERENCES `pb_user`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`user_id`) REFERENCES `pb_user`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `pb_competition` (
@@ -46,7 +46,7 @@ CREATE TABLE `pb_age_divisions` (
 	`comp_id` integer,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text,
-	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `pb_user` (
