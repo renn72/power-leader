@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
 
 import { api } from '~/trpc/react'
@@ -39,7 +39,13 @@ import {
   DialogClose,
 } from '~/components/ui/dialog'
 
-import { ageDivisionsData, eventsData, wcFData, wcMData, equipmentData } from '~/lib/store'
+import {
+  ageDivisionsData,
+  eventsData,
+  wcFData,
+  wcMData,
+  equipmentData,
+} from '~/lib/store'
 
 import type { Control, UseFormReturn } from 'react-hook-form'
 
@@ -60,6 +66,7 @@ const formSchema = z.object({
   notes: z.string(),
   events: z.array(z.string()),
   equipment: z.string(),
+  wc_male: z.array(z.number().positive().or(z.string())),
   divisions: z.array(
     z.object({
       name: z.string(),
@@ -68,7 +75,6 @@ const formSchema = z.object({
       info: z.string(),
     }),
   ),
-  wc_male: z.array(z.number().positive().or(z.string())),
   wc_female: z.array(z.number().positive().or(z.string())),
   wc_mix: z.array(z.number().positive().or(z.string())),
 })
@@ -87,116 +93,120 @@ const WC_Field = ({
   const [index, setIndex] = useState<number>(0)
   const [open, setOpen] = useState<boolean>(false)
 
-  const watch = useWatch({
-    control: form.control,
+  const control = form.control
+
+  const { fields, append, remove, replace } = useFieldArray({
+    control: control,
     name: name,
   })
-  const control = form.control
 
   return (
     <Card>
-      <CardContent>
-        <FormField
-          control={control}
-          name={name}
-          render={({ field }) => (
-            <FormItem className='mt-6'>
-              <div className='flex items-center justify-between'>
-                <FormLabel>{label}</FormLabel>
-                <div className='flex gap-2'>
-                  <Button
-                    variant='outline_card'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      field.onChange([])
-                    }}
-                  >
-                    Clear
-                  </Button>
-                  <Button
-                    variant='outline_card'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      field.onChange([...data])
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </div>
-              <Dialog
-                open={open}
-                onOpenChange={setOpen}
-              >
-                <div className='flex flex-wrap gap-4'>
-                  {watch?.map((_, index) => (
-                    <DialogTrigger
-                      key={index}
-                      asChild
-                      onClick={() => {
-                        setIndex(index)
-                      }}
-                    >
-                      <div className='flex cursor-pointer items-center gap-2 rounded-full border border-border px-2 py-1 hover:bg-secondary hover:text-secondary-foreground'>
-                        <div>{field.value[index]}</div>
-                        <XCircle
-                          className='cursor-pointer place-self-center hover:text-destructive'
-                          strokeWidth={1}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            field.onChange(
-                              field.value.filter((_, i) => i !== index),
-                            )
-                          }}
-                        />
-                      </div>
-                    </DialogTrigger>
-                  ))}
-                </div>
-                <DialogContent className='w-full max-w-[240px] place-items-center'>
-                  <DialogHeader></DialogHeader>
-                  <DialogDescription asChild>
-                    <FormField
-                      control={control}
-                      name={`${name}.${index}`}
-                      render={({ field }) => (
-                        <FormItem className='flex flex-col gap-4'>
-                          <FormControl>
-                            <Input
-                              placeholder='name'
-                              type='number'
-                              {...field}
-                              onChange={(e) => {field.onChange(parseInt(e.target.value))}}
-                            />
-                          </FormControl>
-                          <DialogClose asChild>
-                            <Button
-                              className='w-full'
-                              type='button'
-                              variant='secondary'
-                            >
-                              Set
-                            </Button>
-                          </DialogClose>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </DialogDescription>
-                </DialogContent>
-              </Dialog>
-              <PlusCircle
-                className='center w-full cursor-pointer hover:text-secondary'
+      <CardHeader></CardHeader>
+      <CardContent className='flex flex-col gap-4'>
+        <div className='flex items-center justify-between'>
+          <div>{label}</div>
+          <div className='flex gap-2'>
+            <Button
+              variant='outline_card'
+              onClick={(e) => {
+                e.preventDefault()
+                replace([])
+              }}
+            >
+              Clear
+            </Button>
+            <Button
+              variant='outline_card'
+              onClick={(e) => {
+                e.preventDefault()
+                replace(data)
+              }}
+            >
+              Reset
+            </Button>
+          </div>
+        </div>
+        <Dialog
+          open={open}
+          onOpenChange={setOpen}
+        >
+          <div className='flex flex-wrap gap-4 px-8'>
+            {fields?.map((field, index) => (
+              <DialogTrigger
+                key={field.id}
+                asChild
                 onClick={() => {
-                  field.onChange([...field.value, 60])
-                  setOpen(true)
-                  setIndex(field.value.length)
+                  setIndex(index)
                 }}
+              >
+                <div className={cn('flex cursor-pointer items-center gap-2 rounded-full border border-border px-2 py-1 hover:bg-secondary hover:text-secondary-foreground',
+                  form.getValues(name).reduce((a,c,i) => i == index || c !== form.getValues(`${name}.${index}`) ? a : true, false) && 'border-destructive'
+                )}>
+                  <FormField
+                    control={control}
+                    name={`${name}.${index}`}
+                    render={({ field }) => <div>{field.value}</div>}
+                  />
+                  <XCircle
+                    className='cursor-pointer place-self-center hover:text-destructive'
+                    strokeWidth={1}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      remove(index)
+                    }}
+                  />
+                </div>
+              </DialogTrigger>
+            ))}
+          </div>
+          <DialogContent className='w-full max-w-[240px] place-items-center'>
+            <DialogHeader></DialogHeader>
+            <DialogDescription asChild>
+              <FormField
+                control={control}
+                name={`${name}.${index}`}
+                render={({ field }) => (
+                  <FormItem className='flex flex-col gap-4'>
+                    <FormControl>
+                      <Input
+                        placeholder='name'
+                        type='number'
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(parseFloat(e.target.value))
+                        }}
+                      />
+                    </FormControl>
+                    <DialogClose asChild>
+                      <Button
+                        className='w-full'
+                        type='button'
+                        variant='secondary'
+                        autoFocus
+                        onClick={() => {
+                          const values = form.getValues(name) as number[]
+                          replace(values.sort((a, b) => a - b))
+
+                        }}
+                      >
+                        Set
+                      </Button>
+                    </DialogClose>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <FormControl></FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+        <PlusCircle
+          className='center w-full cursor-pointer hover:text-secondary'
+          onClick={() => {
+            setOpen(true)
+            append(60)
+            setIndex(fields.length)
+          }}
         />
       </CardContent>
     </Card>
