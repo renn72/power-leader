@@ -5,6 +5,7 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 import { competitions, divisions } from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
+import { TRPCError } from '@trpc/server'
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
   return array.length > 0
@@ -85,11 +86,27 @@ export const competitionRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const res = await ctx.db.query.competitions.findMany({
       orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
+      with: {
+        divisions: true,
+      },
     })
     return res
   }),
   getMyCompetitions: publicProcedure.query(async ({ ctx }) => {
     const user = await getCurrentUser()
-    return user
+    if (!user) {
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'You are not authorized to access this resource.',
+      })
+    }
+    const res = await ctx.db.query.competitions.findMany({
+      where: (competitions, { eq }) => eq(competitions.creatorId, user.id),
+      orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
+      with: {
+        divisions: true,
+      },
+    })
+    return res
   }),
 })
