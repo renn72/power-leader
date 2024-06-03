@@ -88,6 +88,7 @@ export const competitions = createTable('competition', {
   wc_mix: text('wc_mix'),
   equipment: text('equipment'),
   formular: text('formular'),
+  currentState: text('current_state'),
   notes: text('notes'),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
