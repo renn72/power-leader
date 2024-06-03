@@ -1,9 +1,11 @@
 'use client'
+import { useState } from 'react'
 import { api } from '~/trpc/react'
 import Link from 'next/link'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Button } from '~/components/ui/button'
+import { Separator } from '~/components/ui/separator'
 import {
   Table,
   TableBody,
@@ -22,8 +24,40 @@ import {
 export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
+  const [isOpenClosing, setIsOpenClosing] = useState(false)
+  const [open, setOpen] = useState('Open')
+  const [close, setClose] = useState('Close')
+
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
+
+  const ctx = api.useUtils()
+
+  const { mutate: openCompetition } =
+    api.competition.openCompetition.useMutation({
+      onMutate: () => {
+        setIsOpenClosing(true)
+        setOpen('Opening...')
+      },
+      onSettled: async () => {
+        await ctx.competition.getMyCompetitions.refetch()
+        setIsOpenClosing(false)
+        setOpen('Open')
+      },
+    })
+
+  const { mutate: closeCompetition } =
+    api.competition.closeCompetition.useMutation({
+      onMutate: () => {
+        setIsOpenClosing(true)
+        setClose('Closing...')
+      },
+      onSettled: async () => {
+        await ctx.competition.getMyCompetitions.refetch()
+        setIsOpenClosing(false)
+        setClose('Close')
+      },
+    })
 
   console.log(competitions)
 
@@ -52,7 +86,7 @@ export default function Dashboard() {
             {competitionsLoading ? (
               <div className='flex flex-col items-center justify-center gap-2'>
                 <div className='animate-spin'>
-                  <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-gray-200' />
+                  <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
                 </div>
               </div>
             ) : (
@@ -76,6 +110,7 @@ export default function Dashboard() {
                     <TableHead>WC Women</TableHead>
                     <TableHead>WC Mix</TableHead>
                     <TableHead>Divisions</TableHead>
+                    <TableHead>Information</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -241,17 +276,25 @@ export default function Dashboard() {
                           </HoverCardTrigger>
                           <HoverCardContent>
                             <div className='flex flex-col gap-1'>
-                              <div className='grid grid-cols-6 gap-1'></div>
-                              {competition.divisions.map((division) => (
+                              <div className='grid grid-cols-6 gap-1'>
+                                <div className='col-span-2'>Name</div>
+                                <div>Min</div>
+                                <div>Max</div>
+                                <div className='col-span-2'>Info</div>
+                              </div>
+                              {competition.divisions.map((division, i) => (
                                 <div
                                   key={division.id}
                                   className='grid grid-cols-6 gap-1'
                                 >
+                                  {i !== 0 && (
+                                    <Separator className='col-span-6' />
+                                  )}
                                   <div className='col-span-2'>
                                     {division.name}
                                   </div>
-                                  <div>{division.minAge}</div>
-                                  <div>{division.maxAge}</div>
+                                  <div>{division.minAge || '-'}</div>
+                                  <div>{division.maxAge || '-'}</div>
                                   <div className='col-span-2'>
                                     {division.info}
                                   </div>
@@ -261,7 +304,49 @@ export default function Dashboard() {
                           </HoverCardContent>
                         </HoverCard>
                       </TableCell>
-                      <TableCell>actions</TableCell>
+                      <TableCell>{competition.notes}</TableCell>
+                      <TableCell>
+                        {(competition.currentState === '' ||
+                          competition.currentState === null ||
+                          competition.currentState === 'closed') && (
+                          <div className='flex flex-col items-center gap-2'>
+                            <div className='text-destructive font-bold'>Closed</div>
+                            <Button
+                              variant='outline_card'
+                              className='min-w-[130px]'
+                              onClick={() => {
+                                openCompetition(competition.id)
+                              }}
+                            >
+                              {isOpenClosing && (
+                                <div className='mr-3 animate-spin'>
+                                  <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
+                                </div>
+                              )}
+                              {open}
+                            </Button>
+                          </div>
+                        )}
+                        {competition.currentState === 'open' && (
+                          <div className='flex flex-col items-center gap-2'>
+                            <div className='font-bold text-secondary'>Open</div>
+                            <Button
+                              variant='outline_card'
+                              className='min-w-[130px]'
+                              onClick={() => {
+                                closeCompetition(competition.id)
+                              }}
+                            >
+                              {isOpenClosing && (
+                                <div className='mr-3 animate-spin'>
+                                  <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
+                                </div>
+                              )}
+                              {close}
+                            </Button>
+                          </div>
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -272,7 +357,6 @@ export default function Dashboard() {
             </Link>
           </section>
         </TabsContent>
-        <TabsContent value='password'>Change your password here.</TabsContent>
       </Tabs>
     </section>
   )

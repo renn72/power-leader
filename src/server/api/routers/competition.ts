@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { eq } from 'drizzle-orm';
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
@@ -71,8 +72,8 @@ export const competitionRouter = createTRPCRouter({
         }) =>
           ctx.db.insert(divisions).values({
             name: division.name,
-            minAge: Number(division.minAge),
-            maxAge: Number(division.maxAge),
+            minAge: division.minAge === '' ? null : Number(division.minAge),
+            maxAge: division.maxAge === '' ? null : Number(division.maxAge),
             info: division.info || '',
             compId: resComp[0]?.id || 0,
           }),
@@ -109,4 +110,84 @@ export const competitionRouter = createTRPCRouter({
     })
     return res
   }),
+  openCompetition: publicProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      const comp = await ctx.db.query.competitions.findFirst({
+        where: (competitions, { eq }) => eq(competitions.id, input),
+        with: {
+          creator: true,
+        },
+      })
+
+      if (!comp) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Competition not found.',
+        })
+      }
+      if (comp.creator.id !== user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Unauthorized.',
+        })
+      }
+
+      await ctx.db
+        .update(competitions)
+        .set({
+          currentState: 'open',
+        })
+        .where(eq(competitions.id, input))
+
+      return true
+    }),
+  closeCompetition: publicProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      const comp = await ctx.db.query.competitions.findFirst({
+        where: (competitions, { eq }) => eq(competitions.id, input),
+        with: {
+          creator: true,
+        },
+      })
+
+      if (!comp) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Competition not found.',
+        })
+      }
+      if (comp.creator.id !== user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Unauthorized.',
+        })
+      }
+
+      await ctx.db
+        .update(competitions)
+        .set({
+          currentState: 'closed',
+        })
+        .where(eq(competitions.id, input))
+
+      return true
+    }),
 })
