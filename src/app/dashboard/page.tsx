@@ -13,6 +13,11 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '~/components/ui/hover-card'
 
 export const dynamic = 'force-dynamic'
 
@@ -71,6 +76,7 @@ export default function Dashboard() {
                     <TableHead>WC Women</TableHead>
                     <TableHead>WC Mix</TableHead>
                     <TableHead>Divisions</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -109,59 +115,153 @@ export default function Dashboard() {
                       </TableCell>
                       <TableCell>{competition.formular}</TableCell>
                       <TableCell>
-                        {competition.wc_male
-                          ?.split('/')
-                          .slice(0, 3)
-                          .map((event) => (
-                            <div
-                              key={event}
-                              className='text-nowrap'
-                            >
-                              {event}
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <div className='flex gap-1'>
+                              {competition.wc_male
+                                ?.split('/')
+                                .slice(0, 3)
+                                .map((event) => (
+                                  <div
+                                    key={event}
+                                    className='text-nowrap'
+                                  >
+                                    {event}kg
+                                  </div>
+                                ))}
+                              {competition.wc_male &&
+                                competition.wc_male?.split('/')?.length > 3 && (
+                                  <div className='text-nowrap'>...</div>
+                                )}
                             </div>
-                          ))}
-                      </TableCell>
-                      <TableCell>
-                        <div className='flex gap-1'>
-                          {competition.wc_female
-                            ?.split('/')
-                            .slice(0, 3)
-                            .map((event) => (
-                              <div
-                                key={event}
-                                className='text-nowrap'
-                              >
-                                {event}kg
-                              </div>
-                            ))}
-                          {competition.wc_female && competition.wc_female?.split('/')?.length > 3 && (
-                            <div className='text-nowrap'>...</div>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {competition.wc_mix
-                          ?.split('/')
-                          .slice(0, 3)
-                          .map((event) => (
-                            <div
-                              key={event}
-                              className='text-nowrap'
-                            >
-                              {event}
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <div className='grid grid-cols-4 gap-1'>
+                              {competition.wc_male?.split('/').map((event) => (
+                                <div
+                                  key={event}
+                                  className='text-nowrap'
+                                >
+                                  {event}kg
+                                </div>
+                              ))}
                             </div>
-                          ))}
+                          </HoverCardContent>
+                        </HoverCard>
                       </TableCell>
                       <TableCell>
-                        {competition.divisions?.map((division) => (
-                          <div
-                            key={division.id}
-                            className='text-nowrap'
-                          >
-                            {division.name}
-                          </div>
-                        ))}
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <div className='flex gap-1'>
+                              {competition.wc_female
+                                ?.split('/')
+                                .slice(0, 3)
+                                .map((event) => (
+                                  <div
+                                    key={event}
+                                    className='text-nowrap'
+                                  >
+                                    {event}kg
+                                  </div>
+                                ))}
+                              {competition.wc_female &&
+                                competition.wc_female?.split('/')?.length >
+                                  3 && <div className='text-nowrap'>...</div>}
+                            </div>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <div className='grid grid-cols-4 gap-1'>
+                              {competition.wc_female
+                                ?.split('/')
+                                .map((event) => (
+                                  <div
+                                    key={event}
+                                    className='text-nowrap'
+                                  >
+                                    {event}kg
+                                  </div>
+                                ))}
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
                       </TableCell>
+                      <TableCell>
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <div className='flex gap-1'>
+                              {competition.wc_mix
+                                ?.split('/')
+                                .slice(0, 3)
+                                .map((event) => (
+                                  <div
+                                    key={event}
+                                    className='text-nowrap'
+                                  >
+                                    {event}kg
+                                  </div>
+                                ))}
+                              {competition.wc_mix &&
+                                competition.wc_mix?.split('/')?.length > 3 && (
+                                  <div className='text-nowrap'>...</div>
+                                )}
+                            </div>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <div className='grid grid-cols-4 gap-1'>
+                              {competition.wc_mix?.split('/').map((event) => (
+                                <div
+                                  key={event}
+                                  className='text-nowrap'
+                                >
+                                  {event}kg
+                                </div>
+                              ))}
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
+                      </TableCell>
+                      <TableCell>
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <div className='flex flex-col gap-1'>
+                              {competition.divisions
+                                ?.slice(0, 3)
+                                .map((division) => (
+                                  <div
+                                    key={division.id}
+                                    className='text-nowrap'
+                                  >
+                                    {division.name}
+                                  </div>
+                                ))}
+                              {competition.divisions?.length > 3 && (
+                                <div className='text-nowrap'>...</div>
+                              )}
+                            </div>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <div className='flex flex-col gap-1'>
+                              <div className='grid grid-cols-6 gap-1'></div>
+                              {competition.divisions.map((division) => (
+                                <div
+                                  key={division.id}
+                                  className='grid grid-cols-6 gap-1'
+                                >
+                                  <div className='col-span-2'>
+                                    {division.name}
+                                  </div>
+                                  <div>{division.minAge}</div>
+                                  <div>{division.maxAge}</div>
+                                  <div className='col-span-2'>
+                                    {division.info}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
+                      </TableCell>
+                      <TableCell>actions</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
