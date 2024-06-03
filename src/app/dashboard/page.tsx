@@ -1,10 +1,7 @@
 'use client'
-import { useState } from 'react'
-
 import { api } from '~/trpc/react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
-import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import Link from 'next/link'
 
@@ -12,6 +9,8 @@ export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
   const { data: competitions } = api.competition.getAll.useQuery()
+
+  console.log(competitions)
 
   return (
     <section className='mt-8 flex h-full grow flex-col'>
@@ -44,7 +43,7 @@ export default function Dashboard() {
                   key={competition.id}
                   className='flex justify-between'
                 >
-                  <span>{competition.name}</span>
+                  <span>{competition.name} {competition.creatorId}</span>
                 </div>
               ))}
             </div>
