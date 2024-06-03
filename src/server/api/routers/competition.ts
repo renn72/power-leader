@@ -1,12 +1,10 @@
 import { z } from 'zod'
-import { currentUser } from '@clerk/nextjs/server'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
-import {
-  competitions,
-  insertCompetitionSchema,
-  divisions,
-} from '~/server/db/schema'
+
+import { competitions, divisions } from '~/server/db/schema'
+
+import { getCurrentUser } from './user'
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
   return array.length > 0
@@ -80,7 +78,7 @@ export const competitionRouter = createTRPCRouter({
       )
 
       if (isTuple(ins)) {
-        const batch = await ctx.db.batch(ins)
+        await ctx.db.batch(ins)
       }
     }),
 
@@ -89,5 +87,9 @@ export const competitionRouter = createTRPCRouter({
       orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
     })
     return res
+  }),
+  getMyCompetitions: publicProcedure.query(async ({ ctx }) => {
+    const user = await getCurrentUser()
+    return user
   }),
 })

@@ -8,7 +8,7 @@ import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
-  const { data: competitions } = api.competition.getAll.useQuery()
+  const { data: competitions } = api.competition.getMyCompetitions.useQuery()
 
   console.log(competitions)
 
@@ -27,25 +27,13 @@ export default function Dashboard() {
             >
               Competition
             </TabsTrigger>
-            <TabsTrigger
-              value='password'
-              className='w-28'
-            >
-              Pasword
-            </TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value='competition'>
-          <section className='flex flex-col gap-4'>
+        <TabsContent
+          className='min-h-[calc(100vh - 10rem)] w-full'
+          value='competition'>
+          <section className='grid grid-cols-1 place-content-between gap-4 h-full'>
             <div className='flex flex-col gap-2'>
-              {competitions?.map((competition) => (
-                <div
-                  key={competition.id}
-                  className='flex justify-between'
-                >
-                  <span>{competition.name} {competition.creatorId}</span>
-                </div>
-              ))}
             </div>
             <Link href='/dashboard/create'>
               <Button>Create</Button>
