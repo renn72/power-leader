@@ -89,6 +89,11 @@ export const competitions = createTable('competition', {
   equipment: text('equipment'),
   formular: text('formular'),
   currentState: text('current_state'),
+  competitorLimit: int('competitor_limit'),
+  venue: text('venue'),
+  isStarted: integer('is_started', { mode: 'boolean' }),
+  isLimited: integer('is_limited', { mode: 'boolean' }),
+  isPaid: integer('is_paid', { mode: 'boolean' }),
   notes: text('notes'),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)

@@ -15,6 +15,20 @@
       "when": 1717385858037,
       "tag": "0001_absent_whirlwind",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1717469987992,
+      "tag": "0002_open_maddog",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1717482928674,
+      "tag": "0003_purple_star_brand",
+      "breakpoints": true
     }
   ]
 }

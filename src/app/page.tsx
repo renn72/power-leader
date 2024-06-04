@@ -1,4 +1,5 @@
 'use client'
+import { api } from '~/trpc/react'
 
 export const dynamic = 'force-dynamic'
 

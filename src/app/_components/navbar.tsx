@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { ModeToggle } from './mode-toggle'
+import Header from './header'
 
 const Navbar = () => {
   return (
@@ -26,7 +27,7 @@ const Navbar = () => {
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <UserButton />
+            <UserButton />
         </SignedIn>
         </div>
       </div>
