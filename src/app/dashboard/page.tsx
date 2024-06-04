@@ -20,6 +20,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '~/components/ui/hover-card'
+import Create from '~/app/_components/create'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,8 +60,6 @@ export default function Dashboard() {
       },
     })
 
-  console.log(competitions)
-
   return (
     <section className='mt-8 flex h-full grow flex-col'>
       <Tabs
@@ -69,15 +68,32 @@ export default function Dashboard() {
         className='flex h-full grow space-x-2'
       >
         <div className='min-h-[calc(100vh - 10rem)] rounded-md bg-muted p-2'>
-          <TabsList className='flex h-full w-36 flex-col justify-start space-x-2'>
+          <TabsList className='flex h-full w-36 flex-col justify-start gap-6 space-x-2'>
+            <TabsTrigger
+              value='join'
+              className='w-28'
+            >
+              Join
+            </TabsTrigger>
             <TabsTrigger
               value='competition'
               className='w-28'
             >
               Competition
             </TabsTrigger>
+            <TabsTrigger
+              value='create'
+              className='w-28'
+            >
+              Create
+            </TabsTrigger>
           </TabsList>
         </div>
+        <TabsContent
+          className='min-h-[calc(100vh - 10rem)] w-full'
+          value='join'
+        >
+        </TabsContent>
         <TabsContent
           className='min-h-[calc(100vh - 10rem)] w-full'
           value='competition'
@@ -95,6 +111,7 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
+                    <TableHead>Venue</TableHead>
                     <TableHead>Federation</TableHead>
                     <TableHead>City</TableHead>
                     <TableHead>State</TableHead>
@@ -310,7 +327,9 @@ export default function Dashboard() {
                           competition.currentState === null ||
                           competition.currentState === 'closed') && (
                           <div className='flex flex-col items-center gap-2'>
-                            <div className='text-destructive font-bold'>Closed</div>
+                            <div className='font-bold text-destructive'>
+                              Closed
+                            </div>
                             <Button
                               variant='outline_card'
                               className='min-w-[130px]'
@@ -356,6 +375,12 @@ export default function Dashboard() {
               <Button>Create</Button>
             </Link>
           </section>
+        </TabsContent>
+        <TabsContent
+          className='min-h-[calc(100vh - 10rem)] w-full'
+          value='create'
+        >
+          <Create />
         </TabsContent>
       </Tabs>
     </section>

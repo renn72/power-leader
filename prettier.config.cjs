@@ -2,7 +2,7 @@
 const config = {
   singleQuote: true,
   trailingComma: 'all',
-  tabWidth: 2,
+  tabWidth: 4,
   semi: false,
   jsxSingleQuote: true,
   singleAttributePerLine: true,

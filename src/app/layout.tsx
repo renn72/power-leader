@@ -7,7 +7,7 @@ import { dark } from '@clerk/themes'
 
 import { ThemeProvider } from '~/app/_components/theme-provider'
 import Navbar from './_components/navbar'
-import { Toaster } from "~/components/ui/sonner"
+import { Toaster } from '~/components/ui/sonner'
 
 export const metadata = {
   title: 'Scoreboard',
@@ -26,9 +26,7 @@ export default function RootLayout({
         baseTheme: dark,
       }}
     >
-      <html
-        lang='en'
-      >
+      <html lang='en'>
         <body>
           <TRPCReactProvider>
             <ThemeProvider
@@ -37,15 +35,10 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main
-                className={`flex flex-col min-h-screen `}
-              >
+              <main className={`flex min-h-screen flex-col `}>
                 <Navbar />
                 {children}
-                <footer
-                  className='h-16'>
-                  footer
-                </footer>
+                <footer className='h-16'>footer</footer>
                 <Toaster />
               </main>
             </ThemeProvider>
