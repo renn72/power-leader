@@ -68,10 +68,10 @@ export default function Dashboard() {
             <Tabs
                 defaultValue='competition'
                 orientation='vertical'
-                className='flex flex-col lg:flex-row  h-full grow space-x-2'
+                className='flex h-full grow  flex-col space-x-2 lg:flex-row'
             >
                 <div className='lg:min-h-[calc(100vh - 10rem)] rounded-md bg-muted p-2'>
-                    <TabsList className='flex h-full w-36 lg:flex-col justify-start gap-6 space-x-2'>
+                    <TabsList className='flex h-full w-36 justify-start gap-6 space-x-2 lg:flex-col'>
                         <TabsTrigger
                             value='join'
                             className='w-28'
@@ -860,41 +860,18 @@ export default function Dashboard() {
                                                         null ||
                                                     competition.currentState ===
                                                         'closed') && (
-                                                    <div className='flex flex-col items-center gap-2'>
-                                                        <div className='font-bold text-destructive'>
-                                                            Closed
-                                                        </div>
-                                                        <Button
-                                                            variant='outline_card'
-                                                            className='min-w-[130px]'
-                                                            onClick={() => {
-                                                                openCompetition(
-                                                                    competition.id,
-                                                                )
-                                                            }}
-                                                        >
-                                                            {isOpenClosing && (
-                                                                <div className='mr-3 animate-spin'>
-                                                                    <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
-                                                                </div>
-                                                            )}
-                                                            {open}
-                                                        </Button>
-                                                    </div>
+                                                    <div className='flex flex-col items-center gap-2'></div>
                                                 )}
                                                 {competition.currentState ===
                                                     'open' && (
                                                     <div className='flex flex-col items-center gap-2'>
                                                         <div className='font-bold text-secondary'>
-                                                            Open
+                                                            join
                                                         </div>
                                                         <Button
                                                             variant='outline_card'
                                                             className='min-w-[130px]'
                                                             onClick={() => {
-                                                                closeCompetition(
-                                                                    competition.id,
-                                                                )
                                                             }}
                                                         >
                                                             {isOpenClosing && (

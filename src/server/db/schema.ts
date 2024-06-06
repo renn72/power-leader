@@ -24,7 +24,20 @@ export const users = createTable('user', {
 export const usersRelations = relations(users, ({ many }) => ({
     entry: many(compEntry),
     competition: many(competitions),
+    role: many(roles),
 }))
+
+export const roles = createTable('role', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    name: text('name', { length: 256 }),
+    user: int('user_id', { mode: 'number' }).references(() => users.id, {
+        onDelete: 'cascade',
+    }),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    updatedAt: text('updatedAt'),
+})
 
 export const compEntry = createTable('comp_entry', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -38,9 +51,15 @@ export const compEntry = createTable('comp_entry', {
     birthDate: int('birth_date', { mode: 'timestamp' }),
     equipment: text('equipment'),
     gender: text('gender'),
+    predictedWeight: text('predicted_weight'),
     weight: text('weight'),
     events: text('events'),
     division: text('division'),
+    squatOpener: text('squat_opener'),
+    squarRackHeight: text('squar_rack_height'),
+    benchOpener: text('bench_opener'),
+    benchRackHeight: text('bench_rack_height'),
+    deadliftOpener: text('deadlift_opener'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
