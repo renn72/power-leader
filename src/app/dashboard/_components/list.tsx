@@ -364,7 +364,11 @@ const List = () => {
                                             <TableCell>
                                                 {competition.notes}
                                             </TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell>
+                                        <Link href={`/join/${competition.uuid}`}>
+                                            <Button>Join</Button>
+                                        </Link>
+                                    </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

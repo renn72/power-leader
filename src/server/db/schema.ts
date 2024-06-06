@@ -127,6 +127,7 @@ export const competitions = createTable('competition', {
     isStarted: integer('is_started', { mode: 'boolean' }),
     isLimited: integer('is_limited', { mode: 'boolean' }),
     isPaid: integer('is_paid', { mode: 'boolean' }),
+    uuid: text('uuid'),
     notes: text('notes'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
