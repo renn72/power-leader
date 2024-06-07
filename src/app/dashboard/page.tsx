@@ -1,25 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { api } from '~/trpc/react'
-import Link from 'next/link'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
-import { Button } from '~/components/ui/button'
-import { Separator } from '~/components/ui/separator'
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '~/components/ui/table'
-import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from '~/components/ui/hover-card'
 import Create from './_components/create'
 import Competitions from './_components/competions'
 import List from './_components/list'
@@ -27,44 +8,6 @@ import List from './_components/list'
 export const dynamic = 'force-dynamic'
 
 export default function Dashboard() {
-    const [isOpenClosing, setIsOpenClosing] = useState(false)
-    const [open, setOpen] = useState('Open')
-    const [close, setClose] = useState('Close')
-
-    const { data: competitions, isLoading: competitionsLoading } =
-        api.competition.getMyCompetitions.useQuery()
-
-    const { data: allCompetitions, isLoading: allCompetitionsLoading } =
-        api.competition.getAll.useQuery()
-
-    const ctx = api.useUtils()
-
-    const { mutate: openCompetition } =
-        api.competition.openCompetition.useMutation({
-            onMutate: () => {
-                setIsOpenClosing(true)
-                setOpen('Opening...')
-            },
-            onSettled: async () => {
-                await ctx.competition.getMyCompetitions.refetch()
-                setIsOpenClosing(false)
-                setOpen('Open')
-            },
-        })
-
-    const { mutate: closeCompetition } =
-        api.competition.closeCompetition.useMutation({
-            onMutate: () => {
-                setIsOpenClosing(true)
-                setClose('Closing...')
-            },
-            onSettled: async () => {
-                await ctx.competition.getMyCompetitions.refetch()
-                setIsOpenClosing(false)
-                setClose('Close')
-            },
-        })
-
     return (
         <section className='mt-8 flex h-full grow flex-col'>
             <Tabs
