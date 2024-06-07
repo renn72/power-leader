@@ -14,9 +14,8 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
     const hostName = window.location.origin
     const { isSignedIn, isLoaded } = useUser()
 
-    const { data: competition, isLoading : competitionLoading } = api.competition.getCompetitionByUuid.useQuery(
-        comp,
-    )
+    const { data: competition, isLoading: competitionLoading } =
+        api.competition.getCompetitionByUuid.useQuery(comp)
 
     if (!isLoaded) {
         return null
@@ -40,24 +39,20 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
     }
 
     if (competitionLoading) {
-        return <Skeleton className='w-[600px] h-[200px]' />
+        return <Skeleton className='h-[200px] w-[600px]' />
     }
 
     if (!competition) {
         return <div>Competition not found</div>
     }
 
-
-
-
     return (
-        <section className='mt-8 flex h-full grow flex-col'>
-            {}
-            <div>
+        <>
+            <div className='grow'>
                 <h1>Join Competition</h1>
                 <h2>{comp}</h2>
             </div>
-        </section>
+        </>
     )
 }
 

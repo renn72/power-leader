@@ -15,7 +15,7 @@ export default function Dashboard() {
                 orientation='vertical'
                 className='flex h-full grow  flex-col space-x-2 lg:flex-row'
             >
-                <div className='lg:min-h-[calc(100vh - 10rem)] rounded-md bg-muted p-2'>
+                <div className='rounded-md bg-muted p-2'>
                     <TabsList className='flex h-full w-36 justify-start gap-6 space-x-2 lg:flex-col'>
                         <TabsTrigger
                             value='join'
