@@ -15,6 +15,7 @@ export const users = createTable('user', {
     notes: text('notes'),
     instagram: text('instagram'),
     openlifter: text('openlifter'),
+    phone: text('phone'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),

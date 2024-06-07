@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { api } from '~/trpc/react'
 
 export const dynamic = 'force-dynamic'
@@ -12,7 +13,15 @@ export default function Home() {
                 </h1>
             </div>
             <div className='inset-0 z-0 flex flex-col items-center justify-center gap-2'>
-                <h2 className='text-2xl font-bold'></h2>
+                <h2 className='text-2xl font-bold'>
+                    <Link
+                        href='
+                        join/6c65c43c-eb6a-44fe-8d61-7fb017d2e5f6
+                        '
+                    >
+                        comp
+                    </Link>
+                </h2>
             </div>
         </section>
     )

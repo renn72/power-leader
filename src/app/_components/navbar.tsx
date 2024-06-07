@@ -2,7 +2,6 @@ import Link from 'next/link'
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { ModeToggle } from './mode-toggle'
-import Header from './header'
 
 const Navbar = () => {
   return (
@@ -24,7 +23,7 @@ const Navbar = () => {
         <ModeToggle />
         <div className='w-8 flex items-center'>
         <SignedOut>
-          <SignInButton />
+          <SignInButton mode='modal' />
         </SignedOut>
         <SignedIn>
             <UserButton />
