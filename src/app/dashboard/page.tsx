@@ -38,20 +38,20 @@ export default function Dashboard() {
                     </TabsList>
                 </div>
                 <TabsContent
-                    className='min-h-[calc(100vh - 10rem)] w-full'
+                    className='min-h-[calc(100vh-10rem)] w-full'
                     value='join'
                 >
                     <List />
                 </TabsContent>
 
                 <TabsContent
-                    className='min-h-[calc(100vh - 10rem)] w-full'
+                    className='min-h-[calc(100vh-10rem)] w-full'
                     value='competition'
                 >
                     <Competitions />
                 </TabsContent>
                 <TabsContent
-                    className='min-h-[calc(100vh - 10rem)] w-full'
+                    className='min-h-[calc(100vh-10rem)] w-full'
                     value='create'
                 >
                     <Create />

@@ -20,6 +20,7 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from '~/components/ui/hover-card'
+import { Skeleton } from '~/components/ui/skeleton'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,6 +31,7 @@ const Competitions = () => {
     const ctx = api.useUtils()
     const { data: competitions, isLoading: competitionsLoading } =
         api.competition.getMyCompetitions.useQuery()
+
     const { mutate: openCompetition } =
         api.competition.openCompetition.useMutation({
             onMutate: () => {
@@ -63,9 +65,7 @@ const Competitions = () => {
             <section className='grid h-full grid-cols-1 place-content-between gap-4'>
                 {competitionsLoading ? (
                     <div className='flex flex-col items-center justify-center gap-2'>
-                        <div className='animate-spin'>
-                            <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
-                        </div>
+                        <Skeleton className='h-[200px] w-[80vw]' />
                     </div>
                 ) : (
                     <Table>
