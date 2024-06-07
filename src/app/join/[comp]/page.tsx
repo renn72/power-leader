@@ -1,19 +1,22 @@
 'use client'
 
-import { SignUpButton, SignInButton, SignIn } from '@clerk/nextjs'
 import { useUser } from '@clerk/nextjs'
 
-import Link from 'next/link'
+import { api } from '~/trpc/react'
 
 import { Button } from '~/components/ui/button'
+import { Skeleton } from '~/components/ui/skeleton'
 
 export const dynamic = 'force-dynamic'
 
 const JoinCompPage = ({ params }: { params: { comp: string } }) => {
     const { comp } = params
     const hostName = window.location.origin
-
     const { isSignedIn, isLoaded } = useUser()
+
+    const { data: competition, isLoading : competitionLoading } = api.competition.getCompetitionByUuid.useQuery(
+        comp,
+    )
 
     if (!isLoaded) {
         return null
@@ -34,6 +37,14 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
                 </a>
             </div>
         )
+    }
+
+    if (competitionLoading) {
+        return <Skeleton className='w-[600px] h-[200px]' />
+    }
+
+    if (!competition) {
+        return <div>Competition not found</div>
     }
 
 
