@@ -2,37 +2,42 @@
 
 import { SignUpButton, SignInButton, SignIn } from '@clerk/nextjs'
 import { useUser } from '@clerk/nextjs'
+
+import Link from 'next/link'
+
 import { Button } from '~/components/ui/button'
 
 export const dynamic = 'force-dynamic'
 
 const JoinCompPage = ({ params }: { params: { comp: string } }) => {
     const { comp } = params
+    const hostName = window.location.origin
 
-    const { isSignedIn } = useUser()
+    const { isSignedIn, isLoaded } = useUser()
+
+    if (!isLoaded) {
+        return null
+    }
 
     if (!isSignedIn) {
         return (
             <div className='flex w-full flex-col items-center justify-center gap-2'>
-                <SignInButton
-                    mode='modal'
-                    fallbackRedirectUrl='/dashboard'
-                    forceRedirectUrl={`/join/${comp}`}
-                    signUpFallbackRedirectUrl='/dashboard'
-                >
-                    <Button size='lg'>Sign in</Button>
-                </SignInButton>
-
-                <SignUpButton
-                    mode='modal'
-                    signInFallbackRedirectUrl='/dashboard'
-                    fallbackRedirectUrl='/dashboard'
+                <a
+                    href={`https://welcomed-hound-18.accounts.dev/sign-up?redirect_url=${hostName}/join/${comp}`}
                 >
                     <Button size='lg'>Sign up</Button>
-                </SignUpButton>
+                </a>
+                <a
+                    href={`https://welcomed-hound-18.accounts.dev/sign-in?redirect_url=${hostName}/join/${comp}`}
+                >
+                    <Button size='lg'>Sign in</Button>
+                </a>
             </div>
         )
     }
+
+
+
 
     return (
         <section className='mt-8 flex h-full grow flex-col'>

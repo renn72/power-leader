@@ -1,10 +1,21 @@
 'use client'
 import Link from 'next/link'
 import { api } from '~/trpc/react'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
 export default function Home() {
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const pathname = searchParams.get('redirect_url')
+
+    if (pathname) {
+        console.log(pathname)
+        router.push(pathname)
+        return null
+    }
+
     return (
         <section className='relative flex h-[80vh] w-full flex-col items-center justify-center gap-8 overflow-hidden'>
             <div className='relative z-10 max-w-3xl px-4 text-center sm:px-6 lg:px-8'>
