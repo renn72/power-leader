@@ -57,7 +57,7 @@ export const competitionRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             console.log('input', input)
 
-            let comp_id = input.name + '-' + getDateFromDate(input.date)
+            let comp_id = input.name.trim().replaceAll(/\s/g, '-') + '-' + getDateFromDate(input.date)
             const idCheck = await ctx.db.query.competitions.findFirst({
                 where: (competitions, { eq }) =>
                     eq(competitions.name, input.name) &&

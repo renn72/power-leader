@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { api } from '~/trpc/react'
 
 import { CalendarIcon, PlusCircle, XCircle } from 'lucide-react'
-import { cn, getDateFromDate, getDateFromString } from '~/lib/utils'
+import { cn, } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
 
 import { format } from 'date-fns'
@@ -258,11 +258,24 @@ const WC_Field = ({
 }
 
 export default function Create() {
+    const [isPending, setIsPending] = useState(false)
     const context = api.useUtils()
 
     const { mutate: createComp } = api.competition.create.useMutation({
+        onMutate: () => {
+            setIsPending(true)
+        },
         onSettled: () => {
             context.competition.invalidate()
+            setIsPending(false)
+        },
+        onError: (err) => {
+            console.log(err)
+            toast('Error')
+        },
+        onSuccess: () => {
+            toast('Created')
+            form.reset()
         },
     })
 
@@ -672,7 +685,7 @@ export default function Create() {
 
                     <Card>
                         <CardHeader></CardHeader>
-                        <CardContent className='lg:px-6 px-4'>
+                        <CardContent className='px-4 lg:px-6'>
                             <FormField
                                 control={form.control}
                                 name='divisions'
@@ -903,19 +916,15 @@ export default function Create() {
                     </Card>
 
                     <Button
-                        className='mt-4 w-min'
+                        className='mx-auto mt-4 w-[140px]'
                         type='submit'
                     >
-                        Submit
-                    </Button>
-                    <Button
-                        className='w-min'
-                        onClick={(e) => {
-                            e.preventDefault()
-                            console.log(form.getValues())
-                        }}
-                    >
-                        Data
+                        {isPending && (
+                            <div className='mr-3 animate-spin'>
+                                <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
+                            </div>
+                        )}
+                        {isPending ? 'Submitting...' : 'Submit'}
                     </Button>
                 </form>
             </Form>
