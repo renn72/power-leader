@@ -40,6 +40,13 @@ export const roles = createTable('role', {
     updatedAt: text('updatedAt'),
 })
 
+export const rolesRelations = relations(roles, ({ one }) => ({
+    user: one(users, {
+        fields: [roles.user],
+        references: [users.id],
+    }),
+}))
+
 export const compEntry = createTable('comp_entry', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
     userId: int('user_id', { mode: 'number' }).references(() => users.id, {

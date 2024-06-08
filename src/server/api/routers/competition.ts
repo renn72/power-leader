@@ -56,6 +56,7 @@ export const competitionRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             console.log('input', input)
 
+
             const resComp = await ctx.db
                 .insert(competitions)
                 .values({

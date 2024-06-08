@@ -316,7 +316,7 @@ export default function Create() {
             wc_female: data.wc_female.map((item) => item.toString()).join('/'),
             wc_mix: data.wc_mix.map((item) => item.toString()).join('/'),
         }
-        createComp(input)
+        console.log('input', input)
     }
 
     return (
