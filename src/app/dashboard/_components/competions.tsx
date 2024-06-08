@@ -402,9 +402,6 @@ const Competitions = () => {
                         </TableBody>
                     </Table>
                 )}
-                <Link href='/dashboard/create'>
-                    <Button>Create</Button>
-                </Link>
             </section>
         </TabsContent>
     )

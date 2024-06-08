@@ -7,6 +7,7 @@ import { competitions, divisions } from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
+import { getDateFromDate } from '~/lib/utils'
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
     return array.length > 0
@@ -56,11 +57,22 @@ export const competitionRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             console.log('input', input)
 
+            let comp_id = input.name + '-' + getDateFromDate(input.date)
+            const idCheck = await ctx.db.query.competitions.findFirst({
+                where: (competitions, { eq }) =>
+                    eq(competitions.name, input.name) &&
+                    eq(competitions.date, input.date),
+            })
+            if (idCheck) {
+                comp_id = comp_id + '-' + Math.random().toString(36).substring(2, 8)
+            }
+
 
             const resComp = await ctx.db
                 .insert(competitions)
                 .values({
                     ...input,
+                    uuid: comp_id,
                 })
                 .returning({ id: competitions.id })
 

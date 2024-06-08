@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { api } from '~/trpc/react'
 
 import { CalendarIcon, PlusCircle, XCircle } from 'lucide-react'
-import { cn } from '~/lib/utils'
+import { cn, getDateFromDate, getDateFromString } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
 
 import { format } from 'date-fns'
@@ -316,7 +316,7 @@ export default function Create() {
             wc_female: data.wc_female.map((item) => item.toString()).join('/'),
             wc_mix: data.wc_mix.map((item) => item.toString()).join('/'),
         }
-        console.log('input', input)
+        createComp(input)
     }
 
     return (
