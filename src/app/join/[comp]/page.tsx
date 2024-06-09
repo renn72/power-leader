@@ -11,12 +11,20 @@ import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
 
 import { CalendarIcon, PlusCircle, XCircle } from 'lucide-react'
-import { cn } from '~/lib/utils'
+import { cn, getFormattedDate } from '~/lib/utils'
 import { Calendar } from '~/components/ui/calendar'
-
+import { CalendarDrop } from '~/components/ui/calendar-drop'
 import { format } from 'date-fns'
+
 import { toast } from 'sonner'
-import { Card, CardContent, CardTitle, CardDescription, CardFooter, CardHeader } from '~/components/ui/card'
+import {
+    Card,
+    CardContent,
+    CardTitle,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+} from '~/components/ui/card'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import {
@@ -32,6 +40,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '~/components/ui/popover'
+import { DatePicker } from '~/components/ui/date-picker'
 import { Textarea } from '~/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
 import {
@@ -49,6 +58,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '~/components/ui/select'
+import { PopoverClose } from '@radix-ui/react-popover'
 
 export const dynamic = 'force-dynamic'
 
@@ -157,174 +167,325 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
 
     return (
         <>
-            <div className='grow'>
-                <h1>Join</h1>
-                <Card className='w-full sm:w-96'>
+            <div className='flex w-full grow flex-col items-center gap-4'>
+                <Card className='w-full sm:max-w-2xl'>
                     <CardHeader>
                         <CardTitle>{competition?.name}</CardTitle>
-                        <CardDescription>{competition?.venue}{competition?.city}</CardDescription>
+                        <CardDescription className='flex flex-col gap-1'>
+                            <div>
+                                {competition.date
+                                    ? getFormattedDate(competition.date)
+                                    : ''}
+                            </div>
+                            <div>
+                                {competition.venue
+                                    ? competition.venue + ','
+                                    : ''}
+                            </div>
+                            <div className='flex items-center gap-1 text-xs'>
+                                <div>
+                                    {competition.city
+                                        ? competition.city + ','
+                                        : ''}
+                                </div>
+                                <div>
+                                    {competition.state
+                                        ? competition.state + ','
+                                        : ''}
+                                </div>
+                            </div>
+                        </CardDescription>
                     </CardHeader>
-                    <CardContent className='flex flex-col gap-2'>
-                    </CardContent>
+                    <CardContent className='flex flex-col gap-2'></CardContent>
                 </Card>
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className='flex w-full max-w-2xl flex-col gap-2'
                     >
-                        <FormField
-                            control={form.control}
-                            name='address'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Address</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='address'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='phone'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Phone</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='phone'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='instagram'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Instagram</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='instagram'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='openlifter'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Openlifter</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='openlifter'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='birthDate'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Birth Date</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='birthDate'
-                                            type='date'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='equipment'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Equipment</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='equipment'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='gender'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Gender</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='gender'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='predictedWeight'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Predicted Weight</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='predictedWeight'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='weight'
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel>Weight</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='weight'
-                                            type='text'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <Card>
+                            <CardHeader></CardHeader>
+                            <CardContent className='flex flex-col gap-2'>
+                                <FormField
+                                    control={form.control}
+                                    name='address'
+                                    render={({ field }) => (
+                                        <FormItem className='w-full'>
+                                            <FormLabel>Address</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder='address'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div className='flex w-full items-end justify-between gap-4'>
+                                    <FormField
+                                        control={form.control}
+                                        name='phone'
+                                        render={({ field }) => (
+                                            <FormItem className='w-full'>
+                                                <FormLabel>Phone</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder='phone'
+                                                        type='text'
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name='birthDate'
+                                        render={({ field }) => (
+                                            <FormItem className='flex w-full flex-col justify-end'>
+                                                <FormLabel>
+                                                    Birth Date
+                                                </FormLabel>
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant={'outline'}
+                                                            className={cn(
+                                                                'w-full justify-start text-left font-normal',
+                                                                !field.value &&
+                                                                    'text-muted-foreground',
+                                                            )}
+                                                        >
+                                                            <CalendarIcon className='mr-2 h-4 w-4' />
+                                                            {field.value ? (
+                                                                format(
+                                                                    field.value,
+                                                                    'PPP',
+                                                                )
+                                                            ) : (
+                                                                <span>
+                                                                    Pick a date
+                                                                </span>
+                                                            )}
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent
+                                                        align='start'
+                                                        className=' w-auto p-0'
+                                                    >
+                                                        <CalendarDrop
+                                                            mode='single'
+                                                            captionLayout='dropdown-buttons'
+                                                            selected={
+                                                                field.value
+                                                            }
+                                                            onSelect={
+                                                                field.onChange
+                                                            }
+                                                            fromYear={1930}
+                                                            toYear={2020}
+                                                        />
+                                                        <PopoverClose asChild>
+                                                            <p className='mb-2 flex w-full items-center justify-center'>
+                                                                <Button
+                                                                    size='sm'
+                                                                    variant='outline'
+                                                                >
+                                                                    Set
+                                                                </Button>
+                                                            </p>
+                                                        </PopoverClose>
+                                                    </PopoverContent>
+                                                </Popover>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className='flex w-full items-end justify-between gap-4'>
+                                    <FormField
+                                        control={form.control}
+                                        name='gender'
+                                        render={({ field }) => (
+                                            <FormItem className='w-full'>
+                                                <FormLabel>Gender</FormLabel>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    defaultValue={field.value}
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder='Gender' />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {[
+                                                            'Male',
+                                                            'Female',
+                                                            'NA',
+                                                        ].map((item) => (
+                                                            <SelectItem
+                                                                key={item}
+                                                                value={item}
+                                                            >
+                                                                {item}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name='instagram'
+                                        render={({ field }) => (
+                                            <FormItem className='w-full'>
+                                                <FormLabel>Instagram</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder='instagram'
+                                                        type='text'
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <FormField
+                                    control={form.control}
+                                    name='openlifter'
+                                    render={({ field }) => (
+                                        <FormItem className='hidden w-full'>
+                                            <FormLabel>Openlifter</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder='openlifter'
+                                                    type='text'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Weight Class</CardTitle>
+                            </CardHeader>
+                            <CardContent className='mt-4 flex flex-col gap-2'>
+                                {competition.wc_male && (
+                                    <div>
+                                        <div className='text-lg font-medium'>
+                                            Male
+                                        </div>
+                                        <div className='flex flex-wrap gap-2'>
+                                            {competition.wc_male
+                                                ?.split('/')
+                                                .map((item) => (
+                                                    <div
+                                                        key={item}
+                                                        className='text-nowrap'
+                                                    >
+                                                        {item}
+                                                        kg
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {competition.wc_female && (
+                                    <div>
+                                        <div className='text-lg font-medium'>
+                                            Female
+                                        </div>
+                                        <div className='flex flex-wrap gap-2'>
+                                            {competition.wc_female
+                                                ?.split('/')
+                                                .map((item) => (
+                                                    <div
+                                                        key={item}
+                                                        className='text-nowrap'
+                                                    >
+                                                        {item}
+                                                        kg
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {competition.wc_mix && (
+                                    <div className='hidden'>
+                                        <div className='text-lg font-medium'>
+                                            Mixed
+                                        </div>
+                                        <div className='flex gap-2'>
+                                            {competition.wc_mix
+                                                ?.split('/')
+                                                .map((item) => (
+                                                    <div
+                                                        key={item}
+                                                        className='text-nowrap'
+                                                    >
+                                                        {item}
+                                                        kg
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
+                                <FormField
+                                    control={form.control}
+                                    name='predictedWeight'
+                                    render={({ field }) => (
+                                        <FormItem className='w-full'>
+                                            <FormLabel>Target Weight</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder='in kg'
+                                                    type='text'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Competition</CardTitle>
+                            </CardHeader>
+                            <CardContent className='mt-4 flex flex-col gap-2'>
+                                <FormField
+                                    control={form.control}
+                                    name='equipment'
+                                    render={({ field }) => (
+                                        <FormItem className='w-full'>
+                                            <FormLabel>Equipment</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder='equipment'
+                                                    type='text'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </CardContent>
+                        </Card>
                         <FormField
                             control={form.control}
                             name='events'

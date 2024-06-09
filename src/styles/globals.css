@@ -142,4 +142,7 @@ input[type=number] {
   }
 }
 
+.rdp-vhidden {
+  @apply hidden;
+}
 

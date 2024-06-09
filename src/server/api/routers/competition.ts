@@ -137,7 +137,10 @@ export const competitionRouter = createTRPCRouter({
                 where: (competitions, { eq }) => eq(competitions.uuid, input),
             })
             if (!res) {
-                return { competition: null }
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Competition not found.',
+                })
             }
             return res
         }),
