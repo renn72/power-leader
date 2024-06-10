@@ -135,6 +135,9 @@ export const competitionRouter = createTRPCRouter({
         .query(async ({ ctx, input }) => {
             const res = await ctx.db.query.competitions.findFirst({
                 where: (competitions, { eq }) => eq(competitions.uuid, input),
+                with: {
+                    divisions: true,
+                },
             })
             if (!res) {
                 throw new TRPCError({

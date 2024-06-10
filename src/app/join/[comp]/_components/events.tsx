@@ -1,6 +1,5 @@
 'use client'
 import { useFormContext } from 'react-hook-form'
-import { useState } from 'react'
 import {
     FormField,
     FormItem,
@@ -16,19 +15,16 @@ import {
 } from '~/components/ui/card'
 import type { GetCompetitionByUuid } from '~/lib/types'
 
-const Equipment = ({
+const Events = ({
     competition,
 }: {
     competition: GetCompetitionByUuid
 }) => {
     const form = useFormContext()
-    const [selected, setSelected] = useState<string>(
-        competition.equipment?.split('/')[0] || '',
-    )
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Equipment</CardTitle>
+                <CardTitle>Events</CardTitle>
             </CardHeader>
             <CardContent className='mt-4 flex flex-col gap-2'>
                 <FormField
@@ -37,16 +33,14 @@ const Equipment = ({
                     render={({ field }) => (
                         <FormItem>
                             <ToggleGroup
-                                type='single'
-                                defaultValue={competition.equipment?.split('/')[0] || ''}
-                                value={selected}
+                                type='multiple'
+                                defaultValue={['']}
                                 onValueChange={(value) => {
-                                    setSelected(value)
                                     field.onChange(value)
                                 }}
                             >
                                 <div className='flex flex-wrap justify-around gap-2 px-6'>
-                                    {competition.equipment
+                                    {competition.events
                                         ?.split('/')
                                         .map((item) => (
                                             <FormField
@@ -61,9 +55,6 @@ const Equipment = ({
                                                                     variant='secondary'
                                                                     className='rounded-md border border-input'
                                                                     value={item}
-                                                                    onClick={(e) => {
-                                                                        item === selected && e.preventDefault()
-                                                                    }}
                                                                 >
                                                                     {item}
                                                                 </ToggleGroupItem>
@@ -83,4 +74,4 @@ const Equipment = ({
         </Card>
     )
 }
-export default Equipment
+export default Events

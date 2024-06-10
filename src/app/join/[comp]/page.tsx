@@ -10,38 +10,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 
-import Address from './_components/address'
-
-import { cn, getFormattedDate } from '~/lib/utils'
-
-import { toast } from 'sonner'
-import {
-    Card,
-    CardContent,
-    CardTitle,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-} from '~/components/ui/card'
-import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import {
     Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
 } from '~/components/ui/form'
-import { Textarea } from '~/components/ui/textarea'
 
-import Phone from './_components/phone'
-import BirthDate from './_components/birth-date'
-import Gender from './_components/gender'
-import Instagram from './_components/instagram'
-import Openlifter from './_components/openlifter'
 import WeightClass from './_components/weight-class'
 import Equipment from './_components/equipment'
+import Personal from './_components/personal'
+import CompInfo from './_components/comp-info'
+import Events from './_components/events'
+import Divisions from './_components/divisions'
+import LiftInfo from './_components/lift-info'
+import Notes from './_components/notes'
 
 export const dynamic = 'force-dynamic'
 
@@ -135,7 +116,7 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
     }
 
     if (competitionLoading) {
-        return <Skeleton className='h-[200px] w-[600px]' />
+        return <Skeleton className='h-[800px] w-[600px]' />
     }
 
     if (!competition) {
@@ -145,245 +126,20 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
     return (
         <>
             <div className='flex w-full grow flex-col items-center gap-4'>
-                <Card className='w-full sm:max-w-2xl'>
-                    <CardHeader>
-                        <CardTitle>{competition?.name}</CardTitle>
-                        <CardDescription className='flex flex-col gap-1'>
-                            <div>
-                                {competition.date
-                                    ? getFormattedDate(competition.date)
-                                    : ''}
-                            </div>
-                            <div>
-                                {competition.venue
-                                    ? competition.venue + ','
-                                    : ''}
-                            </div>
-                            <div className='flex items-center gap-1 text-xs'>
-                                <div>
-                                    {competition.city
-                                        ? competition.city + ','
-                                        : ''}
-                                </div>
-                                <div>
-                                    {competition.state
-                                        ? competition.state + ','
-                                        : ''}
-                                </div>
-                            </div>
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className='flex flex-col gap-2'></CardContent>
-                </Card>
+                <CompInfo competition={competition} />
                 <FormProvider {...form}>
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
                             className='flex w-full max-w-2xl flex-col gap-2'
                         >
-                            <Card>
-                                <CardHeader></CardHeader>
-                                <CardContent className='flex flex-col gap-2'>
-                                    <Address />
-                                    <div className='flex w-full items-end justify-between gap-4'>
-                                        <Phone />
-                                        <BirthDate />
-                                    </div>
-                                    <div className='flex w-full items-end justify-between gap-4'>
-                                        <Gender />
-                                        <Instagram />
-                                    </div>
-                                    <Openlifter />
-                                </CardContent>
-                            </Card>
+                            <Personal />
                             <WeightClass competition={competition} />
                             <Equipment competition={competition} />
-                            <FormField
-                                control={form.control}
-                                name='events'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Events</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='events'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='division'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Division</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='division'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='squatOpener'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Squat Opener</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='squatOpener'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='squarRackHeight'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Squar Rack Height</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='squarRackHeight'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='benchOpener'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Bench Opener</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='benchOpener'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='benchRackHeight'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Bench Rack Height</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='benchRackHeight'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='deadliftOpener'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Deadlift Opener</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='deadliftOpener'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='squatPB'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Squat PB</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='squatPB'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='benchPB'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Bench PB</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='benchPB'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='deadliftPB'
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel>Deadlift PB</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder='deadliftPB'
-                                                type='text'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='notes'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Notes</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder='notes'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <Events competition={competition} />
+                            <Divisions competition={competition} />
+                            <LiftInfo />
+                            <Notes />
                             <Button
                                 className='mt-4 w-min'
                                 type='submit'
