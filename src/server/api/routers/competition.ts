@@ -44,14 +44,6 @@ const createSchema = z.object({
 })
 
 export const competitionRouter = createTRPCRouter({
-    hello: publicProcedure
-        .input(z.object({ text: z.string() }))
-        .query(({ input }) => {
-            return {
-                greeting: `Hello ${input.text}`,
-            }
-        }),
-
     create: publicProcedure
         .input(createSchema)
         .mutation(async ({ ctx, input }) => {

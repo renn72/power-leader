@@ -36,7 +36,7 @@ const formSchema = z.object({
     predictedWeight: z.string(),
     weight: z.string(),
     events: z.array(z.string()),
-    division: z.array(z.string()),
+    division: z.array(z.number()),
     squatOpener: z.string(),
     squarRackHeight: z.string(),
     benchOpener: z.string(),
@@ -115,7 +115,6 @@ const JoinCompForm = ({ comp }: { comp: string }) => {
 
         const formData = {
             ...data,
-            division: data.division.join('/'),
             events: data.events.join('/'),
             compId: competition.id,
         }

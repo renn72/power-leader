@@ -62,7 +62,6 @@ export const compEntry = createTable('comp_entry', {
     predictedWeight: text('predicted_weight'),
     weight: text('weight'),
     events: text('events'),
-    division: text('division'),
     squatOpener: text('squat_opener'),
     squarRackHeight: text('squar_rack_height'),
     benchOpener: text('bench_opener'),

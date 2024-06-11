@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
-import { compEntry } from '~/server/db/schema'
+import { compEntry, compEntryToDivisions } from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
@@ -19,7 +19,7 @@ const createSchema = z.object({
     predictedWeight: z.string(),
     weight: z.string(),
     events: z.string(),
-    division: z.string(),
+    division: z.array(z.number()),
     squatOpener: z.string(),
     squarRackHeight: z.string(),
     benchOpener: z.string(),
@@ -31,6 +31,10 @@ const createSchema = z.object({
     notes: z.string(),
     compId: z.number(),
 })
+
+function isTuple<T>(array: T[]): array is [T, ...T[]] {
+    return array.length > 0
+}
 
 export const compEntryRouter = createTRPCRouter({
     create: publicProcedure
@@ -53,7 +57,19 @@ export const compEntryRouter = createTRPCRouter({
                     userId: user.id,
                 })
                 .returning({ id: compEntry.id })
-            return res
+
+            const ins = input.division.map((id) =>
+                ctx.db.insert(compEntryToDivisions).values({
+                    compEntryId: res[0]?.id || 0,
+                    divisionId: id,
+                }),
+            )
+
+            if (isTuple(ins)) {
+                await ctx.db.batch(ins)
+            }
+
+            return true
         }),
     getAll: publicProcedure.query(async ({ ctx }) => {
         const res = await ctx.db.query.competitions.findMany({
@@ -73,8 +89,7 @@ export const compEntryRouter = createTRPCRouter({
             })
         }
         const res = await ctx.db.query.compEntry.findMany({
-            where: (compEntry, { eq }) =>
-                eq(compEntry.userId, user.id),
+            where: (compEntry, { eq }) => eq(compEntry.userId, user.id),
             orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
             with: {
                 competition: true,
