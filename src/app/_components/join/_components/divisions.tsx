@@ -18,7 +18,7 @@ import type { GetCompetitionByUuid } from '~/lib/types'
 const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
     const form = useFormContext()
     return (
-        <Card>
+        <Card className='w-full sm:max-w-2xl'>
             <CardHeader>
                 <CardTitle>Divisions</CardTitle>
             </CardHeader>

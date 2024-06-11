@@ -17,7 +17,7 @@ import {
 const Address = () => {
     const { control } = useFormContext()
     return (
-        <Card>
+        <Card className='w-full sm:max-w-2xl'>
             <CardHeader></CardHeader>
             <CardContent className='flex flex-col gap-2'>
                 <div className='flex w-full items-end justify-between gap-4'>

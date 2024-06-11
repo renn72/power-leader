@@ -26,7 +26,7 @@ const Equipment = ({
         competition.equipment?.split('/')[0] || '',
     )
     return (
-        <Card>
+        <Card className='w-full sm:max-w-2xl'>
             <CardHeader>
                 <CardTitle>Equipment</CardTitle>
             </CardHeader>

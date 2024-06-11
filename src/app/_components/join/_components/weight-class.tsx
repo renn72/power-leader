@@ -18,7 +18,7 @@ const WeightClass = ({
 }) => {
     const form = useFormContext()
     return (
-        <Card>
+        <Card className='w-full sm:max-w-2xl'>
             <CardHeader>
                 <CardTitle>Weight Class</CardTitle>
             </CardHeader>

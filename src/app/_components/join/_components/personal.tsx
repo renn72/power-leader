@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 
 const Personal = () => {
     return (
-        <Card>
+        <Card className='w-full sm:max-w-2xl'>
             <CardHeader>
                 <CardTitle>Personal</CardTitle>
             </CardHeader>

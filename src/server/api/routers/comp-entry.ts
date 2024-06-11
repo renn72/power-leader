@@ -7,11 +7,6 @@ import { compEntry } from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
-import { getDateFromDate } from '~/lib/utils'
-
-function isTuple<T>(array: T[]): array is [T, ...T[]] {
-    return array.length > 0
-}
 
 const createSchema = z.object({
     address: z.string(),
