@@ -1,17 +1,24 @@
 'use client'
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import Create from './_components/create'
 import Competitions from './_components/competions'
 import List from './_components/list'
+import { useSearchParams } from 'next/navigation'
+import Upcoming from './_components/upcoming'
 
 export const dynamic = 'force-dynamic'
 
-export default function Dashboard() {
+export default function Dashboard({ params }: { params: { tab: string } }) {
+    const searchParams = useSearchParams()
+    const tab = searchParams.get('tab')
+    console.log(tab)
+
+
+
     return (
         <section className='mt-8 flex h-full grow flex-col'>
             <Tabs
-                defaultValue='competition'
+                defaultValue={ tab || 'competition' }
                 orientation='vertical'
                 className='flex h-full grow  flex-col space-x-2 lg:flex-row'
             >
@@ -28,6 +35,12 @@ export default function Dashboard() {
                             className='w-28'
                         >
                             Competition
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value='upcoming'
+                            className='w-28'
+                        >
+                           Upcoming
                         </TabsTrigger>
                         <TabsTrigger
                             value='create'
@@ -49,6 +62,12 @@ export default function Dashboard() {
                     value='competition'
                 >
                     <Competitions />
+                </TabsContent>
+                <TabsContent
+                    className='min-h-[calc(100vh-10rem)] w-full'
+                    value='upcoming'
+                >
+                    <Upcoming />
                 </TabsContent>
                 <TabsContent
                     className='min-h-[calc(100vh-10rem)] w-full'

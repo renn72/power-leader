@@ -64,7 +64,7 @@ export const compEntryRouter = createTRPCRouter({
         })
         return res
     }),
-    getMyCompetitions: publicProcedure.query(async ({ ctx }) => {
+    getMyCompEntries: publicProcedure.query(async ({ ctx }) => {
         const user = await getCurrentUser()
         if (!user) {
             throw new TRPCError({
@@ -72,12 +72,12 @@ export const compEntryRouter = createTRPCRouter({
                 message: 'You are not authorized to access this resource.',
             })
         }
-        const res = await ctx.db.query.competitions.findMany({
-            where: (competitions, { eq }) =>
-                eq(competitions.creatorId, user.id),
-            orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
+        const res = await ctx.db.query.compEntry.findMany({
+            where: (compEntry, { eq }) =>
+                eq(compEntry.userId, user.id),
+            orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
             with: {
-                divisions: true,
+                competition: true,
             },
         })
         return res

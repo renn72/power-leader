@@ -30,6 +30,7 @@ const Events = ({
                 <FormField
                     control={form.control}
                     name='events'
+                    rules={{ required: true }}
                     render={({ field }) => (
                         <FormItem>
                             <ToggleGroup

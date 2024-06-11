@@ -74,7 +74,7 @@ export const compEntry = createTable('comp_entry', {
     updatedAt: text('updatedAt'),
 })
 
-export const compEntryRelations = relations(compEntry, ({ one }) => ({
+export const compEntryRelations = relations(compEntry, ({ one, many }) => ({
     user: one(users, {
         fields: [compEntry.userId],
         references: [users.id],
@@ -83,7 +83,23 @@ export const compEntryRelations = relations(compEntry, ({ one }) => ({
         fields: [compEntry.compId],
         references: [competitions.id],
     }),
+    compEntryToDivisions: many(compEntryToDivisions),
 }))
+
+export const compEntryToDivisions = createTable('comp_entry_to_divisions', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    compEntryId: int('comp_entry_id', { mode: 'number' }).references(
+        () => compEntry.id,
+        { onDelete: 'cascade' },
+    ),
+    divisionId: int('division_id', { mode: 'number' }).references(
+        () => divisions.id,
+        { onDelete: 'cascade' },
+    ),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+})
 
 export const divisions = createTable('age_divisions', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -102,12 +118,27 @@ export const divisions = createTable('age_divisions', {
 })
 export const insertDivisionSchema = createInsertSchema(divisions)
 
-export const divisionsRelations = relations(divisions, ({ one }) => ({
+export const divisionsRelations = relations(divisions, ({ one, many }) => ({
     competitions: one(competitions, {
         fields: [divisions.compId],
         references: [competitions.id],
     }),
+    compEntryToDivisions: many(compEntryToDivisions),
 }))
+
+export const compEntryToDivisionsRelations = relations(
+    compEntryToDivisions,
+    ({ one }) => ({
+        compEntry: one(compEntry, {
+            fields: [compEntryToDivisions.compEntryId],
+            references: [compEntry.id],
+        }),
+        division: one(divisions, {
+            fields: [compEntryToDivisions.divisionId],
+            references: [divisions.id],
+        }),
+    }),
+)
 
 export const competitions = createTable('competition', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),

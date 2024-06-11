@@ -26,6 +26,7 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
                 <FormField
                     control={form.control}
                     name='division'
+                    rules={{ required: true }}
                     render={({ field }) => (
                         <FormItem>
                             <ToggleGroup

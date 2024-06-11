@@ -10,6 +10,7 @@ import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
 import { Form } from '~/components/ui/form'
+import { toast } from 'sonner'
 
 import WeightClass from './_components/weight-class'
 import Equipment from './_components/equipment'
@@ -20,6 +21,7 @@ import Divisions from './_components/divisions'
 import LiftInfo from './_components/lift-info'
 import Notes from './_components/notes'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,7 +51,8 @@ const formSchema = z.object({
 const JoinCompForm = ({ comp }: { comp: string }) => {
     const [isPending, setIsPending] = useState(false)
     const [submitText, setSubmitText] = useState('Submit')
-    const context = api.useUtils()
+
+    const router = useRouter()
 
     const { data: competition, isLoading: competitionLoading } =
         api.competition.getCompetitionByUuid.useQuery(comp)
@@ -57,7 +60,27 @@ const JoinCompForm = ({ comp }: { comp: string }) => {
     const { data: user, isLoading: userLoading } =
         api.user.getCurrentUser.useQuery()
 
-    const { mutate: createComp } = api.compEntry.create.useMutation({})
+    const { mutate: createComp } = api.compEntry.create.useMutation({
+        onMutate: () => {
+            setIsPending(true)
+            setSubmitText('Entering...')
+        },
+        onSettled: async () => {
+            setIsPending(false)
+        },
+        onError: (err) => {
+            console.log(err)
+            toast('Error')
+        },
+        onSuccess: () => {
+            setSubmitText('Entered')
+            setTimeout(() => {
+                router.push('/dashboard?tab=upcoming')
+            }, 500)
+
+            form.reset()
+        },
+    })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -116,7 +139,7 @@ const JoinCompForm = ({ comp }: { comp: string }) => {
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className='flex w-full max-w-2xl flex-col gap-2 items-center'
+                            className='flex w-full max-w-2xl flex-col items-center gap-2'
                         >
                             <Personal />
                             <WeightClass competition={competition} />
@@ -126,7 +149,7 @@ const JoinCompForm = ({ comp }: { comp: string }) => {
                             <LiftInfo />
                             <Notes />
                             <Button
-                                className='mt-4 min-w-[130px] w-min'
+                                className='mt-4 w-min min-w-[170px]'
                                 type='submit'
                             >
                                 {isPending && (

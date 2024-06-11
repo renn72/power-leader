@@ -28,7 +28,7 @@ const WeightClass = ({
                     name='predictedWeight'
                     render={({ field }) => (
                         <FormItem className='w-full'>
-                            <FormLabel>Target Weight</FormLabel>
+                            <FormLabel>Target Body Weight</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder='in kg'
