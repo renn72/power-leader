@@ -115,6 +115,7 @@ const JoinCompForm = ({ comp }: { comp: string }) => {
 
         const formData = {
             ...data,
+            equipment: data.equipment === '' ? (competition.equipment?.split('/')[0] || 'nil') : data.equipment,
             events: data.events.join('/'),
             compId: competition.id,
         }

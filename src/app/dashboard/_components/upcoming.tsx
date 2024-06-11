@@ -101,14 +101,13 @@ const Upcoming = () => {
                             <div className='flex items-baseline gap-4'>
                                 <div className='font-medium'>Divisions:</div>
                                 <div className='text-sm text-muted-foreground flex gap-1'>
-                                    {compEntry?.division
-                                        ?.split('/')
+                                    {compEntry?.compEntryToDivisions
                                         .map((division, i, arr) => (
                                             <div
-                                                key={division}
+                                                key={division.id}
                                                 className='text-nowrap flex gap-1 items-center'
                                             >
-                                                {division}
+                                                {division.division?.name}
                                                 {i !== arr.length - 1 && <SeparatorVertical size={16} />}
                                             </div>
                                         ))}
