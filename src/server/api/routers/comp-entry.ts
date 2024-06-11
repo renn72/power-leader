@@ -71,15 +71,6 @@ export const compEntryRouter = createTRPCRouter({
 
             return true
         }),
-    getAll: publicProcedure.query(async ({ ctx }) => {
-        const res = await ctx.db.query.competitions.findMany({
-            orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
-            with: {
-                divisions: true,
-            },
-        })
-        return res
-    }),
     getMyCompEntries: publicProcedure.query(async ({ ctx }) => {
         const user = await getCurrentUser()
         if (!user) {
@@ -93,6 +84,11 @@ export const compEntryRouter = createTRPCRouter({
             orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
             with: {
                 competition: true,
+                compEntryToDivisions: {
+                    with: {
+                        division: true,
+                    },
+                },
             },
         })
         return res
