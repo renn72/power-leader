@@ -19,7 +19,7 @@ const createSchema = z.object({
     predictedWeight: z.string(),
     weight: z.string(),
     events: z.string(),
-    division: z.array(z.number()),
+    division: z.array(z.string()),
     squatOpener: z.string(),
     squarRackHeight: z.string(),
     benchOpener: z.string(),
@@ -61,7 +61,7 @@ export const compEntryRouter = createTRPCRouter({
             const ins = input.division.map((id) =>
                 ctx.db.insert(compEntryToDivisions).values({
                     compEntryId: res[0]?.id || 0,
-                    divisionId: id,
+                    divisionId: Number(id),
                 }),
             )
 

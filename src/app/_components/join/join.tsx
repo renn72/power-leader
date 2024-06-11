@@ -36,7 +36,7 @@ const formSchema = z.object({
     predictedWeight: z.string(),
     weight: z.string(),
     events: z.array(z.string()),
-    division: z.array(z.number()),
+    division: z.array(z.string()),
     squatOpener: z.string(),
     squarRackHeight: z.string(),
     benchOpener: z.string(),

@@ -62,7 +62,7 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
                                                                 variant='secondary'
                                                                 className='w-full rounded-md border border-input tracking-tight'
                                                                 value={
-                                                                    item.id
+                                                                    item.id.toString()
                                                                 }
                                                             >
                                                                 <div className='grid w-full grid-cols-6 gap-1 divide-x divide-muted'>
