@@ -9,6 +9,16 @@ import {
     CardHeader,
     CardDescription,
 } from '~/components/ui/card'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table"
+
 import { Button } from '~/components/ui/button'
 
 import { getFormattedDate } from '~/lib/utils'
@@ -33,7 +43,7 @@ const Upcoming = () => {
             {compEntries?.map((compEntry) => (
                 <div
                     key={compEntry.id}
-                    className='grid w-full grid-cols-2 gap-4'
+                    className=''
                 >
                     <Card className='w-full sm:max-w-2xl'>
                         <CardHeader>
@@ -84,33 +94,42 @@ const Upcoming = () => {
                             </div>
                             <div className='flex items-baseline gap-4'>
                                 <div className='font-medium'>Events:</div>
-                                <div className='text-sm text-muted-foreground flex gap-1'>
+                                <div className='flex gap-1 text-sm text-muted-foreground'>
                                     {compEntry?.events
                                         ?.split('/')
                                         .map((event, i, arr) => (
                                             <div
                                                 key={event}
-                                                className='text-nowrap flex gap-1 items-center'
+                                                className='flex items-center gap-1 text-nowrap'
                                             >
                                                 {event}
-                                                {i !== arr.length - 1 && <SeparatorVertical size={16} />}
+                                                {i !== arr.length - 1 && (
+                                                    <SeparatorVertical
+                                                        size={16}
+                                                    />
+                                                )}
                                             </div>
                                         ))}
                                 </div>
                             </div>
                             <div className='flex items-baseline gap-4'>
                                 <div className='font-medium'>Divisions:</div>
-                                <div className='text-sm text-muted-foreground flex gap-1'>
-                                    {compEntry?.compEntryToDivisions
-                                        .map((division, i, arr) => (
+                                <div className='flex gap-1 text-sm text-muted-foreground'>
+                                    {compEntry?.compEntryToDivisions.map(
+                                        (division, i, arr) => (
                                             <div
                                                 key={division.id}
-                                                className='text-nowrap flex gap-1 items-center'
+                                                className='flex items-center gap-1 text-nowrap'
                                             >
                                                 {division.division?.name}
-                                                {i !== arr.length - 1 && <SeparatorVertical size={16} />}
+                                                {i !== arr.length - 1 && (
+                                                    <SeparatorVertical
+                                                        size={16}
+                                                    />
+                                                )}
                                             </div>
-                                        ))}
+                                        ),
+                                    )}
                                 </div>
                             </div>
                             <div className='flex items-baseline gap-4'>
@@ -119,9 +138,41 @@ const Upcoming = () => {
                                     {compEntry?.equipment}
                                 </div>
                             </div>
+                            <Card className='mt-4'>
+                                <CardHeader>Lifts</CardHeader>
+                                <CardContent>
+                                    <Table>
+                                        <TableCaption>Lifts</TableCaption>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Lift</TableHead>
+                                                <TableHead>Opener</TableHead>
+                                                <TableHead>Rack</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>Squat</TableCell>
+                                                <TableCell>{compEntry.squatOpener ? compEntry.squatOpener : '...'}</TableCell>
+                                                <TableCell>{compEntry?.squarRackHeight ? compEntry.squarRackHeight : '...'}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Bench</TableCell>
+                                                <TableCell>{compEntry?.benchOpener ? compEntry.benchOpener : '...'}</TableCell>
+                                                <TableCell>{compEntry?.benchRackHeight ? compEntry.benchRackHeight : '...'}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell>Deadlift</TableCell>
+                                                <TableCell>{compEntry?.deadliftOpener ? compEntry.deadliftOpener : '...'}</TableCell>
+                                                <TableCell>n/a</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
                             <Button
-                                variant='outline_card'
-                                className='min-w-[130px]'
+                                variant='secondary'
+                                className='w-[130px] mx-auto'
                             >
                                 edit
                             </Button>
