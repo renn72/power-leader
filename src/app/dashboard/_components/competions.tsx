@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { api } from '~/trpc/react'
-import Link from 'next/link'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Button } from '~/components/ui/button'
@@ -21,6 +20,16 @@ import {
     HoverCardTrigger,
 } from '~/components/ui/hover-card'
 import { Skeleton } from '~/components/ui/skeleton'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '~/components/ui/dialog'
+import { XIcon } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,6 +37,9 @@ const Competitions = () => {
     const [isOpenClosing, setIsOpenClosing] = useState(false)
     const [open, setOpen] = useState('Open')
     const [close, setClose] = useState('Close')
+    const [openDelete, setOpenDelete] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [deleteText, setDeleteText] = useState('Delete')
     const ctx = api.useUtils()
     const { data: competitions, isLoading: competitionsLoading } =
         api.competition.getMyCompetitions.useQuery()
@@ -49,12 +61,25 @@ const Competitions = () => {
         api.competition.closeCompetition.useMutation({
             onMutate: () => {
                 setIsOpenClosing(true)
-                setClose('Closing...')
+                setDeleteText('Closing...')
             },
             onSettled: async () => {
                 await ctx.competition.getMyCompetitions.refetch()
                 setIsOpenClosing(false)
                 setClose('Close')
+            },
+        })
+    const { mutate: deleteCompetition } =
+        api.competition.deleteCompetition.useMutation({
+            onMutate: () => {
+                setDeleteText('Deleting...')
+                setIsDeleting(true)
+            },
+            onSettled: async () => {
+                await ctx.competition.getMyCompetitions.refetch()
+                setOpenDelete(false)
+                setIsDeleting(false)
+                setDeleteText('Deleted')
             },
         })
     return (
@@ -91,6 +116,7 @@ const Competitions = () => {
                                 <TableHead>Divisions</TableHead>
                                 <TableHead>Information</TableHead>
                                 <TableHead>Actions</TableHead>
+                                <TableHead>Delete</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -396,6 +422,43 @@ const Competitions = () => {
                                                 </Button>
                                             </div>
                                         )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Dialog
+                                            open={openDelete}
+                                            onOpenChange={setOpenDelete}
+                                        >
+                                            <DialogTrigger asChild>
+                                                <XIcon
+                                                    size={32}
+                                                    className='text-destructive hover:text-destructive/50'
+                                                />
+                                            </DialogTrigger>
+                                            <DialogContent className='flex flex-col gap-8 p-4'>
+                                                <DialogHeader>
+                                                    Delete Competition
+                                                    <DialogDescription>
+                                                        Are you sure you want to
+                                                        delete this competition?
+                                                    </DialogDescription>
+                                                </DialogHeader>
+                                                <Button
+                                                    variant='destructive'
+                                                    className='mx-auto w-48'
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                            console.log(competition.id)
+                                                    }}
+                                                >
+                                                    {isDeleting && (
+                                                        <div className='mr-3 animate-spin'>
+                                                            <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
+                                                        </div>
+                                                    )}
+                                                    {deleteText}
+                                                </Button>
+                                            </DialogContent>
+                                        </Dialog>
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -219,4 +219,41 @@ export const competitionRouter = createTRPCRouter({
 
             return true
         }),
+    deleteCompetition: publicProcedure
+        .input(z.number())
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const comp = await ctx.db.query.competitions.findFirst({
+                where: (competitions, { eq }) => eq(competitions.id, input),
+                with: {
+                    creator: true,
+                },
+            })
+
+            if (!comp) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Competition not found.',
+                })
+            }
+            if (comp.creator.id !== user.id) {
+                throw new TRPCError({
+                    code: 'FORBIDDEN',
+                    message: 'Unauthorized.',
+                })
+            }
+
+            await ctx.db
+                .delete(competitions)
+                .where(eq(competitions.id, input))
+
+            return true
+        }),
 })

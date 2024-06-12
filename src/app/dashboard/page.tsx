@@ -5,6 +5,7 @@ import Competitions from './_components/competions'
 import List from './_components/list'
 import { useSearchParams } from 'next/navigation'
 import Upcoming from './_components/upcoming'
+import WeighIn from './_components/weigh-in'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,6 +49,12 @@ export default function Dashboard({ params }: { params: { tab: string } }) {
                         >
                             Create
                         </TabsTrigger>
+                        <TabsTrigger
+                            value='weigh-in'
+                            className='w-28'
+                        >
+                            Weigh In
+                        </TabsTrigger>
                     </TabsList>
                 </div>
                 <TabsContent
@@ -74,6 +81,12 @@ export default function Dashboard({ params }: { params: { tab: string } }) {
                     value='create'
                 >
                     <Create />
+                </TabsContent>
+                <TabsContent
+                    className='min-h-[calc(100vh-10rem)] w-full'
+                    value='weigh-in'
+                >
+                    <WeighIn />
                 </TabsContent>
             </Tabs>
         </section>
