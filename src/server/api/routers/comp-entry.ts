@@ -84,6 +84,7 @@ export const compEntryRouter = createTRPCRouter({
             orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
             with: {
                 competition: true,
+                user: true,
                 compEntryToDivisions: {
                     with: {
                         division: true,
@@ -91,6 +92,27 @@ export const compEntryRouter = createTRPCRouter({
                 },
             },
         })
+        return res
+    }),
+    get: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+        const res = await ctx.db.query.compEntry.findFirst({
+            where: (compEntry, { eq }) => eq(compEntry.id, input),
+            with: {
+                competition: true,
+                compEntryToDivisions: {
+                    with: {
+                        division: true,
+                    },
+                },
+                user: true,
+            },
+        })
+        if (!res) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: 'Competition not found.',
+            })
+        }
         return res
     }),
 })

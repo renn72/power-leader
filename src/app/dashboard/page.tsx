@@ -5,11 +5,11 @@ import Competitions from './_components/competition/competitions'
 import List from './_components/list'
 import { useSearchParams } from 'next/navigation'
 import Upcoming from './_components/upcoming'
-import WeighIn from './_components/weigh-in'
+import WeighIn from './_components/weigh-in/weigh-in'
 
 export const dynamic = 'force-dynamic'
 
-export default function Dashboard({ params }: { params: { tab: string } }) {
+export default function Dashboard() {
     const searchParams = useSearchParams()
     const tab = searchParams.get('tab')
     console.log(tab)

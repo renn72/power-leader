@@ -49,16 +49,19 @@ export const competitionRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             console.log('input', input)
 
-            let comp_id = input.name.trim().replaceAll(/\s/g, '-') + '-' + getDateFromDate(input.date)
+            let comp_id =
+                input.name.trim().replaceAll(/\s/g, '-') +
+                '-' +
+                getDateFromDate(input.date)
             const idCheck = await ctx.db.query.competitions.findFirst({
                 where: (competitions, { eq }) =>
                     eq(competitions.name, input.name) &&
                     eq(competitions.date, input.date),
             })
             if (idCheck) {
-                comp_id = comp_id + '-' + Math.random().toString(36).substring(2, 8)
+                comp_id =
+                    comp_id + '-' + Math.random().toString(36).substring(2, 8)
             }
-
 
             const resComp = await ctx.db
                 .insert(competitions)
@@ -118,27 +121,47 @@ export const competitionRouter = createTRPCRouter({
             orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
             with: {
                 divisions: true,
+                entries: {
+                    with: {
+                        user: true,
+                        competition: true,
+                        compEntryToDivisions: {
+                            with: {
+                                division: true,
+                            },
+                        },
+                    },
+                },
             },
         })
         return res
     }),
-    get: publicProcedure
-        .input(z.number())
-        .query(async ({ ctx, input }) => {
-            const res = await ctx.db.query.competitions.findFirst({
-                where: (competitions, { eq }) => eq(competitions.id, input),
-                with: {
-                    divisions: true,
+    get: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+        const res = await ctx.db.query.competitions.findFirst({
+            where: (competitions, { eq }) => eq(competitions.id, input),
+            with: {
+                divisions: true,
+                entries: {
+                    with: {
+                        user: true,
+                        competition: true,
+                        compEntryToDivisions: {
+                            with: {
+                                division: true,
+                            },
+                        },
+                    },
                 },
+            },
+        })
+        if (!res) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: 'Competition not found.',
             })
-            if (!res) {
-                throw new TRPCError({
-                    code: 'NOT_FOUND',
-                    message: 'Competition not found.',
-                })
-            }
-            return res
-        }),
+        }
+        return res
+    }),
     getCompetitionByUuid: publicProcedure
         .input(z.string())
         .query(async ({ ctx, input }) => {
@@ -267,9 +290,7 @@ export const competitionRouter = createTRPCRouter({
                 })
             }
 
-            await ctx.db
-                .delete(competitions)
-                .where(eq(competitions.id, input))
+            await ctx.db.delete(competitions).where(eq(competitions.id, input))
 
             return true
         }),
