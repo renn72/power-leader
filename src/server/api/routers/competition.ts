@@ -122,6 +122,23 @@ export const competitionRouter = createTRPCRouter({
         })
         return res
     }),
+    get: publicProcedure
+        .input(z.number())
+        .query(async ({ ctx, input }) => {
+            const res = await ctx.db.query.competitions.findFirst({
+                where: (competitions, { eq }) => eq(competitions.id, input),
+                with: {
+                    divisions: true,
+                },
+            })
+            if (!res) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Competition not found.',
+                })
+            }
+            return res
+        }),
     getCompetitionByUuid: publicProcedure
         .input(z.string())
         .query(async ({ ctx, input }) => {

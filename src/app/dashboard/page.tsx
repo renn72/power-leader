@@ -1,7 +1,7 @@
 'use client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import Create from './_components/create'
-import Competitions from './_components/competions'
+import Competitions from './_components/competition/competitions'
 import List from './_components/list'
 import { useSearchParams } from 'next/navigation'
 import Upcoming from './_components/upcoming'
