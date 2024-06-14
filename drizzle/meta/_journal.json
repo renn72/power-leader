@@ -71,6 +71,20 @@
       "when": 1718093595121,
       "tag": "0009_awesome_ink",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1718333273302,
+      "tag": "0010_breezy_doorman",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1718333307071,
+      "tag": "0011_cooing_phalanx",
+      "breakpoints": true
     }
   ]
 }

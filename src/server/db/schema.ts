@@ -64,9 +64,13 @@ export const compEntry = createTable('comp_entry', {
     events: text('events'),
     squatOpener: text('squat_opener'),
     squarRackHeight: text('squar_rack_height'),
+    squatPB: text('squat_pb'),
     benchOpener: text('bench_opener'),
     benchRackHeight: text('bench_rack_height'),
+    benchPB: text('bench_pb'),
     deadliftOpener: text('deadlift_opener'),
+    deadliftPB: text('deadlift_pb'),
+    notes: text('notes'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
