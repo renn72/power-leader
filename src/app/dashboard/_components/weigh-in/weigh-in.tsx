@@ -151,6 +151,7 @@ const WeighIn = () => {
     const entry = competition?.entries?.find((entry) => entry.id === Number(entryId))
 
     console.log(competition)
+    console.log('entry', entry)
 
     return (
         <div className='flex flex-col gap-4'>
@@ -192,7 +193,7 @@ const WeighIn = () => {
                             You can edit this info later
                         </SheetDescription>
                     </SheetHeader>
-                    <WeighInForm comp={compId} />
+                    <WeighInForm entry={entry} competition={competition} />
                 </SheetContent>
             </Sheet>
         </div>

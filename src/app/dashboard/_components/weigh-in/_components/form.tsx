@@ -24,6 +24,8 @@ import Notes from './_components/notes'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
+
 export const dynamic = 'force-dynamic'
 
 const formSchema = z.object({
@@ -49,88 +51,47 @@ const formSchema = z.object({
     notes: z.string(),
 })
 
-const WeighInForm = ({ comp }: { comp: string }) => {
+const WeighInForm = ({ entry, competition }: { entry: GetCompetitionEntryById | undefined; competition: GetCompetitionById | undefined }) => {
     const [isPending, setIsPending] = useState(false)
     const [submitText, setSubmitText] = useState('Submit')
 
     const router = useRouter()
 
-    const { data: competition, isLoading: competitionLoading } =
-        api.competition.get.useQuery(+comp)
-
-    const { data: user, isLoading: userLoading } =
-        api.user.getCurrentUser.useQuery()
-
-    const { mutate: createComp } = api.compEntry.create.useMutation({
-        onMutate: () => {
-            setIsPending(true)
-            setSubmitText('Entering...')
-        },
-        onSettled: async () => {
-            setIsPending(false)
-        },
-        onError: (err) => {
-            console.log(err)
-            toast('Error')
-        },
-        onSuccess: () => {
-            setSubmitText('Entered')
-            setTimeout(() => {
-                router.push('/dashboard?tab=upcoming')
-            }, 500)
-
-            form.reset()
-        },
-    })
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            address: user && user.address ? user.address : '',
-            phone: user && user.phone ? user.phone : '',
-            instagram: user && user.instagram ? user.instagram : '',
-            openlifter: user && user.openlifter ? user.openlifter : '',
-            birthDate: user && user.birthDate ? user.birthDate : undefined,
-            equipment: '',
-            gender: '',
-            predictedWeight: '',
-            weight: '',
-            events: [],
-            division: [],
-            squatOpener: '',
-            squarRackHeight: '',
-            benchOpener: '',
-            benchRackHeight: '',
-            deadliftOpener: '',
-            squatPB: '',
-            benchPB: '',
-            deadliftPB: '',
-            notes: '',
+            address: entry?.user && entry.user.address ? entry.user.address : '',
+            phone: entry?.user && entry.user.phone ? entry.user.phone : '',
+            instagram: entry?.user && entry.user.instagram ? entry.user.instagram : '',
+            openlifter: entry?.user && entry.user.openlifter ? entry.user.openlifter : '',
+            birthDate: entry?.user && entry.user.birthDate ? entry.user.birthDate : undefined,
+            equipment: entry?.equipment ? entry.equipment : '',
+            gender: entry?.gender ? entry.gender : '',
+            predictedWeight: entry?.predictedWeight ? entry.predictedWeight : '',
+            weight: entry?.weight ? entry.weight : '',
+            events: entry?.events ? entry.events.split('/') : [],
+            division: entry?.compEntryToDivisions?.map((division) => division.division?.id.toString()) || [],
+            squatOpener: entry?.squatOpener ? entry.squatOpener : '',
+            squarRackHeight: entry?.squarRackHeight ? entry.squarRackHeight : '',
+            benchOpener: entry?.benchOpener ? entry.benchOpener : '',
+            benchRackHeight: entry?.benchRackHeight ? entry.benchRackHeight : '',
+            deadliftOpener: entry?.deadliftOpener ? entry.deadliftOpener : '',
+            squatPB: entry?.squatPB ? entry.squatPB : '',
+            benchPB: entry?.benchPB ? entry.benchPB : '',
+            deadliftPB: entry?.deadliftPB ? entry.deadliftPB : '',
+            notes: entry?.notes ? entry.notes : '',
         },
     })
 
     const onSubmit = (data: z.infer<typeof formSchema>) => {
-        if (!competition || !competition.id) {
-            return
-        }
 
-        const formData = {
-            ...data,
-            equipment: data.equipment === '' ? (competition.equipment?.split('/')[0] || 'nil') : data.equipment,
-            events: data.events.join('/'),
-            compId: competition.id,
-        }
-        console.log('formData', formData)
-        createComp(formData)
-    }
-
-    if (competitionLoading) {
-        return <Skeleton className='h-[800px] w-[600px]' />
+        console.log('formData', data)
     }
 
     if (!competition) {
         return <div>Competition not found</div>
     }
+
 
     return (
         <>
@@ -142,7 +103,6 @@ const WeighInForm = ({ comp }: { comp: string }) => {
                             className='flex w-full max-w-2xl flex-col items-center gap-2'
                         >
                             <Personal />
-                            <WeightClass competition={competition} />
                             <Equipment competition={competition} />
                             <Events competition={competition} />
                             <Divisions competition={competition} />
