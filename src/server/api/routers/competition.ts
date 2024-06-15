@@ -29,6 +29,8 @@ const createSchema = z.object({
     equipment: z.string(),
     formular: z.string(),
     wc_male: z.string(),
+    currentState: z.string(),
+    competitorLimit: z.number().nonnegative().int(),
     divisions: z
         .array(
             z.object({

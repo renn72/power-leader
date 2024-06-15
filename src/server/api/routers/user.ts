@@ -7,102 +7,11 @@ import { users } from '~/server/db/schema'
 
 import { eq } from 'drizzle-orm'
 
+import { generateFullName, generateName } from '~/lib/utils'
+
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
     return array.length > 0
 }
-
-const fakeUsers = [
-    {
-        name: 'Joe Howard',
-        birthDate: new Date(1980, 0, 1),
-        isFake: true,
-        address: '123 Main St',
-        phone: '0408123456',
-        instagram: 'joehoward',
-        openlifter: 'joehoward',
-        notes: '',
-    },
-    {
-        name: 'John Doe',
-        birthDate: new Date(1980, 0, 1),
-        isFake: true,
-        address: '543 Green St',
-        phone: '0423876543',
-        instagram: 'johndoe',
-        openlifter: 'johndoe',
-        notes: '',
-    },
-    {
-        name: 'Jane Doe',
-        birthDate: new Date(1997, 5, 3),
-        isFake: true,
-        address: '978 Oak St',
-        phone: '0419432109',
-        instagram: 'janedoe',
-        openlifter: 'janedoe',
-        notes: '',
-    },
-    {
-        name: 'Jack Doe',
-        birthDate: new Date(2001, 4, 1),
-        isFake: true,
-        address: '8 Maple Rd',
-        phone: '0412345678',
-        instagram: 'jackdoe',
-        openlifter: 'jackdoe',
-        notes: '',
-    },
-    {
-        name: 'Jill Doe',
-        birthDate: new Date(1990, 0, 1),
-        isFake: true,
-        address: '87 Jackson St',
-        phone: '0409678901',
-        instagram: 'jilldoe',
-        openlifter: 'jilldoe',
-        notes: '',
-    },
-    {
-        name: 'Nick Barrett',
-        birthDate: new Date(1995, 4, 9),
-        isFake: true,
-        address: '32 Oak St',
-        phone: '0409876543',
-        instagram: 'nickbarrett',
-        openlifter: 'nickbarrett',
-        notes: '',
-    },
-    {
-        name: 'Bob Smith',
-        birthDate: new Date(1985, 0, 1),
-        isFake: true,
-        address: '123 Oak St',
-        phone: '0409876543',
-        instagram: 'bobsmith',
-        openlifter: 'bobsmith',
-        notes: '',
-    },
-    {
-        name: 'Samantha Johnson',
-        birthDate: new Date(1990, 0, 1),
-        isFake: true,
-        address: '123 Oak St',
-        phone: '0409876543',
-        instagram: 'samanthajohnson',
-        openlifter: 'samanthajohnson',
-        notes: '',
-    },
-    {
-        name: 'Emily Lee',
-        birthDate: new Date(1980, 0, 1),
-        isFake: true,
-        address: '123 Oak St',
-        phone: '0409876543',
-        instagram: 'emilylee',
-        openlifter: 'emilylee',
-        notes: '',
-    },
-]
 
 export const userRouter = createTRPCRouter({
     getCurrentUser: publicProcedure.query(async ({ ctx }) => {
@@ -115,11 +24,17 @@ export const userRouter = createTRPCRouter({
             where: (users, { eq }) => eq(users.clerkId, user.id),
         })
         if (!res) {
-            const newUser = db.insert(users).values({
-                clerkId: user.id,
-                name: user.fullName,
+            const newUser = db
+                .insert(users)
+                .values({
+                    clerkId: user.id,
+                    name: user.fullName,
+                })
+                .returning({ id: users.id })
+            const newRes = await ctx.db.query.users.findFirst({
+                where: (users, { eq }) => eq(users.clerkId, user.id),
             })
-            return newUser
+            return newRes
         }
         return res
     }),
@@ -136,6 +51,25 @@ export const userRouter = createTRPCRouter({
         return res
     }),
     generateFakeUsers: publicProcedure.mutation(async ({ ctx }) => {
+        const fakeUsers = [...Array(10).keys()].map(() => {
+            const name = generateFullName()
+            return {
+                name: name,
+                // generate a random birth date
+                birthDate: new Date(Math.floor(Math.random() * 100) + 1980, Math.floor(Math.random() * 12), Math.floor(Math.random() * 26)),
+                isFake: true,
+                address: `${Math.floor(Math.random() * 100)} ${generateName()} St`,
+                // generate a random phone number
+                phone: `04${Math.floor(Math.random() * 100)
+                    .toString()
+                    .padStart(3, '0')}${Math.floor(Math.random() * 100)
+                    .toString()
+                    .padStart(4, '0')}`,
+                instagram: '@' + name.replace(' ', '').toLowerCase(),
+                openlifter: 'www.openpowerlifting.org/' + name.replace(' ', '').toLowerCase(),
+                notes: '',
+            }
+        })
         const usersGen = fakeUsers.map((name) =>
             db.insert(users).values({
                 name: name.name,
