@@ -39,6 +39,10 @@ export function getAge(birthDate: Date | null, eventDate?: Date | null) {
     return age
 }
 
+export function isTuple<T>(array: T[]): array is [T, ...T[]] {
+    return array.length > 0
+}
+
 const capFirst = (string: string | undefined) => {
     if (!string) {
         return string
@@ -4266,5 +4270,43 @@ export function generateName() {
     ]
 
     const name = capFirst(name1[getRandomInt(0, name1.length + 1)])
+    if (!name) {
+        return generateName()
+    }
+    return name
+}
+
+export function generateInitals() {
+    const name1 = [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z',
+    ]
+
+    const name = `${name1[getRandomInt(0, name1.length + 1)]}${name1[getRandomInt(0, name1.length + 1)]}${name1[getRandomInt(0, name1.length + 1)]}${name1[getRandomInt(0, name1.length + 1)]}`
+
     return name
 }

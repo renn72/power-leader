@@ -17,20 +17,21 @@ const createSchema = z.object({
     name: z.string().min(2),
     creatorId: z.number(),
     federation: z.string(),
-    country: z.string(),
-    state: z.string(),
-    city: z.string(),
+    country: z.string().optional(),
+    state: z.string().optional(),
+    city: z.string().optional(),
     date: z.date(),
     daysOfCompetition: z.number().nonnegative().int().min(1),
     platforms: z.number().nonnegative().int().min(1),
-    rules: z.string(),
+    rules: z.string().optional(),
     notes: z.string(),
     events: z.string(),
     equipment: z.string(),
     formular: z.string(),
-    wc_male: z.string(),
+    wc_male: z.string().optional(),
     currentState: z.string(),
-    competitorLimit: z.number().nonnegative().int(),
+    competitorLimit: z.number().nonnegative().int().optional(),
+    venue: z.string().optional(),
     divisions: z
         .array(
             z.object({
@@ -41,8 +42,8 @@ const createSchema = z.object({
             }),
         )
         .nonempty(),
-    wc_female: z.string(),
-    wc_mix: z.string(),
+    wc_female: z.string().optional(),
+    wc_mix: z.string().optional(),
 })
 
 export const competitionRouter = createTRPCRouter({
@@ -82,6 +83,7 @@ export const competitionRouter = createTRPCRouter({
                 }) =>
                     ctx.db.insert(divisions).values({
                         name: division.name,
+                        compName: input.name,
                         minAge:
                             division.minAge === ''
                                 ? null

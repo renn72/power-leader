@@ -325,6 +325,7 @@ export default function Create() {
             equipment: data.equipment.join('/'),
             formular: data.formular,
             divisions: data.divisions,
+            currentState: 'created',
             wc_male: data.wc_male.map((item) => item.toString()).join('/'),
             wc_female: data.wc_female.map((item) => item.toString()).join('/'),
             wc_mix: data.wc_mix.map((item) => item.toString()).join('/'),

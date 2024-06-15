@@ -110,6 +110,7 @@ export const divisions = createTable('age_divisions', {
     name: text('name').notNull(),
     minAge: integer('min_age'),
     maxAge: integer('max_age'),
+    compName: text('comp_name'),
     info: text('info').notNull(),
     compId: int('comp_id', { mode: 'number' }).references(
         () => competitions.id,

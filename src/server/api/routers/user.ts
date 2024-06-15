@@ -19,20 +19,20 @@ export const userRouter = createTRPCRouter({
         if (!user) {
             return false
         }
-        console.log('call user')
         const res = await ctx.db.query.users.findFirst({
             where: (users, { eq }) => eq(users.clerkId, user.id),
         })
         if (!res) {
-            const newUser = db
+            const newUser = await db
                 .insert(users)
                 .values({
                     clerkId: user.id,
                     name: user.fullName,
                 })
                 .returning({ id: users.id })
+            const id = newUser[0]?.id || 0
             const newRes = await ctx.db.query.users.findFirst({
-                where: (users, { eq }) => eq(users.clerkId, user.id),
+                where: (users, { eq }) => eq(users.id, id),
             })
             return newRes
         }
@@ -56,7 +56,11 @@ export const userRouter = createTRPCRouter({
             return {
                 name: name,
                 // generate a random birth date
-                birthDate: new Date(Math.floor(Math.random() * 100) + 1980, Math.floor(Math.random() * 12), Math.floor(Math.random() * 26)),
+                birthDate: new Date(
+                    Math.floor(Math.random() * 100) + 1980,
+                    Math.floor(Math.random() * 12),
+                    Math.floor(Math.random() * 26),
+                ),
                 isFake: true,
                 address: `${Math.floor(Math.random() * 100)} ${generateName()} St`,
                 // generate a random phone number
@@ -66,7 +70,9 @@ export const userRouter = createTRPCRouter({
                     .toString()
                     .padStart(4, '0')}`,
                 instagram: '@' + name.replace(' ', '').toLowerCase(),
-                openlifter: 'www.openpowerlifting.org/' + name.replace(' ', '').toLowerCase(),
+                openlifter:
+                    'www.openpowerlifting.org/' +
+                    name.replace(' ', '').toLowerCase(),
                 notes: '',
             }
         })

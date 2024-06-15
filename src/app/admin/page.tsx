@@ -2,6 +2,22 @@
 import { api } from '~/trpc/react'
 
 import { Button } from '~/components/ui/button'
+import { toast } from 'sonner'
+
+import {
+    generateFullName,
+    generateName,
+    generateInitals,
+    isTuple,
+} from '~/lib/utils'
+import {
+    ageDivisionsData,
+    eventsData,
+    wcFData,
+    wcMData,
+    equipmentData,
+    winnerFormular,
+} from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,6 +30,7 @@ export default function Admin() {
             },
         })
     const { data: fakeUsers } = api.user.getFakeUsers.useQuery()
+    const { data: user } = api.user.getCurrentUser.useQuery()
     const { mutate: deleteFakeUsers } = api.user.deleteFakeUsers.useMutation({
         onSettled: () => {
             ctx.user.getFakeUsers.refetch()
@@ -24,7 +41,18 @@ export default function Admin() {
         onSettled: () => {
             ctx.competition.getMyCompetitions.refetch()
         },
+        onError: (err) => {
+            console.log(err)
+            toast('Error')
+        },
+        onSuccess: () => {
+            toast('Created')
+        },
     })
+
+    if (!user) {
+        return <div>No Auth</div>
+    }
 
     return (
         <section className='mt-8 flex h-full grow flex-col gap-8'>
@@ -53,36 +81,61 @@ export default function Admin() {
                 <Button
                     onClick={() => {
                         createCompetition({
-                            name: 'test',
-                            creatorId: 1,
+                            name: generateFullName(),
+                            creatorId: user?.id || 0,
                             // create a radom date in the future
                             date: new Date(
-                                Date.now() + 6000 * 60 * 60 * 24 * 30 * Math.random(),
+                                Date.now() +
+                                    6000 * 60 * 60 * 24 * 30 * Math.random(),
                             ),
                             daysOfCompetition: 1,
                             platforms: 1,
-                            federation: '',
-                            country: '',
-                            state: '',
-                            city: '',
+                            federation: generateInitals(),
+                            country: generateName(),
+                            state: generateName(),
+                            city: generateName(),
                             divisions: [
                                 {
-                                    name: 'test',
+                                    name: 'Open',
                                     minAge: '',
                                     maxAge: '',
-                                    info: '',
+                                    info: 'Open',
+                                },
+                                {
+                                    name: 'Teen',
+                                    minAge: 13,
+                                    maxAge: 19,
+                                    info: 'Teen',
+                                },
+                                {
+                                    name: 'Master',
+                                    minAge: 50,
+                                    maxAge: '',
+                                    info: 'Masters',
+                                },
+                                {
+                                    name: 'First Timers',
+                                    minAge: '',
+                                    maxAge: '',
+                                    info: 'First powerlifting event',
+                                },
+                                {
+                                    name: 'Novice',
+                                    minAge: '',
+                                    maxAge: '',
+                                    info: 'Second powerlifting event',
                                 },
                             ],
                             rules: '',
                             events: '',
-                            wc_male: '',
-                            wc_female: '',
+                            wc_male: wcMData.join('/'),
+                            wc_female: wcFData.join('/'),
                             wc_mix: '',
-                            equipment: '',
-                            formular: '',
-                            currentState: '',
+                            equipment: 'Bare/Sleeeves/Multi Ply',
+                            formular: Math.random() > 0.5 ? 'Total' : 'DOTS',
+                            currentState: 'created',
                             competitorLimit: 100,
-                            venue: '',
+                            venue: generateName(),
                             notes: '',
                         })
                     }}
