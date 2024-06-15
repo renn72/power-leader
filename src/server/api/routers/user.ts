@@ -55,7 +55,6 @@ export const userRouter = createTRPCRouter({
         if (!user) {
             return false
         }
-        console.log(user)
         if (user.privateMetadata?.admin == 'true') {
             console.log('true')
             return true
