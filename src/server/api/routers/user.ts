@@ -50,6 +50,18 @@ export const userRouter = createTRPCRouter({
 
         return res
     }),
+    isAdmin: publicProcedure.query(async ({ ctx }) => {
+        const user = await currentUser()
+        if (!user) {
+            return false
+        }
+        console.log(user)
+        if (user.privateMetadata?.admin == 'true') {
+            console.log('true')
+            return true
+        }
+        return false
+    }),
     generateFakeUsers: publicProcedure.mutation(async ({ ctx }) => {
         const fakeUsers = [...Array(10).keys()].map(() => {
             const name = generateFullName()

@@ -80,6 +80,15 @@ export default function Admin() {
             <div className='flex gap-4'>
                 <Button
                     onClick={() => {
+                        const events =[
+                            'Squat, Bench, Deadlift',
+                            Math.random() > 0.5 ? 'Squat, Bench' : '',
+                            Math.random() > 0.5 ? 'Squat, Deadlift' : '',
+                            Math.random() > 0.5 ? 'Bench, Deadlift' : '',
+                            Math.random() > 0.5 ? 'Bench, Squat' : '',
+                            Math.random() > 0.5 ? 'Deadlift, Bench' : '',
+                            Math.random() > 0.5 ? 'Deadlift, Squat' : '',
+                        ].filter(item => item != '').join('/')
                         createCompetition({
                             name: generateFullName(),
                             creatorId: user?.id || 0,
@@ -127,7 +136,7 @@ export default function Admin() {
                                 },
                             ],
                             rules: '',
-                            events: '',
+                            events: events,
                             wc_male: wcMData.join('/'),
                             wc_female: wcFData.join('/'),
                             wc_mix: '',

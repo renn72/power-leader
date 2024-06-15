@@ -278,7 +278,7 @@ const Competition = ({ competition } : { competition: GetCompetitionById }) => {
                 </TableCell>
                 <TableCell>{competition.notes}</TableCell>
                 <TableCell>
-                    {(competition.currentState === '' ||
+                    {(competition.currentState === 'created' ||
                         competition.currentState === null ||
                         competition.currentState === 'closed') && (
                         <div className='flex flex-col items-center gap-2'>
