@@ -22,9 +22,7 @@ const Equipment = ({
     competition: GetCompetitionByUuid
 }) => {
     const form = useFormContext()
-    const [selected, setSelected] = useState<string>(
-        competition.equipment?.split('/')[0] || '',
-    )
+    const [selected, setSelected] = useState<string>()
     return (
         <Card className='w-full sm:max-w-2xl'>
             <CardHeader>
@@ -38,7 +36,7 @@ const Equipment = ({
                         <FormItem>
                             <ToggleGroup
                                 type='single'
-                                defaultValue={competition.equipment?.split('/')[0] || 'nil'}
+                                defaultValue={form.getValues('equipment') || 'nil'}
                                 value={selected}
                                 onValueChange={(value) => {
                                     setSelected(value)

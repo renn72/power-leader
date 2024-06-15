@@ -1,9 +1,8 @@
-
 'use client'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { api } from '~/trpc/react'
-
-import { Skeleton } from '~/components/ui/skeleton'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray, FormProvider } from 'react-hook-form'
@@ -13,16 +12,12 @@ import { Button } from '~/components/ui/button'
 import { Form } from '~/components/ui/form'
 import { toast } from 'sonner'
 
-import WeightClass from './_components/weight-class'
 import Equipment from './_components/equipment'
 import Personal from './_components/personal'
-import CompInfo from './_components/comp-info'
 import Events from './_components/events'
 import Divisions from './_components/divisions'
 import LiftInfo from './_components/lift-info'
 import Notes from './_components/notes'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
 
@@ -87,6 +82,34 @@ const WeighInForm = ({ entry, competition }: { entry: GetCompetitionEntryById | 
 
         console.log('formData', data)
     }
+
+    useEffect(() => {
+        if (entry) {
+            form.reset({
+            address: entry?.user && entry.user.address ? entry.user.address : '',
+            phone: entry?.user && entry.user.phone ? entry.user.phone : '',
+            instagram: entry?.user && entry.user.instagram ? entry.user.instagram : '',
+            openlifter: entry?.user && entry.user.openlifter ? entry.user.openlifter : '',
+            birthDate: entry.birthDate ? entry.birthDate : undefined,
+            equipment: entry?.equipment ? entry.equipment : '',
+            gender: entry?.gender ? entry.gender : '',
+            predictedWeight: entry?.predictedWeight ? entry.predictedWeight : '',
+            weight: entry?.weight ? entry.weight : '',
+            events: entry?.events ? entry.events.split('/') : [],
+            division: entry?.compEntryToDivisions?.map((division) => division.division?.id.toString()) || [],
+            squatOpener: entry?.squatOpener ? entry.squatOpener : '',
+            squarRackHeight: entry?.squarRackHeight ? entry.squarRackHeight : '',
+            benchOpener: entry?.benchOpener ? entry.benchOpener : '',
+            benchRackHeight: entry?.benchRackHeight ? entry.benchRackHeight : '',
+            deadliftOpener: entry?.deadliftOpener ? entry.deadliftOpener : '',
+            squatPB: entry?.squatPB ? entry.squatPB : '',
+            benchPB: entry?.benchPB ? entry.benchPB : '',
+            deadliftPB: entry?.deadliftPB ? entry.deadliftPB : '',
+            notes: entry?.notes ? entry.notes : '',
+            })
+        }
+        console.log('formData', form.getValues())
+    }, [entry])
 
     if (!competition) {
         return <div>Competition not found</div>
