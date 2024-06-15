@@ -14,10 +14,12 @@ import { toast } from 'sonner'
 
 import Equipment from './_components/equipment'
 import Personal from './_components/personal'
+import PersonalInfo from './_components/personal-info'
 import Events from './_components/events'
 import Divisions from './_components/divisions'
 import LiftInfo from './_components/lift-info'
 import Notes from './_components/notes'
+import WeighIn from './_components/weigh-in'
 
 import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
 
@@ -49,6 +51,8 @@ const formSchema = z.object({
 const WeighInForm = ({ entry, competition }: { entry: GetCompetitionEntryById | undefined; competition: GetCompetitionById | undefined }) => {
     const [isPending, setIsPending] = useState(false)
     const [submitText, setSubmitText] = useState('Submit')
+
+    const [isEditPersonal, setIsEditPersonal] = useState(false)
 
     const router = useRouter()
 
@@ -125,10 +129,11 @@ const WeighInForm = ({ entry, competition }: { entry: GetCompetitionEntryById | 
                             onSubmit={form.handleSubmit(onSubmit)}
                             className='flex w-full max-w-2xl flex-col items-center gap-2'
                         >
-                            <Personal />
+                            {isEditPersonal ? (<Personal />) : (<PersonalInfo entry={entry} />)}
                             <Equipment competition={competition} />
                             <Events competition={competition} />
                             <Divisions competition={competition} />
+                            <WeighIn />
                             <LiftInfo />
                             <Notes />
                             <Button

@@ -189,9 +189,6 @@ const WeighIn = () => {
                 <SheetContent className='w-[400px] sm:w-[640px] sm:max-w-lg overflow-y-auto'>
                     <SheetHeader>
                         <SheetTitle>Weigh In</SheetTitle>
-                        <SheetDescription>
-                            You can edit this info later
-                        </SheetDescription>
                     </SheetHeader>
                     <WeighInForm entry={entry} competition={competition} />
                 </SheetContent>

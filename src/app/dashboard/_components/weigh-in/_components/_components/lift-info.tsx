@@ -21,9 +21,6 @@ const LiftInfo = () => {
             <Card className='w-full sm:max-w-2xl'>
                 <CardHeader>
                     <CardTitle>Lift Info</CardTitle>
-                    <CardDescription>
-                        You can edit this info later
-                    </CardDescription>
                 </CardHeader>
                 <CardContent className='mt-2 flex flex-col gap-2 tracking-tight'>
                     <Card>
@@ -43,7 +40,7 @@ const LiftInfo = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder=''
-                                                type='text'
+                                                type='number'
                                                 {...field}
                                             />
                                         </FormControl>
@@ -77,7 +74,7 @@ const LiftInfo = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder=''
-                                                type='text'
+                                                type='number'
                                                 {...field}
                                             />
                                         </FormControl>
@@ -104,7 +101,7 @@ const LiftInfo = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder=''
-                                                type='text'
+                                                type='number'
                                                 {...field}
                                             />
                                         </FormControl>
@@ -138,7 +135,7 @@ const LiftInfo = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder=''
-                                                type='text'
+                                                type='number'
                                                 {...field}
                                             />
                                         </FormControl>
@@ -165,7 +162,7 @@ const LiftInfo = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder=''
-                                                type='text'
+                                                type='number'
                                                 {...field}
                                             />
                                         </FormControl>
@@ -183,7 +180,7 @@ const LiftInfo = () => {
                                         <FormControl>
                                             <Input
                                                 placeholder=''
-                                                type='text'
+                                                type='number'
                                                 {...field}
                                             />
                                         </FormControl>
