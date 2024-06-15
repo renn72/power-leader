@@ -35,7 +35,7 @@ const Events = ({
                         <FormItem>
                             <ToggleGroup
                                 type='multiple'
-                                defaultValue={[]}
+                                defaultValue={form.getValues('events') || []}
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}

@@ -31,7 +31,7 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
                         <FormItem>
                             <ToggleGroup
                                 type='multiple'
-                                defaultValue={[]}
+                                defaultValue={form.getValues('division') || []}
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
