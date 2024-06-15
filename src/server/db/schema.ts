@@ -16,6 +16,7 @@ export const users = createTable('user', {
     instagram: text('instagram'),
     openlifter: text('openlifter'),
     phone: text('phone'),
+    isFake: int('is_fake', { mode: 'boolean' }),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
