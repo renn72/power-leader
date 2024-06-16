@@ -68,7 +68,7 @@ export const userRouter = createTRPCRouter({
                 name: name,
                 // generate a random birth date
                 birthDate: new Date(
-                    Math.floor(Math.random() * 100) + 1980,
+                    Math.floor(Math.random() * 30) + 1980,
                     Math.floor(Math.random() * 12),
                     Math.floor(Math.random() * 26),
                 ),
