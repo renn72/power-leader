@@ -86,7 +86,11 @@ const Entry = ({
         <SheetTrigger asChild>
             <div
                 onClick={() => setEntryId(entry.id)}
-                className='grid cursor-pointer grid-flow-row grid-cols-14 justify-between rounded-full border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10'
+                className={cn(
+                    'grid-cols-14 grid cursor-pointer grid-flow-row justify-between rounded-full',
+                    'border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
+                    entry.isLocked && 'border-destructive',
+                )}
             >
                 <Cell
                     title='Name'

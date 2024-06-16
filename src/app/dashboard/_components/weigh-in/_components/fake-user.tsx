@@ -5,6 +5,10 @@ import { Button } from '~/components/ui/button'
 
 import type { GetCompetitionById } from '~/lib/types'
 
+const roundPL = (num: number) => {
+    return Math.round(num / 2.5) * 2.5
+}
+
 const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
     const ctx = api.useUtils()
     const { data: isAdmin } = api.user.isAdmin.useQuery()
@@ -18,30 +22,38 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
 
     const update = () => {
         for (const entry of competition.entries) {
+            const squatOpener = roundPL(50 + Math.floor(Math.random() * 120))
+            const benchOpener = roundPL(50 + Math.floor(Math.random() * 120))
+            const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 120))
             updateAndLock({
                 id: entry.id,
-                address: entry.address,
-                phone: entry.user.phone,
-                instagram: entry.user.instagram,
-                openlifter: entry.user.openlifter,
-                birthDate: entry.birthDate,
-                equipment: entry.equipment,
-                gender: entry.gender,
-                predictedWeight: entry.predictedWeight,
-                weight: entry.weight,
-                events: entry.events,
-                division: entry.division,
-                squatOpener: entry.squatOpener,
-                squarRackHeight: entry.squarRackHeight,
-                benchOpener: entry.benchOpener,
-                benchRackHeight: entry.benchRackHeight,
-                deadliftOpener: entry.deadliftOpener,
-                squatPB: entry.squatPB,
-                benchPB: entry.benchPB,
-                deadliftPB: entry.deadliftPB,
-                notes: entry.notes,
-                compId: competition.id,
-                userId: entry.user.id,
+                address: entry?.address || '',
+                phone: entry?.phone || '',
+                instagram: entry?.instagram || '',
+                openlifter: entry?.openlifter || '',
+                birthDate: entry?.birthDate || new Date(),
+                equipment: entry?.equipment || '',
+                gender: entry?.gender || '',
+                predictedWeight: entry?.predictedWeight || '',
+                weight: (40 + Math.floor(Math.random() * 100)).toString(),
+                events: entry?.events || '',
+                division:
+                    entry?.compEntryToDivisions?.map(
+                        (division) => division.division?.id.toString() || '',
+                    ) || [],
+                squatOpener: squatOpener.toString(),
+                squarRackHeight:
+                    Math.ceil(Math.random() * 15).toString() +
+                    (Math.random() > 0.5 ? 'in' : 'out'),
+                benchOpener: benchOpener.toString(),
+                benchRackHeight: Math.ceil(Math.random() * 10).toString() + '/' + Math.ceil(Math.random() * 5).toString(),
+                deadliftOpener: deadliftOpener.toString(),
+                squatPB: (squatOpener + 25).toString(),
+                benchPB: (benchOpener + 25).toString(),
+                deadliftPB: (deadliftOpener + 25).toString(),
+                compId: competition?.id || 0,
+                userId: entry.userId || 0,
+                notes: entry?.notes || '',
             })
         }
     }

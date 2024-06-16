@@ -113,10 +113,11 @@ export const compEntryRouter = createTRPCRouter({
                 .update(compEntry)
                 .set({
                     ...input,
+                    isLocked: true,
                 })
                 .where(eq(compEntry.id, input.id))
 
-            return true
+            return res
         }),
     createFake: publicProcedure
         .input(createSchema)
