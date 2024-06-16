@@ -23,6 +23,7 @@ import {
 import { XIcon } from 'lucide-react'
 
 import type { GetCompetitionById } from '~/lib/types'
+import { Icons } from '~/components/ui/icons'
 
 export const dynamic = 'force-dynamic'
 
@@ -294,7 +295,7 @@ const Competition = ({ competition } : { competition: GetCompetitionById }) => {
                             >
                                 {isOpenClosing && (
                                     <div className='mr-3 animate-spin'>
-                                        <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
+                                        <Icons.spinner className='h-4 w-4' />
                                     </div>
                                 )}
                                 {open}
@@ -313,7 +314,7 @@ const Competition = ({ competition } : { competition: GetCompetitionById }) => {
                             >
                                 {isOpenClosing && (
                                     <div className='mr-3 animate-spin'>
-                                        <div className='h-4 w-4 rounded-full border-b-2 border-t-2 border-border' />
+                                        <Icons.spinner className='h-4 w-4' />
                                     </div>
                                 )}
                                 {close}

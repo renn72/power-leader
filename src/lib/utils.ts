@@ -4306,7 +4306,7 @@ export function generateInitals() {
         'Z',
     ]
 
-    const name = `${name1[getRandomInt(0, name1.length + 1)]}${name1[getRandomInt(0, name1.length + 1)]}${name1[getRandomInt(0, name1.length + 1)]}${name1[getRandomInt(0, name1.length + 1)]}`
+    const name = `${name1[getRandomInt(0, name1.length)]}${name1[getRandomInt(0, name1.length)]}${name1[getRandomInt(0, name1.length)]}${name1[getRandomInt(0, name1.length)]}`
 
     return name
 }

@@ -111,6 +111,16 @@ export const competitionRouter = createTRPCRouter({
         })
         return res
     }),
+    getAllOpen: publicProcedure.query(async ({ ctx }) => {
+        const res = await ctx.db.query.competitions.findMany({
+            where: (competitions, { eq }) => eq(competitions.currentState, 'open'),
+            orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
+            with: {
+                divisions: true,
+            },
+        })
+        return res
+    }),
     getMyCompetitions: publicProcedure.query(async ({ ctx }) => {
         const user = await getCurrentUser()
         if (!user) {

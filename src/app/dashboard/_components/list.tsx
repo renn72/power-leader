@@ -23,7 +23,7 @@ export const dynamic = 'force-dynamic'
 
 const List = () => {
     const { data: allCompetitions, isLoading: allCompetitionsLoading } =
-        api.competition.getAll.useQuery()
+        api.competition.getAllOpen.useQuery()
     return (
         <section className='grid h-full grid-cols-1 place-content-between gap-4'>
             {allCompetitionsLoading ? (
