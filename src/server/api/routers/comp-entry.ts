@@ -17,6 +17,31 @@ const createSchema = z.object({
     equipment: z.string(),
     gender: z.string(),
     predictedWeight: z.string(),
+    events: z.string(),
+    division: z.array(z.string()),
+    squatOpener: z.string(),
+    squarRackHeight: z.string(),
+    benchOpener: z.string(),
+    benchRackHeight: z.string(),
+    deadliftOpener: z.string(),
+    squatPB: z.string(),
+    benchPB: z.string(),
+    deadliftPB: z.string(),
+    notes: z.string(),
+    compId: z.number(),
+    userId: z.number().optional(),
+})
+
+const updateAndLockSchema = z.object({
+    id: z.number(),
+    address: z.string(),
+    phone: z.string(),
+    instagram: z.string(),
+    openlifter: z.string(),
+    birthDate: z.date(),
+    equipment: z.string(),
+    gender: z.string(),
+    predictedWeight: z.string(),
     weight: z.string(),
     events: z.string(),
     division: z.array(z.string()),
@@ -32,6 +57,7 @@ const createSchema = z.object({
     compId: z.number(),
     userId: z.number().optional(),
 })
+
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
     return array.length > 0
@@ -69,6 +95,26 @@ export const compEntryRouter = createTRPCRouter({
             if (isTuple(ins)) {
                 await ctx.db.batch(ins)
             }
+
+            return true
+        }),
+    updateAndLock: publicProcedure
+        .input(updateAndLockSchema)
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const res = await ctx.db
+                .update(compEntry)
+                .set({
+                    ...input,
+                })
+                .where(eq(compEntry.id, input.id))
 
             return true
         }),

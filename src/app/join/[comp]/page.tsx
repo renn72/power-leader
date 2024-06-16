@@ -59,7 +59,6 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
                 equipment: equipment[Math.floor(Math.random() * equipment.length)] || '',
                 gender: Math.random() > 0.5 ? 'Male' : 'Female',
                 predictedWeight: (60 + Math.floor(Math.random() * 100)).toString(),
-                weight: '',
                 events: pickedEvents,
                 division: pickedDivisions,
                 squatOpener: '',

@@ -8,15 +8,10 @@ import {
     generateFullName,
     generateName,
     generateInitals,
-    isTuple,
 } from '~/lib/utils'
 import {
-    ageDivisionsData,
-    eventsData,
     wcFData,
     wcMData,
-    equipmentData,
-    winnerFormular,
 } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'

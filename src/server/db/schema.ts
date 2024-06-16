@@ -58,6 +58,10 @@ export const compEntry = createTable('comp_entry', {
         { onDelete: 'cascade' },
     ),
     birthDate: int('birth_date', { mode: 'timestamp' }),
+    address: text('address'),
+    phone: text('phone'),
+    instagram: text('instagram'),
+    openlifter: text('openlifter'),
     equipment: text('equipment'),
     gender: text('gender'),
     predictedWeight: text('predicted_weight'),
@@ -71,6 +75,7 @@ export const compEntry = createTable('comp_entry', {
     benchPB: text('bench_pb'),
     deadliftOpener: text('deadlift_opener'),
     deadliftPB: text('deadlift_pb'),
+    isLocked: int('is_locked', { mode: 'boolean' }),
     notes: text('notes'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)

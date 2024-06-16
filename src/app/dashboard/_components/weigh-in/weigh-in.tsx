@@ -19,7 +19,6 @@ import {
     SheetHeader,
     SheetTitle,
 } from '~/components/ui/sheet'
-import { Button } from '~/components/ui/button'
 
 const WeighIn = () => {
     const [compId, setCompId] = useState('')
