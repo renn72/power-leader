@@ -1,7 +1,6 @@
 'use client'
 import { api } from '~/trpc/react'
 
-import {  TabsContent, } from '~/components/ui/tabs'
 import {
     Table,
     TableBody,
@@ -21,11 +20,7 @@ const Competitions = () => {
         api.competition.getMyCompetitions.useQuery()
 
     return (
-        <TabsContent
-            className='min-h-[calc(100vh - 10rem)] w-full'
-            value='competition'
-        >
-            <section className='grid h-full grid-cols-1 place-content-between gap-4'>
+            <section className='min-h-[calc(100vh - 10rem)] grid w-full grid-cols-1 place-content-between gap-4'>
                 {competitionsLoading ? (
                     <div className='flex flex-col items-center justify-center gap-2'>
                         <Skeleton className='h-[20px] w-[80vw] rounded-full' />
@@ -68,7 +63,6 @@ const Competitions = () => {
                     </Table>
                 )}
             </section>
-        </TabsContent>
     )
 }
 

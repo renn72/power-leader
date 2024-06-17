@@ -5,7 +5,7 @@ import { getAge } from '~/lib/utils'
 import { cn } from '~/lib/utils'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
-import { CircleDot } from 'lucide-react'
+import { CircleCheck, CircleDot, TicketCheck } from 'lucide-react'
 
 const Cell = ({
     title,
@@ -88,10 +88,14 @@ const Entry = ({
                 onClick={() => setEntryId(entry.id)}
                 className={cn(
                     'grid-cols-14 grid cursor-pointer grid-flow-row justify-between rounded-full',
-                    'border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
-                    entry.isLocked && 'border-destructive',
+                    'border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10 relative',
                 )}
             >
+                <CircleCheck
+                    size={24}
+                    strokeWidth={3}
+                    className='text-complete absolute top-1/2 left-6 -translate-y-1/2 '
+                />
                 <Cell
                     title='Name'
                     className='col-span-2'

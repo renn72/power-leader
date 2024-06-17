@@ -37,7 +37,9 @@ export default function RootLayout({
                         >
                             <main className={`flex min-h-screen flex-col `}>
                                 <Navbar />
+                                <div className='min-h-[calc(100vh-7.8rem)]'>
                                 {children}
+                                </div>
                                 <footer className='h-16'>footer</footer>
                                 <Toaster />
                             </main>
