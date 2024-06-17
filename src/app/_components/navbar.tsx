@@ -62,6 +62,13 @@ const Navbar = () => {
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link href='/bracket' legacyBehavior passHref>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                Bracket
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
             <div className='flex items-center gap-4'>

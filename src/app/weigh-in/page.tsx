@@ -48,7 +48,7 @@ const WeighIn = () => {
     }
 
     return (
-        <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-4 p-4'>
             <Select
                 onValueChange={setCompId}
                 defaultValue={compId}
