@@ -36,13 +36,13 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
             //66
 
             let wc = ''
-            if (entry?.gender == 'female' && wc_female) {
+            if (entry?.gender?.toLowerCase() == 'female' && wc_female) {
                 wc =
                     wc_female
                         .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
                         .toString() + '-f'
             } else {
-                if (wc_male) {
+                if (wc_male && entry?.gender?.toLowerCase() !== 'female') {
                     wc =
                         wc_male
                             .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
