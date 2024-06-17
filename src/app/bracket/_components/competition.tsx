@@ -10,6 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from '~/components/ui/card'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const Bracket = ({
     entries,
@@ -137,6 +138,18 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
 
     return (
         <div className='flex w-full flex-col items-center  gap-8'>
+            <div>
+                <div>Days</div>
+                <div>
+                    <ChevronLeft />
+                <div>{competition.daysOfCompetition}</div>
+                    <ChevronRight />
+            </div>
+            </div>
+            <div>
+                <div>Platforms</div>
+                <div>{competition.platforms}</div>
+            </div>
             <div className='flex w-full justify-center gap-16'>
                 <Bracket
                     entries={menSquat}
