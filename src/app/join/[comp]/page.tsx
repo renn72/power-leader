@@ -47,8 +47,15 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
         const equipment = competition?.equipment?.split('/') || []
 
         for (const user of fakeUsers) {
-            const pickedEvents = events.filter((event) => Math.random() > 0.5).join('/')
-            const pickedDivisions = divisions.filter((division) => Math.random() > 0.5).map((division) => division.toString())
+            let pickedEvents = events.filter((event) => Math.random() > 0.5).join('/')
+            if (pickedEvents.length == 0 && events[0]) {
+                pickedEvents = events[0].toString()
+            }
+
+            let pickedDivisions = divisions.filter((division) => Math.random() > 0.5).map((division) => division.toString())
+            if (pickedDivisions.length == 0 && divisions[0]) {
+                pickedDivisions = [divisions[0].toString()]
+            }
             console.log(pickedEvents, pickedDivisions)
             createFakeUsers({
                 birthDate: user.birthDate ? user.birthDate : new Date(),

@@ -43,6 +43,7 @@ const updateAndLockSchema = z.object({
     gender: z.string(),
     predictedWeight: z.string(),
     weight: z.string(),
+    wc: z.string().optional(),
     events: z.string(),
     division: z.array(z.string()),
     squatOpener: z.string(),

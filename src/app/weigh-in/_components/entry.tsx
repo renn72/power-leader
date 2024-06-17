@@ -6,6 +6,7 @@ import { cn } from '~/lib/utils'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
 import { CircleCheck, CircleDot, TicketCheck } from 'lucide-react'
+import { Badge } from '~/components/ui/badge'
 
 const Cell = ({
     title,
@@ -28,6 +29,28 @@ const Cell = ({
             >
                 {info || '-'}
             </div>
+        </div>
+    )
+}
+const CellBadge = ({
+    title,
+    info,
+    className,
+}: {
+    title: string
+    info: string | number | null | undefined
+    className?: string
+}) => {
+    return (
+        <div className={cn('flex flex-col items-center gap-1', className)}>
+            <div className='text-xs text-muted-foreground'>{title}</div>
+            {info && (
+                <Badge
+                    className='w-16 flex justify-center items-center'
+                >
+                    {info}kg
+                </Badge>
+            )}
         </div>
     )
 }
@@ -88,14 +111,16 @@ const Entry = ({
                 onClick={() => setEntryId(entry.id)}
                 className={cn(
                     'grid-cols-15 grid cursor-pointer grid-flow-row justify-between rounded-full',
-                    'border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10 relative',
+                    'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
                 )}
             >
-                <CircleCheck
-                    size={24}
-                    strokeWidth={3}
-                    className='text-complete absolute top-1/2 left-6 -translate-y-1/2 '
-                />
+                {entry.isLocked && (
+                    <CircleCheck
+                        size={24}
+                        strokeWidth={3}
+                        className='text-complete absolute left-6 top-1/2 -translate-y-1/2 '
+                    />
+                )}
                 <Cell
                     title='Name'
                     className='col-span-2'
@@ -113,9 +138,9 @@ const Entry = ({
                     title='Weight'
                     info={entry.weight}
                 />
-                <Cell
+                <CellBadge
                     title='WC'
-                    info={entry.wc}
+                    info={entry.wc?.split('-')[0]}
                 />
                 <Cell
                     title='Squat'
