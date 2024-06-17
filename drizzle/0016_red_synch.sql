@@ -1,0 +1,1 @@
+ALTER TABLE `pb_comp_entry` ADD `wc` text;

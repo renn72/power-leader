@@ -87,7 +87,7 @@ const Entry = ({
             <div
                 onClick={() => setEntryId(entry.id)}
                 className={cn(
-                    'grid-cols-14 grid cursor-pointer grid-flow-row justify-between rounded-full',
+                    'grid-cols-15 grid cursor-pointer grid-flow-row justify-between rounded-full',
                     'border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10 relative',
                 )}
             >
@@ -112,6 +112,10 @@ const Entry = ({
                 <Cell
                     title='Weight'
                     info={entry.weight}
+                />
+                <Cell
+                    title='WC'
+                    info={entry.wc}
                 />
                 <Cell
                     title='Squat'

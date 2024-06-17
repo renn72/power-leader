@@ -5,6 +5,7 @@ import { api } from '~/trpc/react'
 import WeighInForm from './_components/form'
 import Entry from './_components/entry'
 import FakeUser from './_components/fake-user'
+import WeightClasses from './_components/weight-classes'
 
 import {
     Select,
@@ -48,7 +49,7 @@ const WeighIn = () => {
     }
 
     return (
-        <div className='flex flex-col gap-4 p-4'>
+        <div className='flex flex-col gap-4'>
             <Select
                 onValueChange={setCompId}
                 defaultValue={compId}
@@ -74,6 +75,7 @@ const WeighIn = () => {
                 </div>
                 {competition && (
                     <div className='mx-4 flex flex-col gap-2'>
+                        <WeightClasses competition={competition} />
                         {competition.entries?.map((entry) => (
                             <Entry
                                 entry={entry}
