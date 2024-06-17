@@ -120,6 +120,13 @@
       "when": 1718594135585,
       "tag": "0016_red_synch",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1718608835567,
+      "tag": "0017_rare_machine_man",
+      "breakpoints": true
     }
   ]
 }
