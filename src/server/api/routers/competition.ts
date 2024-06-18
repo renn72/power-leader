@@ -325,6 +325,86 @@ export const competitionRouter = createTRPCRouter({
 
             return true
         }),
+    startCompetition: publicProcedure
+        .input(z.number())
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const comp = await ctx.db.query.competitions.findFirst({
+                where: (competitions, { eq }) => eq(competitions.id, input),
+                with: {
+                    creator: true,
+                },
+            })
+
+            if (!comp) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Competition not found.',
+                })
+            }
+            if (comp.creator.id !== user.id) {
+                throw new TRPCError({
+                    code: 'FORBIDDEN',
+                    message: 'Unauthorized.',
+                })
+            }
+
+            await ctx.db
+                .update(competitions)
+                .set({
+                    currentState: 'started',
+                })
+                .where(eq(competitions.id, input))
+
+            return true
+        }),
+    pauseCompetition: publicProcedure
+        .input(z.number())
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const comp = await ctx.db.query.competitions.findFirst({
+                where: (competitions, { eq }) => eq(competitions.id, input),
+                with: {
+                    creator: true,
+                },
+            })
+
+            if (!comp) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Competition not found.',
+                })
+            }
+            if (comp.creator.id !== user.id) {
+                throw new TRPCError({
+                    code: 'FORBIDDEN',
+                    message: 'Unauthorized.',
+                })
+            }
+
+            await ctx.db
+                .update(competitions)
+                .set({
+                    currentState: 'paused',
+                })
+                .where(eq(competitions.id, input))
+
+            return true
+        }),
     deleteCompetition: publicProcedure
         .input(z.number())
         .mutation(async ({ ctx, input }) => {

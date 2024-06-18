@@ -64,6 +64,9 @@ const updateOrderSchema = z.object({
     squatOrder: z.number().optional(),
     benchOrder: z.number().optional(),
     deadliftOrder: z.number().optional(),
+    squatBracket: z.number().optional(),
+    benchBracket: z.number().optional(),
+    deadliftBracket: z.number().optional(),
 })
 
 
