@@ -10,6 +10,7 @@ import {
     SelectValue,
 } from '~/components/ui/select'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
+import { Icons } from '~/components/ui/icons'
 
 import Competition from './_components/competition'
 
@@ -30,8 +31,8 @@ const CompDay = () => {
 
     if (competitionsLoading) {
         return (
-            <div className='flex flex-col items-center justify-center gap-2'>
-                <div className='font-bold text-destructive'>Loading...</div>
+            <div className='flex flex-col w-full h-full min-h-[calc(100vh-10rem)] items-center justify-center animate-spin'>
+                <Icons.spinner className='h-40 w-40' />
             </div>
         )
     }
@@ -57,12 +58,19 @@ const CompDay = () => {
                 </SelectContent>
             </Select>
             {competition?.currentState === 'open' ? (
-                <Alert variant='destructive' className='w-[200px]'>
+                <Alert
+                    variant='destructive'
+                    className='w-[200px]'
+                >
                     <AlertTitle>Heads up!</AlertTitle>
                     <AlertDescription>comp is still open</AlertDescription>
                 </Alert>
             ) : (
-                <>{competition && <Competition competition={competition} />}</>
+                <>
+                    {competition && (
+                        <Competition competitionId={competition.id} />
+                    )}
+                </>
             )}
         </div>
     )

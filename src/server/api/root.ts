@@ -4,6 +4,7 @@ import { competitionRouter } from './routers/competition'
 import { divisionRouter } from './routers/division'
 import { userRouter } from './routers/user'
 import { compEntryRouter } from './routers/comp-entry'
+import { competitionDayRouter } from './routers/comp-day'
 
 /**
  * This is the primary router for your server.
@@ -12,6 +13,7 @@ import { compEntryRouter } from './routers/comp-entry'
  */
 export const appRouter = createTRPCRouter({
     competition: competitionRouter,
+    competitionDay: competitionDayRouter,
     division: divisionRouter,
     user: userRouter,
     compEntry: compEntryRouter,

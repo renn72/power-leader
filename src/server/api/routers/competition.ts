@@ -214,6 +214,7 @@ export const competitionRouter = createTRPCRouter({
             where: (competitions, { eq }) => eq(competitions.id, input),
             with: {
                 divisions: true,
+                compDayInfo: true,
                 entries: {
                     with: {
                         user: true,
