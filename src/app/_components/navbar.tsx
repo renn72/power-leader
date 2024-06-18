@@ -65,7 +65,7 @@ const Navbar = () => {
                     <NavigationMenuItem>
                         <Link href='/bracket' legacyBehavior passHref>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                Bracket
+                                Bracket's
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>

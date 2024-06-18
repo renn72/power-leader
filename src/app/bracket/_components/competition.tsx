@@ -1,3 +1,7 @@
+'use client'
+
+import { api } from '~/trpc/react'
+
 import type { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 
@@ -10,6 +14,7 @@ import {
     CardHeader,
     CardTitle,
 } from '~/components/ui/card'
+import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const Bracket = ({
@@ -40,7 +45,7 @@ const Bracket = ({
                             <div
                                 key={entry.id}
                                 className={cn(
-                                    'grid grid-cols-6 gap-2 place-items-center border border-input',
+                                    'grid grid-cols-6 place-items-center gap-2 border border-input',
                                     'rounded-full p-1 hover:bg-muted',
                                     entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
                                 )}
@@ -55,7 +60,6 @@ const Bracket = ({
                                     {entry.user?.name}
                                 </div>
                                 <div className='col-span-2'>{opener}kg</div>
-
                             </div>
                         )
                     })}
@@ -65,8 +69,44 @@ const Bracket = ({
     )
 }
 
+const UpdateComp = ({
+    title,
+    children,
+}: {
+    title: string
+    children: React.ReactNode
+}) => {
+    return (
+        <Card className='flex flex-col items-center gap-2'>
+            <CardHeader>
+                <CardTitle className='text-xl'>{title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className='flex items-center gap-2 text-xl font-bold'>
+                    {children}
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
 const Competition = ({ competition }: { competition: GetCompetitionById }) => {
-    console.log(competition)
+    const ctx = api.useUtils()
+    const { mutate: updateDaysOfCompetition } =
+        api.competition.updateDaysOfCompetition.useMutation({
+            onSettled: () => {
+                ctx.competition.getMyCompetitions.refetch()
+                toast('Updated')
+            },
+        })
+
+    const { mutate: updatePlatforms } =
+        api.competition.updatePlatforms.useMutation({
+            onSettled: () => {
+                ctx.competition.getMyCompetitions.refetch()
+                toast('Updated')
+            },
+        })
 
     //squat
     const menSquat = competition.entries
@@ -138,17 +178,67 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
 
     return (
         <div className='flex w-full flex-col items-center  gap-8'>
-            <div>
-                <div>Days</div>
-                <div>
-                    <ChevronLeft />
-                <div>{competition.daysOfCompetition}</div>
-                    <ChevronRight />
-            </div>
-            </div>
-            <div>
-                <div>Platforms</div>
-                <div>{competition.platforms}</div>
+            <div className='flex w-full max-w-sm items-center justify-between'>
+                <UpdateComp title='Days'>
+                    <ChevronLeft
+                        size={32}
+                        strokeWidth={3}
+                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
+                        onClick={() => {
+                            if (competition?.daysOfCompetition == 1) {
+                                toast('You can not delete the first day')
+                                return
+                            }
+                            updateDaysOfCompetition({
+                                id: competition.id,
+                                daysOfCompetition:
+                                    Number(competition?.daysOfCompetition) - 1,
+                            })
+                        }}
+                    />
+                    <div>{competition.daysOfCompetition}</div>
+                    <ChevronRight
+                        size={32}
+                        strokeWidth={3}
+                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
+                        onClick={() => {
+                            updateDaysOfCompetition({
+                                id: competition.id,
+                                daysOfCompetition:
+                                    Number(competition?.daysOfCompetition) + 1,
+                            })
+                        }}
+                    />
+                </UpdateComp>
+                <UpdateComp title='Platforms'>
+                    <ChevronLeft
+                        size={32}
+                        strokeWidth={3}
+                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
+                        onClick={() => {
+                            if (competition?.platforms == 1) {
+                                toast('You need to have at least one platform')
+                                return
+                            }
+                            updatePlatforms({
+                                id: competition.id,
+                                platforms: Number(competition?.platforms) - 1,
+                            })
+                        }}
+                    />
+                    <div>{competition.platforms}</div>
+                    <ChevronRight
+                        size={32}
+                        strokeWidth={3}
+                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground '
+                        onClick={() => {
+                            updatePlatforms({
+                                id: competition.id,
+                                platforms: Number(competition?.platforms) + 1,
+                            })
+                        }}
+                    />
+                </UpdateComp>
             </div>
             <div className='flex w-full justify-center gap-16'>
                 <Bracket

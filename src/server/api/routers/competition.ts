@@ -46,6 +46,16 @@ const createSchema = z.object({
     wc_mix: z.string().optional(),
 })
 
+const updateDaysOfCompetitionSchema = z.object({
+    id: z.number(),
+    daysOfCompetition: z.number().nonnegative().int().min(1),
+})
+
+const updatePlatformsSchema = z.object({
+    id: z.number(),
+    platforms: z.number().nonnegative().int().min(1),
+})
+
 export const competitionRouter = createTRPCRouter({
     create: publicProcedure
         .input(createSchema)
@@ -100,6 +110,48 @@ export const competitionRouter = createTRPCRouter({
             if (isTuple(ins)) {
                 await ctx.db.batch(ins)
             }
+        }),
+
+    updateDaysOfCompetition: publicProcedure
+        .input(updateDaysOfCompetitionSchema)
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const res = await ctx.db
+                .update(competitions)
+                .set({
+                    daysOfCompetition: input.daysOfCompetition,
+                })
+                .where(eq(competitions.id, input.id))
+
+            return res
+        }),
+
+    updatePlatforms: publicProcedure
+        .input(updatePlatformsSchema)
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const res = await ctx.db
+                .update(competitions)
+                .set({
+                    platforms: input.platforms,
+                })
+                .where(eq(competitions.id, input.id))
+
+            return res
         }),
 
     getAll: publicProcedure.query(async ({ ctx }) => {
