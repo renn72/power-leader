@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
-import { competitions, divisions } from '~/server/db/schema'
+import { competitions, divisions, compDayInfo } from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
@@ -110,6 +110,13 @@ export const competitionRouter = createTRPCRouter({
             if (isTuple(ins)) {
                 await ctx.db.batch(ins)
             }
+            await ctx.db.insert(compDayInfo).values({
+                compId: resComp[0]?.id || 0,
+                day: 0,
+                lift: '',
+                bracket: 0,
+                index: 0,
+            })
         }),
 
     updateDaysOfCompetition: publicProcedure

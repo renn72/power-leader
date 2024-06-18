@@ -31,7 +31,7 @@ const Bracket = ({
     bracket: number
 }) => {
     const ctx = api.useUtils()
-    const { mutate: updateOrder } = api.compEntry.updateOrder.useMutation({
+    const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
         onSettled: () => {
             ctx.competition.getMyCompetitions.refetch()
         },
@@ -39,29 +39,26 @@ const Bracket = ({
 
     const commit = () => {
         if (lift === 'squat') {
-            for (const [i, entry] of entries.entries()) {
-                updateOrder({
-                    id: entry.id,
-                    squatOrder: i,
-                    squatBracket: bracket,
-                })
-            }
+            const ins = entries.map((entry, i) => ({
+                id: entry.id,
+                squatOrder: i,
+                squatBracket: bracket,
+            }))
+            updateOrder(ins)
         } else if (lift === 'bench') {
-            for (const [i, entry] of entries.entries()) {
-                updateOrder({
-                    id: entry.id,
-                    benchOrder: i,
-                    benchBracket: bracket,
-                })
-            }
+            const ins = entries.map((entry, i) => ({
+                id: entry.id,
+                benchOrder: i,
+                benchBracket: bracket,
+            }))
+            updateOrder(ins)
         } else if (lift === 'deadlift') {
-            for (const [i, entry] of entries.entries()) {
-                updateOrder({
-                    id: entry.id,
-                    deadliftOrder: i,
-                    deadliftBracket: bracket,
-                })
-            }
+            const ins = entries.map((entry, i) => ({
+                id: entry.id,
+                deadliftOrder: i,
+                deadliftBracket: bracket,
+            }))
+            updateOrder(ins)
         }
     }
     return (

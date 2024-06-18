@@ -209,5 +209,31 @@ export const competitionsRelations = relations(
         }),
         entries: many(compEntry),
         divisions: many(divisions),
+        compDayInfo: one(compDayInfo, {
+            fields: [competitions.id],
+            references: [compDayInfo.compId],
+        }),
     }),
 )
+
+export const compDayInfo = createTable('comp_day_info', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    compId: int('comp_id', { mode: 'number' }).references(() => competitions.id, {
+        onDelete: 'cascade',
+    }),
+    day: int('day').notNull(),
+    lift: text('lift', { length: 256 }).notNull(),
+    bracket: int('bracket').notNull(),
+    index: int('index').notNull(),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    updatedAt: text('updatedAt'),
+})
+
+export const compDayInfoRelations = relations(compDayInfo, ({ one }) => ({
+    competitions: one(competitions, {
+        fields: [compDayInfo.compId],
+        references: [competitions.id],
+    }),
+}))
