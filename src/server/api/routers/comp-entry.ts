@@ -59,6 +59,13 @@ const updateAndLockSchema = z.object({
     userId: z.number().optional(),
 })
 
+const updateOrderSchema = z.object({
+    id: z.number(),
+    squatOrder: z.number().optional(),
+    benchOrder: z.number().optional(),
+    deadliftOrder: z.number().optional(),
+})
+
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
     return array.length > 0
@@ -153,6 +160,26 @@ export const compEntryRouter = createTRPCRouter({
             }
 
             return true
+        }),
+    updateOrder: publicProcedure
+        .input(updateOrderSchema)
+        .mutation(async ({ ctx, input }) => {
+            const user = await getCurrentUser()
+            if (!user) {
+                throw new TRPCError({
+                    code: 'UNAUTHORIZED',
+                    message: 'You are not authorized to access this resource.',
+                })
+            }
+
+            const res = await ctx.db
+                .update(compEntry)
+                .set({
+                    ...input,
+                })
+                .where(eq(compEntry.id, input.id))
+
+            return res
         }),
     getMyCompEntries: publicProcedure.query(async ({ ctx }) => {
         const user = await getCurrentUser()

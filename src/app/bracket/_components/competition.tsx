@@ -1,4 +1,5 @@
 'use client'
+import { useState, } from 'react'
 
 import { api } from '~/trpc/react'
 
@@ -10,11 +11,12 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '~/components/ui/card'
 import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
+
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const Bracket = ({
@@ -26,11 +28,53 @@ const Bracket = ({
     lift: string
     title: string
 }) => {
+    const ctx = api.useUtils()
+    const { mutate: updateOrder } = api.compEntry.updateOrder.useMutation({
+        onSettled: () => {
+            ctx.competition.getMyCompetitions.refetch()
+        },
+    })
+
+    const commit = () => {
+        if (lift === 'squat') {
+            for (const [i, entry] of entries.entries()) {
+                updateOrder({
+                    id: entry.id,
+                    squatOrder: i,
+                })
+            }
+        }
+        else if (lift === 'bench') {
+            for (const [i, entry] of entries.entries()) {
+                updateOrder({
+                    id: entry.id,
+                    benchOrder: i,
+                })
+            }
+        }
+        else if (lift === 'deadlift') {
+            for (const [i, entry] of entries.entries()) {
+                updateOrder({
+                    id: entry.id,
+                    deadliftOrder: i,
+                })
+            }
+        }
+    }
     return (
         <Card>
             <CardHeader className='mb-4'>
-                <CardTitle className='text-3xl'>{title}</CardTitle>
-                <CardDescription></CardDescription>
+                <CardTitle className='text-3xl flex items-center justify-around'>
+                    <span className=''>{title}</span>
+                    <Button
+                        onClick={commit}
+                        size='sm'
+                        variant='secondary'>
+                        Commit
+                    </Button>
+                </CardTitle>
+                <CardDescription>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <div className='flex flex-col gap-2'>
@@ -48,6 +92,9 @@ const Bracket = ({
                                     'grid grid-cols-6 place-items-center gap-2 border border-input',
                                     'rounded-full p-1 hover:bg-muted',
                                     entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
+                                    lift === 'squat' && entry.squatOrder !== null && 'border-complete',
+                                    lift === 'bench' && entry.benchOrder !== null && 'border-complete',
+                                    lift === 'deadlift' && entry.deadliftOrder !== null && 'border-complete',
                                 )}
                             >
                                 <div className='text-xs text-muted-foreground'>
@@ -177,7 +224,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
         .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
 
     return (
-        <div className='flex w-full flex-col items-center  gap-8'>
+        <div className=' flex w-full flex-col  items-center gap-8'>
             <div className='flex w-full max-w-sm items-center justify-between'>
                 <UpdateComp title='Days'>
                     <ChevronLeft
