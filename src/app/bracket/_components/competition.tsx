@@ -1,5 +1,5 @@
 'use client'
-import { useState, } from 'react'
+import { useState } from 'react'
 
 import { api } from '~/trpc/react'
 
@@ -23,10 +23,12 @@ const Bracket = ({
     entries,
     lift,
     title,
+    bracket,
 }: {
     entries: GetCompetitionEntryById[]
     lift: string
     title: string
+    bracket: number
 }) => {
     const ctx = api.useUtils()
     const { mutate: updateOrder } = api.compEntry.updateOrder.useMutation({
@@ -41,22 +43,23 @@ const Bracket = ({
                 updateOrder({
                     id: entry.id,
                     squatOrder: i,
+                    squatBracket: bracket,
                 })
             }
-        }
-        else if (lift === 'bench') {
+        } else if (lift === 'bench') {
             for (const [i, entry] of entries.entries()) {
                 updateOrder({
                     id: entry.id,
                     benchOrder: i,
+                    benchBracket: bracket,
                 })
             }
-        }
-        else if (lift === 'deadlift') {
+        } else if (lift === 'deadlift') {
             for (const [i, entry] of entries.entries()) {
                 updateOrder({
                     id: entry.id,
                     deadliftOrder: i,
+                    deadliftBracket: bracket,
                 })
             }
         }
@@ -64,17 +67,17 @@ const Bracket = ({
     return (
         <Card>
             <CardHeader className='mb-4'>
-                <CardTitle className='text-3xl flex items-center justify-around'>
+                <CardTitle className='flex items-center justify-around text-3xl'>
                     <span className=''>{title}</span>
                     <Button
                         onClick={commit}
                         size='sm'
-                        variant='secondary'>
+                        variant='secondary'
+                    >
                         Commit
                     </Button>
                 </CardTitle>
-                <CardDescription>
-                </CardDescription>
+                <CardDescription></CardDescription>
             </CardHeader>
             <CardContent>
                 <div className='flex flex-col gap-2'>
@@ -92,9 +95,15 @@ const Bracket = ({
                                     'grid grid-cols-6 place-items-center gap-2 border border-input',
                                     'rounded-full p-1 hover:bg-muted',
                                     entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
-                                    lift === 'squat' && entry.squatOrder !== null && 'border-complete',
-                                    lift === 'bench' && entry.benchOrder !== null && 'border-complete',
-                                    lift === 'deadlift' && entry.deadliftOrder !== null && 'border-complete',
+                                    lift === 'squat' &&
+                                        entry.squatOrder !== null &&
+                                        'border-complete',
+                                    lift === 'bench' &&
+                                        entry.benchOrder !== null &&
+                                        'border-complete',
+                                    lift === 'deadlift' &&
+                                        entry.deadliftOrder !== null &&
+                                        'border-complete',
                                 )}
                             >
                                 <div className='text-xs text-muted-foreground'>
@@ -292,11 +301,13 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
                     entries={menSquat}
                     lift='squat'
                     title={`Men\'s Squat`}
+                    bracket={1}
                 />
                 <Bracket
                     entries={womenSquat}
                     lift='squat'
                     title={`Women\'s Squat`}
+                    bracket={2}
                 />
             </div>
             <div className='flex w-full justify-center gap-16'>
@@ -304,11 +315,13 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
                     entries={menBench}
                     lift='bench'
                     title={`Men\'s Bench`}
+                    bracket={1}
                 />
                 <Bracket
                     entries={womenBench}
                     lift='bench'
                     title={`Women\'s Bench`}
+                    bracket={2}
                 />
             </div>
             <div className='flex w-full justify-center gap-16'>
@@ -316,11 +329,13 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
                     entries={menDead}
                     lift='deadlift'
                     title={`Men\'s Deadlift`}
+                    bracket={1}
                 />
                 <Bracket
                     entries={womenDead}
                     lift='deadlift'
                     title={`Women\'s Deadlift`}
+                    bracket={2}
                 />
             </div>
         </div>
