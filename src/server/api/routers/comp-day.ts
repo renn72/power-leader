@@ -5,6 +5,8 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
 import { competitions, divisions, compDayInfo } from '~/server/db/schema'
 
+import { pusherServer } from '~/server/api/pusher'
+
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
 
@@ -13,6 +15,7 @@ export const competitionDayRouter = createTRPCRouter({
         .input(
             z.object({
                 id: z.number(),
+                uuid: z.string(),
                 lift: z.string(),
             }),
         )
@@ -32,6 +35,10 @@ export const competitionDayRouter = createTRPCRouter({
                 })
                 .where(eq(compDayInfo.compId, input.id))
                 .returning({ lift: compDayInfo.lift })
+
+            await pusherServer.trigger('competition-' + input.uuid, 'update', {
+                lift: input.lift,
+            })
 
             return res
         }),

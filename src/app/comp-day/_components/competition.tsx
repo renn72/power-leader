@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { api } from '~/trpc/react'
 import { GetCompetitionById } from '~/lib/types'
@@ -54,7 +55,12 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
     }
     return (
         <div className='flex flex-col items-center justify-center gap-2'>
-            <div className='w-full'>
+            <div className='flex flex-col gap-2'>
+                <Button variant='secondary' className='w-[130px]'>
+                    <Link href={`/comp-day/screen/${competition.uuid}`}>
+                        Screen
+                    </Link>
+                </Button>
                 {competition.currentState === 'closed' ||
                 competition.currentState === 'paused' ? (
                     <Button
@@ -96,6 +102,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                         onValueChange={(value) => {
                             updateLift({
                                 id: competition.id,
+                                uuid: competition.uuid || '',
                                 lift: value,
                             })
                         }}

@@ -172,7 +172,8 @@ export const competitionRouter = createTRPCRouter({
     }),
     getAllOpen: publicProcedure.query(async ({ ctx }) => {
         const res = await ctx.db.query.competitions.findMany({
-            where: (competitions, { eq }) => eq(competitions.currentState, 'open'),
+            where: (competitions, { eq }) =>
+                eq(competitions.currentState, 'open'),
             orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
             with: {
                 divisions: true,
@@ -244,6 +245,18 @@ export const competitionRouter = createTRPCRouter({
                 where: (competitions, { eq }) => eq(competitions.uuid, input),
                 with: {
                     divisions: true,
+                    compDayInfo: true,
+                    entries: {
+                        with: {
+                            user: true,
+                            competition: true,
+                            compEntryToDivisions: {
+                                with: {
+                                    division: true,
+                                },
+                            },
+                        },
+                    },
                 },
             })
             if (!res) {
