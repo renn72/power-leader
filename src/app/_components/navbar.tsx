@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import {
     NavigationMenu,
@@ -16,6 +17,11 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { ModeToggle } from './mode-toggle'
 
 const Navbar = () => {
+    const pathname = usePathname()
+    if (pathname.includes('comp-day/screen/')) {
+        return null
+    }
+
     return (
         <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-2'>
             <NavigationMenu>

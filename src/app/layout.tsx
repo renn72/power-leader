@@ -6,7 +6,10 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 
 import { ThemeProvider } from '~/app/_components/theme-provider'
+
 import Navbar from './_components/navbar'
+import Footer from './_components/footer'
+
 import { Toaster } from '~/components/ui/sonner'
 
 export const metadata = {
@@ -40,7 +43,7 @@ export default function RootLayout({
                                 <div className='min-h-[calc(100vh-7.8rem)]'>
                                 {children}
                                 </div>
-                                <footer className='h-16'>footer</footer>
+                                <Footer />
                                 <Toaster />
                             </main>
                         </ThemeProvider>

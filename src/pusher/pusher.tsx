@@ -22,13 +22,8 @@ const createPusherStore = ({ slug }: PusherProps) => {
     pusherClient = Pusher.instances[0] as Pusher
     pusherClient.connect()
   } else {
-    const randomUserId = `random-user-id:${Math.random().toFixed(7)}`
-    pusherClient = new Pusher(env.NEXT_PUBLIC_PUSHER_APP_ID, {
+    pusherClient = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
       cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      authEndpoint: '/api/pusher/auth-channel',
-      auth: {
-        headers: { user_id: randomUserId },
-      },
     })
     // pusherClient = new Pusher(pusher_key, {
     //   wsHost: pusher_server_host,

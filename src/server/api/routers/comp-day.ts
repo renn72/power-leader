@@ -37,7 +37,7 @@ export const competitionDayRouter = createTRPCRouter({
                 .returning({ lift: compDayInfo.lift })
 
             await pusherServer.trigger('competition-' + input.uuid, 'update', {
-                lift: input.lift,
+                data: input.lift
             })
 
             return res

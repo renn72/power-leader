@@ -1,16 +1,7 @@
-import PusherClient from 'pusher-js'
-import PusherServer from 'pusher'
+import Pusher from 'pusher-js'
 
 import { env } from '~/env'
 
-export const pusherServer = new PusherServer({
-    appId: env.PUSHER_APP_ID,
-    key: env.PUSHER_KEY,
-    secret: env.PUSHER_SECRET,
-    cluster: env.PUSHER_CLUSTER,
-    useTLS: true,
-})
-
-export const pusherClient = new PusherClient(env.NEXT_PUBLIC_PUSHER_APP_ID, {
-    cluster: env.PUSHER_CLUSTER,
+export const pusherClient = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
+    cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
 })
