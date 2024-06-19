@@ -19,9 +19,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         console.log('channel', 'competition-' + comp)
         Pusher.logToConsole = true
         const channel = pusherClient.subscribe('competition-' + comp)
-        channel.bind('update', (data : string) => {
-            console.log('callback', data.data)
-            setUpdate((prev) => [...prev, data])
+        channel.bind('update', (data : { data: string }) => {
             setLift(data.data)
         })
         return () => {
@@ -33,14 +31,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         setLift(competition?.compDayInfo.lift || '')
     }, [competition])
 
-    console.log('update', update)
+    console.log('comp', competition)
 
     return (
         <>
             <div
                 className={cn(
                     'flex h-full min-h-[calc(100vh-10rem)] w-full flex-col',
-                    ' animate-pulse items-center justify-center text-6xl font-bold',
+                    ' items-center justify-center text-6xl font-bold',
                 )}
             >
                 {lift}

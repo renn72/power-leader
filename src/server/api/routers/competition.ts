@@ -113,7 +113,7 @@ export const competitionRouter = createTRPCRouter({
             await ctx.db.insert(compDayInfo).values({
                 compId: resComp[0]?.id || 0,
                 day: 0,
-                lift: '',
+                lift: 'squat',
                 bracket: 0,
                 index: 0,
             })
