@@ -215,7 +215,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                         </ToggleGroup>
                     </div>
                     <div className='rounded-md border border-input p-2'>
-                        <ScrollArea className='h-[800px]'>
+                        <ScrollArea className='h-[700px]'>
                             <Table
                                 className='text-lg'
                             >
@@ -229,15 +229,24 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                         <TableHead>WC</TableHead>
                                         <TableHead>Squat Rack</TableHead>
                                         <TableHead>Squat 1</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Squat 2</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Squat 3</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Bench Rack</TableHead>
                                         <TableHead>Bench 1</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Bench 2</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Bench 3</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Deadlift 1</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Deadlift 2</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Deadlift 3</TableHead>
+                                        <TableHead></TableHead>
                                         <TableHead>Lifting</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -281,6 +290,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                     `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 1)?.weight}kg`}
                                                     </div>
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -289,6 +299,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 2)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -297,6 +308,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 3)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.benchRackHeight}
                                             </TableCell>
@@ -308,6 +320,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 1)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -316,6 +329,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 2)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -324,6 +338,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 3)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -333,6 +348,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 1)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -342,6 +358,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 2)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {lifter?.lift?.find(
                                                     (item) =>
@@ -351,6 +368,7 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                 ) &&
                                                     `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 3)?.weight}kg`}
                                             </TableCell>
+                                            <TableCell className=''></TableCell>
                                             <TableCell>
                                                 {+index === i ? (
                                                     <Button
