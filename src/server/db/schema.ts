@@ -103,6 +103,31 @@ export const compEntryRelations = relations(compEntry, ({ one, many }) => ({
         references: [competitions.id],
     }),
     compEntryToDivisions: many(compEntryToDivisions),
+    lift: many(lift),
+}))
+
+export const lift = createTable('lift', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    compEntryId: int('comp_entry_id', { mode: 'number' }).references(
+        () => compEntry.id,
+        { onDelete: 'cascade' },
+    ),
+    lift: text('lift'),
+    liftNumber: int('lift_number',),
+    isGoodOne: int('is_good_one', { mode: 'boolean' }),
+    isGoodTwo: int('is_good_two', { mode: 'boolean' }),
+    isGoodThree: int('is_good_three', { mode: 'boolean' }),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    updatedAt: text('updatedAt'),
+})
+
+export const liftRelations = relations(lift, ({ one }) => ({
+    compEntry: one(compEntry, {
+        fields: [lift.compEntryId],
+        references: [compEntry.id],
+    }),
 }))
 
 export const compEntryToDivisions = createTable('comp_entry_to_divisions', {
@@ -209,12 +234,58 @@ export const competitionsRelations = relations(
         }),
         entries: many(compEntry),
         divisions: many(divisions),
+        judges: many(judges),
+        bracketJudges: many(bracketJudges),
         compDayInfo: one(compDayInfo, {
             fields: [competitions.id],
             references: [compDayInfo.compId],
         }),
     }),
 )
+
+export const judges = createTable('judges', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    compId: int('comp_id', { mode: 'number' }).references(() => competitions.id, {
+        onDelete: 'cascade',
+    }),
+    judgeId: int('judge_id', { mode: 'number' }).references(() => users.id, {
+        onDelete: 'cascade',
+    }),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    updatedAt: text('updatedAt'),
+})
+
+export const judgesRelations = relations(judges, ({ one }) => ({
+    competition: one(competitions, {
+        fields: [judges.compId],
+        references: [competitions.id],
+    }),
+}))
+
+export const bracketJudges = createTable('bracket_judge', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    compId: int('comp_id', { mode: 'number' }).references(() => competitions.id, {
+        onDelete: 'cascade',
+    }),
+    judgeId: int('judge_id', { mode: 'number' }).references(() => users.id, {
+        onDelete: 'cascade',
+    }),
+    bracket: int('bracket', { mode: 'number' }),
+    lift: text('lift'),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    updatedAt: text('updatedAt'),
+})
+
+export const bracketJudgesRelations = relations(bracketJudges, ({ one }) => ({
+    competition: one(competitions, {
+        fields: [bracketJudges.compId],
+        references: [competitions.id],
+    }),
+}))
 
 export const compDayInfo = createTable('comp_day_info', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
