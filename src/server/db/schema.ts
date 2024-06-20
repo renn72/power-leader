@@ -114,6 +114,8 @@ export const lift = createTable('lift', {
     ),
     lift: text('lift'),
     liftNumber: int('lift_number',),
+    weight: text('weight'),
+    state: text('state'),
     isGoodOne: int('is_good_one', { mode: 'boolean' }),
     isGoodTwo: int('is_good_two', { mode: 'boolean' }),
     isGoodThree: int('is_good_three', { mode: 'boolean' }),

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 
 import { api } from '~/trpc/react'
 
+import { cn } from '~/lib/utils'
+
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
@@ -17,6 +19,16 @@ import {
 } from '~/components/ui/card'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Badge } from '~/components/ui/badge'
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '~/components/ui/table-scroll'
+import { CircleCheckBig, User, UserCheck } from 'lucide-react'
 
 const Competition = ({ competitionId }: { competitionId: number }) => {
     const [lift, setLift] = useState('')
@@ -203,47 +215,171 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                         </ToggleGroup>
                     </div>
                     <div className='rounded-md border border-input p-2'>
-                        <div className='text-lg font-bold'>Lifter's</div>
-                        <ToggleGroup
-                            type='single'
-                            variant='outline'
-                            size='lg'
-                            defaultValue={competition.compDayInfo.index.toString()}
-                            onValueChange={(value) => {
-                                setIndex(value)
-                            }}
-                        >
-                            <ScrollArea className='flex max-h-[600px] w-full flex-col gap-4'>
-                                {lifters.map((lifter, index) => (
-                                    <div
-                                        key={lifter.id}
-                                        className='my-4'
-                                    >
-                                        <ToggleGroupItem
-                                            value={index.toString()}
-                                            className='grid w-full grid-cols-4 gap-4'
+                        <ScrollArea className='h-[800px]'>
+                            <Table
+                                className='text-lg'
+                            >
+                                <TableCaption>
+                                    A list of your recent invoices.
+                                </TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>#</TableHead>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>WC</TableHead>
+                                        <TableHead>Squat Rack</TableHead>
+                                        <TableHead>Squat 1</TableHead>
+                                        <TableHead>Squat 2</TableHead>
+                                        <TableHead>Squat 3</TableHead>
+                                        <TableHead>Bench Rack</TableHead>
+                                        <TableHead>Bench 1</TableHead>
+                                        <TableHead>Bench 2</TableHead>
+                                        <TableHead>Bench 3</TableHead>
+                                        <TableHead>Deadlift 1</TableHead>
+                                        <TableHead>Deadlift 2</TableHead>
+                                        <TableHead>Deadlift 3</TableHead>
+                                        <TableHead>Lifting</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody className='h-40 overflow-y-auto'>
+                                    {lifters.map((lifter, i) => (
+                                        <TableRow
+                                            key={lifter.id}
+                                            className={cn(
+                                                +index === i
+                                                    ? 'bg-secondary'
+                                                    : '',
+                                            )}
                                         >
-                                            <div>{index + 1}</div>
-                                            <div>{lifter?.user?.name}</div>
-                                            <div>
-                                                {lift === 'squat'
-                                                    ? lifter?.squatOpener + 'kg'
-                                                    : lift === 'bench'
-                                                      ? lifter?.benchOpener +
-                                                        'kg'
-                                                      : lift === 'deadlift'
-                                                        ? lifter?.deadliftOpener +
-                                                          'kg'
-                                                        : ''}
-                                            </div>
-                                            <Badge className='flex w-14 items-center justify-center'>
+                                            <TableCell>{i + 1}</TableCell>
+                                            <TableCell>
+                                                {lifter?.user?.name}
+                                            </TableCell>
+                                            <TableCell
+                                                className=''
+                                            >
+                                                <Badge
+                                                    className='w-14 items-center justify-center'
+                                                >
                                                 {lifter?.wc?.split('-')[0]}kg
-                                            </Badge>
-                                        </ToggleGroupItem>
-                                    </div>
-                                ))}
-                            </ScrollArea>
-                        </ToggleGroup>
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className='text-right'>
+                                                {lifter?.squarRackHeight}
+                                            </TableCell>
+                                            <TableCell
+                                                className='p-2'
+                                            >
+                                                <div
+                                                    className={cn('border border-input p-2 rounded-md cursor-pointer',)}
+                                                >
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift === 'squat' &&
+                                                        item.liftNumber === 1,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 1)?.weight}kg`}
+                                                    </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift === 'squat' &&
+                                                        item.liftNumber === 2,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 2)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift === 'squat' &&
+                                                        item.liftNumber === 3,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 3)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.benchRackHeight}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift === 'bench' &&
+                                                        item.liftNumber === 1,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 1)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift === 'bench' &&
+                                                        item.liftNumber === 2,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 2)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift === 'bench' &&
+                                                        item.liftNumber === 3,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 3)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift ===
+                                                            'deadlift' &&
+                                                        item.liftNumber === 1,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 1)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift ===
+                                                            'deadlift' &&
+                                                        item.liftNumber === 2,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 2)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {lifter?.lift?.find(
+                                                    (item) =>
+                                                        item.lift ===
+                                                            'deadlift' &&
+                                                        item.liftNumber === 3,
+                                                ) &&
+                                                    `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 3)?.weight}kg`}
+                                            </TableCell>
+                                            <TableCell>
+                                                {+index === i ? (
+                                                    <Button
+                                                        variant='ghost'
+                                                        className='cursor-auto text-complete hover:bg-muted/10 hover:text-complete'
+                                                    >
+                                                        <UserCheck
+                                                            size={32}
+                                                            strokeWidth={3}
+                                                            className={cn('')}
+                                                        />
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        variant='ghost'
+                                                        className='hover:text-muted-foreground'
+                                                    >
+                                                        <User
+                                                            size={24}
+                                                            className={cn('')}
+                                                        />
+                                                    </Button>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </ScrollArea>
                     </div>
                 </CardContent>
             </Card>

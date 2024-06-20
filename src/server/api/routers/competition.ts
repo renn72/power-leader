@@ -219,6 +219,7 @@ export const competitionRouter = createTRPCRouter({
                 compDayInfo: true,
                 entries: {
                     with: {
+                        lift: true,
                         user: true,
                         competition: true,
                         compEntryToDivisions: {

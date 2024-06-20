@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
-import { compEntry, compEntryToDivisions } from '~/server/db/schema'
+import { compEntry, compEntryToDivisions, lift } from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
@@ -139,6 +139,34 @@ export const compEntryRouter = createTRPCRouter({
                 })
                 .where(eq(compEntry.id, input.id))
 
+            await ctx.db
+                .delete(lift)
+                .where(
+                    and(eq(lift.compEntryId, input.id), eq(lift.liftNumber, 1)),
+                )
+
+            await ctx.db.insert(lift).values({
+                compEntryId: input.id,
+                liftNumber: 1,
+                state: 'created',
+                lift: 'squat',
+                weight: input.squatOpener,
+            })
+            await ctx.db.insert(lift).values({
+                compEntryId: input.id,
+                liftNumber: 1,
+                state: 'created',
+                lift: 'bench',
+                weight: input.benchOpener,
+            })
+            await ctx.db.insert(lift).values({
+                compEntryId: input.id,
+                liftNumber: 1,
+                state: 'created',
+                lift: 'deadlift',
+                weight: input.deadliftOpener,
+            })
+
             return res
         }),
     createFake: publicProcedure
@@ -207,16 +235,18 @@ export const compEntryRouter = createTRPCRouter({
             }
 
             const ins = input.map((item) =>
-                ctx.db.update(compEntry).set({
-                    ...item,
-                }).where(eq(compEntry.id, item.id)),
+                ctx.db
+                    .update(compEntry)
+                    .set({
+                        ...item,
+                    })
+                    .where(eq(compEntry.id, item.id)),
             )
 
             if (isTuple(ins)) {
                 await ctx.db.batch(ins)
             }
             return true
-
         }),
     getMyCompEntries: publicProcedure.query(async ({ ctx }) => {
         const user = await getCurrentUser()
