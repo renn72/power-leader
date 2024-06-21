@@ -68,7 +68,7 @@ const CompDay = () => {
             ) : (
                 <>
                     {competition && (
-                        <Competition competitionId={competition.id} />
+                        <Competition competitionId={competition.id} competitonUuid={competition.uuid || ''} />
                     )}
                 </>
             )}

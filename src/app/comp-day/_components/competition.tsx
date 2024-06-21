@@ -3,12 +3,14 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
 import { api } from '~/trpc/react'
+import { pusherClient } from '~/lib/pusher'
+import Pusher from 'pusher-js'
 
 import { cn } from '~/lib/utils'
 
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
-import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
+import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group-bold'
 import { toast } from 'sonner'
 import {
     Card,
@@ -28,17 +30,25 @@ import {
     TableHeader,
     TableRow,
 } from '~/components/ui/table-scroll'
-import { CircleCheckBig, User, UserCheck } from 'lucide-react'
+import { Check, Circle, CircleCheckBig, User, UserCheck, X } from 'lucide-react'
 
-const Competition = ({ competitionId }: { competitionId: number }) => {
+const Competition = ({
+    competitionId,
+    competitonUuid,
+}: {
+    competitionId: number
+    competitonUuid: string
+}) => {
     const [lift, setLift] = useState('')
     const [bracket, setBracket] = useState('')
     const [index, setIndex] = useState('')
+    const [round, setRound] = useState('')
 
     const ctx = api.useUtils()
 
     const { data: competition, isLoading: competitionLoading } =
         api.competition.get.useQuery(competitionId)
+
     const { mutate: startCompetition } =
         api.competition.startCompetition.useMutation({
             onSettled: () => {
@@ -56,15 +66,70 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
             ctx.competition.get.refetch()
         },
         onSuccess: (e) => {
-            toast(`${e?.[0]?.lift} set`)
+            toast(JSON.stringify(e))
         },
     })
+    const { mutate: updateIsLiftGood } =
+        api.competitionDay.updateIsLiftGood.useMutation({
+            onSettled: () => {
+                ctx.competition.get.refetch()
+            },
+        })
 
     useEffect(() => {
         if (competition) {
             setLift(competition.compDayInfo.lift)
             setBracket(competition.compDayInfo.bracket.toString())
             setIndex(competition.compDayInfo.index.toString())
+            setRound(competition.compDayInfo.round.toString())
+        }
+    }, [competition])
+
+    useEffect(() => {
+        Pusher.logToConsole = true
+        const channel = pusherClient.subscribe('competition-' + competitonUuid)
+
+        channel.bind(
+            'judge',
+            (data: {
+                id: number
+                entryId: number
+                judge: number
+                isGood: boolean
+            }) => {
+                if (!competition) {
+                    return
+                }
+                console.log('data', data)
+                ctx.competition.get.setData(competitionId, {
+                    ...competition,
+                    entries: competition.entries.map((entry) => {
+                        return {
+                            ...entry,
+                            lift: entry.lift.map((i) => {
+                                return {
+                                    ...i,
+                                    isGoodOne:
+                                        (i.id === data.id &&
+                                        data.judge === 1) ?
+                                        data.isGood : i.isGoodOne,
+                                    isGoodTwo:
+                                        (i.id === data.id &&
+                                        data.judge === 2) ?
+                                        data.isGood : i.isGoodTwo,
+                                    isGoodThree:
+                                        (i.id === data.id &&
+                                        data.judge === 3) ?
+                                        data.isGood : i.isGoodThree,
+                                }
+                            }),
+                        }
+                    }),
+                })
+            },
+        )
+        return () => {
+            pusherClient.unsubscribe('competition-' + competitonUuid)
         }
     }, [competition])
 
@@ -121,9 +186,28 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
             return 0
         })
 
+    const lifter = lifters.find((l) => {
+        if (lift === 'squat') {
+            return l.squatOrder == Number(index)
+        } else if (lift === 'bench') {
+            return l.benchOrder == Number(index)
+        } else if (lift === 'deadlift') {
+            return l.deadliftOrder == Number(index)
+        }
+        return false
+    })
+
+    const currentLift = lifter?.lift?.find(
+        (item) =>
+            item.lift === lift.toLowerCase() &&
+            item.liftNumber === Number(round),
+    )
+
     console.log('comp', competition)
-    console.log({ lift, bracket, index })
-    console.log('lifters', lifters)
+    console.log('lifter', lifter)
+    console.log('currentLift', currentLift)
+    // console.log({ lift, bracket, index, round })
+    // console.log('lifters', lifters)
 
     return (
         <div className='flex flex-col items-center justify-center gap-2'>
@@ -168,57 +252,293 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                     <CardDescription className=''></CardDescription>
                 </CardHeader>
                 <CardContent className='flex flex-col gap-2'>
-                    <div className='hidden'>
-                        <div>Day</div>
-                        <div>{competition.compDayInfo.day + 1}</div>
+                    <div className='grid grid-cols-2 gap-2'>
+                        <Card>
+                            <CardHeader></CardHeader>
+                            <CardContent>
+                                <div>
+                                    {lifter && lifter.user && lifter.user.name}
+                                </div>
+                                <div>Round {round}</div>
+                                <div className='capitalize'>{lift}</div>
+                                <div>{currentLift?.weight}kg</div>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader></CardHeader>
+                            <CardContent className='flex w-full justify-around'>
+                                <div className='flex flex-col items-center gap-4'>
+                                    <Check
+                                        className='cursor-pointer'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodOne: true,
+                                            })
+                                        }}
+                                    />
+                                    <div>
+                                        {currentLift?.isGoodOne === null ? (
+                                            <Circle
+                                                size={44}
+                                                strokeWidth={3}
+                                            />
+                                        ) : currentLift?.isGoodOne ? (
+                                            <Circle
+                                                strokeWidth={3}
+                                                size={44}
+                                                className='text-green-700'
+                                                fill='green'
+                                            />
+                                        ) : (
+                                            <Circle
+                                                strokeWidth={3}
+                                                size={44}
+                                                className='text-red-600'
+                                                fill='#dc2626'
+                                            />
+                                        )}
+                                    </div>
+                                    <X
+                                        className='cursor-pointer'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodOne: false,
+                                            })
+                                        }}
+                                    />
+                                    <Button
+                                        variant='outline'
+                                        className='opacity-50'
+                                        size='sm'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodOne: null,
+                                            })
+                                        }}
+                                    >
+                                        Clear
+                                    </Button>
+                                </div>
+                                <div className='flex flex-col items-center gap-4'>
+                                    <Check
+                                        className='cursor-pointer'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodTwo: true,
+                                            })
+                                        }}
+                                    />
+                                    <div>
+                                        {currentLift?.isGoodTwo === null ? (
+                                            <Circle
+                                                size={44}
+                                                strokeWidth={3}
+                                            />
+                                        ) : currentLift?.isGoodTwo ? (
+                                            <Circle
+                                                strokeWidth={3}
+                                                size={44}
+                                                className='text-green-700'
+                                                fill='green'
+                                            />
+                                        ) : (
+                                            <Circle
+                                                strokeWidth={3}
+                                                size={44}
+                                                className='text-red-600'
+                                                fill='#dc2626'
+                                            />
+                                        )}
+                                    </div>
+                                    <X
+                                        className='cursor-pointer'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodTwo: false,
+                                            })
+                                        }}
+                                    />
+                                    <Button
+                                        variant='outline'
+                                        className='opacity-50'
+                                        size='sm'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodTwo: null,
+                                            })
+                                        }}
+                                    >
+                                        Clear
+                                    </Button>
+                                </div>
+                                <div className='flex flex-col items-center gap-4'>
+                                    <Check
+                                        className='cursor-pointer'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodThree: true,
+                                            })
+                                        }}
+                                    />
+                                    <div>
+                                        {currentLift?.isGoodThree === null ? (
+                                            <Circle
+                                                size={44}
+                                                strokeWidth={3}
+                                            />
+                                        ) : currentLift?.isGoodThree ? (
+                                            <Circle
+                                                strokeWidth={3}
+                                                size={44}
+                                                className='text-green-700'
+                                                fill='green'
+                                            />
+                                        ) : (
+                                            <Circle
+                                                strokeWidth={3}
+                                                size={44}
+                                                className='text-red-600'
+                                                fill='#dc2626'
+                                            />
+                                        )}
+                                    </div>
+                                    <X
+                                        className='cursor-pointer'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodThree: false,
+                                            })
+                                        }}
+                                    />
+                                    <Button
+                                        variant='outline'
+                                        className='opacity-50'
+                                        size='sm'
+                                        onClick={() => {
+                                            updateIsLiftGood({
+                                                id: currentLift?.id || -1,
+                                                entryId: lifter?.id || -1,
+                                                uuid: competition.uuid || '',
+                                                isGoodThree: null,
+                                            })
+                                        }}
+                                    >
+                                        Clear
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
-                    <div className='rounded-md border border-input p-2'>
-                        <div className='text-lg font-bold'>Lift</div>
-                        <ToggleGroup
-                            type='single'
-                            variant='outline'
-                            size='lg'
-                            defaultValue={competition.compDayInfo.lift.toLowerCase()}
-                            onValueChange={(value) => {
-                                setLift(value)
-                                updateLift({
-                                    id: competition.id,
-                                    uuid: competition.uuid || '',
-                                    lift: value,
-                                })
-                            }}
-                        >
-                            <ToggleGroupItem value='squat'>
-                                Squat
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value='bench'>
-                                Bench
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value='deadlift'>
-                                Deadlift
-                            </ToggleGroupItem>
-                        </ToggleGroup>
-                    </div>
-                    <div className='rounded-md border border-input p-2'>
-                        <div className='text-lg font-bold'>Bracket</div>
-                        <ToggleGroup
-                            type='single'
-                            size='lg'
-                            variant='outline'
-                            defaultValue={competition.compDayInfo.bracket.toString()}
-                            onValueChange={(value) => {
-                                setBracket(value)
-                            }}
-                        >
-                            <ToggleGroupItem value='1'>1</ToggleGroupItem>
-                            <ToggleGroupItem value='2'>2</ToggleGroupItem>
-                        </ToggleGroup>
+                    <div className='grid grid-cols-3 gap-2'>
+                        <div className='hidden'>
+                            <div>Day</div>
+                            <div>{competition.compDayInfo.day + 1}</div>
+                        </div>
+                        <div className='rounded-md border border-input p-2'>
+                            <div className='text-lg font-bold'>Lift</div>
+                            <ToggleGroup
+                                type='single'
+                                variant='outline'
+                                size='lg'
+                                defaultValue={competition.compDayInfo.lift.toLowerCase()}
+                                onValueChange={(value) => {
+                                    setLift(value)
+                                    updateLift({
+                                        id: competition.id,
+                                        uuid: competition.uuid || '',
+                                        round: +round,
+                                        lift: value,
+                                        bracket: +bracket,
+                                        index: +index,
+                                    })
+                                }}
+                            >
+                                <ToggleGroupItem value='squat'>
+                                    Squat
+                                </ToggleGroupItem>
+                                <ToggleGroupItem value='bench'>
+                                    Bench
+                                </ToggleGroupItem>
+                                <ToggleGroupItem value='deadlift'>
+                                    Deadlift
+                                </ToggleGroupItem>
+                            </ToggleGroup>
+                        </div>
+                        <div className='rounded-md border border-input p-2'>
+                            <div className='text-lg font-bold'>Round</div>
+                            <ToggleGroup
+                                type='single'
+                                size='lg'
+                                variant='outline'
+                                defaultValue={competition.compDayInfo.round.toString()}
+                                onValueChange={(value) => {
+                                    setRound(value)
+                                    updateLift({
+                                        id: competition.id,
+                                        uuid: competition.uuid || '',
+                                        round: +value,
+                                        lift: lift,
+                                        bracket: +bracket,
+                                        index: +index,
+                                    })
+                                }}
+                            >
+                                <ToggleGroupItem value='1'>1</ToggleGroupItem>
+                                <ToggleGroupItem value='2'>2</ToggleGroupItem>
+                                <ToggleGroupItem value='3'>3</ToggleGroupItem>
+                            </ToggleGroup>
+                        </div>
+                        <div className='rounded-md border border-input p-2'>
+                            <div className='text-lg font-bold'>Bracket</div>
+                            <ToggleGroup
+                                type='single'
+                                size='lg'
+                                variant='outline'
+                                defaultValue={competition.compDayInfo.bracket.toString()}
+                                onValueChange={(value) => {
+                                    setBracket(value)
+                                    updateLift({
+                                        id: competition.id,
+                                        uuid: competition.uuid || '',
+                                        round: +round,
+                                        lift: lift,
+                                        bracket: +value,
+                                        index: +index,
+                                    })
+                                }}
+                            >
+                                <ToggleGroupItem value='1'>1</ToggleGroupItem>
+                                <ToggleGroupItem value='2'>2</ToggleGroupItem>
+                            </ToggleGroup>
+                        </div>
                     </div>
                     <div className='rounded-md border border-input p-2'>
                         <ScrollArea className='h-[700px]'>
-                            <Table
-                                className='text-lg'
-                            >
+                            <Table className='text-lg'>
                                 <TableCaption>
                                     A list of your recent invoices.
                                 </TableCaption>
@@ -264,31 +584,30 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                             <TableCell>
                                                 {lifter?.user?.name}
                                             </TableCell>
-                                            <TableCell
-                                                className=''
-                                            >
-                                                <Badge
-                                                    className='w-14 items-center justify-center'
-                                                >
-                                                {lifter?.wc?.split('-')[0]}kg
+                                            <TableCell className=''>
+                                                <Badge className='w-14 items-center justify-center'>
+                                                    {lifter?.wc?.split('-')[0]}
+                                                    kg
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className='text-right'>
                                                 {lifter?.squarRackHeight}
                                             </TableCell>
-                                            <TableCell
-                                                className='p-2'
-                                            >
+                                            <TableCell className='p-2'>
                                                 <div
-                                                    className={cn('border border-input p-2 rounded-md cursor-pointer',)}
+                                                    className={cn(
+                                                        'cursor-pointer rounded-md border border-input p-2',
+                                                    )}
                                                 >
-                                                {lifter?.lift?.find(
-                                                    (item) =>
-                                                        item.lift === 'squat' &&
-                                                        item.liftNumber === 1,
-                                                ) &&
-                                                    `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 1)?.weight}kg`}
-                                                    </div>
+                                                    {lifter?.lift?.find(
+                                                        (item) =>
+                                                            item.lift ===
+                                                                'squat' &&
+                                                            item.liftNumber ===
+                                                                1,
+                                                    ) &&
+                                                        `${lifter?.lift?.find((item) => item.lift === 'squat' && item.liftNumber === 1)?.weight}kg`}
+                                                </div>
                                             </TableCell>
                                             <TableCell className=''></TableCell>
                                             <TableCell>
@@ -385,6 +704,22 @@ const Competition = ({ competitionId }: { competitionId: number }) => {
                                                     <Button
                                                         variant='ghost'
                                                         className='hover:text-muted-foreground'
+                                                        onClick={() => {
+                                                            setIndex(
+                                                                i.toString(),
+                                                            )
+                                                            updateLift({
+                                                                id: competition.id,
+                                                                uuid:
+                                                                    competition.uuid ||
+                                                                    '',
+                                                                round: +round,
+                                                                lift: lift,
+                                                                bracket:
+                                                                    +bracket,
+                                                                index: i,
+                                                            })
+                                                        }}
                                                     >
                                                         <User
                                                             size={24}
