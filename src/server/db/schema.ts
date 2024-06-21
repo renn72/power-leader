@@ -213,6 +213,7 @@ export const competitions = createTable('competition', {
     currentState: text('current_state'),
     competitorLimit: int('competitor_limit'),
     venue: text('venue'),
+    isFourthRound: int('is_fourth_round', { mode: 'boolean' }).default(false),
     isStarted: integer('is_started', { mode: 'boolean' }),
     isLimited: integer('is_limited', { mode: 'boolean' }),
     isPaid: integer('is_paid', { mode: 'boolean' }),
@@ -296,6 +297,7 @@ export const compDayInfo = createTable('comp_day_info', {
     }),
     day: int('day').notNull(),
     lift: text('lift', { length: 256 }).notNull(),
+    round: int('round').notNull().default(1),
     bracket: int('bracket').notNull(),
     index: int('index').notNull(),
     createdAt: text('created_at')
