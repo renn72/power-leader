@@ -4,15 +4,8 @@ import { api } from '~/trpc/react'
 import { Button } from '~/components/ui/button'
 import { toast } from 'sonner'
 
-import {
-    generateFullName,
-    generateName,
-    generateInitals,
-} from '~/lib/utils'
-import {
-    wcFData,
-    wcMData,
-} from '~/lib/store'
+import { generateFullName, generateName, generateInitals } from '~/lib/utils'
+import { wcFData, wcMData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,10 +44,6 @@ export default function Admin() {
 
     return (
         <section className='mt-8 flex h-full grow flex-col gap-8'>
-            <div>
-                {fakeUsers?.map((user) => <div key={user.id}>{user.name}</div>)}
-            </div>
-
             <div className='flex gap-4'>
                 <Button
                     onClick={() => {
@@ -75,7 +64,7 @@ export default function Admin() {
             <div className='flex gap-4'>
                 <Button
                     onClick={() => {
-                        const events =[
+                        const events = [
                             'Squat, Bench, Deadlift',
                             Math.random() > 0.5 ? 'Squat, Bench' : '',
                             Math.random() > 0.5 ? 'Squat, Deadlift' : '',
@@ -83,7 +72,9 @@ export default function Admin() {
                             Math.random() > 0.5 ? 'Bench, Squat' : '',
                             Math.random() > 0.5 ? 'Deadlift, Bench' : '',
                             Math.random() > 0.5 ? 'Deadlift, Squat' : '',
-                        ].filter(item => item != '').join('/')
+                        ]
+                            .filter((item) => item != '')
+                            .join('/')
                         createCompetition({
                             name: generateFullName(),
                             creatorId: user?.id || 0,
@@ -146,6 +137,9 @@ export default function Admin() {
                 >
                     Create Competition
                 </Button>
+            </div>
+            <div>
+                {fakeUsers?.map((user) => <div key={user.id}>{user.name}</div>)}
             </div>
         </section>
     )

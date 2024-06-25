@@ -169,6 +169,13 @@
       "when": 1719212771726,
       "tag": "0023_gorgeous_human_torch",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1719288367281,
+      "tag": "0024_flawless_steve_rogers",
+      "breakpoints": true
     }
   ]
 }

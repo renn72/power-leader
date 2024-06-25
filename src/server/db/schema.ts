@@ -121,6 +121,9 @@ export const lift = createTable('lift', {
     isGoodThree: int('is_good_three', { mode: 'boolean' }),
     order: int('order'),
     bracket: int('bracket'),
+    day: int('day'),
+    platform: int('platform'),
+    rackHeight: text('rack_height'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
