@@ -50,6 +50,10 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
 
     console.log('comp', competition)
 
+    const lifter = competition?.entries?.find(
+        (entry) => entry.id === Number(entryId),
+    )
+
     return (
         <>
             <div
@@ -59,7 +63,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
                 )}
             >
                 <div>
-                    <div>lift: {lift}</div>
+                    <div className='capitalize'>{lift}</div>
                     <div>bracket: {bracket}</div>
                     <div>index: {index}</div>
                     <div>round: {round}</div>

@@ -119,6 +119,8 @@ export const lift = createTable('lift', {
     isGoodOne: int('is_good_one', { mode: 'boolean' }),
     isGoodTwo: int('is_good_two', { mode: 'boolean' }),
     isGoodThree: int('is_good_three', { mode: 'boolean' }),
+    order: int('order'),
+    bracket: int('bracket'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),

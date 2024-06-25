@@ -110,17 +110,17 @@ const Competition = ({
                                 return {
                                     ...i,
                                     isGoodOne:
-                                        (i.id === data.id &&
-                                        data.judge === 1) ?
-                                        data.isGood : i.isGoodOne,
+                                        i.id === data.id && data.judge === 1
+                                            ? data.isGood
+                                            : i.isGoodOne,
                                     isGoodTwo:
-                                        (i.id === data.id &&
-                                        data.judge === 2) ?
-                                        data.isGood : i.isGoodTwo,
+                                        i.id === data.id && data.judge === 2
+                                            ? data.isGood
+                                            : i.isGoodTwo,
                                     isGoodThree:
-                                        (i.id === data.id &&
-                                        data.judge === 3) ?
-                                        data.isGood : i.isGoodThree,
+                                        i.id === data.id && data.judge === 3
+                                            ? data.isGood
+                                            : i.isGoodThree,
                                 }
                             }),
                         }
@@ -135,11 +135,11 @@ const Competition = ({
 
     if (competitionLoading) {
         return (
-            <>
+            <div className='flex flex-col items-center justify-center gap-2'>
                 <Skeleton className='h-[100px] w-[800px] rounded-full' />
                 <Skeleton className='h-[100px] w-[800px] rounded-full' />
                 <Skeleton className='h-[800px] w-[800px] rounded-xl' />
-            </>
+            </div>
         )
     }
     if (!competition) {
@@ -281,24 +281,11 @@ const Competition = ({
                                     />
                                     <div>
                                         {currentLift?.isGoodOne === null ? (
-                                            <Circle
-                                                size={44}
-                                                strokeWidth={3}
-                                            />
+                                            <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
                                         ) : currentLift?.isGoodOne ? (
-                                            <Circle
-                                                strokeWidth={3}
-                                                size={44}
-                                                className='text-green-700'
-                                                fill='green'
-                                            />
+                                            <div className='good-lift h-16 w-16 rounded-full '></div>
                                         ) : (
-                                            <Circle
-                                                strokeWidth={3}
-                                                size={44}
-                                                className='text-red-600'
-                                                fill='#dc2626'
-                                            />
+                                            <div className='bad-lift h-16 w-16 rounded-full '></div>
                                         )}
                                     </div>
                                     <X
@@ -347,12 +334,7 @@ const Competition = ({
                                                 strokeWidth={3}
                                             />
                                         ) : currentLift?.isGoodTwo ? (
-                                            <Circle
-                                                strokeWidth={3}
-                                                size={44}
-                                                className='text-green-700'
-                                                fill='green'
-                                            />
+                                            <div className='good-lift h-16 w-16 rounded-full '></div>
                                         ) : (
                                             <Circle
                                                 strokeWidth={3}
@@ -408,12 +390,7 @@ const Competition = ({
                                                 strokeWidth={3}
                                             />
                                         ) : currentLift?.isGoodThree ? (
-                                            <Circle
-                                                strokeWidth={3}
-                                                size={44}
-                                                className='text-green-700'
-                                                fill='green'
-                                            />
+                                            <div className='good-lift h-16 w-16 rounded-full '></div>
                                         ) : (
                                             <Circle
                                                 strokeWidth={3}

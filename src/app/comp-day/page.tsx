@@ -29,13 +29,13 @@ const CompDay = () => {
         setCompId(competitions?.[0]?.id.toString() || '')
     }, [competitions])
 
-    if (competitionsLoading) {
-        return (
-            <div className='flex flex-col w-full h-full min-h-[calc(100vh-10rem)] items-center justify-center animate-spin'>
-                <Icons.spinner className='h-40 w-40' />
-            </div>
-        )
-    }
+    // if (competitionsLoading) {
+    //     return (
+    //         <div className='flex flex-col w-full h-full min-h-[calc(100vh-10rem)] items-center justify-center animate-spin'>
+    //             <Icons.spinner className='h-40 w-40' />
+    //         </div>
+    //     )
+    // }
 
     return (
         <div className='flex flex-col gap-4 p-4'>
