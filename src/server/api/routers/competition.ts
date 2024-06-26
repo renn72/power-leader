@@ -3,7 +3,12 @@ import { eq } from 'drizzle-orm'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
-import { competitions, divisions, compDayInfo } from '~/server/db/schema'
+import {
+    competitions,
+    divisions,
+    compDayInfo,
+    events,
+} from '~/server/db/schema'
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
@@ -107,8 +112,119 @@ export const competitionRouter = createTRPCRouter({
                     }),
             )
 
+            const insEvent = input.events.split('/').map((e) => {
+                if (e.toLowerCase() == 'squat only') {
+                    return ctx.db.insert(events).values({
+                        name: 'Squat only',
+                        isSquat: true,
+                        isBench: false,
+                        isDeadlift: false,
+                        isTeamBattle: false,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
+                } else if (e.toLowerCase() == 'bench only') {
+                    return ctx.db.insert(events).values({
+                        name: 'Bench only',
+                        isSquat: true,
+                        isBench: true,
+                        isDeadlift: false,
+                        isTeamBattle: false,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
+                } else if (e.toLowerCase() == 'deadlift only') {
+                    return ctx.db.insert(events).values({
+                        name: 'Deadlift only',
+                        isSquat: true,
+                        isBench: true,
+                        isDeadlift: true,
+                        isTeamBattle: false,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
+                } else if (e.toLowerCase() == 'team battle') {
+                    return ctx.db.insert(events).values({
+                        name: 'Team Battle',
+                        isSquat: true,
+                        isBench: true,
+                        isDeadlift: true,
+                        isTeamBattle: true,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
+                } else if (e.toLowerCase() == 'squat, bench') {
+                    return ctx.db.insert(events).values({
+                        name: 'Squat, Bench',
+                        isSquat: true,
+                        isBench: true,
+                        isDeadlift: false,
+                        isTeamBattle: false,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
+                } else if (e.toLowerCase() == 'squat, deadlift') {
+                    return ctx.db.insert(events).values({
+                        name: 'Squat, Deadlift',
+                        isSquat: true,
+                        isBench: false,
+                        isDeadlift: true,
+                        isTeamBattle: false,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
+                }
+                return ctx.db.insert(events).values({
+                    name: 'Squat, Bench, Deadlift',
+                    isSquat: true,
+                    isBench: true,
+                    isDeadlift: true,
+                    isTeamBattle: false,
+                    isPress: false,
+                    isOtherOne: false,
+                    isOtherTwo: false,
+                    isOtherThree: false,
+                    isOtherFour: false,
+                    isOtherFive: false,
+                    compId: resComp[0]?.id || 0,
+                })
+            })
+
             if (isTuple(ins)) {
                 await ctx.db.batch(ins)
+            }
+            if (isTuple(insEvent)) {
+                await ctx.db.batch(insEvent)
             }
             await ctx.db.insert(compDayInfo).values({
                 compId: resComp[0]?.id || 0,

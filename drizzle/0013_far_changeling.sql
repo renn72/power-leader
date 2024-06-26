@@ -1,1 +1,0 @@
-ALTER TABLE `pb_age_divisions` ADD `comp_name` text;

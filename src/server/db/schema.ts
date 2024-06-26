@@ -104,7 +104,7 @@ export const compEntryRelations = relations(compEntry, ({ one, many }) => ({
     }),
     compEntryToDivisions: many(compEntryToDivisions),
     lift: many(lift),
-    events: many(events),
+    events: many(compEntryToEvents),
 }))
 
 export const lift = createTable('lift', {
@@ -153,6 +153,34 @@ export const compEntryToDivisions = createTable('comp_entry_to_divisions', {
         .notNull(),
 })
 
+export const compEntryToEvents = createTable('comp_entry_to_events', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    compEntryId: int('comp_entry_id', { mode: 'number' }).references(
+        () => compEntry.id,
+        { onDelete: 'cascade' },
+    ),
+    eventId: int('event_id', { mode: 'number' }).references(() => events.id, {
+        onDelete: 'cascade',
+    }),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+})
+
+export const compEntryToEventsRelations = relations(
+    compEntryToEvents,
+    ({ one }) => ({
+        compEntry: one(compEntry, {
+            fields: [compEntryToEvents.compEntryId],
+            references: [compEntry.id],
+        }),
+        event: one(events, {
+            fields: [compEntryToEvents.eventId],
+            references: [events.id],
+        }),
+    }),
+)
+
 export const divisions = createTable('age_divisions', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
     name: text('name').notNull(),
@@ -193,7 +221,7 @@ export const compEntryToDivisionsRelations = relations(
     }),
 )
 
-export const events = createTable('event', {
+export const events = createTable('events', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
     name: text('name').notNull(),
     isSquat: int('is_squat', { mode: 'boolean' }).default(false),
@@ -206,15 +234,22 @@ export const events = createTable('event', {
     isOtherThree: int('is_other_three', { mode: 'boolean' }).default(false),
     isOtherFour: int('is_other_four', { mode: 'boolean' }).default(false),
     isOtherFive: int('is_other_five', { mode: 'boolean' }).default(false),
+    isOtherSix: int('is_other_six', { mode: 'boolean' }).default(false),
+    compId: int('comp_id', { mode: 'number' }).references(() => competitions.id, {
+        onDelete: 'cascade',
+    }),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
     updatedAt: text('updatedAt'),
 })
 
-export const eventRelations = relations(events, ({ many }) => ({
-    entries: many(compEntry),
-    competitions: many(competitions),
+export const eventRelations = relations(events, ({ many, one }) => ({
+    entries: many(compEntryToEvents),
+    competitions: one(competitions, {
+        fields: [events.compId],
+        references: [competitions.id],
+    }),
 }))
 
 export const competitions = createTable('competition', {
@@ -230,11 +265,7 @@ export const competitions = createTable('competition', {
     date: int('date', { mode: 'timestamp' }),
     daysOfCompetition: int('days_of_competition'),
     platforms: int('platforms'),
-    squatBracket: int('squat_bracket_id'),
-    benchBracket: int('bench_bracket_id'),
-    deadliftBracket: int('deadlift_bracket_id'),
     rules: text('rules'),
-    events: text('events'),
     wc_male: text('wc_male'),
     wc_female: text('wc_female'),
     wc_mix: text('wc_mix'),

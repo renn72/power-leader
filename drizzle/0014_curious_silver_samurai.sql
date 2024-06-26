@@ -1,1 +1,0 @@
-ALTER TABLE `pb_comp_entry` ADD `is_locked` integer;
