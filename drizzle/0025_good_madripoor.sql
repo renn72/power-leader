@@ -1,0 +1,1 @@
+ALTER TABLE `pb_lift` ADD `rack_height` text;

@@ -104,6 +104,7 @@ export const compEntryRelations = relations(compEntry, ({ one, many }) => ({
     }),
     compEntryToDivisions: many(compEntryToDivisions),
     lift: many(lift),
+    events: many(events),
 }))
 
 export const lift = createTable('lift', {
@@ -192,6 +193,30 @@ export const compEntryToDivisionsRelations = relations(
     }),
 )
 
+export const events = createTable('event', {
+    id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+    name: text('name').notNull(),
+    isSquat: int('is_squat', { mode: 'boolean' }).default(false),
+    isBench: int('is_bench', { mode: 'boolean' }).default(false),
+    isDeadlift: int('is_deadlift', { mode: 'boolean' }).default(false),
+    isTeamBattle: int('is_team_battle', { mode: 'boolean' }).default(false),
+    isPress: int('is_press', { mode: 'boolean' }).default(false),
+    isOtherOne: int('is_other_one', { mode: 'boolean' }).default(false),
+    isOtherTwo: int('is_other_two', { mode: 'boolean' }).default(false),
+    isOtherThree: int('is_other_three', { mode: 'boolean' }).default(false),
+    isOtherFour: int('is_other_four', { mode: 'boolean' }).default(false),
+    isOtherFive: int('is_other_five', { mode: 'boolean' }).default(false),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
+    updatedAt: text('updatedAt'),
+})
+
+export const eventRelations = relations(events, ({ many }) => ({
+    entries: many(compEntry),
+    competitions: many(competitions),
+}))
+
 export const competitions = createTable('competition', {
     id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
     creatorId: int('creator_id', { mode: 'number' })
@@ -244,6 +269,7 @@ export const competitionsRelations = relations(
         divisions: many(divisions),
         judges: many(judges),
         bracketJudges: many(bracketJudges),
+        events: many(events),
         compDayInfo: one(compDayInfo, {
             fields: [competitions.id],
             references: [compDayInfo.compId],
