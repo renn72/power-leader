@@ -42,16 +42,16 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
         if (!fakeUsers) {
             return
         }
-        const events = competition?.events?.split('/') || []
         const divisions = competition?.divisions?.map((division) => division.id) || []
         const equipment = competition?.equipment?.split('/') || []
+        const events = competition?.events?.map((event) => event.id) || []
 
         for (const user of fakeUsers) {
             if (!user.birthDate) continue
             const birthDate = new Date(user.birthDate)
-            let pickedEvents = events.filter((event) => Math.random() > 0.5).join('/')
+            let pickedEvents = events.filter((event) => Math.random() > 0.5).map((event) => event.toString())
             if (pickedEvents.length == 0 && events[0]) {
-                pickedEvents = events[0].toString()
+                pickedEvents = [events[0].toString()]
             }
 
             let pickedDivisions = divisions.filter((_division) => Math.random() > 0.5).map((division) => division.toString())
@@ -68,7 +68,7 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
                 equipment: equipment[Math.floor(Math.random() * equipment.length)] || '',
                 gender: Math.random() > 0.5 ? 'Male' : 'Female',
                 predictedWeight: (60 + Math.floor(Math.random() * 100)).toString(),
-                events: pickedEvents,
+                event: pickedEvents,
                 division: pickedDivisions,
                 squatOpener: '',
                 squarRackHeight: '',

@@ -282,6 +282,7 @@ export const competitionRouter = createTRPCRouter({
             orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
             with: {
                 divisions: true,
+                    events: true,
             },
         })
         return res
@@ -293,6 +294,7 @@ export const competitionRouter = createTRPCRouter({
             orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
             with: {
                 divisions: true,
+                events: true,
             },
         })
         return res
@@ -312,6 +314,7 @@ export const competitionRouter = createTRPCRouter({
             with: {
                 divisions: true,
                 compDayInfo: true,
+                events: true,
                 entries: {
                     with: {
                         lift: true,
@@ -334,6 +337,7 @@ export const competitionRouter = createTRPCRouter({
             with: {
                 divisions: true,
                 compDayInfo: true,
+                events: true,
                 entries: {
                     with: {
                         lift: true,
@@ -364,6 +368,7 @@ export const competitionRouter = createTRPCRouter({
                 with: {
                     divisions: true,
                     compDayInfo: true,
+                    events: true,
                     entries: {
                         with: {
                             lift: true,
