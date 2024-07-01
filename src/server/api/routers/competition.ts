@@ -113,7 +113,7 @@ export const competitionRouter = createTRPCRouter({
             )
 
             const insEvent = input.events.split('/').map((e) => {
-                if (e.toLowerCase() == 'squat only') {
+                if (e.toLowerCase() === 'squat only') {
                     return ctx.db.insert(events).values({
                         name: 'Squat only',
                         isSquat: true,
@@ -128,10 +128,10 @@ export const competitionRouter = createTRPCRouter({
                         isOtherFive: false,
                         compId: resComp[0]?.id || 0,
                     })
-                } else if (e.toLowerCase() == 'bench only') {
+                } else if (e.toLowerCase() === 'bench only') {
                     return ctx.db.insert(events).values({
                         name: 'Bench only',
-                        isSquat: true,
+                        isSquat: false,
                         isBench: true,
                         isDeadlift: false,
                         isTeamBattle: false,
@@ -143,11 +143,11 @@ export const competitionRouter = createTRPCRouter({
                         isOtherFive: false,
                         compId: resComp[0]?.id || 0,
                     })
-                } else if (e.toLowerCase() == 'deadlift only') {
+                } else if (e.toLowerCase() === 'deadlift only') {
                     return ctx.db.insert(events).values({
                         name: 'Deadlift only',
-                        isSquat: true,
-                        isBench: true,
+                        isSquat: false,
+                        isBench: false,
                         isDeadlift: true,
                         isTeamBattle: false,
                         isPress: false,
@@ -158,7 +158,7 @@ export const competitionRouter = createTRPCRouter({
                         isOtherFive: false,
                         compId: resComp[0]?.id || 0,
                     })
-                } else if (e.toLowerCase() == 'team battle') {
+                } else if (e.toLowerCase() === 'team battle') {
                     return ctx.db.insert(events).values({
                         name: 'Team Battle',
                         isSquat: true,
@@ -173,7 +173,7 @@ export const competitionRouter = createTRPCRouter({
                         isOtherFive: false,
                         compId: resComp[0]?.id || 0,
                     })
-                } else if (e.toLowerCase() == 'squat, bench') {
+                } else if (e.toLowerCase() === 'squat, bench') {
                     return ctx.db.insert(events).values({
                         name: 'Squat, Bench',
                         isSquat: true,
@@ -188,7 +188,7 @@ export const competitionRouter = createTRPCRouter({
                         isOtherFive: false,
                         compId: resComp[0]?.id || 0,
                     })
-                } else if (e.toLowerCase() == 'squat, deadlift') {
+                } else if (e.toLowerCase() === 'squat, deadlift') {
                     return ctx.db.insert(events).values({
                         name: 'Squat, Deadlift',
                         isSquat: true,
@@ -203,7 +203,23 @@ export const competitionRouter = createTRPCRouter({
                         isOtherFive: false,
                         compId: resComp[0]?.id || 0,
                     })
+                } else if (e.toLowerCase() === 'bench, deadlift') {
+                    return ctx.db.insert(events).values({
+                        name: 'Bench, Deadlift',
+                        isSquat: false,
+                        isBench: true,
+                        isDeadlift: true,
+                        isTeamBattle: false,
+                        isPress: false,
+                        isOtherOne: false,
+                        isOtherTwo: false,
+                        isOtherThree: false,
+                        isOtherFour: false,
+                        isOtherFive: false,
+                        compId: resComp[0]?.id || 0,
+                    })
                 }
+
                 return ctx.db.insert(events).values({
                     name: 'Squat, Bench, Deadlift',
                     isSquat: true,

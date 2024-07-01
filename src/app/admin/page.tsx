@@ -69,9 +69,9 @@ export default function Admin() {
                             Math.random() > 0.5 ? 'Squat, Bench' : '',
                             Math.random() > 0.5 ? 'Squat, Deadlift' : '',
                             Math.random() > 0.5 ? 'Bench, Deadlift' : '',
-                            Math.random() > 0.5 ? 'Bench, Squat' : '',
-                            Math.random() > 0.5 ? 'Deadlift, Bench' : '',
-                            Math.random() > 0.5 ? 'Deadlift, Squat' : '',
+                            Math.random() > 0.5 ? 'Squat Only' : '',
+                            Math.random() > 0.5 ? 'Bench Only' : '',
+                            Math.random() > 0.5 ? 'Deadlift Only' : '',
                         ]
                             .filter((item) => item != '')
                             .join('/')

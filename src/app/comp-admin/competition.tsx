@@ -90,12 +90,12 @@ const Competition = ({ competition } : { competition: GetCompetitionById }) => {
                 <TableCell>{competition.platforms}</TableCell>
                 <TableCell>{competition.rules}</TableCell>
                 <TableCell>
-                    {competition.events?.split('/').map((event) => (
+                    {competition.events?.map((event) => (
                         <div
-                            key={event}
+                            key={event.id}
                             className='text-nowrap'
                         >
-                            {event}
+                            {event.name}
                         </div>
                     ))}
                 </TableCell>

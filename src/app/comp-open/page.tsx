@@ -69,13 +69,12 @@ const List = () => {
                                 <TableCell>{competition.country}</TableCell>
                                 <TableCell>
                                     {competition.events
-                                        ?.split('/')
                                         .map((event) => (
                                             <div
-                                                key={event}
+                                                key={event.id}
                                                 className='text-nowrap'
                                             >
-                                                {event}
+                                                {event.name}
                                             </div>
                                         ))}
                                 </TableCell>
