@@ -42,22 +42,21 @@ const Events = ({
                             >
                                 <div className='flex flex-wrap justify-around gap-2 px-6'>
                                     {competition.events
-                                        ?.split('/')
                                         .map((item) => (
                                             <FormField
-                                                key={item}
+                                                key={item.id}
                                                 control={form.control}
                                                 name='events'
                                                 render={() => {
                                                     return (
-                                                        <FormItem key={item}>
+                                                        <FormItem key={item.id}>
                                                             <FormControl>
                                                                 <ToggleGroupItem
                                                                     variant='secondary'
                                                                     className='rounded-md border border-input'
-                                                                    value={item}
+                                                                    value={item.name}
                                                                 >
-                                                                    {item}
+                                                                    {item.name}
                                                                 </ToggleGroupItem>
                                                             </FormControl>
                                                         </FormItem>

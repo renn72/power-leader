@@ -362,6 +362,7 @@ export const compDayInfo = createTable('comp_day_info', {
     round: int('round').notNull().default(1),
     bracket: int('bracket').notNull(),
     index: int('index').notNull(),
+    nextIndex: int('next_index'),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),

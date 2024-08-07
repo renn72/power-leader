@@ -1,0 +1,1 @@
+ALTER TABLE `pb_comp_day_info` ADD `next_index` integer;
