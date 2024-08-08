@@ -121,7 +121,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div>
               {isGoodOne === null ? (
                 <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
-              ) : lift?.isGoodOne ? (
+              ) : isGoodOne ? (
                 <div className='good-lift h-16 w-16 rounded-full '></div>
               ) : (
                 <div className='bad-lift h-16 w-16 rounded-full '></div>
@@ -130,7 +130,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div>
               {isGoodTwo === null ? (
                 <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
-              ) : lift?.isGoodTwo ? (
+              ) : isGoodTwo ? (
                 <div className='good-lift h-16 w-16 rounded-full '></div>
               ) : (
                 <div className='bad-lift h-16 w-16 rounded-full '></div>
@@ -139,7 +139,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div>
               {isGoodThree === null ? (
                 <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
-              ) : lift?.isGoodThree ? (
+              ) : isGoodThree ? (
                 <div className='good-lift h-16 w-16 rounded-full '></div>
               ) : (
                 <div className='bad-lift h-16 w-16 rounded-full '></div>

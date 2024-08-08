@@ -118,7 +118,7 @@ const JoinCompForm = ({ comp }: { comp: string }) => {
             compId: competition.id,
         }
         console.log('formData', formData)
-        createComp(formData)
+        // createComp(formData)
     }
 
     if (competitionLoading) {

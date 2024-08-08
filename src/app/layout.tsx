@@ -13,7 +13,7 @@ import Footer from './_components/footer'
 import { Toaster } from '~/components/ui/sonner'
 
 export const metadata = {
-  title: 'Scoreboard',
+title: "Scoreboard",
   description: 'Scoreboard for a game',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
