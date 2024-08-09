@@ -12,7 +12,7 @@ import { Calendar } from '~/components/ui/calendar'
 
 import { format } from 'date-fns'
 import { toast } from 'sonner'
-import { Card, CardContent, CardTitle, CardHeader } from '~/components/ui/card'
+import { Card, CardContent, CardHeader } from '~/components/ui/card'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import {
@@ -55,7 +55,7 @@ import {
     winnerFormular,
 } from '~/lib/store'
 
-import type { Control, UseFormReturn } from 'react-hook-form'
+import type { UseFormReturn } from 'react-hook-form'
 
 export const dynamic = 'force-dynamic'
 
