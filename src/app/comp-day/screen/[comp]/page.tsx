@@ -31,6 +31,15 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
   )
 
+  const lifter2 = competition?.entries?.find(
+    (entry) => entry.id === Number(nextIndex),
+  )
+
+  const lift2 = lifter2?.lift?.find(
+    (item) =>
+      item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
+  )
+
   console.log(competition)
 
   useEffect(() => {
@@ -104,7 +113,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     <>
       <div
         className={cn(
-          'flex h-full min-h-[calc(100vh-10rem)] w-full flex-col',
+          'flex h-full min-h-[100vh] w-full flex-col',
           ' relative items-center justify-center',
         )}
       >
@@ -116,6 +125,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           <div>round: {round}</div>
         </div>
         <div className='flex flex-col items-center gap-12 text-6xl font-bold'>
+          <div>{lifter?.user?.name}</div>
           <div className=''>{lift?.weight}kg</div>
           <div className='flex gap-10 justify-center'>
             <div>
@@ -146,6 +156,10 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               )}
             </div>
           </div>
+        </div>
+        <div className='absolute bottom-0 left-0 text-sm'>
+          <div className='capitalize'>{lifter2?.user?.name}</div>
+          <div className='capitalize'>{lift2?.weight}kg</div>
         </div>
       </div>
     </>
