@@ -51,7 +51,7 @@ const Competitions = () => {
                                 <TableHead>WC Mix</TableHead>
                                 <TableHead>Divisions</TableHead>
                                 <TableHead>Information</TableHead>
-                                <TableHead>Actions</TableHead>
+                                <TableHead className='hidden'>Actions</TableHead>
                                 <TableHead>Delete</TableHead>
                             </TableRow>
                         </TableHeader>
