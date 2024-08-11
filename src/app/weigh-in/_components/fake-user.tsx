@@ -62,7 +62,7 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
                 predictedWeight: entry?.predictedWeight || '',
                 weight: weight.toString(),
                 wc: wc,
-                events: entry?.events || '',
+                event: entry?.events || '',
                 division:
                     entry?.compEntryToDivisions?.map(
                         (division) => division.division?.id.toString() || '',
