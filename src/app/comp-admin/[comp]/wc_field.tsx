@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardContent, CardHeader } from '~/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Badge } from '~/components/ui/badge'
 import type { GetCompetitionByUuid } from '~/lib/types'
 
@@ -14,13 +14,19 @@ const WC_Field = ({
   const wc =
     weight_class === 'wc_male'
       ? competition.wc_male?.split('/')
-      : competition.wc_female?.split('/') || competition.wc_mix?.split('/')
+      : weight_class === 'wc_female'
+        ? competition.wc_female?.split('/')
+        : competition.wc_mix?.split('/')
 
   if (!wc) return null
 
   return (
     <Card className='w-full'>
-      <CardHeader></CardHeader>
+      <CardHeader className='mb-4'>
+        <CardTitle>
+         {weight_class === 'wc_male' ? 'Male' : 'Female'} Weight Class
+        </CardTitle>
+      </CardHeader>
       <CardContent>
         <div className='flex w-full flex-wrap items-center gap-4'>
           {wc.map((e: string) => (

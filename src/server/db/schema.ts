@@ -11,11 +11,13 @@ export const users = createTable('user', {
     clerkId: text('clerk_id'),
     name: text('name', { length: 256 }),
     birthDate: integer('birth_date', { mode: 'timestamp' }),
+    gender: text('gender'),
     address: text('address'),
     notes: text('notes'),
     instagram: text('instagram'),
     openlifter: text('openlifter'),
     phone: text('phone'),
+    email: text('email'),
     isFake: int('is_fake', { mode: 'boolean' }),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)

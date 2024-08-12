@@ -95,11 +95,6 @@ const CompInfo = ({ competition }: { competition: GetCompetitionByUuid }) => {
           weight_class='wc_female'
         />
 
-        <WC_Field
-          competition={competition}
-          weight_class='wc_mix'
-        />
-
         <Card className='w-full'>
           <CardHeader></CardHeader>
           <CardContent>

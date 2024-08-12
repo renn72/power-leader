@@ -6,9 +6,8 @@ import { api } from '~/trpc/react'
 
 export const dynamic = 'force-dynamic'
 
-import { Card, CardContent, CardHeader } from '~/components/ui/card'
-
 import CompInfo from './comp_info'
+import Entries from './entries'
 
 const Competition = ({ params }: { params: { comp: string } }) => {
   const { comp } = params
@@ -38,12 +37,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
         </div>
         <div className='flex w-full'>
           <CompInfo competition={competition} />
-          <div className='flex w-full flex-col items-center gap-2 text-lg font-medium'>
-            <Card className='w-full max-w-2xl'>
-              <CardHeader></CardHeader>
-              <CardContent>hi</CardContent>
-            </Card>
-          </div>
+          <Entries competition={competition} />
         </div>
       </div>
     </>

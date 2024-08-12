@@ -15,6 +15,20 @@
       "when": 1723021750254,
       "tag": "0001_woozy_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1723352597516,
+      "tag": "0002_happy_the_leader",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1723431571956,
+      "tag": "0003_glossy_namorita",
+      "breakpoints": true
     }
   ]
 }

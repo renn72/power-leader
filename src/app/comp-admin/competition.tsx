@@ -309,7 +309,11 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
             </div>
           )}
         </TableCell>
-        <TableCell>
+        <TableCell
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
           <Dialog
             open={openDelete}
             onOpenChange={setOpenDelete}
@@ -331,6 +335,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
                 variant='destructive'
                 className='mx-auto w-48'
                 onClick={(e) => {
+                  e.stopPropagation()
                   e.preventDefault()
                   deleteCompetition(competition.id)
                 }}
