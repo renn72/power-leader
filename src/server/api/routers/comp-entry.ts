@@ -22,7 +22,7 @@ const createSchema = z.object({
   equipment: z.string(),
   gender: z.string(),
   predictedWeight: z.string(),
-  eventuiuius: z.array(z.string()),
+  events: z.array(z.string()),
   division: z.array(z.string()),
   squatOpener: z.string(),
   squarRackHeight: z.string(),
