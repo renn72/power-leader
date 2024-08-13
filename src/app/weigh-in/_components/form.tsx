@@ -58,7 +58,7 @@ const WeighInForm = ({
   const [isPending, setIsPending] = useState(false)
   const [submitText, setSubmitText] = useState('Submit')
 
-  const [isEditPersonal, setIsEditPersonal] = useState(false)
+  const [isEditPersonal, setIsEditPersonal] = useState(true)
 
   const router = useRouter()
 
@@ -77,7 +77,9 @@ const WeighInForm = ({
       gender: entry?.gender ? entry.gender : '',
       predictedWeight: entry?.predictedWeight ? entry.predictedWeight : '',
       weight: entry?.weight ? entry.weight : '',
-      events: entry?.events ? entry.events.map((event) => event.id.toString()) : [],
+      events: entry?.events
+        ? entry.events.map((event) => event.id.toString())
+        : [],
       division:
         entry?.compEntryToDivisions?.map((division) =>
           division.division?.id.toString(),
@@ -112,7 +114,9 @@ const WeighInForm = ({
         gender: entry?.gender ? entry.gender : '',
         predictedWeight: entry?.predictedWeight ? entry.predictedWeight : '',
         weight: entry?.weight ? entry.weight : '',
-      events: entry?.events ? entry.events.map((event) => event.id.toString()) : [],
+        events: entry.events
+          ? entry.events.map((event) => event.id.toString())
+          : [],
         division:
           entry?.compEntryToDivisions?.map((division) =>
             division.division?.id.toString(),
@@ -146,7 +150,7 @@ const WeighInForm = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className='flex w-full max-w-2xl flex-col items-center gap-2'
             >
-              {isEditPersonal ? <Personal /> : <PersonalInfo entry={entry} />}
+              {isEditPersonal ? <Personal name={entry?.user?.name || ''} /> : <PersonalInfo entry={entry} />}
               <Equipment competition={competition} />
               <Events competition={competition} />
               <Divisions competition={competition} />
