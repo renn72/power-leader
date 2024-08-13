@@ -1,4 +1,7 @@
 'use client'
+import { api } from '~/trpc/react'
+
+import { toast } from 'sonner'
 import { Card, CardContent, CardHeader } from '~/components/ui/card'
 import {
   Popover,
@@ -46,20 +49,21 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
-  birthDate: z.date().optional(),
-  gender: z.string().optional(),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().optional(),
-  equipment: z.string().optional(),
+  birthDate: z.date(),
+  gender: z.string(),
+  address: z.string(),
+  phone: z.string(),
+  email: z.string(),
+  equipment: z.string(),
   events: z.array(z.string()).nonempty(),
-  notes: z.string().optional(),
   divisions: z.array(z.string()).nonempty(),
-  squatOpener: z.string().optional(),
-  benchOpener: z.string().optional(),
-  deadliftOpener: z.string().optional(),
-  squatRackHeight: z.string().optional(),
-  benchRackHeight: z.string().optional(),
+  notes: z.string(),
+  squatOpener: z.string(),
+  benchOpener: z.string(),
+  deadliftOpener: z.string(),
+  squatRackHeight: z.string(),
+  benchRackHeight: z.string(),
+  compId: z.number(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -78,19 +82,28 @@ const Entries = ({ competition }: { competition: GetCompetitionByUuid }) => {
       email: '',
       equipment: competition.equipment?.split('/')[0] || '',
       events: [],
-      notes: '',
       divisions: [],
+      notes: '',
       squatOpener: '',
       benchOpener: '',
       deadliftOpener: '',
       squatRackHeight: '',
       benchRackHeight: '',
+      compId: competition.id,
+    },
+  })
+
+  const { mutate } = api.compEntry.createEntry.useMutation({
+    onSettled: () => {
+      toast.success('Entry created')
     },
   })
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
+    mutate(data)
   }
+
+  console.log({competition})
 
   return (
     <div className='flex w-full flex-col items-center gap-2 text-lg font-medium'>

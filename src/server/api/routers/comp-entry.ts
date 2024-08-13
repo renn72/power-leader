@@ -6,6 +6,7 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 import {
   compEntry,
   compEntryToDivisions,
+  compEntryToEvents,
   lift,
   users,
 } from '~/server/db/schema'
@@ -94,11 +95,11 @@ const createEntrySchema = z.object({
   gender: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
-  email: z.string().email().optional(),
+  email: z.string().optional(),
   equipment: z.string().optional(),
-  events: z.string().optional(),
+  events: z.array(z.string()).nonempty(),
+  divisions: z.array(z.string()).nonempty(),
   notes: z.string().optional(),
-  divisions: z.string().optional(),
   squatOpener: z.string().optional(),
   benchOpener: z.string().optional(),
   deadliftOpener: z.string().optional(),
@@ -154,6 +155,37 @@ export const compEntryRouter = createTRPCRouter({
           userId: userId,
         })
         .returning({ id: compEntry.id })
+
+    const entryId = entry[0]?.id
+
+    if (!entryId) {
+      throw new TRPCError({
+        code: 'PARSE_ERROR',
+        message: 'Error creating entry',
+      })
+    }
+
+    const divisionIds = input.divisions.map((division) => {
+      return ctx.db.insert(compEntryToDivisions).values({
+        compEntryId: entryId,
+        divisionId: Number(division),
+      })
+    })
+
+    if (isTuple(divisionIds)) {
+      await ctx.db.batch(divisionIds)
+    }
+
+    const eventIds = input.events.map((event) => {
+      return ctx.db.insert(compEntryToEvents).values({
+        compEntryId: entryId,
+        eventId: Number(event),
+      })
+    })
+
+    if (isTuple(eventIds)) {
+      await ctx.db.batch(eventIds)
+    }
 
       return true
     }),
