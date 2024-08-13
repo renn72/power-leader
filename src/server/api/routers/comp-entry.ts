@@ -88,17 +88,15 @@ const updateOrderBulkSchema = z.array(
 )
 
 const createEntrySchema = z.object({
-  name: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
+  name: z.string(),
   birthDate: z.date().optional(),
   gender: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().optional(),
   equipment: z.string().optional(),
-  events: z.array(z.string()).nonempty(),
-  divisions: z.array(z.string()).nonempty(),
+  events: z.array(z.string()),
+  divisions: z.array(z.string()),
   notes: z.string().optional(),
   squatOpener: z.string().optional(),
   benchOpener: z.string().optional(),
@@ -106,6 +104,7 @@ const createEntrySchema = z.object({
   squatRackHeight: z.string().optional(),
   benchRackHeight: z.string().optional(),
   compId: z.number(),
+  userId: z.number().optional(),
 })
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
@@ -118,19 +117,23 @@ export const compEntryRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       console.log('input', input)
 
-      const user = await ctx.db
-        .insert(users)
-        .values({
-          name: input.name,
-          email: input.email,
-          birthDate: input.birthDate,
-          gender: input.gender,
-          address: input.address,
-          phone: input.phone,
-        })
-        .returning({ id: users.id })
+      let userId = input.userId
 
-      const userId = user[0]?.id
+      if (!input.userId) {
+        const user = await ctx.db
+          .insert(users)
+          .values({
+            name: input.name,
+            email: input.email,
+            birthDate: input.birthDate,
+            gender: input.gender,
+            address: input.address,
+            phone: input.phone,
+          })
+          .returning({ id: users.id })
+
+        userId = user[0]?.id
+      }
 
       if (!userId) {
         throw new TRPCError({
@@ -156,36 +159,36 @@ export const compEntryRouter = createTRPCRouter({
         })
         .returning({ id: compEntry.id })
 
-    const entryId = entry[0]?.id
+      const entryId = entry[0]?.id
 
-    if (!entryId) {
-      throw new TRPCError({
-        code: 'PARSE_ERROR',
-        message: 'Error creating entry',
+      if (!entryId) {
+        throw new TRPCError({
+          code: 'PARSE_ERROR',
+          message: 'Error creating entry',
+        })
+      }
+
+      const divisionIds = input.divisions.map((division) => {
+        return ctx.db.insert(compEntryToDivisions).values({
+          compEntryId: entryId,
+          divisionId: Number(division),
+        })
       })
-    }
 
-    const divisionIds = input.divisions.map((division) => {
-      return ctx.db.insert(compEntryToDivisions).values({
-        compEntryId: entryId,
-        divisionId: Number(division),
+      if (isTuple(divisionIds)) {
+        await ctx.db.batch(divisionIds)
+      }
+
+      const eventIds = input.events.map((event) => {
+        return ctx.db.insert(compEntryToEvents).values({
+          compEntryId: entryId,
+          eventId: Number(event),
+        })
       })
-    })
 
-    if (isTuple(divisionIds)) {
-      await ctx.db.batch(divisionIds)
-    }
-
-    const eventIds = input.events.map((event) => {
-      return ctx.db.insert(compEntryToEvents).values({
-        compEntryId: entryId,
-        eventId: Number(event),
-      })
-    })
-
-    if (isTuple(eventIds)) {
-      await ctx.db.batch(eventIds)
-    }
+      if (isTuple(eventIds)) {
+        await ctx.db.batch(eventIds)
+      }
 
       return true
     }),
@@ -371,6 +374,11 @@ export const compEntryRouter = createTRPCRouter({
             division: true,
           },
         },
+        events: {
+          with: {
+            event: true,
+          },
+        },
       },
     })
     return res
@@ -383,6 +391,11 @@ export const compEntryRouter = createTRPCRouter({
         compEntryToDivisions: {
           with: {
             division: true,
+          },
+        },
+        events: {
+          with: {
+            event: true,
           },
         },
         user: true,

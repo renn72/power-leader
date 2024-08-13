@@ -35,9 +35,13 @@ const Competition = ({ params }: { params: { comp: string } }) => {
             onClick={() => router.back()}
           />
         </div>
-        <div className='flex w-full'>
-          <CompInfo competition={competition} />
-          <Entries competition={competition} />
+        <div className='w-full grid grid-cols-3 gap-4'>
+          <CompInfo
+            className='col-span-1'
+          competition={competition} />
+          <Entries
+            className='col-span-2'
+          competition={competition} />
         </div>
       </div>
     </>

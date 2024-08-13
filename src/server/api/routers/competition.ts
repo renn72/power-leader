@@ -332,6 +332,11 @@ export const competitionRouter = createTRPCRouter({
                 division: true,
               },
             },
+            events: {
+              with: {
+                event: true,
+              },
+            },
           },
         },
       },
@@ -353,6 +358,11 @@ export const competitionRouter = createTRPCRouter({
             compEntryToDivisions: {
               with: {
                 division: true,
+              },
+            },
+            events: {
+              with: {
+                event: true,
               },
             },
           },

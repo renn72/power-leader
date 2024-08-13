@@ -1,5 +1,4 @@
 'use client'
-import { SheetTrigger } from '~/components/ui/sheet'
 
 import { getAge } from '~/lib/utils'
 import { cn } from '~/lib/utils'
@@ -96,84 +95,47 @@ const CellArray = ({
   )
 }
 
-const Entry = ({
-  entry,
-  setEntryId,
-}: {
-  entry: GetCompetitionEntryById
-  setEntryId: (id: number) => void
-}) => {
+const Entry = ({ entry }: { entry: GetCompetitionEntryById }) => {
   return (
-    <SheetTrigger asChild>
-      <div
-        onClick={() => setEntryId(entry.id)}
-        className={cn(
-          'grid-cols-15 grid cursor-pointer grid-flow-row justify-between rounded-full',
-          'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
+    <div
+      className={cn(
+        'grid-cols-11 grid cursor-pointer grid-flow-row justify-between rounded-full',
+        'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
+      )}
+    >
+      {entry.isLocked && (
+        <CircleCheck
+          size={24}
+          strokeWidth={3}
+          className='absolute left-6 top-1/2 -translate-y-1/2 text-complete '
+        />
+      )}
+      <Cell
+        title='Name'
+        className='col-span-2'
+        info={entry.user?.name}
+      />
+      <Cell
+        title='Gender'
+        info={entry?.gender}
+      />
+      <Cell
+        title='Age'
+        info={getAge(entry.birthDate, entry.competition?.date)}
+      />
+      <CellArray
+        title='Events'
+        className='col-span-4'
+        info={entry.events?.map((event) => event.event?.name || '')}
+      />
+      <CellArray
+        title='Divisions'
+        className='col-span-3'
+        info={entry.compEntryToDivisions?.map(
+          (division) => division.division?.name || '',
         )}
-      >
-        {entry.isLocked && (
-          <CircleCheck
-            size={24}
-            strokeWidth={3}
-            className='absolute left-6 top-1/2 -translate-y-1/2 text-complete '
-          />
-        )}
-        <Cell
-          title='Name'
-          className='col-span-2'
-          info={entry.user?.name}
-        />
-        <Cell
-          title='Gender'
-          info={entry?.gender}
-        />
-        <Cell
-          title='Age'
-          info={getAge(entry.birthDate, entry.competition?.date)}
-        />
-        <Cell
-          title='Weight'
-          info={entry.weight}
-        />
-        <CellBadge
-          title='WC'
-          info={entry.wc?.split('-')[0]}
-        />
-        <Cell
-          title='Squat'
-          info={entry.squatOpener}
-        />
-        <Cell
-          title='Squat Rack'
-          info={entry.squarRackHeight}
-        />
-        <Cell
-          title='Bench'
-          info={entry.benchOpener}
-        />
-        <Cell
-          title='Bench Rack'
-          info={entry.benchRackHeight}
-        />
-        <Cell
-          title='Deadlift'
-          info={entry.deadliftOpener}
-        />
-        <CellArray
-          title='Events'
-          className='col-span-2'
-          info={entry.events?.map((event) => event.event?.name || '')}
-        />
-        <CellArray
-          title='Divisions'
-          className='col-span-2'
-          info={entry.compEntryToDivisions?.map(
-            (division) => division.division?.name || '',
-          )}
-        />
-      </div>
-    </SheetTrigger>
+      />
+    </div>
   )
 }
 

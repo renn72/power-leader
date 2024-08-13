@@ -1,10 +1,11 @@
 'use client'
+import { cn } from '~/lib/utils'
 import { Card, CardContent, CardHeader } from '~/components/ui/card'
 import type { GetCompetitionByUuid } from '~/lib/types'
 import WC_Field from './wc_field'
-const CompInfo = ({ competition }: { competition: GetCompetitionByUuid }) => {
+const CompInfo = ({ competition, className }: { competition: GetCompetitionByUuid, className?: string }) => {
   return (
-    <div className='flex w-full flex-col items-center'>
+    <div className={cn(className, 'flex w-full flex-col items-center')}>
       <div className='flex w-full max-w-2xl flex-col items-center gap-2 text-lg font-medium'>
         <Card className='w-full'>
           <CardHeader></CardHeader>
