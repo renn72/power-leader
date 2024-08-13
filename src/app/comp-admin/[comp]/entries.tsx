@@ -1,13 +1,11 @@
 'use client'
-import { api } from '~/trpc/react'
-
-import { toast } from 'sonner'
 import { Card, CardContent, CardHeader } from '~/components/ui/card'
 import { cn } from '~/lib/utils'
 
 import Entry from './entry'
 import EntryForm from './entry_form'
 import AddFakeUsers from './add_fake_users'
+import DeleteAllEntries from './delete_all_entries'
 
 import type { GetCompetitionByUuid } from '~/lib/types'
 
@@ -43,6 +41,7 @@ const Entries = ({
                 entry={entry}
               />
             ))}
+            <DeleteAllEntries compId={competition.id} />
           </div>
         </CardContent>
       </Card>

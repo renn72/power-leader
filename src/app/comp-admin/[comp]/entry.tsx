@@ -4,8 +4,10 @@ import { getAge } from '~/lib/utils'
 import { cn } from '~/lib/utils'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
-import { CircleCheck, CircleDot, TicketCheck } from 'lucide-react'
+import { CircleCheck, CircleDot, TicketCheck, XIcon } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
+
+import DeleteEntryButton from './delete_entry'
 
 const Cell = ({
   title,
@@ -28,26 +30,6 @@ const Cell = ({
       >
         {info || '-'}
       </div>
-    </div>
-  )
-}
-const CellBadge = ({
-  title,
-  info,
-  className,
-}: {
-  title: string
-  info: string | number | null | undefined
-  className?: string
-}) => {
-  return (
-    <div className={cn('flex flex-col items-center gap-1', className)}>
-      <div className='text-xs text-muted-foreground'>{title}</div>
-      {info && (
-        <Badge className='flex w-16 items-center justify-center'>
-          {info}kg
-        </Badge>
-      )}
     </div>
   )
 }
@@ -99,7 +81,7 @@ const Entry = ({ entry }: { entry: GetCompetitionEntryById }) => {
   return (
     <div
       className={cn(
-        'grid-cols-11 grid cursor-pointer grid-flow-row justify-between rounded-full',
+        'grid-cols-12 grid grid-flow-row justify-between rounded-full',
         'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
       )}
     >
@@ -135,6 +117,7 @@ const Entry = ({ entry }: { entry: GetCompetitionEntryById }) => {
           (division) => division.division?.name || '',
         )}
       />
+      <DeleteEntryButton entry={entry} />
     </div>
   )
 }

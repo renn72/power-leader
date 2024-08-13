@@ -112,6 +112,40 @@ function isTuple<T>(array: T[]): array is [T, ...T[]] {
 }
 
 export const compEntryRouter = createTRPCRouter({
+  deleteAllEntries: publicProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .delete(compEntry)
+        .where(eq(compEntry.compId, input))
+      return res
+    }),
+  deleteEntry: publicProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      const res = await ctx.db.delete(compEntry).where(eq(compEntry.id, input))
+
+      return res
+    }),
+  deleteEntryAndUser: publicProcedure
+    .input(z.object({ userId: z.number(), entryId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.delete(users).where(eq(users.id, input.userId))
+
+      const res = await ctx.db
+        .delete(compEntry)
+        .where(eq(compEntry.id, input.entryId))
+
+      return res
+    }),
   createEntry: publicProcedure
     .input(createEntrySchema)
     .mutation(async ({ ctx, input }) => {
