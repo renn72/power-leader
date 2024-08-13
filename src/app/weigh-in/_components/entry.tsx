@@ -5,8 +5,23 @@ import { getAge } from '~/lib/utils'
 import { cn } from '~/lib/utils'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
-import { CircleCheck, CircleDot, TicketCheck } from 'lucide-react'
+import { CircleCheck, CircleDot, CircleOff, Minus, TicketCheck } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
+
+const EmptyCell = ({title, className}: {title: string, className?: string}) => {
+  return (
+    <div className={cn('flex flex-col items-center gap-0', className)}>
+      <div className='text-xs text-muted-foreground'>{title}</div>
+      <div
+        className={cn(
+          'text-center text-lg font-medium text-muted',
+        )}
+      >
+        {title === '' ? '' : <CircleOff size={20} className='mt-1' />}
+      </div>
+    </div>
+  )
+}
 
 const Cell = ({
   title,
@@ -23,11 +38,11 @@ const Cell = ({
       <div
         className={cn(
           'text-center text-lg font-medium',
-          info ? 'text-primary' : 'text-secondary',
+          info ? 'text-primary' : 'text-warning',
           title === 'Weight' && 'text-xl',
         )}
       >
-        {info || '-'}
+        {info || <Minus size={24} className='mt-1' />}
       </div>
     </div>
   )
@@ -96,6 +111,7 @@ const CellArray = ({
   )
 }
 
+
 const Entry = ({
   entry,
   setEntryId,
@@ -103,6 +119,18 @@ const Entry = ({
   entry: GetCompetitionEntryById
   setEntryId: (id: number) => void
 }) => {
+  const isSquat = entry.events.reduce((a, c) => {
+    if (c.event?.isSquat) return true
+    return a
+  }, false)
+  const isBench = entry.events.reduce((a, c) => {
+    if (c.event?.isBench) return true
+    return a
+  }, false)
+  const isDeadlift = entry.events.reduce((a, c) => {
+    if (c.event?.isDeadlift) return true
+    return a
+  }, false)
   return (
     <SheetTrigger asChild>
       <div
@@ -140,26 +168,46 @@ const Entry = ({
           title='WC'
           info={entry.wc?.split('-')[0]}
         />
-        <Cell
-          title='Squat'
-          info={entry.squatOpener}
-        />
-        <Cell
-          title='Squat Rack'
-          info={entry.squarRackHeight}
-        />
-        <Cell
-          title='Bench'
-          info={entry.benchOpener}
-        />
-        <Cell
-          title='Bench Rack'
-          info={entry.benchRackHeight}
-        />
-        <Cell
-          title='Deadlift'
-          info={entry.deadliftOpener}
-        />
+        {isSquat ? (
+          <Cell
+            title='Squat'
+            info={entry.squatOpener}
+          />
+        ) : (
+          <EmptyCell title='Squat' />
+        )}
+        {isSquat ? (
+          <Cell
+            title='Squat Rack'
+            info={entry.squarRackHeight}
+          />
+        ) : (
+          <EmptyCell title='' />
+        )}
+        {isBench ? (
+          <Cell
+            title='Bench'
+            info={entry.benchOpener}
+          />
+        ) : (
+          <EmptyCell title='Bench' />
+        )}
+        {isBench ? (
+          <Cell
+            title='Bench Rack'
+            info={entry.benchRackHeight}
+          />
+        ) : (
+          <EmptyCell title='' />
+        )}
+        {isDeadlift ? (
+          <Cell
+            title='Deadlift'
+            info={entry.deadliftOpener}
+          />
+        ) : (
+          <EmptyCell title='Deadlift' />
+        )}
         <CellArray
           title='Events'
           className='col-span-2'

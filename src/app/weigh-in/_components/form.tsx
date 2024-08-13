@@ -60,8 +60,6 @@ const WeighInForm = ({
 
   const [isEditPersonal, setIsEditPersonal] = useState(true)
 
-  const router = useRouter()
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -140,8 +138,6 @@ const WeighInForm = ({
   }
 
   if (!entry) return <div>Entry not found</div>
-
-  console.log('entry', competition)
 
   return (
     <>

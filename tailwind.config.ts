@@ -56,6 +56,9 @@ const config = {
                     DEFAULT: 'hsl(var(--complete))',
                     foreground: 'hsl(var(--complete-foreground))',
                 },
+                warning: {
+                    DEFAULT: 'hsl(var(--warning))',
+                },
             },
             borderRadius: {
                 lg: 'var(--radius)',

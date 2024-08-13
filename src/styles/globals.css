@@ -40,6 +40,8 @@ input[type='number'] {
 
         --complete: 120 6.5% 50%;
 
+        --warning: 15 84.2% 60.2%;
+
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 60 9.1% 97.8%;
 
@@ -73,6 +75,8 @@ input[type='number'] {
         --accent-foreground: 60 9.1% 97.8%;
 
         --complete: 120 30% 40%;
+
+        --warning: 23 84.2% 60.2%;
 
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 20 75% 40%;
