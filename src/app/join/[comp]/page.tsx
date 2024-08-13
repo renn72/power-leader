@@ -59,29 +59,29 @@ const JoinCompPage = ({ params }: { params: { comp: string } }) => {
                 pickedDivisions = [divisions[0].toString()]
             }
             console.log(pickedEvents, pickedDivisions)
-            createFakeUsers({
-                birthDate: birthDate,
-                address: user.address || '',
-                phone: user.phone || '',
-                instagram: user.instagram || '',
-                openlifter: user.openlifter || '',
-                equipment: equipment[Math.floor(Math.random() * equipment.length)] || '',
-                gender: Math.random() > 0.5 ? 'Male' : 'Female',
-                predictedWeight: (60 + Math.floor(Math.random() * 100)).toString(),
-                event: pickedEvents,
-                division: pickedDivisions,
-                squatOpener: '',
-                squarRackHeight: '',
-                benchOpener: '',
-                benchRackHeight: '',
-                deadliftOpener: '',
-                squatPB: '',
-                benchPB: '',
-                deadliftPB: '',
-                compId: competition?.id || 0,
-                notes: '',
-                userId: user.id,
-            })
+            // createFakeUsers({
+            //     birthDate: birthDate,
+            //     address: user.address || '',
+            //     phone: user.phone || '',
+            //     instagram: user.instagram || '',
+            //     openlifter: user.openlifter || '',
+            //     equipment: equipment[Math.floor(Math.random() * equipment.length)] || '',
+            //     gender: Math.random() > 0.5 ? 'Male' : 'Female',
+            //     predictedWeight: (60 + Math.floor(Math.random() * 100)).toString(),
+            //     event: pickedEvents,
+            //     division: pickedDivisions,
+            //     squatOpener: '',
+            //     squarRackHeight: '',
+            //     benchOpener: '',
+            //     benchRackHeight: '',
+            //     deadliftOpener: '',
+            //     squatPB: '',
+            //     benchPB: '',
+            //     deadliftPB: '',
+            //     compId: competition?.id || 0,
+            //     notes: '',
+            //     userId: user.id,
+            // })
         }
 
     }
