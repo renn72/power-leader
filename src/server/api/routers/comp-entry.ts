@@ -183,6 +183,7 @@ export const compEntryRouter = createTRPCRouter({
           gender: input.gender,
           address: input.address,
           phone: input.phone,
+          equipment: input.equipment,
           squatOpener: input.squatOpener,
           benchOpener: input.benchOpener,
           deadliftOpener: input.deadliftOpener,

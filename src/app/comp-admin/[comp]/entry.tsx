@@ -4,8 +4,7 @@ import { getAge } from '~/lib/utils'
 import { cn } from '~/lib/utils'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
-import { CircleCheck, CircleDot, TicketCheck, XIcon } from 'lucide-react'
-import { Badge } from '~/components/ui/badge'
+import { CircleCheck, CircleDot } from 'lucide-react'
 
 import DeleteEntryButton from './delete_entry'
 
@@ -81,7 +80,7 @@ const Entry = ({ entry }: { entry: GetCompetitionEntryById }) => {
   return (
     <div
       className={cn(
-        'grid-cols-12 grid grid-flow-row justify-between rounded-full',
+        'grid grid-flow-row grid-cols-12 justify-between rounded-full',
         'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
       )}
     >
@@ -105,9 +104,13 @@ const Entry = ({ entry }: { entry: GetCompetitionEntryById }) => {
         title='Age'
         info={getAge(entry.birthDate, entry.competition?.date)}
       />
+      <Cell
+        title='Equipment'
+        info={entry?.equipment}
+      />
       <CellArray
         title='Events'
-        className='col-span-4'
+        className='col-span-3'
         info={entry.events?.map((event) => event.event?.name || '')}
       />
       <CellArray
