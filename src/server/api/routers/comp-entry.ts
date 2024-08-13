@@ -157,40 +157,42 @@ export const compEntryRouter = createTRPCRouter({
 
       return true
     }),
-  // create: publicProcedure
-  //   .input(createSchema)
-  //   .mutation(async ({ ctx, input }) => {
-  //     console.log('input', input)
-  //
-  //     const user = await getCurrentUser()
-  //     if (!user) {
-  //       throw new TRPCError({
-  //         code: 'UNAUTHORIZED',
-  //         message: 'You are not authorized to access this resource.',
-  //       })
-  //     }
-  //
-  //     const res = await ctx.db
-  //       .insert(compEntry)
-  //       .values({
-  //         ...input,
-  //         userId: user.id,
-  //       })
-  //       .returning({ id: compEntry.id })
-  //
-  //     const ins = input.division.map((id) =>
-  //       ctx.db.insert(compEntryToDivisions).values({
-  //         compEntryId: res[0]?.id || 0,
-  //         divisionId: Number(id),
-  //       }),
-  //     )
-  //
-  //     if (isTuple(ins)) {
-  //       await ctx.db.batch(ins)
-  //     }
-  //
-  //     return true
-  //   }),
+  create: publicProcedure
+    .input(createSchema)
+    .mutation(async ({ ctx, input }) => {
+      console.log('input', input)
+
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      return true
+
+      // const res = await ctx.db
+      //   .insert(compEntry)
+      //   .values({
+      //     ...input,
+      //     userId: user.id,
+      //   })
+      //   .returning({ id: compEntry.id })
+      //
+      // const ins = input.division.map((id) =>
+      //   ctx.db.insert(compEntryToDivisions).values({
+      //     compEntryId: res[0]?.id || 0,
+      //     divisionId: Number(id),
+      //   }),
+      // )
+      //
+      // if (isTuple(ins)) {
+      //   await ctx.db.batch(ins)
+      // }
+      //
+      // return true
+    }),
   updateAndLock: publicProcedure
     .input(updateAndLockSchema)
     .mutation(async ({ ctx, input }) => {
