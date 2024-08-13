@@ -78,7 +78,7 @@ const WeighInForm = ({
       predictedWeight: entry?.predictedWeight ? entry.predictedWeight : '',
       weight: entry?.weight ? entry.weight : '',
       events: entry?.events
-        ? entry.events.map((event) => event.id.toString())
+        ? entry.events.map((event) => event.event?.id.toString())
         : [],
       division:
         entry?.compEntryToDivisions?.map((division) =>
@@ -115,7 +115,7 @@ const WeighInForm = ({
         predictedWeight: entry?.predictedWeight ? entry.predictedWeight : '',
         weight: entry?.weight ? entry.weight : '',
         events: entry.events
-          ? entry.events.map((event) => event.id.toString())
+          ? entry.events.map((event) => event.event?.id.toString())
           : [],
         division:
           entry?.compEntryToDivisions?.map((division) =>
@@ -140,6 +140,8 @@ const WeighInForm = ({
   }
 
   if (!entry) return <div>Entry not found</div>
+
+  console.log('entry', competition)
 
   return (
     <>

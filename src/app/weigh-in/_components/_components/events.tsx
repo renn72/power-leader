@@ -44,7 +44,7 @@ const Events = ({ competition }: { competition: GetCompetitionByUuid }) => {
                               <ToggleGroupItem
                                 variant='secondary'
                                 className='rounded-md border border-input'
-                                value={item.name}
+                                value={item.id.toString()}
                               >
                                 {item.name}
                               </ToggleGroupItem>
