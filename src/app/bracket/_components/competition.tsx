@@ -8,335 +8,391 @@ import { cn } from '~/lib/utils'
 
 import { Badge } from '~/components/ui/badge'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '~/components/ui/card'
 import { toast } from 'sonner'
 import { Button } from '~/components/ui/button'
 
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Menu } from 'lucide-react'
 
 const Bracket = ({
-    entries,
-    lift,
-    title,
-    bracket,
+  entries,
+  lift,
+  title,
+  bracket,
 }: {
-    entries: GetCompetitionEntryById[]
-    lift: string
-    title: string
-    bracket: number
+  entries: GetCompetitionEntryById[]
+  lift: string
+  title: string
+  bracket: number
 }) => {
-    const ctx = api.useUtils()
-    const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
-        onSettled: () => {
-            ctx.competition.getMyCompetitions.refetch()
-        },
-    })
+  const ctx = api.useUtils()
+  const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
+    onSettled: () => {
+      ctx.competition.getMyCompetitions.refetch()
+    },
+  })
 
-    const commit = () => {
-        if (lift === 'squat') {
-            const ins = entries.map((entry, i) => ({
-                id: entry.id,
-                squatOrder: i,
-                squatBracket: bracket,
-            }))
-            updateOrder(ins)
-        } else if (lift === 'bench') {
-            const ins = entries.map((entry, i) => ({
-                id: entry.id,
-                benchOrder: i,
-                benchBracket: bracket,
-            }))
-            updateOrder(ins)
-        } else if (lift === 'deadlift') {
-            const ins = entries.map((entry, i) => ({
-                id: entry.id,
-                deadliftOrder: i,
-                deadliftBracket: bracket,
-            }))
-            updateOrder(ins)
-        }
+  const lock = () => {
+    if (lift === 'squat') {
+      const ins = entries.map((entry, i) => ({
+        id: entry.id,
+        squatOrder: i,
+        squatBracket: bracket,
+      }))
+      updateOrder(ins)
+    } else if (lift === 'bench') {
+      const ins = entries.map((entry, i) => ({
+        id: entry.id,
+        benchOrder: i,
+        benchBracket: bracket,
+      }))
+      updateOrder(ins)
+    } else if (lift === 'deadlift') {
+      const ins = entries.map((entry, i) => ({
+        id: entry.id,
+        deadliftOrder: i,
+        deadliftBracket: bracket,
+      }))
+      updateOrder(ins)
     }
-    return (
-        <Card>
-            <CardHeader className='mb-4'>
-                <CardTitle className='flex items-center justify-around text-3xl'>
-                    <span className=''>{title}</span>
-                    <Button
-                        onClick={commit}
-                        size='sm'
-                        variant='secondary'
-                    >
-                        Commit
-                    </Button>
-                </CardTitle>
-                <CardDescription></CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className='flex flex-col gap-2'>
-                    {entries.map((entry, i, arr) => {
-                        const opener =
-                            lift === 'squat'
-                                ? entry.squatOpener
-                                : lift === 'bench'
-                                  ? entry.benchOpener
-                                  : entry.deadliftOpener
-                        return (
-                            <div
-                                key={entry.id}
-                                className={cn(
-                                    'grid grid-cols-6 place-items-center gap-2 border border-input',
-                                    'rounded-full p-1 hover:bg-muted',
-                                    entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
-                                    lift === 'squat' &&
-                                        entry.squatOrder !== null &&
-                                        'border-complete',
-                                    lift === 'bench' &&
-                                        entry.benchOrder !== null &&
-                                        'border-complete',
-                                    lift === 'deadlift' &&
-                                        entry.deadliftOrder !== null &&
-                                        'border-complete',
-                                )}
-                            >
-                                <div className='text-xs text-muted-foreground'>
-                                    {i + 1}
-                                </div>
-                                <Badge className='flex w-16 items-center justify-center'>
-                                    {entry.wc?.split('-')[0]}kg
-                                </Badge>
-                                <div className='col-span-2'>
-                                    {entry.user?.name}
-                                </div>
-                                <div className='col-span-2'>{opener}kg</div>
-                            </div>
-                        )
-                    })}
+  }
+  const unlock = () => {
+    if (lift === 'squat') {
+      const ins = entries.map((entry, i) => ({
+        id: entry.id,
+        squatOrder: null,
+        squatBracket: null,
+      }))
+      updateOrder(ins)
+    } else if (lift === 'bench') {
+      const ins = entries.map((entry, i) => ({
+        id: entry.id,
+        benchOrder: null,
+        benchBracket: null,
+      }))
+      updateOrder(ins)
+    } else if (lift === 'deadlift') {
+      const ins = entries.map((entry, i) => ({
+        id: entry.id,
+        deadliftOrder: null,
+        deadliftBracket: null,
+      }))
+      updateOrder(ins)
+    }
+  }
+
+  const isLocked = entries.reduce((a, c) => {
+    if (lift === 'squat' && c.squatOrder !== null) {
+      return true
+    }
+    if (lift === 'bench' && c.benchOrder !== null) {
+      return true
+    }
+    if (lift === 'deadlift' && c.deadliftOrder !== null) {
+      return true
+    }
+    return a
+  }, false)
+
+  return (
+    <Card className='relative'>
+      <CardHeader className='mb-4'>
+        <CardTitle className='flex items-center justify-around text-3xl'>
+          <div className=''>{title}</div>
+        </CardTitle>
+        <CardDescription></CardDescription>
+      </CardHeader>
+      <CardContent className='mb-4'>
+        <div className='flex flex-col gap-2'>
+          {entries.map((entry, i, arr) => {
+            const opener =
+              lift === 'squat'
+                ? entry.squatOpener
+                : lift === 'bench'
+                  ? entry.benchOpener
+                  : entry.deadliftOpener
+            return (
+              <div
+                key={entry.id}
+                className={cn(
+                  'grid grid-cols-7 place-items-center gap-2 border border-input',
+                  'rounded-full p-1 hover:bg-muted',
+                  entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
+                  lift === 'squat' &&
+                    entry.squatOrder !== null &&
+                    'border-2 border-complete bg-muted/80',
+                  lift === 'bench' &&
+                    entry.benchOrder !== null &&
+                    'border-2 border-complete bg-muted/80',
+                  lift === 'deadlift' &&
+                    entry.deadliftOrder !== null &&
+                    'border-2 border-complete bg-muted/80',
+                )}
+              >
+                <div className='text-lg font-extrabold text-muted-foreground'>
+                  {i + 1}
                 </div>
-            </CardContent>
-        </Card>
-    )
+                <Badge className='flex w-16 items-center justify-center'>
+                  {entry.wc?.split('-')[0]}kg
+                </Badge>
+                <div className='col-span-2'>{entry.user?.name}</div>
+                <div className='col-span-2'>{opener}kg</div>
+                <div className='col-span-1 cursor-pointer'>
+                  {!isLocked && (
+                    <Menu
+                      size={20}
+                      className='text-muted-foreground/50'
+                    />
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <div className='absolute bottom-2 left-0 flex w-full justify-center gap-2'>
+          {isLocked ? (
+            <Button
+              onClick={unlock}
+              size='sm'
+              variant='secondary'
+            >
+              Unlock
+            </Button>
+          ) : (
+            <Button
+              onClick={lock}
+              size='sm'
+              variant='secondary'
+            >
+              Lock
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
 const UpdateComp = ({
-    title,
-    children,
+  title,
+  children,
 }: {
-    title: string
-    children: React.ReactNode
+  title: string
+  children: React.ReactNode
 }) => {
-    return (
-        <Card className='flex flex-col items-center gap-2'>
-            <CardHeader>
-                <CardTitle className='text-xl'>{title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className='flex items-center gap-2 text-xl font-bold'>
-                    {children}
-                </div>
-            </CardContent>
-        </Card>
-    )
+  return (
+    <Card className='flex flex-col items-center gap-2'>
+      <CardHeader>
+        <CardTitle className='text-xl'>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className='flex items-center gap-2 text-xl font-bold'>
+          {children}
+        </div>
+      </CardContent>
+    </Card>
+  )
 }
 
 const Competition = ({ competition }: { competition: GetCompetitionById }) => {
-    const ctx = api.useUtils()
-    const { mutate: updateDaysOfCompetition } =
-        api.competition.updateDaysOfCompetition.useMutation({
-            onSettled: () => {
-                ctx.competition.getMyCompetitions.refetch()
-                toast('Updated')
-            },
-        })
+  const ctx = api.useUtils()
+  const { mutate: updateDaysOfCompetition } =
+    api.competition.updateDaysOfCompetition.useMutation({
+      onSettled: () => {
+        ctx.competition.getMyCompetitions.refetch()
+        toast('Updated')
+      },
+    })
 
-    const { mutate: updatePlatforms } =
-        api.competition.updatePlatforms.useMutation({
-            onSettled: () => {
-                ctx.competition.getMyCompetitions.refetch()
-                toast('Updated')
-            },
-        })
+  const { mutate: updatePlatforms } =
+    api.competition.updatePlatforms.useMutation({
+      onSettled: () => {
+        ctx.competition.getMyCompetitions.refetch()
+        toast('Updated')
+      },
+    })
 
-    //squat
-    const menSquat = competition.entries
-        .filter((entry) => entry.gender?.toLowerCase() == 'male')
-        .map((e) => {
-            return {
-                ...e,
-                wc: e.wc || '',
-            }
-        })
-        .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
-        .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  //squat
+  const menSquat = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
+    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
 
-    const womenSquat = competition.entries
-        .filter((entry) => entry.gender?.toLowerCase() == 'female')
-        .map((e) => {
-            return {
-                ...e,
-                wc: e.wc || '',
-            }
-        })
-        .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
-        .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  const womenSquat = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
+    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
 
-    //bench
-    const menBench = competition.entries
-        .filter((entry) => entry.gender?.toLowerCase() == 'male')
-        .map((e) => {
-            return {
-                ...e,
-                wc: e.wc || '',
-            }
-        })
-        .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
-        .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  //bench
+  const menBench = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
+    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
 
-    const womenBench = competition.entries
-        .filter((entry) => entry.gender?.toLowerCase() == 'female')
-        .map((e) => {
-            return {
-                ...e,
-                wc: e.wc || '',
-            }
-        })
-        .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
-        .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  const womenBench = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
+    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
 
-    //Dead
-    const menDead = competition.entries
-        .filter((entry) => entry.gender?.toLowerCase() == 'male')
-        .map((e) => {
-            return {
-                ...e,
-                wc: e.wc || '',
-            }
-        })
-        .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
-        .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
-    const womenDead = competition.entries
-        .filter((entry) => entry.gender?.toLowerCase() == 'female')
-        .map((e) => {
-            return {
-                ...e,
-                wc: e.wc || '',
-            }
-        })
-        .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
-        .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  //Dead
+  const menDead = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
+    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  const womenDead = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
+    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
 
-    return (
-        <div className=' flex w-full flex-col  items-center gap-8'>
-            <div className='flex w-full max-w-sm items-center justify-between'>
-                <UpdateComp title='Days'>
-                    <ChevronLeft
-                        size={32}
-                        strokeWidth={3}
-                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
-                        onClick={() => {
-                            if (competition?.daysOfCompetition == 1) {
-                                toast('You can not delete the first day')
-                                return
-                            }
-                            updateDaysOfCompetition({
-                                id: competition.id,
-                                daysOfCompetition:
-                                    Number(competition?.daysOfCompetition) - 1,
-                            })
-                        }}
-                    />
-                    <div>{competition.daysOfCompetition}</div>
-                    <ChevronRight
-                        size={32}
-                        strokeWidth={3}
-                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
-                        onClick={() => {
-                            updateDaysOfCompetition({
-                                id: competition.id,
-                                daysOfCompetition:
-                                    Number(competition?.daysOfCompetition) + 1,
-                            })
-                        }}
-                    />
-                </UpdateComp>
-                <UpdateComp title='Platforms'>
-                    <ChevronLeft
-                        size={32}
-                        strokeWidth={3}
-                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
-                        onClick={() => {
-                            if (competition?.platforms == 1) {
-                                toast('You need to have at least one platform')
-                                return
-                            }
-                            updatePlatforms({
-                                id: competition.id,
-                                platforms: Number(competition?.platforms) - 1,
-                            })
-                        }}
-                    />
-                    <div>{competition.platforms}</div>
-                    <ChevronRight
-                        size={32}
-                        strokeWidth={3}
-                        className='cursor-pointer hover:scale-110 hover:text-muted-foreground '
-                        onClick={() => {
-                            updatePlatforms({
-                                id: competition.id,
-                                platforms: Number(competition?.platforms) + 1,
-                            })
-                        }}
-                    />
-                </UpdateComp>
-            </div>
-            <div className='flex w-full justify-center gap-16'>
-                <Bracket
-                    entries={menSquat}
-                    lift='squat'
-                    title={`Men\'s Squat`}
-                    bracket={1}
-                />
-                <Bracket
-                    entries={womenSquat}
-                    lift='squat'
-                    title={`Women\'s Squat`}
-                    bracket={2}
-                />
-            </div>
-            <div className='flex w-full justify-center gap-16'>
-                <Bracket
-                    entries={menBench}
-                    lift='bench'
-                    title={`Men\'s Bench`}
-                    bracket={1}
-                />
-                <Bracket
-                    entries={womenBench}
-                    lift='bench'
-                    title={`Women\'s Bench`}
-                    bracket={2}
-                />
-            </div>
-            <div className='flex w-full justify-center gap-16'>
-                <Bracket
-                    entries={menDead}
-                    lift='deadlift'
-                    title={`Men\'s Deadlift`}
-                    bracket={1}
-                />
-                <Bracket
-                    entries={womenDead}
-                    lift='deadlift'
-                    title={`Women\'s Deadlift`}
-                    bracket={2}
-                />
-            </div>
-        </div>
-    )
+  console.log(competition)
+
+  return (
+    <div className=' flex w-full flex-col  items-center gap-8'>
+      <div className='flex hidden w-full max-w-sm items-center justify-between'>
+        <UpdateComp title='Days'>
+          <ChevronLeft
+            size={32}
+            strokeWidth={3}
+            className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
+            onClick={() => {
+              if (competition?.daysOfCompetition == 1) {
+                toast('You can not delete the first day')
+                return
+              }
+              updateDaysOfCompetition({
+                id: competition.id,
+                daysOfCompetition: Number(competition?.daysOfCompetition) - 1,
+              })
+            }}
+          />
+          <div>{competition.daysOfCompetition}</div>
+          <ChevronRight
+            size={32}
+            strokeWidth={3}
+            className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
+            onClick={() => {
+              updateDaysOfCompetition({
+                id: competition.id,
+                daysOfCompetition: Number(competition?.daysOfCompetition) + 1,
+              })
+            }}
+          />
+        </UpdateComp>
+        <UpdateComp title='Platforms'>
+          <ChevronLeft
+            size={32}
+            strokeWidth={3}
+            className='cursor-pointer hover:scale-110 hover:text-muted-foreground'
+            onClick={() => {
+              if (competition?.platforms == 1) {
+                toast('You need to have at least one platform')
+                return
+              }
+              updatePlatforms({
+                id: competition.id,
+                platforms: Number(competition?.platforms) - 1,
+              })
+            }}
+          />
+          <div>{competition.platforms}</div>
+          <ChevronRight
+            size={32}
+            strokeWidth={3}
+            className='cursor-pointer hover:scale-110 hover:text-muted-foreground '
+            onClick={() => {
+              updatePlatforms({
+                id: competition.id,
+                platforms: Number(competition?.platforms) + 1,
+              })
+            }}
+          />
+        </UpdateComp>
+      </div>
+      <div className='flex w-full justify-center gap-16'>
+        <Bracket
+          entries={menSquat}
+          lift='squat'
+          title={`Men\'s Squat`}
+          bracket={1}
+        />
+        <Bracket
+          entries={womenSquat}
+          lift='squat'
+          title={`Women\'s Squat`}
+          bracket={2}
+        />
+      </div>
+      <div className='flex w-full justify-center gap-16'>
+        <Bracket
+          entries={menBench}
+          lift='bench'
+          title={`Men\'s Bench`}
+          bracket={1}
+        />
+        <Bracket
+          entries={womenBench}
+          lift='bench'
+          title={`Women\'s Bench`}
+          bracket={2}
+        />
+      </div>
+      <div className='flex w-full justify-center gap-16'>
+        <Bracket
+          entries={menDead}
+          lift='deadlift'
+          title={`Men\'s Deadlift`}
+          bracket={1}
+        />
+        <Bracket
+          entries={womenDead}
+          lift='deadlift'
+          title={`Women\'s Deadlift`}
+          bracket={2}
+        />
+      </div>
+    </div>
+  )
 }
 
 export default Competition

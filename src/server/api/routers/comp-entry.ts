@@ -50,7 +50,7 @@ const updateAndLockSchema = z.object({
   predictedWeight: z.string(),
   weight: z.string(),
   wc: z.string().optional(),
-  event: z.string(),
+  event: z.array(z.string()),
   division: z.array(z.string()),
   squatOpener: z.string(),
   squarRackHeight: z.string(),
@@ -67,9 +67,9 @@ const updateAndLockSchema = z.object({
 
 const updateOrderSchema = z.object({
   id: z.number(),
-  squatOrder: z.number().optional(),
-  benchOrder: z.number().optional(),
-  deadliftOrder: z.number().optional(),
+  squatOrder: z.number().optional().nullable(),
+  benchOrder: z.number().optional().nullable(),
+  deadliftOrder: z.number().optional().nullable(),
   squatBracket: z.number().optional(),
   benchBracket: z.number().optional(),
   deadliftBracket: z.number().optional(),
@@ -78,12 +78,12 @@ const updateOrderSchema = z.object({
 const updateOrderBulkSchema = z.array(
   z.object({
     id: z.number(),
-    squatOrder: z.number().optional(),
-    benchOrder: z.number().optional(),
-    deadliftOrder: z.number().optional(),
-    squatBracket: z.number().optional(),
-    benchBracket: z.number().optional(),
-    deadliftBracket: z.number().optional(),
+    squatOrder: z.number().optional().nullable(),
+    benchOrder: z.number().optional().nullable(),
+    deadliftOrder: z.number().optional().nullable(),
+    squatBracket: z.number().optional().nullable(),
+    benchBracket: z.number().optional().nullable(),
+    deadliftBracket: z.number().optional().nullable(),
   }),
 )
 
