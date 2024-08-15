@@ -99,13 +99,13 @@ const Bracket = ({
 
   const validEntries = entries.filter((entry) => {
     if (lift === 'squat') {
-      return entry.squatOrderOne !== null
+      return entry.squatOpener !== ''
     }
     if (lift === 'bench') {
-      return entry.benchOrderOne !== null
+      return entry.benchOpener !== ''
     }
     if (lift === 'deadlift') {
-      return entry.deadliftOrderOne !== null
+      return entry.deadliftOpener !== ''
     }
   })
 
@@ -119,7 +119,7 @@ const Bracket = ({
       </CardHeader>
       <CardContent className='mb-4'>
         <div className='flex flex-col gap-2'>
-          {entries.map((entry, i, arr) => {
+          {validEntries.map((entry, i, arr) => {
             const opener =
               lift === 'squat'
                 ? entry.squatOpener
