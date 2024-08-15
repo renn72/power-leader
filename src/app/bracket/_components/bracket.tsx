@@ -97,6 +97,18 @@ const Bracket = ({
     return a
   }, false)
 
+  const validEntries = entries.filter((entry) => {
+    if (lift === 'squat') {
+      return entry.squatOrderOne !== null
+    }
+    if (lift === 'bench') {
+      return entry.benchOrderOne !== null
+    }
+    if (lift === 'deadlift') {
+      return entry.deadliftOrderOne !== null
+    }
+  })
+
   return (
     <Card className='relative'>
       <CardHeader className='mb-4'>
