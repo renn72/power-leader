@@ -287,27 +287,91 @@ export const compEntryRouter = createTRPCRouter({
         .delete(lift)
         .where(and(eq(lift.compEntryId, input.id), eq(lift.liftNumber, 1)))
 
-      await ctx.db.insert(lift).values({
-        compEntryId: input.id,
-        liftNumber: 1,
-        state: 'created',
-        lift: 'squat',
-        weight: input.squatOpener,
-      })
-      await ctx.db.insert(lift).values({
-        compEntryId: input.id,
-        liftNumber: 1,
-        state: 'created',
-        lift: 'bench',
-        weight: input.benchOpener,
-      })
-      await ctx.db.insert(lift).values({
-        compEntryId: input.id,
-        liftNumber: 1,
-        state: 'created',
-        lift: 'deadlift',
-        weight: input.deadliftOpener,
-      })
+      // build batch inserts and check if doing lift
+
+      const squat = [
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 1,
+          state: 'created',
+          lift: 'squat',
+          weight: input.squatOpener,
+        }),
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 2,
+          state: 'created',
+          lift: 'squat',
+          weight: '',
+        }),
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 3,
+          state: 'created',
+          lift: 'squat',
+          weight: '',
+        }),
+      ]
+
+      const bench = [
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 1,
+          state: 'created',
+          lift: 'bench',
+          weight: input.benchOpener,
+        }),
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 2,
+          state: 'created',
+          lift: 'bench',
+          weight: '',
+        }),
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 3,
+          state: 'created',
+          lift: 'bench',
+          weight: '',
+        }),
+      ]
+
+      const deadlift = [
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 1,
+          state: 'created',
+          lift: 'deadlift',
+          weight: input.deadliftOpener,
+        }),
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 2,
+          state: 'created',
+          lift: 'deadlift',
+          weight: '',
+        }),
+        ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 3,
+          state: 'created',
+          lift: 'deadlift',
+          weight: '',
+        }),
+      ]
+
+      if (isTuple(squat) && input.squatOpener !== '') {
+        await ctx.db.batch(squat)
+      }
+
+      if (isTuple(bench) && input.benchOpener !== '') {
+        await ctx.db.batch(bench)
+      }
+
+      if (isTuple(deadlift) && input.deadliftOpener !== '') {
+        await ctx.db.batch(deadlift)
+      }
 
       return res
     }),
