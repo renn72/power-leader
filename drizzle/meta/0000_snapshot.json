@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4e963a95-29c8-44d9-91e8-35a78078c02a",
+  "id": "4e20fd2e-86fe-4e28-8a32-56ae9345400c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "pb_bracket_judge": {
@@ -141,6 +141,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "next_index": {
+          "name": "next_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "created_at": {
@@ -342,6 +349,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "is_squat_four": {
+          "name": "is_squat_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "bench_order_id": {
           "name": "bench_order_id",
           "type": "integer",
@@ -349,8 +363,22 @@
           "notNull": false,
           "autoincrement": false
         },
+        "is_bench_four": {
+          "name": "is_bench_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "deadlift_order_id": {
           "name": "deadlift_order_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_deadlift_four": {
+          "name": "is_deadlift_four",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -1350,6 +1378,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "gender": {
+          "name": "gender",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "address": {
           "name": "address",
           "type": "text",
@@ -1380,6 +1415,13 @@
         },
         "phone": {
           "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

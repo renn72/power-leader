@@ -67,9 +67,9 @@ const updateAndLockSchema = z.object({
 
 const updateOrderSchema = z.object({
   id: z.number(),
-  squatOrder: z.number().optional().nullable(),
-  benchOrder: z.number().optional().nullable(),
-  deadliftOrder: z.number().optional().nullable(),
+  squatOrderOne: z.number().optional().nullable(),
+  benchOrderOne: z.number().optional().nullable(),
+  deadliftOrderOne: z.number().optional().nullable(),
   squatBracket: z.number().optional(),
   benchBracket: z.number().optional(),
   deadliftBracket: z.number().optional(),
@@ -78,9 +78,10 @@ const updateOrderSchema = z.object({
 const updateOrderBulkSchema = z.array(
   z.object({
     id: z.number(),
-    squatOrder: z.number().optional().nullable(),
-    benchOrder: z.number().optional().nullable(),
-    deadliftOrder: z.number().optional().nullable(),
+    squatOrderOne: z.number().optional().nullable(),
+    squatOrderTwo: z.number().optional().nullable(),
+    benchOrderOne: z.number().optional().nullable(),
+    deadliftOrderOne: z.number().optional().nullable(),
     squatBracket: z.number().optional().nullable(),
     benchBracket: z.number().optional().nullable(),
     deadliftBracket: z.number().optional().nullable(),

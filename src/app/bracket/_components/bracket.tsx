@@ -39,21 +39,21 @@ const Bracket = ({
     if (lift === 'squat') {
       const ins = entries.map((entry, i) => ({
         id: entry.id,
-        squatOrder: i,
+        squatOrderOne: i,
         squatBracket: bracket,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
       const ins = entries.map((entry, i) => ({
         id: entry.id,
-        benchOrder: i,
+        benchOrderOne: i,
         benchBracket: bracket,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {
       const ins = entries.map((entry, i) => ({
         id: entry.id,
-        deadliftOrder: i,
+        deadliftOrderOne: i,
         deadliftBracket: bracket,
       }))
       updateOrder(ins)
@@ -63,21 +63,21 @@ const Bracket = ({
     if (lift === 'squat') {
       const ins = entries.map((entry, i) => ({
         id: entry.id,
-        squatOrder: null,
+        squatOrderOne: null,
         squatBracket: null,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
       const ins = entries.map((entry, i) => ({
         id: entry.id,
-        benchOrder: null,
+        benchOrderOne: null,
         benchBracket: null,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {
       const ins = entries.map((entry, i) => ({
         id: entry.id,
-        deadliftOrder: null,
+        deadliftOrderOne: null,
         deadliftBracket: null,
       }))
       updateOrder(ins)
@@ -85,13 +85,13 @@ const Bracket = ({
   }
 
   const isLocked = entries.reduce((a, c) => {
-    if (lift === 'squat' && c.squatOrder !== null) {
+    if (lift === 'squat' && c.squatOrderOne !== null) {
       return true
     }
-    if (lift === 'bench' && c.benchOrder !== null) {
+    if (lift === 'bench' && c.benchOrderOne !== null) {
       return true
     }
-    if (lift === 'deadlift' && c.deadliftOrder !== null) {
+    if (lift === 'deadlift' && c.deadliftOrderOne !== null) {
       return true
     }
     return a
@@ -122,13 +122,13 @@ const Bracket = ({
                   'rounded-full p-1 hover:bg-muted',
                   entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
                   lift === 'squat' &&
-                    entry.squatOrder !== null &&
+                    entry.squatOrderOne !== null &&
                     'border-2 border-complete bg-muted/80',
                   lift === 'bench' &&
-                    entry.benchOrder !== null &&
+                    entry.benchOrderOne !== null &&
                     'border-2 border-complete bg-muted/80',
                   lift === 'deadlift' &&
-                    entry.deadliftOrder !== null &&
+                    entry.deadliftOrderOne !== null &&
                     'border-2 border-complete bg-muted/80',
                 )}
               >

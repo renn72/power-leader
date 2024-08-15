@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "3ff2b592-a716-4ec0-a31f-5709c8a6092c",
-  "prevId": "4e963a95-29c8-44d9-91e8-35a78078c02a",
+  "id": "679466ce-c341-40b6-ab94-1411477f05dc",
+  "prevId": "4e20fd2e-86fe-4e28-8a32-56ae9345400c",
   "tables": {
     "pb_bracket_judge": {
       "name": "pb_bracket_judge",
@@ -342,22 +342,106 @@
           "notNull": false,
           "autoincrement": false
         },
-        "squat_order_id": {
-          "name": "squat_order_id",
+        "squat_order_one": {
+          "name": "squat_order_one",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "bench_order_id": {
-          "name": "bench_order_id",
+        "squat_order_two": {
+          "name": "squat_order_two",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "deadlift_order_id": {
-          "name": "deadlift_order_id",
+        "squat_order_three": {
+          "name": "squat_order_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_order_four": {
+          "name": "squat_order_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_squat_four": {
+          "name": "is_squat_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_one": {
+          "name": "bench_order_one",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_two": {
+          "name": "bench_order_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_three": {
+          "name": "bench_order_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_four": {
+          "name": "bench_order_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_bench_four": {
+          "name": "is_bench_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_one": {
+          "name": "deadlift_order_one",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_two": {
+          "name": "deadlift_order_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_three": {
+          "name": "deadlift_order_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_four": {
+          "name": "deadlift_order_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_deadlift_four": {
+          "name": "is_deadlift_four",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -1357,6 +1441,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "gender": {
+          "name": "gender",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "address": {
           "name": "address",
           "type": "text",
@@ -1387,6 +1478,13 @@
         },
         "phone": {
           "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
