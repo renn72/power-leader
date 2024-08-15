@@ -137,8 +137,9 @@ const Entry = ({
       <div
         onClick={() => setEntryId(entry.id)}
         className={cn(
-          'grid-cols-15 grid cursor-pointer grid-flow-row justify-between rounded-full',
+          'grid-cols-17 grid cursor-pointer grid-flow-row justify-between rounded-full',
           'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
+          entry.isLocked && 'border-4 bg-muted/50',
         )}
       >
         {entry.isLocked && (
@@ -211,7 +212,7 @@ const Entry = ({
         )}
         <CellArray
           title='Events'
-          className='col-span-2'
+          className='col-span-4 tracking-tighter'
           info={entry.events?.map((event) => event.event?.name || '')}
         />
         <CellArray
