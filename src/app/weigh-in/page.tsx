@@ -87,7 +87,7 @@ const WeighIn = () => {
             ))}
           </div>
         )}
-        <SheetContent className='w-[400px] overflow-y-auto sm:w-[640px] sm:max-w-lg'>
+        <SheetContent className='w-[400px] overflow-y-auto sm:w-[940px] sm:max-w-3xl'>
           <SheetHeader>
             <SheetTitle>Weigh In</SheetTitle>
           </SheetHeader>
