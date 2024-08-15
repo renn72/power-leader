@@ -131,6 +131,7 @@ const Entry = ({
     if (c.event?.isDeadlift) return true
     return a
   }, false)
+
   return (
     <SheetTrigger asChild>
       <div

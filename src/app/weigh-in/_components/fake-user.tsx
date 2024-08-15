@@ -27,6 +27,22 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
       .map((item) => Number(item))
 
     for (const entry of competition.entries) {
+      const isSquat =
+        entry?.events.reduce((a, c) => {
+          if (c.event?.isSquat) return true
+          return a
+        }, false) || false
+      const isBench =
+        entry?.events.reduce((a, c) => {
+          if (c.event?.isBench) return true
+          return a
+        }, false) || false
+      const isDeadlift =
+        entry?.events.reduce((a, c) => {
+          if (c.event?.isDeadlift) return true
+          return a
+        }, false) || false
+
       const squatOpener = roundPL(50 + Math.floor(Math.random() * 120))
       const benchOpener = roundPL(50 + Math.floor(Math.random() * 120))
       const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 120))
@@ -68,19 +84,22 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
           entry?.compEntryToDivisions?.map(
             (division) => division.division?.id.toString() || '',
           ) || [],
-        squatOpener: squatOpener.toString(),
+        squatOpener: isSquat ? squatOpener.toString() : '',
         squarRackHeight:
-          Math.ceil(Math.random() * 15).toString() +
-          (Math.random() > 0.5 ? 'in' : 'out'),
-        benchOpener: benchOpener.toString(),
-        benchRackHeight:
-          Math.ceil(Math.random() * 10).toString() +
-          '/' +
-          Math.ceil(Math.random() * 5).toString(),
-        deadliftOpener: deadliftOpener.toString(),
-        squatPB: (squatOpener + 25).toString(),
-        benchPB: (benchOpener + 25).toString(),
-        deadliftPB: (deadliftOpener + 25).toString(),
+          isSquat
+            ? Math.ceil(Math.random() * 15).toString() +
+              (Math.random() > 0.5 ? 'in' : 'out')
+            : '',
+        benchOpener: isBench ? benchOpener.toString() : '',
+        benchRackHeight: isBench
+          ? Math.ceil(Math.random() * 10).toString() +
+            '/' +
+            Math.ceil(Math.random() * 5).toString()
+          : '',
+        deadliftOpener: isDeadlift ? deadliftOpener.toString() : '',
+        squatPB: isSquat ? (squatOpener + 25).toString() : '',
+        benchPB: isBench ? (benchOpener + 25).toString() : '',
+        deadliftPB: isDeadlift ? (deadliftOpener + 25).toString() : '',
         compId: competition?.id || 0,
         userId: entry.userId || 0,
         notes: entry?.notes || '',

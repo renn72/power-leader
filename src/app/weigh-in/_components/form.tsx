@@ -60,6 +60,19 @@ const WeighInForm = ({
 
   const [isEditPersonal, setIsEditPersonal] = useState(true)
 
+  const isSquat = entry?.events.reduce((a, c) => {
+    if (c.event?.isSquat) return true
+    return a
+  }, false) || false
+  const isBench = entry?.events.reduce((a, c) => {
+    if (c.event?.isBench) return true
+    return a
+  }, false) || false
+  const isDeadlift = entry?.events.reduce((a, c) => {
+    if (c.event?.isDeadlift) return true
+    return a
+  }, false) || false
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -153,7 +166,7 @@ const WeighInForm = ({
               <Events competition={competition} />
               <Divisions competition={competition} />
               <WeighIn />
-              <LiftInfo />
+              <LiftInfo isSquat={isSquat} isBench={isBench} isDeadlift={isDeadlift} />
               <Notes />
               <Button
                 className='mt-4 w-min min-w-[170px]'
