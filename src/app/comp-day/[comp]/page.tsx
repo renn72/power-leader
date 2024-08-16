@@ -33,15 +33,15 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table-scroll'
-import { Check, Circle, CircleCheckBig, User, UserCheck, X } from 'lucide-react'
+import { Check, User, UserCheck, X } from 'lucide-react'
 
 const Competition = ({
-  competitionId,
-  competitonUuid,
+  params,
 }: {
-    competitionId: number
-    competitonUuid: string
+    params: { comp: string }
   }) => {
+  const { comp } = params
+  const competitonUuid = comp
   const [lift, setLift] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState('')
@@ -50,7 +50,7 @@ const Competition = ({
   const ctx = api.useUtils()
 
   const { data: competition, isLoading: competitionLoading } =
-  api.competition.get.useQuery(competitionId)
+  api.competition.getCompetitionByUuid.useQuery(comp)
 
   const { mutate: startCompetition } =
   api.competition.startCompetition.useMutation({
@@ -104,7 +104,7 @@ const Competition = ({
           return
         }
         console.log('data', data)
-        ctx.competition.get.setData(competitionId, {
+        ctx.competition.get.setData(competition.id, {
           ...competition,
           entries: competition.entries.map((entry) => {
             return {
@@ -482,7 +482,7 @@ const Competition = ({
                 type='single'
                 size='lg'
                 variant='outline'
-                defaultValue={competition.compDayInfo.bracket.toString()}
+                defaultValue={competition.compDayInfo.bracket.toString() || '1'}
                 onValueChange={(value) => {
                   setBracket(value)
                   updateLift({
@@ -504,7 +504,6 @@ const Competition = ({
               <ScrollArea className='h-[700px]'>
                 <Table className='text-lg'>
                   <TableCaption>
-                  A list of your recent invoices.
                 </TableCaption>
                   <TableHeader>
                     <TableRow>

@@ -239,7 +239,7 @@ export const competitionRouter = createTRPCRouter({
         compId: resComp[0]?.id || 0,
         day: 0,
         lift: 'squat',
-        bracket: 0,
+        bracket: 1,
         index: 0,
       })
     }),
