@@ -170,21 +170,21 @@ const Competition = ({
     return false
   })
   .sort((a, b) => {
-    if (a.squatOrder == null || b.squatOrder == null) {
+    if (a.squatOrderOne == null || b.squatOrderOne == null) {
       return 0
     }
-    if (a.benchOrder == null || b.benchOrder == null) {
+    if (a.benchOrderOne == null || b.benchOrderOne == null) {
       return 0
     }
-    if (a.deadliftOrder == null || b.deadliftOrder == null) {
+    if (a.deadliftOrderOne == null || b.deadliftOrderOne == null) {
       return 0
     }
     if (lift === 'squat') {
-      return a?.squatOrder - b?.squatOrder
+      return a?.squatOrderOne - b?.squatOrderOne
     } else if (lift === 'bench') {
-      return a.benchOrder - b.benchOrder
+      return a.benchOrderOne - b.benchOrderOne
     } else if (lift === 'deadlift') {
-      return a.deadliftOrder - b.deadliftOrder
+      return a.deadliftOrderOne - b.deadliftOrderOne
     }
     return 0
   })
