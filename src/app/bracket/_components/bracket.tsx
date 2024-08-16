@@ -1,10 +1,11 @@
 'use client'
-
 import { api } from '~/trpc/react'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 
+import { animations } from '@formkit/drag-and-drop'
+import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 import { Badge } from '~/components/ui/badge'
 import {
   Card,
@@ -15,7 +16,7 @@ import {
 } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 
-import { Menu } from 'lucide-react'
+import { GripVertical, Menu } from 'lucide-react'
 
 const Bracket = ({
   entries,
@@ -34,6 +35,11 @@ const Bracket = ({
       ctx.competition.getMyCompetitions.refetch()
     },
   })
+
+  const [parent, entryList, setEntryList] = useDragAndDrop<
+    HTMLDivElement,
+    GetCompetitionEntryById
+  >(entries, { plugins: [animations()], dragHandle: '.drag-handle' })
 
   const lock = () => {
     if (lift === 'squat') {
@@ -97,17 +103,47 @@ const Bracket = ({
     return a
   }, false)
 
-  const validEntries = entries.filter((entry) => {
-    if (lift === 'squat') {
-      return entry.squatOpener !== ''
-    }
-    if (lift === 'bench') {
-      return entry.benchOpener !== ''
-    }
-    if (lift === 'deadlift') {
-      return entry.deadliftOpener !== ''
-    }
-  })
+  const sortByWC = () => {
+    const sorted = entries
+      .map((e) => {
+        let value = 0
+        if (lift === 'squat') {
+          value = Number(e.squatOpener)
+        } else if (lift === 'bench') {
+          value = Number(e.benchOpener)
+        } else if (lift === 'deadlift') {
+          value = Number(e.deadliftOpener)
+        }
+        return {
+          ...e,
+          lift: value,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => a.lift - b.lift)
+      .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+    setEntryList(sorted)
+  }
+  const sortByWeight = () => {
+    const sorted = entries
+      .map((e) => {
+        let value = 0
+        if (lift === 'squat') {
+          value = Number(e.squatOpener)
+        } else if (lift === 'bench') {
+          value = Number(e.benchOpener)
+        } else if (lift === 'deadlift') {
+          value = Number(e.deadliftOpener)
+        }
+        return {
+          ...e,
+          lift: value,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => a.lift - b.lift)
+    setEntryList(sorted)
+  }
 
   return (
     <Card className='relative'>
@@ -115,11 +151,30 @@ const Bracket = ({
         <CardTitle className='flex items-center justify-around text-3xl'>
           <div className=''>{title}</div>
         </CardTitle>
-        <CardDescription></CardDescription>
+        <CardDescription className='flex items-center gap-2'>
+          <span className='text-base font-bold text-muted-foreground'>
+            Sort By
+          </span>
+          <Button
+            variant='link'
+            onClick={sortByWC}
+          >
+            WC
+          </Button>
+          <Button
+            variant='link'
+            onClick={sortByWeight}
+          >
+            Weight
+          </Button>
+        </CardDescription>
       </CardHeader>
       <CardContent className='mb-4'>
-        <div className='flex flex-col gap-2'>
-          {validEntries.map((entry, i, arr) => {
+        <div
+          ref={parent}
+          className='flex flex-col'
+        >
+          {entryList.map((entry, i) => {
             const opener =
               lift === 'squat'
                 ? entry.squatOpener
@@ -129,10 +184,10 @@ const Bracket = ({
             return (
               <div
                 key={entry.id}
+                data-label={entry.id}
                 className={cn(
-                  'grid grid-cols-7 place-items-center gap-2 border border-input',
+                  'my-1 grid grid-cols-7 place-items-center gap-2 border border-input',
                   'rounded-full p-1 hover:bg-muted',
-                  entry.wc !== arr[i + 1]?.wc ? 'mb-4' : '',
                   lift === 'squat' &&
                     entry.squatOrderOne !== null &&
                     'border-2 border-complete bg-muted/80',
@@ -152,9 +207,9 @@ const Bracket = ({
                 </Badge>
                 <div className='col-span-2'>{entry.user?.name}</div>
                 <div className='col-span-2'>{opener}kg</div>
-                <div className='col-span-1 cursor-pointer'>
+                <div className='drag-handle col-span-1 cursor-move'>
                   {!isLocked && (
-                    <Menu
+                    <GripVertical
                       size={20}
                       className='text-muted-foreground/50'
                     />

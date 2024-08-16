@@ -1,78 +1,84 @@
 'use client'
+import { useState } from 'react'
 
-import type { GetCompetitionById, } from '~/lib/types'
+import type { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
 
 import Bracket from './bracket'
 
 const Competition = ({ competition }: { competition: GetCompetitionById }) => {
+  const [menSquat, setMenSquat] = useState<GetCompetitionEntryById[]>(() =>
+    competition.entries
+      .filter((entry) => entry.gender?.toLowerCase() == 'male')
+      .filter((entry) => entry.squatOpener !== '')
+      .map((e) => {
+        return {
+          ...e,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
+  )
+  const [womenSquat, setWomenSquat] = useState<GetCompetitionEntryById[]>(() =>
+    competition.entries
+      .filter((entry) => entry.gender?.toLowerCase() == 'female')
+      .filter((entry) => entry.squatOpener !== '')
+      .map((e) => {
+        return {
+          ...e,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
+  )
 
-  //squat
-  const menSquat = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'male')
-    .map((e) => {
-      return {
-        ...e,
-        wc: e.wc || '',
-      }
-    })
-    .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
-    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
-
-  const womenSquat = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'female')
-    .map((e) => {
-      return {
-        ...e,
-        wc: e.wc || '',
-      }
-    })
-    .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
-    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
-
-  //bench
-  const menBench = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'male')
-    .map((e) => {
-      return {
-        ...e,
-        wc: e.wc || '',
-      }
-    })
-    .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
-    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
-
-  const womenBench = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'female')
-    .map((e) => {
-      return {
-        ...e,
-        wc: e.wc || '',
-      }
-    })
-    .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
-    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
-
-  //Dead
-  const menDead = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'male')
-    .map((e) => {
-      return {
-        ...e,
-        wc: e.wc || '',
-      }
-    })
-    .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
-    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
-  const womenDead = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'female')
-    .map((e) => {
-      return {
-        ...e,
-        wc: e.wc || '',
-      }
-    })
-    .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
-    .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+  const [menBench, setMenBench] = useState<GetCompetitionEntryById[]>(() =>
+    competition.entries
+      .filter((entry) => entry.gender?.toLowerCase() == 'male')
+      .filter((entry) => entry.benchOpener !== '')
+      .map((e) => {
+        return {
+          ...e,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
+  )
+  const [womenBench, setWomenBench] = useState<GetCompetitionEntryById[]>(() =>
+    competition.entries
+      .filter((entry) => entry.gender?.toLowerCase() == 'female')
+      .filter((entry) => entry.benchOpener !== '')
+      .map((e) => {
+        return {
+          ...e,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
+  )
+  const [menDead, setMenDead] = useState<GetCompetitionEntryById[]>(() =>
+    competition.entries
+      .filter((entry) => entry.gender?.toLowerCase() == 'male')
+      .filter((entry) => entry.deadliftOpener !== '')
+      .map((e) => {
+        return {
+          ...e,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
+  )
+  const [womenDead, setWomenDead] = useState<GetCompetitionEntryById[]>(() =>
+    competition.entries
+      .filter((entry) => entry.gender?.toLowerCase() == 'female')
+      .filter((entry) => entry.deadliftOpener !== '')
+      .map((e) => {
+        return {
+          ...e,
+          wc: e.wc || '',
+        }
+      })
+      .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
+  )
 
   console.log(competition)
 
