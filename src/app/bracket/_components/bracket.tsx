@@ -1,5 +1,6 @@
 'use client'
 import { api } from '~/trpc/react'
+import { useEffect } from 'react'
 
 import type { GetCompetitionEntryById } from '~/lib/types'
 import { cn } from '~/lib/utils'
@@ -16,7 +17,7 @@ import {
 } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 
-import { GripVertical, Menu } from 'lucide-react'
+import { GripVertical, } from 'lucide-react'
 
 const Bracket = ({
   entries,
@@ -41,23 +42,29 @@ const Bracket = ({
     GetCompetitionEntryById
   >(entries, { plugins: [animations()], dragHandle: '.drag-handle' })
 
+  useEffect(() => {
+    setEntryList(entries)
+  }, [entries])
+
   const lock = () => {
+    console.log(entryList.map((entry, i) => {return {lift: entry.squatOpener, index: i}}))
+    // return
     if (lift === 'squat') {
-      const ins = entries.map((entry, i) => ({
+      const ins = entryList.map((entry, i) => ({
         id: entry.id,
         squatOrderOne: i,
         squatBracket: bracket,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
-      const ins = entries.map((entry, i) => ({
+      const ins = entryList.map((entry, i) => ({
         id: entry.id,
         benchOrderOne: i,
         benchBracket: bracket,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {
-      const ins = entries.map((entry, i) => ({
+      const ins = entryList.map((entry, i) => ({
         id: entry.id,
         deadliftOrderOne: i,
         deadliftBracket: bracket,
@@ -67,21 +74,21 @@ const Bracket = ({
   }
   const unlock = () => {
     if (lift === 'squat') {
-      const ins = entries.map((entry, i) => ({
+      const ins = entryList.map((entry, i) => ({
         id: entry.id,
         squatOrderOne: null,
         squatBracket: null,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
-      const ins = entries.map((entry, i) => ({
+      const ins = entryList.map((entry, i) => ({
         id: entry.id,
         benchOrderOne: null,
         benchBracket: null,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {
-      const ins = entries.map((entry, i) => ({
+      const ins = entryList.map((entry, i) => ({
         id: entry.id,
         deadliftOrderOne: null,
         deadliftBracket: null,
@@ -151,28 +158,32 @@ const Bracket = ({
         <CardTitle className='flex items-center justify-around text-3xl'>
           <div className=''>{title}</div>
         </CardTitle>
-        <CardDescription className='flex items-center gap-2'>
-          <span className='text-base font-bold text-muted-foreground'>
-            Sort By
-          </span>
-          <Button
-            variant='link'
-            onClick={sortByWC}
-          >
-            WC
-          </Button>
-          <Button
-            variant='link'
-            onClick={sortByWeight}
-          >
-            Weight
-          </Button>
+        <CardDescription className=''>
+          {!isLocked && (
+            <div className='flex items-center gap-2'>
+              <span className='text-base font-bold text-muted-foreground'>
+                Sort By
+              </span>
+              <Button
+                variant='link'
+                onClick={sortByWC}
+              >
+                WC
+              </Button>
+              <Button
+                variant='link'
+                onClick={sortByWeight}
+              >
+                Weight
+              </Button>
+            </div>
+          )}
         </CardDescription>
       </CardHeader>
-      <CardContent className='mb-4'>
+      <CardContent className='mb-12'>
         <div
           ref={parent}
-          className='flex flex-col'
+          className='flex flex-col gap-1'
         >
           {entryList.map((entry, i) => {
             const opener =
@@ -186,20 +197,21 @@ const Bracket = ({
                 key={entry.id}
                 data-label={entry.id}
                 className={cn(
-                  'my-1 grid grid-cols-7 place-items-center gap-2 border border-input',
-                  'rounded-full p-1 hover:bg-muted',
+                  'grid grid-cols-7 place-items-center gap-2 border border-input text-base tracking-wide',
+                  'rounded-full p-[2px] ',
+                  isLocked ? '' : 'hover:bg-muted',
                   lift === 'squat' &&
                     entry.squatOrderOne !== null &&
-                    'border-2 border-complete bg-muted/80',
+                    'border-0 border-complete bg-muted/80',
                   lift === 'bench' &&
                     entry.benchOrderOne !== null &&
-                    'border-2 border-complete bg-muted/80',
+                    'border-0 border-complete bg-muted/80',
                   lift === 'deadlift' &&
                     entry.deadliftOrderOne !== null &&
-                    'border-2 border-complete bg-muted/80',
+                    'border-0 border-complete bg-muted/80',
                 )}
               >
-                <div className='text-lg font-extrabold text-muted-foreground'>
+                <div className='font-extrabold tracking-wider text-muted-foreground'>
                   {i + 1}
                 </div>
                 <Badge className='flex w-16 items-center justify-center'>
@@ -223,7 +235,7 @@ const Bracket = ({
           {isLocked ? (
             <Button
               onClick={unlock}
-              size='sm'
+              size='lg'
               variant='secondary'
             >
               Unlock
@@ -231,7 +243,7 @@ const Bracket = ({
           ) : (
             <Button
               onClick={lock}
-              size='sm'
+              size='lg'
               variant='secondary'
             >
               Lock

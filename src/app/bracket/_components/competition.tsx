@@ -6,81 +6,103 @@ import type { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
 import Bracket from './bracket'
 
 const Competition = ({ competition }: { competition: GetCompetitionById }) => {
-  const [menSquat, setMenSquat] = useState<GetCompetitionEntryById[]>(() =>
-    competition.entries
-      .filter((entry) => entry.gender?.toLowerCase() == 'male')
-      .filter((entry) => entry.squatOpener !== '')
-      .map((e) => {
-        return {
-          ...e,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
-  )
-  const [womenSquat, setWomenSquat] = useState<GetCompetitionEntryById[]>(() =>
-    competition.entries
-      .filter((entry) => entry.gender?.toLowerCase() == 'female')
-      .filter((entry) => entry.squatOpener !== '')
-      .map((e) => {
-        return {
-          ...e,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => Number(a.squatOpener) - Number(b.squatOpener))
-  )
+  const menSquat = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .filter((entry) => entry.squatOpener !== '')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => {
+      if (a.squatOrderOne !== null && b.squatOrderOne !== null) {
+        return Number(a.squatOrderOne) - Number(b.squatOrderOne)
+      }
+      return Number(a.squatOpener) - Number(b.squatOpener)
+    })
 
-  const [menBench, setMenBench] = useState<GetCompetitionEntryById[]>(() =>
-    competition.entries
-      .filter((entry) => entry.gender?.toLowerCase() == 'male')
-      .filter((entry) => entry.benchOpener !== '')
-      .map((e) => {
-        return {
-          ...e,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
-  )
-  const [womenBench, setWomenBench] = useState<GetCompetitionEntryById[]>(() =>
-    competition.entries
-      .filter((entry) => entry.gender?.toLowerCase() == 'female')
-      .filter((entry) => entry.benchOpener !== '')
-      .map((e) => {
-        return {
-          ...e,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => Number(a.benchOpener) - Number(b.benchOpener))
-  )
-  const [menDead, setMenDead] = useState<GetCompetitionEntryById[]>(() =>
-    competition.entries
-      .filter((entry) => entry.gender?.toLowerCase() == 'male')
-      .filter((entry) => entry.deadliftOpener !== '')
-      .map((e) => {
-        return {
-          ...e,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
-  )
-  const [womenDead, setWomenDead] = useState<GetCompetitionEntryById[]>(() =>
-    competition.entries
-      .filter((entry) => entry.gender?.toLowerCase() == 'female')
-      .filter((entry) => entry.deadliftOpener !== '')
-      .map((e) => {
-        return {
-          ...e,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => Number(a.deadliftOpener) - Number(b.deadliftOpener))
-  )
+  const womenSquat = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .filter((entry) => entry.squatOpener !== '')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => {
+      if (a.squatOrderOne !== null && b.squatOrderOne !== null) {
+        return Number(a.squatOrderOne) - Number(b.squatOrderOne)
+      }
+      return Number(a.squatOpener) - Number(b.squatOpener)
+    })
 
-  console.log(competition)
+  const menBench = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .filter((entry) => entry.benchOpener !== '')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => {
+      if (a.benchOrderOne !== null && b.benchOrderOne !== null) {
+        return Number(a.benchOrderOne) - Number(b.benchOrderOne)
+      }
+      return Number(a.benchOpener) - Number(b.benchOpener)
+    })
+
+  const womenBench = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .filter((entry) => entry.benchOpener !== '')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => {
+      if (a.benchOrderOne !== null && b.benchOrderOne !== null) {
+        return Number(a.benchOrderOne) - Number(b.benchOrderOne)
+      }
+      return Number(a.benchOpener) - Number(b.benchOpener)
+    })
+
+  const menDead = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .filter((entry) => entry.deadliftOpener !== '')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => {
+      if (a.deadliftOrderOne !== null && b.deadliftOrderOne !== null) {
+        return Number(a.deadliftOrderOne) - Number(b.deadliftOrderOne)
+      }
+      return Number(a.deadliftOpener) - Number(b.deadliftOpener)
+    })
+
+  const womenDead = competition.entries
+    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .filter((entry) => entry.deadliftOpener !== '')
+    .map((e) => {
+      return {
+        ...e,
+        wc: e.wc || '',
+      }
+    })
+    .sort((a, b) => {
+      if (a.deadliftOrderOne !== null && b.deadliftOrderOne !== null) {
+        return Number(a.deadliftOrderOne) - Number(b.deadliftOrderOne)
+      }
+      return Number(a.deadliftOpener) - Number(b.deadliftOpener)
+    })
+
+  console.log(menSquat)
 
   return (
     <div className=' flex w-full flex-col  items-center gap-8'>
