@@ -510,4 +510,24 @@ export const compEntryRouter = createTRPCRouter({
     }
     return res
   }),
+  updateField: publicProcedure
+    .input(z.object({ id: z.number(), field: z.string(), value: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          [input.field]: input.value,
+        })
+        .where(eq(compEntry.id, input.id))
+
+      return res
+    }),
 })

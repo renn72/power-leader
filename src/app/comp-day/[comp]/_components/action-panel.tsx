@@ -85,6 +85,7 @@ const ActionPanel = ({
           <ToggleGroupItem value='1'>1</ToggleGroupItem>
           <ToggleGroupItem value='2'>2</ToggleGroupItem>
           <ToggleGroupItem value='3'>3</ToggleGroupItem>
+          <ToggleGroupItem value='4'>4</ToggleGroupItem>
         </ToggleGroup>
       </div>
       <div className='rounded-md border border-input p-2'>

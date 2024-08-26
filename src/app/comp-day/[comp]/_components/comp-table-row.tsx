@@ -2,23 +2,15 @@
 
 export const dynamic = 'force-dynamic'
 
-import { api } from '~/trpc/react'
-
 import { cn } from '~/lib/utils'
 
 import { Button } from '~/components/ui/button'
-import { toast } from 'sonner'
-import { ScrollArea } from '~/components/ui/scroll-area'
 import { Badge } from '~/components/ui/badge'
-import {
-  Table,
-  TableBody,
-  TableCell as Cell,
-  TableRow,
-} from '~/components/ui/table-scroll'
+import { TableCell as Cell, TableRow } from '~/components/ui/table-scroll'
 import { User, UserCheck, X } from 'lucide-react'
 import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import TableCell from './comp-table-cell'
+import SquatRackHeight from './_cells/squat-rack-height'
 
 const CompTableRow = ({
   lifter,
@@ -43,20 +35,24 @@ const CompTableRow = ({
   i: number
   lift: string
 }) => {
+  const isLifter = +index === lifter.id
+  const lifterId = lifter.id
+  const lifterName = lifter?.user?.name
+  const lifterWc = lifter?.wc?.split('-')[0] + 'kg'
+  const lifterSquatRackHeight = lifter?.squarRackHeight || ''
   return (
     <TableRow
       key={lifter.id}
-      className={cn(+index === lifter.id ? 'bg-secondary' : '')}
+      className={cn(isLifter ? 'bg-secondary' : '')}
     >
-      <Cell>{lifter.id}</Cell>
-      <Cell>{lifter?.user?.name}</Cell>
+      <Cell>{lifterId}</Cell>
+      <Cell>{lifterName}</Cell>
       <Cell>
         <Badge className='w-14 items-center justify-center'>
-          {lifter?.wc?.split('-')[0]}
-          kg
+          {lifterWc}
         </Badge>
       </Cell>
-      <TableCell>{lifter?.squarRackHeight}</TableCell>
+        <SquatRackHeight height={lifterSquatRackHeight} entryId={lifterId} />
       <TableCell>
         {lifter?.lift?.find(
           (item) => item.lift === 'squat' && item.liftNumber === 1,
