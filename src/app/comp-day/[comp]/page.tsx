@@ -186,8 +186,8 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   )
 
   // console.log('comp', competition)
-  console.log('lifter', lifter)
-  console.log('currentLift', currentLift)
+  // console.log('lifter', lifter)
+  // console.log('currentLift', currentLift)
   // console.log({ lift, bracket, index, round })
   // console.log('lifters', lifters)
 

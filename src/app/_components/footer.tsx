@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 
 const Footer = () => {
     const pathname = usePathname()
-    if (pathname.includes('comp-day/screen/')) {
+    if (pathname.includes('comp-day/')) {
         return null
     }
 
