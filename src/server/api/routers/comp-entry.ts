@@ -487,6 +487,7 @@ export const compEntryRouter = createTRPCRouter({
     const res = await ctx.db.query.compEntry.findFirst({
       where: (compEntry, { eq }) => eq(compEntry.id, input),
       with: {
+        lift: true,
         competition: true,
         compEntryToDivisions: {
           with: {

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4e20fd2e-86fe-4e28-8a32-56ae9345400c",
+  "id": "e0cedd70-7b07-4f29-806f-fb4107031f26",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "pb_bracket_judge": {
@@ -41,24 +41,24 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "bracket_judge_comp_id_idx": {
+          "name": "bracket_judge_comp_id_idx",
+          "columns": [
+            "comp_id"
+          ],
+          "isUnique": false
+        },
+        "bracket_judge_judge_id_idx": {
+          "name": "bracket_judge_judge_id_idx",
+          "columns": [
+            "judge_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_bracket_judge_comp_id_pb_competition_id_fk": {
           "name": "pb_bracket_judge_comp_id_pb_competition_id_fk",
@@ -150,14 +150,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        },
         "updatedAt": {
           "name": "updatedAt",
           "type": "text",
@@ -166,7 +158,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "comp_day_info_comp_id_idx": {
+          "name": "comp_day_info_comp_id_idx",
+          "columns": [
+            "comp_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_comp_day_info_comp_id_pb_competition_id_fk": {
           "name": "pb_comp_day_info_comp_id_pb_competition_id_fk",
@@ -342,8 +342,92 @@
           "notNull": false,
           "autoincrement": false
         },
-        "squat_order_id": {
-          "name": "squat_order_id",
+        "squat_two": {
+          "name": "squat_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_two": {
+          "name": "bench_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_two": {
+          "name": "deadlift_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_three": {
+          "name": "squat_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_three": {
+          "name": "bench_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_three": {
+          "name": "deadlift_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_four": {
+          "name": "squat_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_four": {
+          "name": "bench_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_four": {
+          "name": "deadlift_four",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_order_one": {
+          "name": "squat_order_one",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_order_two": {
+          "name": "squat_order_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_order_three": {
+          "name": "squat_order_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_order_four": {
+          "name": "squat_order_four",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -356,8 +440,29 @@
           "notNull": false,
           "autoincrement": false
         },
-        "bench_order_id": {
-          "name": "bench_order_id",
+        "bench_order_one": {
+          "name": "bench_order_one",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_two": {
+          "name": "bench_order_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_three": {
+          "name": "bench_order_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_order_four": {
+          "name": "bench_order_four",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -370,8 +475,29 @@
           "notNull": false,
           "autoincrement": false
         },
-        "deadlift_order_id": {
-          "name": "deadlift_order_id",
+        "deadlift_order_one": {
+          "name": "deadlift_order_one",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_two": {
+          "name": "deadlift_order_two",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_three": {
+          "name": "deadlift_order_three",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_order_four": {
+          "name": "deadlift_order_four",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -456,7 +582,22 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "entry_user_id_idx": {
+          "name": "entry_user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "entry_comp_id_idx": {
+          "name": "entry_comp_id_idx",
+          "columns": [
+            "comp_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_comp_entry_user_id_pb_user_id_fk": {
           "name": "pb_comp_entry_user_id_pb_user_id_fk",
@@ -576,17 +717,24 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "comp_entry_to_events_comp_entry_id_idx": {
+          "name": "comp_entry_to_events_comp_entry_id_idx",
+          "columns": [
+            "comp_entry_id"
+          ],
+          "isUnique": false
+        },
+        "comp_entry_to_events_event_id_idx": {
+          "name": "comp_entry_to_events_event_id_idx",
+          "columns": [
+            "event_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_comp_entry_to_events_comp_entry_id_pb_comp_entry_id_fk": {
           "name": "pb_comp_entry_to_events_comp_entry_id_pb_comp_entry_id_fk",
@@ -914,7 +1062,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "divisions_comp_id_idx": {
+          "name": "divisions_comp_id_idx",
+          "columns": [
+            "comp_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_age_divisions_comp_id_pb_competition_id_fk": {
           "name": "pb_age_divisions_comp_id_pb_competition_id_fk",
@@ -1044,24 +1200,17 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "events_comp_id_idx": {
+          "name": "events_comp_id_idx",
+          "columns": [
+            "comp_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_events_comp_id_pb_competition_id_fk": {
           "name": "pb_events_comp_id_pb_competition_id_fk",
@@ -1103,24 +1252,24 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "judges_comp_id_idx": {
+          "name": "judges_comp_id_idx",
+          "columns": [
+            "comp_id"
+          ],
+          "isUnique": false
+        },
+        "judges_judge_id_idx": {
+          "name": "judges_judge_id_idx",
+          "columns": [
+            "judge_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_judges_comp_id_pb_competition_id_fk": {
           "name": "pb_judges_comp_id_pb_competition_id_fk",
@@ -1269,7 +1418,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "lift_comp_entry_id_idx": {
+          "name": "lift_comp_entry_id_idx",
+          "columns": [
+            "comp_entry_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "pb_lift_comp_entry_id_pb_comp_entry_id_fk": {
           "name": "pb_lift_comp_entry_id_pb_comp_entry_id_fk",
@@ -1277,65 +1434,6 @@
           "tableTo": "pb_comp_entry",
           "columnsFrom": [
             "comp_entry_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "pb_role": {
-      "name": "pb_role",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text(256)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "pb_role_user_id_pb_user_id_fk": {
-          "name": "pb_role_user_id_pb_user_id_fk",
-          "tableFrom": "pb_role",
-          "tableTo": "pb_user",
-          "columnsFrom": [
-            "user_id"
           ],
           "columnsTo": [
             "id"

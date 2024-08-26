@@ -4,8 +4,6 @@ CREATE TABLE `pb_bracket_judge` (
 	`judge_id` integer,
 	`bracket` integer,
 	`lift` text,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`updatedAt` text,
 	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`judge_id`) REFERENCES `pb_user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -19,7 +17,6 @@ CREATE TABLE `pb_comp_day_info` (
 	`bracket` integer NOT NULL,
 	`index` integer NOT NULL,
 	`next_index` integer,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text,
 	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -47,11 +44,29 @@ CREATE TABLE `pb_comp_entry` (
 	`bench_pb` text,
 	`deadlift_opener` text,
 	`deadlift_pb` text,
-	`squat_order_id` integer,
+	`squat_two` integer,
+	`bench_two` integer,
+	`deadlift_two` integer,
+	`squat_three` integer,
+	`bench_three` integer,
+	`deadlift_three` integer,
+	`squat_four` integer,
+	`bench_four` integer,
+	`deadlift_four` integer,
+	`squat_order_one` integer,
+	`squat_order_two` integer,
+	`squat_order_three` integer,
+	`squat_order_four` integer,
 	`is_squat_four` integer,
-	`bench_order_id` integer,
+	`bench_order_one` integer,
+	`bench_order_two` integer,
+	`bench_order_three` integer,
+	`bench_order_four` integer,
 	`is_bench_four` integer,
-	`deadlift_order_id` integer,
+	`deadlift_order_one` integer,
+	`deadlift_order_two` integer,
+	`deadlift_order_three` integer,
+	`deadlift_order_four` integer,
 	`is_deadlift_four` integer,
 	`squat_bracket_id` integer,
 	`bench_bracket_id` integer,
@@ -80,7 +95,6 @@ CREATE TABLE `pb_comp_entry_to_events` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`comp_entry_id` integer,
 	`event_id` integer,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`comp_entry_id`) REFERENCES `pb_comp_entry`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`event_id`) REFERENCES `pb_events`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -146,8 +160,6 @@ CREATE TABLE `pb_events` (
 	`is_other_five` integer DEFAULT false,
 	`is_other_six` integer DEFAULT false,
 	`comp_id` integer,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`updatedAt` text,
 	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -155,8 +167,6 @@ CREATE TABLE `pb_judges` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`comp_id` integer,
 	`judge_id` integer,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`updatedAt` text,
 	FOREIGN KEY (`comp_id`) REFERENCES `pb_competition`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`judge_id`) REFERENCES `pb_user`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -181,15 +191,6 @@ CREATE TABLE `pb_lift` (
 	FOREIGN KEY (`comp_entry_id`) REFERENCES `pb_comp_entry`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `pb_role` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`name` text(256),
-	`user_id` integer,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`updatedAt` text,
-	FOREIGN KEY (`user_id`) REFERENCES `pb_user`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
 CREATE TABLE `pb_user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`clerk_id` text,
@@ -206,3 +207,16 @@ CREATE TABLE `pb_user` (
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` text
 );
+--> statement-breakpoint
+CREATE INDEX `bracket_judge_comp_id_idx` ON `pb_bracket_judge` (`comp_id`);--> statement-breakpoint
+CREATE INDEX `bracket_judge_judge_id_idx` ON `pb_bracket_judge` (`judge_id`);--> statement-breakpoint
+CREATE INDEX `comp_day_info_comp_id_idx` ON `pb_comp_day_info` (`comp_id`);--> statement-breakpoint
+CREATE INDEX `entry_user_id_idx` ON `pb_comp_entry` (`user_id`);--> statement-breakpoint
+CREATE INDEX `entry_comp_id_idx` ON `pb_comp_entry` (`comp_id`);--> statement-breakpoint
+CREATE INDEX `comp_entry_to_events_comp_entry_id_idx` ON `pb_comp_entry_to_events` (`comp_entry_id`);--> statement-breakpoint
+CREATE INDEX `comp_entry_to_events_event_id_idx` ON `pb_comp_entry_to_events` (`event_id`);--> statement-breakpoint
+CREATE INDEX `divisions_comp_id_idx` ON `pb_age_divisions` (`comp_id`);--> statement-breakpoint
+CREATE INDEX `events_comp_id_idx` ON `pb_events` (`comp_id`);--> statement-breakpoint
+CREATE INDEX `judges_comp_id_idx` ON `pb_judges` (`comp_id`);--> statement-breakpoint
+CREATE INDEX `judges_judge_id_idx` ON `pb_judges` (`judge_id`);--> statement-breakpoint
+CREATE INDEX `lift_comp_entry_id_idx` ON `pb_lift` (`comp_entry_id`);

@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1723692406781,
-      "tag": "0000_lame_luke_cage",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1723692642230,
-      "tag": "0001_nasty_wallow",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1723707452526,
-      "tag": "0002_purple_vermin",
+      "when": 1724638729818,
+      "tag": "0000_curly_wiccan",
       "breakpoints": true
     }
   ]
