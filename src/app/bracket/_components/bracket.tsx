@@ -17,7 +17,7 @@ import {
 } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 
-import { GripVertical, } from 'lucide-react'
+import { GripVertical } from 'lucide-react'
 
 const Bracket = ({
   entries,
@@ -47,7 +47,11 @@ const Bracket = ({
   }, [entries])
 
   const lock = () => {
-    console.log(entryList.map((entry, i) => {return {lift: entry.squatOpener, index: i}}))
+    console.log(
+      entryList.map((entry, i) => {
+        return { lift: entry.squatOpener, index: i }
+      }),
+    )
     // return
     if (lift === 'squat') {
       const ins = entryList.map((entry, i) => ({
@@ -74,21 +78,21 @@ const Bracket = ({
   }
   const unlock = () => {
     if (lift === 'squat') {
-      const ins = entryList.map((entry, i) => ({
+      const ins = entryList.map((entry, _i) => ({
         id: entry.id,
         squatOrderOne: null,
         squatBracket: null,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
-      const ins = entryList.map((entry, i) => ({
+      const ins = entryList.map((entry, _i) => ({
         id: entry.id,
         benchOrderOne: null,
         benchBracket: null,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {
-      const ins = entryList.map((entry, i) => ({
+      const ins = entryList.map((entry, _i) => ({
         id: entry.id,
         deadliftOrderOne: null,
         deadliftBracket: null,
@@ -123,12 +127,17 @@ const Bracket = ({
         }
         return {
           ...e,
-          lift: value,
+          liftWeight: value,
           wc: e.wc || '',
         }
       })
-      .sort((a, b) => a.lift - b.lift)
-      .sort((a, b) => Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0]))
+      .sort((a, b) => a.liftWeight - b.liftWeight)
+      .sort((a, b) => {
+        if (a.liftWeight === 0) return 1
+        if (b.liftWeight === 0) return -1
+        return Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0])
+      })
+    console.log(sorted)
     setEntryList(sorted)
   }
   const sortByWeight = () => {
@@ -144,11 +153,15 @@ const Bracket = ({
         }
         return {
           ...e,
-          lift: value,
+          liftWeight: value,
           wc: e.wc || '',
         }
       })
-      .sort((a, b) => a.lift - b.lift)
+      .sort((a, b) => {
+        if (a.liftWeight === 0) return 1
+        if (b.liftWeight === 0) return -1
+        return a.liftWeight - b.liftWeight
+      })
     setEntryList(sorted)
   }
 
@@ -218,7 +231,9 @@ const Bracket = ({
                   {entry.wc?.split('-')[0]}kg
                 </Badge>
                 <div className='col-span-2'>{entry.user?.name}</div>
-                <div className='col-span-2'>{opener}kg</div>
+                <div className='col-span-2'>
+                  {opener === '' ? '-' : opener + 'kg'}
+                </div>
                 <div className='drag-handle col-span-1 cursor-move'>
                   {!isLocked && (
                     <GripVertical

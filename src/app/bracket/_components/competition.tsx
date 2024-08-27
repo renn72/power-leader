@@ -1,14 +1,11 @@
 'use client'
-import { useState } from 'react'
-
-import type { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
+import type { GetCompetitionById, } from '~/lib/types'
 
 import Bracket from './bracket'
 
 const Competition = ({ competition }: { competition: GetCompetitionById }) => {
   const menSquat = competition.entries
     .filter((entry) => entry.gender?.toLowerCase() == 'male')
-    .filter((entry) => entry.squatOpener !== '')
     .map((e) => {
       return {
         ...e,
@@ -19,8 +16,12 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
       if (a.squatOrderOne !== null && b.squatOrderOne !== null) {
         return Number(a.squatOrderOne) - Number(b.squatOrderOne)
       }
+      if (a.squatOpener === '') return 1
+      if (b.squatOpener === '') return -1
       return Number(a.squatOpener) - Number(b.squatOpener)
     })
+
+  console.log('menSquat', menSquat)
 
   const womenSquat = competition.entries
     .filter((entry) => entry.gender?.toLowerCase() == 'female')
