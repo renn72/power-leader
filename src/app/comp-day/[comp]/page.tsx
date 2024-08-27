@@ -19,13 +19,10 @@ import CompTableSkeletion from './_components/comp-table-skeletion'
 
 const Competition = ({ params }: { params: { comp: string } }) => {
   const { comp } = params
-  const competitonUuid = comp
   const [lift, setLift] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState('')
   const [round, setRound] = useState('')
-
-  const ctx = api.useUtils()
 
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp)
@@ -63,10 +60,10 @@ const Competition = ({ params }: { params: { comp: string } }) => {
       return false
     })
     .sort((a, b) => {
-      const orderA = a.lift.find((l) => l.lift === lift.toLowerCase() && l.liftNumber === Number(round))?.order || null
-      const orderB = b.lift.find((l) => l.lift === lift.toLowerCase() && l.liftNumber === Number(round))?.order || null
-      if (orderA == null) return 1
-      if (orderB == null) return -1
+      const orderA = a.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))?.order || null
+      const orderB = b.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))?.order || null
+      if (orderA == null || orderA == undefined) return 1
+      if (orderB == null || orderB == undefined) return -1
 
       return orderA - orderB
       // if (a.squatOrderOne == null || b.squatOrderOne == null) {

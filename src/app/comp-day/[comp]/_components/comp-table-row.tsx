@@ -44,6 +44,8 @@ const CompTableRow = ({
   const lifterSquatRackHeight = lifter?.squarRackHeight || ''
   const lifterBenchRackHeight = lifter?.benchRackHeight || ''
 
+  const lifterOrder = lifter?.lift?.find((item) => item.lift === lift && item.liftNumber === Number(round))?.order || null
+
   const isSquatOne = round === '1' && lift === 'squat'
   const lifterSquatOneLift = lifter?.lift?.find(
     (item) => item.lift === 'squat' && item.liftNumber === 1,
@@ -180,12 +182,14 @@ const CompTableRow = ({
       )?.weight || ''
     : ''
 
+
+
   return (
     <TableRow
       key={lifter.id}
       className={cn(isLifter ? 'bg-secondary' : '', 'py-0')}
     >
-      <Cell className='py-0'>{lifterId}</Cell>
+      <Cell className='py-0'>{lifterOrder}</Cell>
       <Cell className='py-0'>{lifterName}</Cell>
       <Cell className='py-0'>
         <Badge className='w-14 items-center justify-center'>{lifterWc}</Badge>
