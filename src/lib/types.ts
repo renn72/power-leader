@@ -8,4 +8,6 @@ type RouterOutputs = inferRouterOutputs<typeof appRouter>
 export type GetCompetitionByUuid = RouterOutputs['competition']['getCompetitionByUuid']
 export type GetCompetitionById = RouterOutputs['competition']['get']
 
+export type GetLiftById = RouterOutputs['lift']['get']
+
 export type GetCompetitionEntryById = RouterOutputs['compEntry']['get']
