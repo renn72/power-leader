@@ -19,36 +19,44 @@ const TH = ({
   handleWieght,
   handleJudge,
   handleDeleteWeight,
+  handleDeleteJudge,
 }: {
   lift: string
   round: number
   handleWieght: (liftName: string, num: number) => void
   handleJudge: (liftName: string, num: number) => void
   handleDeleteWeight: (liftName: string, num: number) => void
+  handleDeleteJudge: (liftName: string, num: number) => void
 }) => {
   return (
     <TableHead>
       <DropdownMenu>
-        <DropdownMenuTrigger className='cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
+        <DropdownMenuTrigger className='cursor-pointer capitalize hover:text-primary z-999'>{`${lift} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel
-            className='hover:bg-muted hover:text-primary cursor-pointer'
+            className='cursor-pointer hover:bg-muted hover:text-primary'
             onClick={() => handleWieght(lift, round)}
           >
             Add Weight
           </DropdownMenuLabel>
           <DropdownMenuLabel
-            className='hover:bg-muted hover:text-primary cursor-pointer'
+            className='cursor-pointer hover:bg-muted hover:text-primary'
             onClick={() => handleDeleteWeight(lift, round)}
           >
             Delete Weight
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className='hover:bg-muted hover:text-primary cursor-pointer'
+            className='cursor-pointer hover:bg-muted hover:text-primary'
             onClick={() => handleJudge(lift, round)}
           >
             Judge Lift
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className='cursor-pointer hover:bg-muted hover:text-primary'
+            onClick={() => handleDeleteJudge(lift, round)}
+          >
+            Delete Judge Lift
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -114,9 +122,25 @@ const CompTableHeader = ({
       if (lift && debug) {
         judge({
           id: lift.id,
-          one: Math.random() > 0.7,
-          two: Math.random() > 0.8,
-          three: Math.random() > 0.7,
+          one: Math.random() < 0.7,
+          two: Math.random() < 0.8,
+          three: Math.random() < 0.7,
+        })
+      }
+    }
+  }
+
+  const handleDeleteJudge = (liftName: string, num: number) => {
+    for (const l of liftersFilter) {
+      const lift = l.lift.find(
+        (item) => item.lift === liftName && item.liftNumber === num,
+      )
+      if (lift && debug) {
+        judge({
+          id: lift.id,
+          one: null,
+          two: null,
+          three: null,
         })
       }
     }
@@ -138,7 +162,9 @@ const CompTableHeader = ({
 
   console.log(liftersFilter)
   return (
-    <TableHeader>
+    <TableHeader
+      className='z-99 bg-secondary'
+    >
       <TableRow>
         <TableHead>#</TableHead>
         <TableHead>Name</TableHead>
@@ -150,6 +176,7 @@ const CompTableHeader = ({
           handleWieght={handleWieght}
           handleJudge={handleJudge}
           handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
         />
         <TH
           lift='squat'
@@ -157,6 +184,7 @@ const CompTableHeader = ({
           handleWieght={handleWieght}
           handleJudge={handleJudge}
           handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
         />
         <TH
           lift='squat'
@@ -164,6 +192,7 @@ const CompTableHeader = ({
           handleWieght={handleWieght}
           handleJudge={handleJudge}
           handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
         />
         <TH
           lift='squat'
@@ -171,16 +200,73 @@ const CompTableHeader = ({
           handleWieght={handleWieght}
           handleJudge={handleJudge}
           handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
         />
         <TableHead>Bench Rack</TableHead>
-        <TableHead>Bench 1</TableHead>
-        <TableHead>Bench 2</TableHead>
-        <TableHead>Bench 3</TableHead>
-        <TableHead>Bench 4</TableHead>
-        <TableHead>Deadlift 1</TableHead>
-        <TableHead>Deadlift 2</TableHead>
-        <TableHead>Deadlift 3</TableHead>
-        <TableHead>Deadlift 4</TableHead>
+        <TH
+          lift='bench'
+          round={1}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='bench'
+          round={2}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='bench'
+          round={3}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='bench'
+          round={4}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='deadlift'
+          round={1}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='deadlift'
+          round={2}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='deadlift'
+          round={3}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
+        <TH
+          lift='deadlift'
+          round={4}
+          handleWieght={handleWieght}
+          handleJudge={handleJudge}
+          handleDeleteWeight={handleDeleteWeight}
+          handleDeleteJudge={handleDeleteJudge}
+        />
         <TableHead>Lifting</TableHead>
       </TableRow>
     </TableHeader>

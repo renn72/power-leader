@@ -13,6 +13,7 @@ import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import { toast } from 'sonner'
 import { cn } from '~/lib/utils'
+import { Dot, Circle } from 'lucide-react'
 
 import { api } from '~/trpc/react'
 
@@ -26,7 +27,7 @@ const Lift = ({
 }: {
   input: string
   title: string
-  lift:  GetLiftById | undefined
+  lift: GetLiftById | undefined
   isHighlighted?: boolean
 }) => {
   const [value, setValue] = useState(() => input)
@@ -44,6 +45,9 @@ const Lift = ({
   const isOne = lift?.isGoodOne
   const isTwo = lift?.isGoodTwo
   const isThree = lift?.isGoodThree
+
+  const isJudged = (isOne !== null && isTwo !== null && isThree !== null && lift)
+  const isGood = (isOne && isTwo) || (isTwo && isThree) || (isOne && isThree)
 
   const handleClick = () => {
     console.log({
@@ -66,11 +70,57 @@ const Lift = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full cursor-pointer justify-center p-2',
+            'flex w-full cursor-pointer items-center justify-between gap-2 p-2',
             input === '' ? '' : 'rounded-md border-2 border-input',
+            isJudged ? isGood ? 'bg-green-600/20 border-0 font-bold' : 'bg-red-600/20 border-0 font-bold' : '',
           )}
         >
-          {input + (input !== '' ? 'kg' : '')}
+          <div className='mr-4'>{input + (input !== '' ? 'kg' : '')}</div>
+          <div
+            className={cn(
+              'flex flex-col gap-1',
+              input === '' ? 'hidden' : '',
+            )}
+          >
+            <Circle
+              size={6}
+              fill={isOne === true ? 'green' : isOne === false ? 'red' : 'gray'}
+              className={cn(
+                'text-accent',
+                isOne === true
+                  ? 'text-green-600'
+                  : isOne === false
+                    ? 'text-red-600'
+                    : '',
+              )}
+            />
+            <Circle
+              size={6}
+              fill={isTwo === true ? 'green' : isTwo === false ? 'red' : 'gray'}
+              className={cn(
+                'text-accent',
+                isTwo === true
+                  ? 'text-green-600'
+                  : isTwo === false
+                    ? 'text-red-600'
+                    : '',
+              )}
+            />
+            <Circle
+              size={6}
+              fill={
+                isThree === true ? 'green' : isThree === false ? 'red' : 'gray'
+              }
+              className={cn(
+                'text-accent',
+                isThree === true
+                  ? 'text-green-600'
+                  : isThree === false
+                    ? 'text-red-600'
+                    : '',
+              )}
+            />
+          </div>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

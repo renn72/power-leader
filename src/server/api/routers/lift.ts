@@ -56,9 +56,9 @@ export const liftRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        one: z.boolean(),
-        two: z.boolean(),
-        three: z.boolean(),
+        one: z.boolean().nullable(),
+        two: z.boolean().nullable(),
+        three: z.boolean().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
