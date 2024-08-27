@@ -1,12 +1,12 @@
-import { currentUser } from '@clerk/nextjs/server'
+import { auth, } from '@clerk/nextjs/server'
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const user = currentUser()
-  if (!user) return null
+  const { userId } = auth()
+  if (!userId) return null
   return (
     <>
       {children}
