@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import type { GetCompetitionEntryById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 
+import { toast } from 'sonner'
 import { animations } from '@formkit/drag-and-drop'
 import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 import { Badge } from '~/components/ui/badge'
@@ -34,6 +35,12 @@ const Bracket = ({
   const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
     onSettled: () => {
       ctx.competition.getMyCompetitions.refetch()
+    },
+    onSuccess: () => {
+      toast.success('Order Updated')
+    },
+    onError: () => {
+      toast.error('Error Updating Order')
     },
   })
 
