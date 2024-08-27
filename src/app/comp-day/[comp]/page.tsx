@@ -5,8 +5,6 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 
 import { api } from '~/trpc/react'
-import { pusherClient } from '~/lib/pusher'
-import Pusher from 'pusher-js'
 
 import {
   Card,
@@ -40,54 +38,6 @@ const Competition = ({ params }: { params: { comp: string } }) => {
       setRound(competition.compDayInfo.round.toString())
     }
   }, [competition])
-
-  // useEffect(() => {
-  //   Pusher.logToConsole = true
-  //   const channel = pusherClient.subscribe('competition-' + competitonUuid)
-  //
-  //   channel.bind(
-  //     'judge',
-  //     (data: {
-  //       id: number
-  //       entryId: number
-  //       judge: number
-  //       isGood: boolean
-  //     }) => {
-  //       if (!competition) {
-  //         return
-  //       }
-  //       console.log('data', data)
-  //       ctx.competition.get.setData(competition.id, {
-  //         ...competition,
-  //         entries: competition.entries.map((entry) => {
-  //           return {
-  //             ...entry,
-  //             lift: entry.lift.map((i) => {
-  //               return {
-  //                 ...i,
-  //                 isGoodOne:
-  //                   i.id === data.id && data.judge === 1
-  //                     ? data.isGood
-  //                     : i.isGoodOne,
-  //                 isGoodTwo:
-  //                   i.id === data.id && data.judge === 2
-  //                     ? data.isGood
-  //                     : i.isGoodTwo,
-  //                 isGoodThree:
-  //                   i.id === data.id && data.judge === 3
-  //                     ? data.isGood
-  //                     : i.isGoodThree,
-  //               }
-  //             }),
-  //           }
-  //         }),
-  //       })
-  //     },
-  //   )
-  //   return () => {
-  //     pusherClient.unsubscribe('competition-' + competitonUuid)
-  //   }
-  // }, [competition])
 
   if (competitionLoading) return <CompTableSkeletion />
   if (!competition) {
