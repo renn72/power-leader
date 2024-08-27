@@ -247,6 +247,12 @@ export default function Dashboard() {
     onSettled: () => {
       context.competition.invalidate()
     },
+    onSuccess: () => {
+      toast.success('Competition Created')
+    },
+    onError: () => {
+      toast.error('Error Creating Competition')
+    },
   })
 
   const { data: user } = api.user.getCurrentUser.useQuery()
