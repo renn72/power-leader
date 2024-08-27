@@ -155,7 +155,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   // console.log('lifters', lifters)
 
   return (
-    <div className='flex flex-col items-center justify-center gap-2'>
+    <div className='flex flex-col items-center justify-center gap-2 relative'>
       <Header competition={competition} />
       <Card className=''>
         <CardContent className='flex flex-col gap-2 py-2 px-2'>

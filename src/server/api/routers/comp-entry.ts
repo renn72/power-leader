@@ -79,12 +79,12 @@ const updateOrderBulkSchema = z.array(
   z.object({
     id: z.number(),
     squatOrderOne: z.number().optional().nullable(),
-    squatOrderTwo: z.number().optional().nullable(),
     benchOrderOne: z.number().optional().nullable(),
     deadliftOrderOne: z.number().optional().nullable(),
     squatBracket: z.number().optional().nullable(),
     benchBracket: z.number().optional().nullable(),
     deadliftBracket: z.number().optional().nullable(),
+    liftId: z.number().optional().nullable(),
   }),
 )
 
@@ -441,17 +441,50 @@ export const compEntryRouter = createTRPCRouter({
         })
       }
 
-      const ins = input.map((item) =>
-        ctx.db
-          .update(compEntry)
-          .set({
-            ...item,
-          })
-          .where(eq(compEntry.id, item.id)),
-      )
+      const ins = input
+        .map((item) => {
+          const { liftId, ...rest } = item
+          return rest
+        })
+        .map((item) =>
+          ctx.db
+            .update(compEntry)
+            .set({
+              ...item,
+            })
+            .where(eq(compEntry.id, item.id)),
+        )
 
       if (isTuple(ins)) {
         await ctx.db.batch(ins)
+      }
+
+      const ins2 = input
+        .filter((i) => i.liftId)
+        .map((item) => {
+          let bracket = 99
+          if (item.squatBracket) bracket = item.squatBracket
+          if (item.benchBracket) bracket = item.benchBracket
+          if (item.deadliftBracket) bracket = item.deadliftBracket
+          let order = 999
+          if (item.squatOrderOne) order = item.squatOrderOne
+          if (item.benchOrderOne) order = item.benchOrderOne
+          if (item.deadliftOrderOne) order = item.deadliftOrderOne
+          return { liftId: item.liftId, order: order, bracket: bracket }
+        })
+        .map((item) =>
+          ctx.db
+            .update(lift)
+            .set({
+              order: item.order,
+              bracket: item.bracket,
+            })
+            .where(eq(lift.id, Number(item.liftId))),
+        )
+
+
+      if (isTuple(ins2)) {
+        await ctx.db.batch(ins2)
       }
       return true
     }),

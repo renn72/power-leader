@@ -45,7 +45,7 @@ const CompTable = ({
     <div className='rounded-md border border-input p-2'>
       <ScrollArea className='h-[63vh]'>
         <Table className='text-lg'>
-          <CompTableHeader />
+          <CompTableHeader lifters={lifters} />
           <TableBody className='h-40 overflow-y-auto'>
             {lifters.map((lifter, i, arr) => (
               <CompTableRow

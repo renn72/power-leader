@@ -56,15 +56,23 @@ const Bracket = ({
   const lock = () => {
     console.log(
       entryList.map((entry, i) => {
-        return { lift: entry.squatOpener, index: i }
+        return {
+          id: entry.id,
+          lift: entry.squatOpener,
+          index: i,
+          liftId: entry.lift.find(
+            (l) => l.lift === 'squat' && l.liftNumber === 1,
+          )?.id,
+        }
       }),
     )
-    // return
     if (lift === 'squat') {
       const ins = entryList.map((entry, i) => ({
         id: entry.id,
         squatOrderOne: i,
         squatBracket: bracket,
+        liftId: entry.lift.find((l) => l.lift === 'squat' && l.liftNumber === 1)
+          ?.id,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
@@ -72,6 +80,8 @@ const Bracket = ({
         id: entry.id,
         benchOrderOne: i,
         benchBracket: bracket,
+        liftId: entry.lift.find((l) => l.lift === 'bench' && l.liftNumber === 1)
+          ?.id,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {
@@ -79,6 +89,9 @@ const Bracket = ({
         id: entry.id,
         deadliftOrderOne: i,
         deadliftBracket: bracket,
+        liftId: entry.lift.find(
+          (l) => l.lift === 'deadlift' && l.liftNumber === 1,
+        )?.id,
       }))
       updateOrder(ins)
     }

@@ -41,6 +41,7 @@ const CompTableRow = ({
   const lifterName = lifter?.user?.name
   const lifterWc = lifter?.wc?.split('-')[0] + 'kg'
   const lifterSquatRackHeight = lifter?.squarRackHeight || ''
+  const lifterBenchRackHeight = lifter?.benchRackHeight || ''
 
   const isSquatOne = round === '1' && lift === 'squat'
   const lifterSquatOneId = lifter?.lift?.find(
@@ -86,6 +87,94 @@ const CompTableRow = ({
         ?.weight || ''
     : ''
 
+  const isBenchOne = round === '1' && lift === 'bench'
+  const lifterBenchOneId = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 1,
+  )?.id
+  const lifterBenchOne = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 1,
+  )
+    ? lifter.lift.find((item) => item.lift === 'bench' && item.liftNumber === 1)
+        ?.weight || ''
+    : ''
+
+  const isBenchTwo = round === '2' && lift === 'bench'
+  const lifterBenchTwoId = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 2,
+  )?.id
+  const lifterBenchTwo = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 2,
+  )
+    ? lifter.lift.find((item) => item.lift === 'bench' && item.liftNumber === 2)
+        ?.weight || ''
+    : ''
+
+  const isBenchThree = round === '3' && lift === 'bench'
+  const lifterBenchThreeId = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 3,
+  )?.id
+  const lifterBenchThree = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 3,
+  )
+    ? lifter.lift.find((item) => item.lift === 'bench' && item.liftNumber === 3)
+        ?.weight || ''
+    : ''
+
+  const isBenchFour = round === '4' && lift === 'bench'
+  const lifterBenchFourId = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 4,
+  )?.id
+  const lifterBenchFour = lifter?.lift?.find(
+    (item) => item.lift === 'bench' && item.liftNumber === 4,
+  )
+    ? lifter.lift.find((item) => item.lift === 'bench' && item.liftNumber === 4)
+        ?.weight || ''
+    : ''
+
+  const isDeadliftOne = round === '1' && lift === 'deadlift'
+  const lifterDeadliftOneId = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 1,
+  )?.id
+  const lifterDeadliftOne = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 1,
+  )
+    ? lifter.lift.find((item) => item.lift === 'deadlift' && item.liftNumber === 1)
+        ?.weight || ''
+    : ''
+
+  const isDeadliftTwo = round === '2' && lift === 'deadlift'
+  const lifterDeadliftTwoId = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 2,
+  )?.id
+  const lifterDeadliftTwo = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 2,
+  )
+    ? lifter.lift.find((item) => item.lift === 'deadlift' && item.liftNumber === 2)
+        ?.weight || ''
+    : ''
+
+  const isDeadliftThree = round === '3' && lift === 'deadlift'
+  const lifterDeadliftThreeId = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 3,
+  )?.id
+  const lifterDeadliftThree = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 3,
+  )
+    ? lifter.lift.find((item) => item.lift === 'deadlift' && item.liftNumber === 3)
+        ?.weight || ''
+    : ''
+
+  const isDeadliftFour = round === '4' && lift === 'deadlift'
+  const lifterDeadliftFourId = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 4,
+  )?.id
+  const lifterDeadliftFour = lifter?.lift?.find(
+    (item) => item.lift === 'deadlift' && item.liftNumber === 4,
+  )
+    ? lifter.lift.find((item) => item.lift === 'deadlift' && item.liftNumber === 4)
+        ?.weight || ''
+    : ''
+
   return (
     <TableRow
       key={lifter.id}
@@ -125,44 +214,54 @@ const CompTableRow = ({
         isHighlighted={isSquatFour}
       />
       <TableCell>{lifter?.benchRackHeight}</TableCell>
-      <TableCell>
-        {lifter?.lift?.find(
-          (item) => item.lift === 'bench' && item.liftNumber === 1,
-        ) &&
-          `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 1)?.weight}kg`}
-      </TableCell>
-      <TableCell>
-        {lifter?.lift?.find(
-          (item) => item.lift === 'bench' && item.liftNumber === 2,
-        ) &&
-          `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 2)?.weight}kg`}
-      </TableCell>
-      <TableCell>
-        {lifter?.lift?.find(
-          (item) => item.lift === 'bench' && item.liftNumber === 3,
-        ) &&
-          `${lifter?.lift?.find((item) => item.lift === 'bench' && item.liftNumber === 3)?.weight}kg`}
-      </TableCell>
-      <TableCell></TableCell>
-      <TableCell>
-        {lifter?.lift?.find(
-          (item) => item.lift === 'deadlift' && item.liftNumber === 1,
-        ) &&
-          `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 1)?.weight}kg`}
-      </TableCell>
-      <TableCell>
-        {lifter?.lift?.find(
-          (item) => item.lift === 'deadlift' && item.liftNumber === 2,
-        ) &&
-          `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 2)?.weight}kg`}
-      </TableCell>
-      <TableCell>
-        {lifter?.lift?.find(
-          (item) => item.lift === 'deadlift' && item.liftNumber === 3,
-        ) &&
-          `${lifter?.lift?.find((item) => item.lift === 'deadlift' && item.liftNumber === 3)?.weight}kg`}
-      </TableCell>
-      <TableCell></TableCell>
+      <Lift
+        input={lifterBenchOne}
+        title='Bench 1'
+        liftId={lifterBenchOneId}
+        isHighlighted={isBenchOne}
+      />
+      <Lift
+        input={lifterBenchTwo}
+        title='Bench 2'
+        liftId={lifterBenchTwoId}
+        isHighlighted={isBenchTwo}
+      />
+      <Lift
+        input={lifterBenchThree}
+        title='Bench 3'
+        liftId={lifterBenchThreeId}
+        isHighlighted={isBenchThree}
+      />
+      <Lift
+        input={lifterBenchFour}
+        title='Bench 4'
+        liftId={lifterBenchFourId}
+        isHighlighted={isBenchFour}
+      />
+      <Lift
+        input={lifterDeadliftOne}
+        title='Deadlift 1'
+        liftId={lifterDeadliftOneId}
+        isHighlighted={isDeadliftOne}
+      />
+      <Lift
+        input={lifterDeadliftTwo}
+        title='Deadlift 2'
+        liftId={lifterDeadliftTwoId}
+        isHighlighted={isDeadliftTwo}
+      />
+      <Lift
+        input={lifterDeadliftThree}
+        title='Deadlift 3'
+        liftId={lifterDeadliftThreeId}
+        isHighlighted={isDeadliftThree}
+      />
+      <Lift
+        input={lifterDeadliftFour}
+        title='Deadlift 4'
+        liftId={lifterDeadliftFourId}
+        isHighlighted={isDeadliftFour}
+      />
       <Cell>
         {+index === lifter.id ? (
           <Button

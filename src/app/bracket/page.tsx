@@ -14,7 +14,6 @@ import Competition from './_components/competition'
 
 const Bracket = () => {
   const [compId, setCompId] = useState('')
-  const [entryId, setEntryId] = useState<number | null>(null)
 
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
