@@ -16,15 +16,17 @@ import { cn } from '~/lib/utils'
 
 import { api } from '~/trpc/react'
 
+import { GetLiftById } from '~/lib/types'
+
 const Lift = ({
   input,
   title,
-  liftId,
+  lift,
   isHighlighted = false,
 }: {
   input: string
   title: string
-  liftId: number | undefined
+  lift:  GetLiftById | undefined
   isHighlighted?: boolean
 }) => {
   const [value, setValue] = useState(() => input)
@@ -39,14 +41,18 @@ const Lift = ({
     },
   })
 
+  const isOne = lift?.isGoodOne
+  const isTwo = lift?.isGoodTwo
+  const isThree = lift?.isGoodThree
+
   const handleClick = () => {
     console.log({
-      id: liftId,
+      id: lift?.id,
       value: value,
     })
-    if (!liftId) return
+    if (!lift?.id) return
     mutate({
-      id: liftId,
+      id: lift.id,
       value: value,
     })
   }
