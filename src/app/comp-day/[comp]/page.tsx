@@ -63,23 +63,29 @@ const Competition = ({ params }: { params: { comp: string } }) => {
       return false
     })
     .sort((a, b) => {
-      if (a.squatOrderOne == null || b.squatOrderOne == null) {
-        return 0
-      }
-      if (a.benchOrderOne == null || b.benchOrderOne == null) {
-        return 0
-      }
-      if (a.deadliftOrderOne == null || b.deadliftOrderOne == null) {
-        return 0
-      }
-      if (lift === 'squat') {
-        return a?.squatOrderOne - b?.squatOrderOne
-      } else if (lift === 'bench') {
-        return a.benchOrderOne - b.benchOrderOne
-      } else if (lift === 'deadlift') {
-        return a.deadliftOrderOne - b.deadliftOrderOne
-      }
-      return 0
+      const orderA = a.lift.find((l) => l.lift === lift.toLowerCase() && l.liftNumber === Number(round))?.order || null
+      const orderB = b.lift.find((l) => l.lift === lift.toLowerCase() && l.liftNumber === Number(round))?.order || null
+      if (orderA == null) return 1
+      if (orderB == null) return -1
+
+      return orderA - orderB
+      // if (a.squatOrderOne == null || b.squatOrderOne == null) {
+      //   return 0
+      // }
+      // if (a.benchOrderOne == null || b.benchOrderOne == null) {
+      //   return 0
+      // }
+      // if (a.deadliftOrderOne == null || b.deadliftOrderOne == null) {
+      //   return 0
+      // }
+      // if (lift === 'squat') {
+      //   return a?.squatOrderOne - b?.squatOrderOne
+      // } else if (lift === 'bench') {
+      //   return a.benchOrderOne - b.benchOrderOne
+      // } else if (lift === 'deadlift') {
+      //   return a.deadliftOrderOne - b.deadliftOrderOne
+      // }
+      // return 0
     })
 
   const lifter = lifters.find((l) => {

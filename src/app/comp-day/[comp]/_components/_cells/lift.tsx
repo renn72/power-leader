@@ -13,7 +13,7 @@ import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import { toast } from 'sonner'
 import { cn } from '~/lib/utils'
-import { Dot, Circle } from 'lucide-react'
+import { Circle } from 'lucide-react'
 
 import { api } from '~/trpc/react'
 

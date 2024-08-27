@@ -9,10 +9,7 @@ import Pusher from 'pusher-js'
 
 import { toast } from 'sonner'
 import { ScrollArea } from '~/components/ui/scroll-area'
-import {
-  Table,
-  TableBody,
-} from '~/components/ui/table-scroll'
+import { Table, TableBody } from '~/components/ui/table-scroll'
 import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import CompTableHeader from './comp-table-header'
 import CompTableRow from './comp-table-row'
@@ -96,7 +93,10 @@ const CompTable = ({
     <div className='rounded-md border border-input p-2'>
       <ScrollArea className='h-[63vh]'>
         <Table className='text-lg tracking-tighter'>
-          <CompTableHeader lifters={lifters} />
+          <CompTableHeader
+            lifters={lifters}
+            bracket={Number(bracket)}
+          />
           <TableBody className='overflow-y-auto'>
             {lifters.map((lifter, i, arr) => (
               <CompTableRow

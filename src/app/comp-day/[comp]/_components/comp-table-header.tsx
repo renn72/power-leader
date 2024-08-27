@@ -12,17 +12,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
+import CompTableHeaderBracket from './comp-table-header-bracket'
 
 const TH = ({
+  lifters,
   lift,
   round,
+  bracket,
   handleWieght,
   handleJudge,
   handleDeleteWeight,
   handleDeleteJudge,
 }: {
+  lifters: GetCompetitionEntryById[]
   lift: string
   round: number
+    bracket: number
   handleWieght: (liftName: string, num: number) => void
   handleJudge: (liftName: string, num: number) => void
   handleDeleteWeight: (liftName: string, num: number) => void
@@ -31,11 +36,16 @@ const TH = ({
   return (
     <TableHead>
       <DropdownMenu>
-        <DropdownMenuTrigger className='cursor-pointer capitalize hover:text-primary z-999'>{`${lift} ${round}`}</DropdownMenuTrigger>
+        <DropdownMenuTrigger className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className='cursor-pointer hover:bg-muted hover:text-primary'>
-            Bracket Order
-            </DropdownMenuLabel>
+            <CompTableHeaderBracket
+              lifters={lifters}
+              round={round}
+              lift={lift}
+              bracket={bracket}
+            />
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuLabel
             className='cursor-pointer hover:bg-muted hover:text-primary'
@@ -70,8 +80,10 @@ const TH = ({
 
 const CompTableHeader = ({
   lifters,
+  bracket
 }: {
   lifters: GetCompetitionEntryById[]
+    bracket: number
 }) => {
   const debug = true
   const { mutate } = api.lift.update.useMutation({
@@ -164,17 +176,18 @@ const CompTableHeader = ({
     }
   }
 
-  console.log(liftersFilter)
+  console.log('lifters', lifters)
+
   return (
-    <TableHeader
-      className='z-99 bg-secondary'
-    >
+    <TableHeader className='z-99 bg-secondary'>
       <TableRow>
         <TableHead>#</TableHead>
         <TableHead>Name</TableHead>
         <TableHead>WC</TableHead>
         <TableHead>Squat Rack</TableHead>
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='squat'
           round={1}
           handleWieght={handleWieght}
@@ -183,6 +196,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='squat'
           round={2}
           handleWieght={handleWieght}
@@ -191,6 +206,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='squat'
           round={3}
           handleWieght={handleWieght}
@@ -199,6 +216,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='squat'
           round={4}
           handleWieght={handleWieght}
@@ -208,6 +227,8 @@ const CompTableHeader = ({
         />
         <TableHead>Bench Rack</TableHead>
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='bench'
           round={1}
           handleWieght={handleWieght}
@@ -216,6 +237,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='bench'
           round={2}
           handleWieght={handleWieght}
@@ -224,6 +247,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='bench'
           round={3}
           handleWieght={handleWieght}
@@ -232,6 +257,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='bench'
           round={4}
           handleWieght={handleWieght}
@@ -240,6 +267,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='deadlift'
           round={1}
           handleWieght={handleWieght}
@@ -248,6 +277,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='deadlift'
           round={2}
           handleWieght={handleWieght}
@@ -256,6 +287,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='deadlift'
           round={3}
           handleWieght={handleWieght}
@@ -264,6 +297,8 @@ const CompTableHeader = ({
           handleDeleteJudge={handleDeleteJudge}
         />
         <TH
+          bracket={bracket}
+          lifters={lifters}
           lift='deadlift'
           round={4}
           handleWieght={handleWieght}
