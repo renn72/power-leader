@@ -15,9 +15,9 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const [index, setIndex] = useState('')
   const [nextIndex, setNextIndex] = useState('')
   const [round, setRound] = useState('')
-  const [isGoodOne, setIsGoodOne] = useState<boolean | null>(null)
-  const [isGoodTwo, setIsGoodTwo] = useState<boolean | null>(null)
-  const [isGoodThree, setIsGoodThree] = useState<boolean | null>(null)
+  const [isGoodOne, setIsGoodOne] = useState<boolean | null | undefined>(null)
+  const [isGoodTwo, setIsGoodTwo] = useState<boolean | null | undefined>(null)
+  const [isGoodThree, setIsGoodThree] = useState<boolean | null | undefined>(null)
   const { comp } = params
   const { data: competition } =
     api.competition.getCompetitionByUuid.useQuery(comp)
@@ -100,13 +100,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   }, [competition])
 
   useEffect(() => {
-    setIsGoodOne(lift?.isGoodOne || null)
-    setIsGoodTwo(lift?.isGoodTwo || null)
-    setIsGoodThree(lift?.isGoodThree || null)
+    setIsGoodOne(lift?.isGoodOne)
+    setIsGoodTwo(lift?.isGoodTwo)
+    setIsGoodThree(lift?.isGoodThree)
 
   }, [lift])
 
   console.log('lift', lift)
+  console.log({isGoodOne, isGoodTwo, isGoodThree})
 
 
   return (
@@ -124,35 +125,35 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           <div>nextIndex: {nextIndex}</div>
           <div>round: {round}</div>
         </div>
-        <div className='flex flex-col items-center gap-12 text-6xl font-bold'>
+        <div className='flex flex-col items-center gap-12 text-9xl font-bold'>
           <div>{lifter?.user?.name}</div>
           <div className=''>{lift?.weight}kg</div>
-          <div className='flex gap-10 justify-center'>
+          <div className='flex gap-24 justify-center'>
             <div>
               {isGoodOne === null ? (
-                <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+                <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
               ) : isGoodOne ? (
-                <div className='good-lift h-16 w-16 rounded-full '></div>
+                <div className='good-lift  h-64 w-64 rounded-full '></div>
               ) : (
-                <div className='bad-lift h-16 w-16 rounded-full '></div>
+                <div className='bad-lift  h-64 w-64 rounded-full '></div>
               )}
             </div>
             <div>
               {isGoodTwo === null ? (
-                <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+                <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
               ) : isGoodTwo ? (
-                <div className='good-lift h-16 w-16 rounded-full '></div>
+                <div className='good-lift  h-64 w-64 rounded-full '></div>
               ) : (
-                <div className='bad-lift h-16 w-16 rounded-full '></div>
+                <div className='bad-lift  h-64 w-64 rounded-full '></div>
               )}
             </div>
             <div>
               {isGoodThree === null ? (
-                <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+                <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
               ) : isGoodThree ? (
-                <div className='good-lift h-16 w-16 rounded-full '></div>
+                <div className='good-lift  h-64 w-64 rounded-full '></div>
               ) : (
-                <div className='bad-lift h-16 w-16 rounded-full '></div>
+                <div className='bad-lift  h-64 w-64 rounded-full '></div>
               )}
             </div>
           </div>
