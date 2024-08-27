@@ -33,6 +33,10 @@ const TH = ({
       <DropdownMenu>
         <DropdownMenuTrigger className='cursor-pointer capitalize hover:text-primary z-999'>{`${lift} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuLabel className='cursor-pointer hover:bg-muted hover:text-primary'>
+            Bracket Order
+            </DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <DropdownMenuLabel
             className='cursor-pointer hover:bg-muted hover:text-primary'
             onClick={() => handleWieght(lift, round)}
