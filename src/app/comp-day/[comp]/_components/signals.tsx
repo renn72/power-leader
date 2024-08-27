@@ -22,7 +22,7 @@ const Signals = ({currentLift, lifter, uuid} : {currentLift: any, lifter: any, u
     <Card>
       <CardHeader></CardHeader>
       <CardContent className='flex w-full justify-around'>
-        <div className='flex flex-col items-center gap-4'>
+        <div className='flex flex-col items-center gap-1'>
           <Check
             className='cursor-pointer'
             onClick={() => {
@@ -70,7 +70,7 @@ const Signals = ({currentLift, lifter, uuid} : {currentLift: any, lifter: any, u
             Clear
           </Button>
         </div>
-        <div className='flex flex-col items-center gap-4'>
+        <div className='flex flex-col items-center gap-1'>
           <Check
             className='cursor-pointer'
             onClick={() => {
@@ -118,7 +118,7 @@ const Signals = ({currentLift, lifter, uuid} : {currentLift: any, lifter: any, u
             Clear
           </Button>
         </div>
-        <div className='flex flex-col items-center gap-4'>
+        <div className='flex flex-col items-center gap-1'>
           <Check
             className='cursor-pointer'
             onClick={() => {

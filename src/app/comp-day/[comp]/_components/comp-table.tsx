@@ -43,7 +43,7 @@ const CompTable = ({
 
   return (
     <div className='rounded-md border border-input p-2'>
-      <ScrollArea className='h-[700px]'>
+      <ScrollArea className='h-[63vh]'>
         <Table className='text-lg'>
           <CompTableHeader />
           <TableBody className='h-40 overflow-y-auto'>

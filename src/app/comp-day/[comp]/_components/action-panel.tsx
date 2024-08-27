@@ -35,11 +35,7 @@ const ActionPanel = ({
 
   return (
     <div className='grid grid-cols-3 gap-2'>
-      <div className='hidden'>
-        <div>Day</div>
-        <div>{competition.compDayInfo.day + 1}</div>
-      </div>
-      <div className='rounded-md border border-input p-2'>
+      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
         <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
           type='single'
@@ -63,7 +59,7 @@ const ActionPanel = ({
           <ToggleGroupItem value='deadlift'>Deadlift</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='rounded-md border border-input p-2'>
+      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
         <div className='text-lg font-bold'>Round</div>
         <ToggleGroup
           type='single'
@@ -88,7 +84,7 @@ const ActionPanel = ({
           <ToggleGroupItem value='4'>4</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='rounded-md border border-input p-2'>
+      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
         <div className='text-lg font-bold'>Bracket</div>
         <ToggleGroup
           type='single'

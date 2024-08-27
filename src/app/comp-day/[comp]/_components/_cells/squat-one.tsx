@@ -14,16 +14,16 @@ import { cn } from '~/lib/utils'
 
 import { api } from '~/trpc/react'
 
-const SquatRackHeight = ({
-  height,
+const SquatOne = ({
+  input,
   entryId,
   isHighlighted = false,
 }: {
-  height: string
+  input: string
   entryId: number
   isHighlighted?: boolean
 }) => {
-  const [value, setValue] = useState(() => height)
+  const [value, setValue] = useState(() => input)
   const [isOpen, setIsOpen] = useState(false)
 
   const ctx = api.useUtils()
@@ -39,14 +39,12 @@ const SquatRackHeight = ({
   const handleClick = () => {
     updateField({
       id: entryId,
-      field: 'squarRackHeight',
+      field: 'squatOpener',
       value: value,
     })
   }
   return (
-    <TableCell
-      className={cn(isHighlighted && 'bg-accent', 'py-0')}
-    >
+    <TableCell className={cn(isHighlighted && 'bg-accent', 'py-0')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {
@@ -54,10 +52,10 @@ const SquatRackHeight = ({
         }}
         modal={false}
       >
-        <DialogTrigger className={cn('flex justify-center w-full',isHighlighted && 'bg-accent')}>
-          <div className={cn('cursor-pointer rounded-md text-center')}>
-            {height}
-          </div>
+        <DialogTrigger
+          className={cn('flex w-full cursor-pointer justify-center border-2 border-input rounded-md p-2')}
+        >
+          {input + (input !== '' ? 'kg' : '')}
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -85,4 +83,4 @@ const SquatRackHeight = ({
   )
 }
 
-export default SquatRackHeight
+export default SquatOne

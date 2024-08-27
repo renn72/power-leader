@@ -10,16 +10,16 @@ const CompTableHeader = () => {
         <TableHead>Squat 1</TableHead>
         <TableHead>Squat 2</TableHead>
         <TableHead>Squat 3</TableHead>
-        <TableHead>4</TableHead>
+        <TableHead>Squat 4</TableHead>
         <TableHead>Bench Rack</TableHead>
         <TableHead>Bench 1</TableHead>
         <TableHead>Bench 2</TableHead>
         <TableHead>Bench 3</TableHead>
-        <TableHead>4</TableHead>
+        <TableHead>Bench 4</TableHead>
         <TableHead>Deadlift 1</TableHead>
         <TableHead>Deadlift 2</TableHead>
         <TableHead>Deadlift 3</TableHead>
-        <TableHead>4</TableHead>
+        <TableHead>Deadleft 4</TableHead>
         <TableHead>Lifting</TableHead>
       </TableRow>
     </TableHeader>

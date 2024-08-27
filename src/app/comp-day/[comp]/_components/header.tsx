@@ -20,7 +20,7 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
       },
     })
   return (
-    <div className='relative flex w-full flex-col items-center justify-center gap-2'>
+    <div className='relative flex w-full flex-col items-center justify-center'>
       <h1 className='text-5xl font-bold'>{competition.name}</h1>
       <h2 className='text-lg capitalize text-muted-foreground'>
         {competition.currentState}

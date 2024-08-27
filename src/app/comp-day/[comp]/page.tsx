@@ -8,36 +8,16 @@ import { api } from '~/trpc/react'
 import { pusherClient } from '~/lib/pusher'
 import Pusher from 'pusher-js'
 
-import { cn } from '~/lib/utils'
-
-import { Button } from '~/components/ui/button'
-import { Skeleton } from '~/components/ui/skeleton'
-import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group-bold'
-import { toast } from 'sonner'
 import {
   Card,
   CardContent,
-  CardTitle,
-  CardHeader,
-  CardDescription,
 } from '~/components/ui/card'
-import { ScrollArea } from '~/components/ui/scroll-area'
-import { Badge } from '~/components/ui/badge'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '~/components/ui/table-scroll'
-import { Check, User, UserCheck, X } from 'lucide-react'
 import Header from './_components/header'
 import LifterInfo from './_components/lifter-info'
 import Signals from './_components/signals'
 import ActionPanel from './_components/action-panel'
 import CompTable from './_components/comp-table'
+import CompTableSkeletion from './_components/comp-table-skeletion'
 
 const Competition = ({ params }: { params: { comp: string } }) => {
   const { comp } = params
@@ -51,15 +31,6 @@ const Competition = ({ params }: { params: { comp: string } }) => {
 
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp)
-
-  const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
-    onSettled: () => {
-      ctx.competition.getCompetitionByUuid.refetch()
-    },
-    onSuccess: (e) => {
-      toast(JSON.stringify(e))
-    },
-  })
 
   useEffect(() => {
     if (competition) {
@@ -118,15 +89,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
     }
   }, [competition])
 
-  if (competitionLoading) {
-    return (
-      <div className='flex flex-col items-center justify-center gap-2'>
-        <Skeleton className='h-[100px] w-[800px] rounded-full' />
-        <Skeleton className='h-[100px] w-[800px] rounded-full' />
-        <Skeleton className='h-[800px] w-[800px] rounded-xl' />
-      </div>
-    )
-  }
+  if (competitionLoading) return <CompTableSkeletion />
   if (!competition) {
     return (
       <div className='flex flex-col items-center justify-center gap-2'>
@@ -194,8 +157,8 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   return (
     <div className='flex flex-col items-center justify-center gap-2'>
       <Header competition={competition} />
-      <Card className='py-6'>
-        <CardContent className='flex flex-col gap-2'>
+      <Card className=''>
+        <CardContent className='flex flex-col gap-2 py-2 px-2'>
           <div className='grid grid-cols-2 gap-2'>
             <LifterInfo
               lifter={lifter}

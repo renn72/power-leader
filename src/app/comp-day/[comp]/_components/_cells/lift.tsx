@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { TableCell } from '~/components/ui/table-scroll'
 import {
@@ -14,21 +16,22 @@ import { cn } from '~/lib/utils'
 
 import { api } from '~/trpc/react'
 
-const SquatRackHeight = ({
-  height,
-  entryId,
+const Lift = ({
+  input,
+  title,
+  liftId,
   isHighlighted = false,
 }: {
-  height: string
-  entryId: number
+  input: string
+  title: string
+  liftId: number | undefined
   isHighlighted?: boolean
 }) => {
-  const [value, setValue] = useState(() => height)
+  const [value, setValue] = useState(() => input)
   const [isOpen, setIsOpen] = useState(false)
 
   const ctx = api.useUtils()
-
-  const { mutate: updateField } = api.compEntry.updateField.useMutation({
+  const { mutate } = api.lift.update.useMutation({
     onSuccess: () => {
       toast('Saved')
       setIsOpen(false)
@@ -37,31 +40,35 @@ const SquatRackHeight = ({
   })
 
   const handleClick = () => {
-    updateField({
-      id: entryId,
-      field: 'squarRackHeight',
+    console.log({
+      id: liftId,
+      value: value,
+    })
+    if (!liftId) return
+    mutate({
+      id: liftId,
       value: value,
     })
   }
   return (
-    <TableCell
-      className={cn(isHighlighted && 'bg-accent', 'py-0')}
-    >
+    <TableCell className={cn(isHighlighted && 'bg-accent', 'py-0')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {
           setIsOpen(open)
         }}
-        modal={false}
       >
-        <DialogTrigger className={cn('flex justify-center w-full',isHighlighted && 'bg-accent')}>
-          <div className={cn('cursor-pointer rounded-md text-center')}>
-            {height}
-          </div>
+        <DialogTrigger
+          className={cn(
+            'flex w-full cursor-pointer justify-center p-2',
+            input === '' ? '' : 'rounded-md border-2 border-input',
+          )}
+        >
+          {input + (input !== '' ? 'kg' : '')}
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Squat Rack Height</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
           <Input
             className='text-lg'
@@ -85,4 +92,4 @@ const SquatRackHeight = ({
   )
 }
 
-export default SquatRackHeight
+export default Lift
