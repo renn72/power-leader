@@ -14,7 +14,7 @@ const LifterInfo = ({
   return (
     <Card>
       <CardHeader></CardHeader>
-      <CardContent className='text-xs lg:text-lg'>
+      <CardContent className='text-xs lg:text-lg flex gap-4'>
         <div>{lifter && lifter.user && lifter.user.name}</div>
         <div>Round {round}</div>
         <div className='capitalize'>{lift}</div>

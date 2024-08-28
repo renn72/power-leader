@@ -20,44 +20,48 @@ const Sign = ({
   field: string
 }) => {
   return (
-    <div className='flex flex-col items-center lg:gap-1'>
-      <Check
-        className='cursor-pointer'
-        onClick={() => {
-          updateIsLiftGood({
-            id: currentLift?.id || -1,
-            entryId: lifter?.id || -1,
-            uuid: uuid,
-            [`${field}`]: true,
-          })
-        }}
-      />
-      <div>
-        {currentLift ? (
-          <div>
-            {isGood === null ? (
-              <div className='h-8 w-8 lg:h-16 lg:w-16 rounded-full border border-4 border-white/60 '></div>
-            ) : isGood ? (
-              <div className='good-lift h-8 w-8 lg:h-16 lg:w-16 rounded-full '></div>
-            ) : (
-              <div className='bad-lift h-8 w-8 lg:h-16 lg:w-16 rounded-full '></div>
-            )}
-          </div>
-        ) : (
-          <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
-        )}
+    <div className='flex flex-col items-center gap-2 lg:gap-1'>
+      <div className='flex items-center justify-center gap-2'>
+        <Check
+          size={36}
+          className='cursor-pointer'
+          onClick={() => {
+            updateIsLiftGood({
+              id: currentLift?.id || -1,
+              entryId: lifter?.id || -1,
+              uuid: uuid,
+              [`${field}`]: true,
+            })
+          }}
+        />
+        <div className=''>
+          {currentLift ? (
+            <div>
+              {isGood === null ? (
+                <div className='h-8 w-8 rounded-full border border-4 border-white/60 lg:h-16 lg:w-16 '></div>
+              ) : isGood ? (
+                <div className='good-lift h-8 w-8 rounded-full lg:h-16 lg:w-16 '></div>
+              ) : (
+                <div className='bad-lift h-8 w-8 rounded-full lg:h-16 lg:w-16 '></div>
+              )}
+            </div>
+          ) : (
+            <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+          )}
+        </div>
+        <X
+          className='cursor-pointer'
+          size={36}
+          onClick={() => {
+            updateIsLiftGood({
+              id: currentLift?.id || -1,
+              entryId: lifter?.id || -1,
+              uuid: uuid,
+              [`${field}`]: false,
+            })
+          }}
+        />
       </div>
-      <X
-        className='cursor-pointer'
-        onClick={() => {
-          updateIsLiftGood({
-            id: currentLift?.id || -1,
-            entryId: lifter?.id || -1,
-            uuid: uuid,
-            [`${field}`]: false,
-          })
-        }}
-      />
       <Button
         variant='outline'
         className='opacity-50'
@@ -96,7 +100,7 @@ const Signals = ({
   return (
     <Card>
       <CardHeader className='p-0'></CardHeader>
-      <CardContent className='flex w-full justify-around p-0 lg:p-6'>
+      <CardContent className='flex w-full justify-around p-0 lg:p-4'>
         <Sign
           isGood={currentLift?.isGoodOne}
           updateIsLiftGood={updateIsLiftGood}

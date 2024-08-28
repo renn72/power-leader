@@ -117,8 +117,10 @@ input[type='number'] {
 }
 
 .good-lift {
-    background: radial-gradient(circle at center, #15803d 0%, #15803d 60%, #15803d50 80%, #15803d00 100% );
+    /* background: radial-gradient(circle at center, #15803d 0%, #15803d 60%, #15803d50 80%, #15803d00 100% ); */
+    background: #fffffff0;
 }
 .bad-lift {
-    background: radial-gradient(circle at center, #b50000 0%, #b50000 60%, #b5000050 80%, #b5000000 100% );
+    /* background: radial-gradient(circle at center, #b50000 0%, #b50000 60%, #b5000050 80%, #b5000000 100% ); */
+    background: #b50000;
 }
