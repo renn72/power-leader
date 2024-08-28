@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e0cedd70-7b07-4f29-806f-fb4107031f26",
+  "id": "5dc9f1f2-e99a-4d73-9649-c1f8f5d53919",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "pb_bracket_judge": {
