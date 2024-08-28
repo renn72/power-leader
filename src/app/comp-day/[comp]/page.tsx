@@ -19,6 +19,7 @@ import CompTableSkeletion from './_components/comp-table-skeletion'
 
 const Competition = ({ params }: { params: { comp: string } }) => {
   const { comp } = params
+  const competitonUuid = comp
   const [lift, setLift] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState('')
@@ -136,6 +137,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
             setRound={setRound}
           />
           <CompTable
+            competitonUuid={competitonUuid}
             lifters={lifters}
             competition={competition}
             lift={lift}

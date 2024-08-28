@@ -176,8 +176,6 @@ const CompTableHeader = ({
     }
   }
 
-  console.log('lifters', lifters)
-
   return (
     <TableHeader className='z-99 bg-secondary'>
       <TableRow>

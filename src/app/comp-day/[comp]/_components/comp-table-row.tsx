@@ -44,7 +44,10 @@ const CompTableRow = ({
   const lifterSquatRackHeight = lifter?.squarRackHeight || ''
   const lifterBenchRackHeight = lifter?.benchRackHeight || ''
 
-  const lifterOrder = lifter?.lift?.find((item) => item.lift === lift && item.liftNumber === Number(round))?.order || null
+  const lifterOrder =
+    lifter?.lift?.find(
+      (item) => item.lift === lift && item.liftNumber === Number(round),
+    )?.order || null
 
   const isSquatOne = round === '1' && lift === 'squat'
   const lifterSquatOneLift = lifter?.lift?.find(
@@ -182,8 +185,6 @@ const CompTableRow = ({
       )?.weight || ''
     : ''
 
-
-
   return (
     <TableRow
       key={lifter.id}
@@ -283,7 +284,19 @@ const CompTableRow = ({
             <UserCheck
               size={32}
               strokeWidth={3}
-              className={cn('')}
+              className={cn('cursor-pointer')}
+              onClick={() => {
+                setIndex('')
+                updateLift({
+                  id: competition.id,
+                  uuid: competition.uuid || '',
+                  round: +round,
+                  lift: lift,
+                  bracket: +bracket,
+                  index: -1,
+                  nextIndex: null,
+                })
+              }}
             />
           </Button>
         ) : (

@@ -2,6 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
+import { useEffect } from 'react'
 import { api } from '~/trpc/react'
 
 import { pusherClient } from '~/lib/pusher'
@@ -22,6 +23,7 @@ const CompTable = ({
   round,
   index,
   setIndex,
+  competitonUuid,
 }: {
   lifters: GetCompetitionEntryById[]
   competition: GetCompetitionByUuid
@@ -30,6 +32,7 @@ const CompTable = ({
   round: string
   index: string
   setIndex: (index: string) => void
+  competitonUuid: string
 }) => {
   const ctx = api.useUtils()
   const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
@@ -41,53 +44,57 @@ const CompTable = ({
     },
   })
 
-  // useEffect(() => {
-  //   Pusher.logToConsole = true
-  //   const channel = pusherClient.subscribe('competition-' + competitonUuid)
-  //
-  //   channel.bind(
-  //     'judge',
-  //     (data: {
-  //       id: number
-  //       entryId: number
-  //       judge: number
-  //       isGood: boolean
-  //     }) => {
-  //       if (!competition) {
-  //         return
-  //       }
-  //       console.log('data', data)
-  //       ctx.competition.get.setData(competition.id, {
-  //         ...competition,
-  //         entries: competition.entries.map((entry) => {
-  //           return {
-  //             ...entry,
-  //             lift: entry.lift.map((i) => {
-  //               return {
-  //                 ...i,
-  //                 isGoodOne:
-  //                   i.id === data.id && data.judge === 1
-  //                     ? data.isGood
-  //                     : i.isGoodOne,
-  //                 isGoodTwo:
-  //                   i.id === data.id && data.judge === 2
-  //                     ? data.isGood
-  //                     : i.isGoodTwo,
-  //                 isGoodThree:
-  //                   i.id === data.id && data.judge === 3
-  //                     ? data.isGood
-  //                     : i.isGoodThree,
-  //               }
-  //             }),
-  //           }
-  //         }),
-  //       })
-  //     },
-  //   )
-  //   return () => {
-  //     pusherClient.unsubscribe('competition-' + competitonUuid)
-  //   }
-  // }, [competition])
+  useEffect(() => {
+    Pusher.logToConsole = true
+    const channel = pusherClient.subscribe('competition-' + competitonUuid)
+
+    channel.bind(
+      'judge',
+      (data: {
+        id: number
+        entryId: number
+        judge: number
+        isGood: boolean
+      }) => {
+        if (!competition) {
+          return
+        }
+        console.log('data', data)
+        ctx.competition.getCompetitionByUuid.setData(competitonUuid, {
+          ...competition,
+          entries: competition.entries.map((entry) => {
+            return {
+              ...entry,
+              lift: entry.lift.map((i) => {
+                if (i.id === data.id && data.judge === 1) {
+                  return {
+                    ...i,
+                    isGoodOne: data.isGood,
+                  }
+                }
+                if (i.id === data.id && data.judge === 2) {
+                  return {
+                    ...i,
+                    isGoodTwo: data.isGood,
+                  }
+                }
+                if (i.id === data.id && data.judge === 3) {
+                  return {
+                    ...i,
+                    isGoodThree: data.isGood,
+                  }
+                }
+                return i
+              }),
+            }
+          }),
+        })
+      },
+    )
+    return () => {
+      pusherClient.unsubscribe('competition-' + competitonUuid)
+    }
+  }, [])
 
   return (
     <div className='rounded-md border border-input p-2'>

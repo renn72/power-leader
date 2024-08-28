@@ -9,10 +9,9 @@ import Pusher from 'pusher-js'
 import { cn } from '~/lib/utils'
 
 const CompDayScreen = ({ params }: { params: { comp: string } }) => {
-  const [update, setUpdate] = useState<string[]>([])
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
-  const [index, setIndex] = useState('')
+  const [index, setIndex] = useState<number | null | undefined>(null)
   const [nextIndex, setNextIndex] = useState('')
   const [round, setRound] = useState('')
   const [isGoodOne, setIsGoodOne] = useState<boolean | null | undefined>(null)
@@ -52,7 +51,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         lift: string
         round: string
         bracket: string
-        index: string
+        index: number | null
         nextIndex: string | null
       }) => {
         setLiftName(data.lift)
@@ -94,7 +93,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   useEffect(() => {
     setLiftName(competition?.compDayInfo.lift || '')
     setBracket(competition?.compDayInfo.bracket.toString() || '')
-    setIndex(competition?.compDayInfo.index.toString() || '')
+    setIndex(competition?.compDayInfo.index)
     setNextIndex(competition?.compDayInfo?.nextIndex?.toString() || '')
     setRound(competition?.compDayInfo.round.toString() || '')
   }, [competition])
@@ -109,6 +108,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   console.log('lift', lift)
   console.log({isGoodOne, isGoodTwo, isGoodThree})
 
+  if(!lift) return null
 
   return (
     <>

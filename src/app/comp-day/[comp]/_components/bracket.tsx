@@ -24,8 +24,6 @@ const Bracket = ({
   lift: string
     bracket: number
 }) => {
-  console.log('lifters', lifters)
-
   const ctx = api.useUtils()
   const { mutate: updateOrder } = api.lift.updateOrderMany.useMutation({
     onSettled: () => {
@@ -70,18 +68,25 @@ const Bracket = ({
 
   const sortByWC = () => {}
   const sortByWeight = () => {}
-  const unlock = () => {}
+  const unlock = () => {
+    const ins = entryList.map((entry, i) => ({
+      id: entry.id,
+      order: null,
+      bracket: bracket,
+      state: 'unlocked'
+    }))
+    updateOrder(ins)
+
+  }
   const lock = () => {
     const ins = entryList.map((entry, i) => ({
       id: entry.id,
-      order: i,
+      order: i + 1,
       bracket: bracket,
       state: 'ordered'
     }))
     updateOrder(ins)
   }
-  console.log('sortedList', sortedList)
-  console.log('entryList', entryList)
   return (
     <CardContent className='mb-12'>
       {!isLocked && (

@@ -63,7 +63,7 @@ export const liftRouter = createTRPCRouter({
           id: z.number(),
           state: z.string(),
           bracket: z.number(),
-          order: z.number(),
+          order: z.number().nullable(),
         }),
       ),
     )
