@@ -57,7 +57,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const menBench = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .filter((entry) => entry.compEntryToDivisions?.find(d => d.divisionId == 6))
     .map((e) => {
       return {
         ...e,
@@ -74,7 +74,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const womenBench = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.divisionId == 6))
     .map((e) => {
       return {
         ...e,
@@ -91,7 +91,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const menDead = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'male')
+    .filter((entry) => entry.compEntryToDivisions?.find(d => d.divisionId == 6))
     .map((e) => {
       return {
         ...e,
@@ -108,7 +108,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const womenDead = competition.entries
-    .filter((entry) => entry.gender?.toLowerCase() == 'female')
+    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.divisionId == 6))
     .map((e) => {
       return {
         ...e,
@@ -130,13 +130,13 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
         <Bracket
           entries={menSquat}
           lift='squat'
-          title={`Men\'s Squat`}
+          title={`Squat 1`}
           bracket={1}
         />
         <Bracket
           entries={womenSquat}
           lift='squat'
-          title={`Women\'s Squat`}
+          title={`Squat 2`}
           bracket={2}
         />
       </div>
@@ -144,13 +144,13 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
         <Bracket
           entries={menBench}
           lift='bench'
-          title={`Men\'s Bench`}
+          title={`Bench 1`}
           bracket={1}
         />
         <Bracket
           entries={womenBench}
           lift='bench'
-          title={`Women\'s Bench`}
+          title={`Bench 2`}
           bracket={2}
         />
       </div>
@@ -158,13 +158,13 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
         <Bracket
           entries={menDead}
           lift='deadlift'
-          title={`Men\'s Deadlift`}
+          title={`Deadlift 1`}
           bracket={1}
         />
         <Bracket
           entries={womenDead}
           lift='deadlift'
-          title={`Women\'s Deadlift`}
+          title={`Deadlift 2`}
           bracket={2}
         />
       </div>
