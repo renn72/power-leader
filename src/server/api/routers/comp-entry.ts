@@ -364,6 +364,8 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'deadlift',
+          gender: input.gender,
+          userWeight: input.weight,
           weight: input.deadliftOpener,
         }),
         ctx.db.insert(lift).values({
@@ -371,6 +373,8 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'deadlift',
+          gender: input.gender,
+          userWeight: input.weight,
           weight: '',
         }),
         ctx.db.insert(lift).values({
@@ -378,6 +382,8 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'deadlift',
+          gender: input.gender,
+          userWeight: input.weight,
           weight: '',
         }),
       ]

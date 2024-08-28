@@ -145,6 +145,8 @@ export const lift = createTable(
     day: int('day'),
     platform: int('platform'),
     rackHeight: text('rack_height'),
+    gender: text('gender'),
+    userWeight: text('user_weight'),
     createdAt: text('created_at')
       .default(sql`(CURRENT_TIMESTAMP)`)
       .notNull(),
