@@ -61,7 +61,7 @@ const Lift = ({
     })
   }
   return (
-    <TableCell className={cn(isHighlighted && 'bg-accent', 'py-0', 'p-0 sm:p-2 ')}>
+    <TableCell className={cn(isHighlighted && 'bg-accent', 'py-0', 'p-0 lg:p-2 ')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {

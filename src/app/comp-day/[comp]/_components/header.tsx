@@ -31,11 +31,11 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
           ctx.competition.getCompetitionByUuid.refetch()
         }}
       />
-      <h1 className='text-5xl font-bold'>{competition.name}</h1>
+      <h1 className='text-2xl lg:text-5xl font-bold'>{competition.name}</h1>
       <h2 className='text-lg capitalize text-muted-foreground'>
         {competition.currentState}
       </h2>
-      <div className='hidden sm:flex absolute bottom-0 right-0 flex items-center gap-2'>
+      <div className='hidden lg:flex absolute bottom-0 right-0 flex items-center gap-2'>
         <Button
           variant='secondary'
           size='sm'
