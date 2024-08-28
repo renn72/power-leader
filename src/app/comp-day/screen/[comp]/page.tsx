@@ -129,7 +129,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     <>
       <div
         className={cn(
-          'flex h-full min-h-[100vh] w-full flex-col',
+          'dark flex h-full min-h-[100vh] w-full flex-col',
           ' relative items-center justify-center',
         )}
       >
