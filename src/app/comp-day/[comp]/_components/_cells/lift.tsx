@@ -61,7 +61,7 @@ const Lift = ({
     })
   }
   return (
-    <TableCell className={cn(isHighlighted && 'bg-accent', 'py-0')}>
+    <TableCell className={cn(isHighlighted && 'bg-accent', 'py-0', 'p-0 sm:p-2 ')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {
@@ -75,7 +75,7 @@ const Lift = ({
             isJudged ? isGood ? 'bg-green-600/20 border-0 font-bold' : 'bg-red-600/20 border-0 font-bold' : '',
           )}
         >
-          <div className='mr-4'>{input + (input !== '' ? 'kg' : '')}</div>
+          <div className='mr-1 sm:mr-4'>{input + (input !== '' ? 'kg' : '')}</div>
           <div
             className={cn(
               'flex flex-col gap-1',

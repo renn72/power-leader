@@ -35,7 +35,7 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
       <h2 className='text-lg capitalize text-muted-foreground'>
         {competition.currentState}
       </h2>
-      <div className='absolute bottom-0 right-0 flex items-center gap-2'>
+      <div className='hidden sm:flex absolute bottom-0 right-0 flex items-center gap-2'>
         <Button
           variant='secondary'
           size='sm'
