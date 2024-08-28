@@ -63,6 +63,8 @@ const Bracket = ({
           liftId: entry.lift.find(
             (l) => l.lift === 'squat' && l.liftNumber === 1,
           )?.id,
+          sRack: entry.squarRackHeight,
+          bRack: entry.benchRackHeight,
         }
       }),
     )
@@ -73,6 +75,7 @@ const Bracket = ({
         squatBracket: bracket,
         liftId: entry.lift.find((l) => l.lift === 'squat' && l.liftNumber === 1)
           ?.id,
+        rack: entry.squarRackHeight,
       }))
       updateOrder(ins)
     } else if (lift === 'bench') {
@@ -82,6 +85,7 @@ const Bracket = ({
         benchBracket: bracket,
         liftId: entry.lift.find((l) => l.lift === 'bench' && l.liftNumber === 1)
           ?.id,
+        rack: entry.benchRackHeight,
       }))
       updateOrder(ins)
     } else if (lift === 'deadlift') {

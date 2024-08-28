@@ -85,6 +85,7 @@ const updateOrderBulkSchema = z.array(
     benchBracket: z.number().optional().nullable(),
     deadliftBracket: z.number().optional().nullable(),
     liftId: z.number().optional().nullable(),
+    rack: z.string().optional().nullable(),
   }),
 )
 
@@ -295,6 +296,7 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'squat',
+          rackHeight: input.squarRackHeight,
           weight: input.squatOpener,
         }),
         ctx.db.insert(lift).values({
@@ -302,6 +304,7 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'squat',
+          rackHeight: input.squarRackHeight,
           weight: '',
         }),
         ctx.db.insert(lift).values({
@@ -309,6 +312,7 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'squat',
+          rackHeight: input.squarRackHeight,
           weight: '',
         }),
       ]
@@ -319,6 +323,7 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'bench',
+          rackHeight: input.benchRackHeight,
           weight: input.benchOpener,
         }),
         ctx.db.insert(lift).values({
@@ -326,6 +331,7 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'bench',
+          rackHeight: input.benchRackHeight,
           weight: '',
         }),
         ctx.db.insert(lift).values({
@@ -333,6 +339,7 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'bench',
+          rackHeight: input.benchRackHeight,
           weight: '',
         }),
       ]
@@ -470,7 +477,7 @@ export const compEntryRouter = createTRPCRouter({
           if (item.squatOrderOne) order = item.squatOrderOne
           if (item.benchOrderOne) order = item.benchOrderOne
           if (item.deadliftOrderOne) order = item.deadliftOrderOne
-          return { liftId: item.liftId, order: order, bracket: bracket }
+          return { liftId: item.liftId, order: order, bracket: bracket, rack: item.rack }
         })
         .map((item) =>
           ctx.db
@@ -478,6 +485,7 @@ export const compEntryRouter = createTRPCRouter({
             .set({
               order: item.order,
               bracket: item.bracket,
+              rackHeight: item.rack,
             })
             .where(eq(lift.id, Number(item.liftId))),
         )

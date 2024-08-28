@@ -8,6 +8,20 @@ import Pusher from 'pusher-js'
 
 import { cn } from '~/lib/utils'
 
+const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
+  return (
+    <div>
+      {isGood === null ? (
+        <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
+      ) : isGood ? (
+        <div className='good-lift  h-64 w-64 rounded-full '></div>
+      ) : (
+        <div className='bad-lift  h-64 w-64 rounded-full '></div>
+      )}
+    </div>
+  )
+}
+
 const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
@@ -16,7 +30,9 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const [round, setRound] = useState('')
   const [isGoodOne, setIsGoodOne] = useState<boolean | null | undefined>(null)
   const [isGoodTwo, setIsGoodTwo] = useState<boolean | null | undefined>(null)
-  const [isGoodThree, setIsGoodThree] = useState<boolean | null | undefined>(null)
+  const [isGoodThree, setIsGoodThree] = useState<boolean | null | undefined>(
+    null,
+  )
   const { comp } = params
   const { data: competition } =
     api.competition.getCompetitionByUuid.useQuery(comp)
@@ -70,15 +86,15 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         isGood: boolean
       }) => {
         console.log('ping', lift?.id, data.id)
-        if(lift?.id != data.entryId) {
+        if (lift?.id != data.entryId) {
           console.log('not the same')
         }
         console.log('passed')
-        if(data.judge === 1) {
+        if (data.judge === 1) {
           setIsGoodOne(data.isGood)
-        } else if(data.judge === 2) {
+        } else if (data.judge === 2) {
           setIsGoodTwo(data.isGood)
-        } else if(data.judge === 3) {
+        } else if (data.judge === 3) {
           setIsGoodThree(data.isGood)
         }
       },
@@ -102,13 +118,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     setIsGoodOne(lift?.isGoodOne)
     setIsGoodTwo(lift?.isGoodTwo)
     setIsGoodThree(lift?.isGoodThree)
-
   }, [lift])
 
   console.log('lift', lift)
-  console.log({isGoodOne, isGoodTwo, isGoodThree})
+  console.log({ isGoodOne, isGoodTwo, isGoodThree })
 
-  if(!lift) return null
+  if (!lift) return null
 
   return (
     <>
@@ -125,37 +140,25 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           <div>nextIndex: {nextIndex}</div>
           <div>round: {round}</div>
         </div>
-        <div className='flex flex-col items-center gap-12 text-9xl font-bold'>
+        <div className='flex w-full flex-col items-center gap-12 text-8xl font-bold'>
+          <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-7xl text-muted-foreground'>
+            RawWar
+          </div>
           <div>{lifter?.user?.name}</div>
-          <div className=''>{lift?.weight}kg</div>
-          <div className='flex gap-24 justify-center'>
-            <div>
-              {isGoodOne === null ? (
-                <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
-              ) : isGoodOne ? (
-                <div className='good-lift  h-64 w-64 rounded-full '></div>
-              ) : (
-                <div className='bad-lift  h-64 w-64 rounded-full '></div>
-              )}
-            </div>
-            <div>
-              {isGoodTwo === null ? (
-                <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
-              ) : isGoodTwo ? (
-                <div className='good-lift  h-64 w-64 rounded-full '></div>
-              ) : (
-                <div className='bad-lift  h-64 w-64 rounded-full '></div>
-              )}
-            </div>
-            <div>
-              {isGoodThree === null ? (
-                <div className=' h-64 w-64 rounded-full border border-4 border-white/60 '></div>
-              ) : isGoodThree ? (
-                <div className='good-lift  h-64 w-64 rounded-full '></div>
-              ) : (
-                <div className='bad-lift  h-64 w-64 rounded-full '></div>
-              )}
-            </div>
+          <div className='flex w-full justify-center relative'>
+            <div>{lift?.weight}kg</div>
+            {
+            lift?.rackHeight && (
+              <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-5xl text-muted-foreground'>
+                {lift?.rackHeight}
+              </div>
+            )
+          }
+          </div>
+          <div className='flex w-full justify-center gap-24'>
+            <Sign isGood={isGoodOne} />
+            <Sign isGood={isGoodTwo} />
+            <Sign isGood={isGoodThree} />
           </div>
         </div>
         <div className='absolute bottom-0 left-0 text-sm'>

@@ -33,12 +33,18 @@ const Sign = ({
         }}
       />
       <div>
-        {isGood === null ? (
-          <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
-        ) : isGood ? (
-          <div className='good-lift h-16 w-16 rounded-full '></div>
+        {currentLift ? (
+          <div>
+            {isGood === null ? (
+              <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+            ) : isGood ? (
+              <div className='good-lift h-16 w-16 rounded-full '></div>
+            ) : (
+              <div className='bad-lift h-16 w-16 rounded-full '></div>
+            )}
+          </div>
         ) : (
-          <div className='bad-lift h-16 w-16 rounded-full '></div>
+          <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
         )}
       </div>
       <X
