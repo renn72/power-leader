@@ -13,8 +13,11 @@ import {
 import { Button } from '~/components/ui/button'
 import Link from 'next/link'
 
+import { useAuth } from '@clerk/nextjs'
+
 const CompDay = () => {
   const [compId, setCompId] = useState('')
+  const { isLoaded: isAuthLoaded, userId } = useAuth()
 
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
@@ -23,8 +26,10 @@ const CompDay = () => {
     setCompId(competitions?.[0]?.uuid?.toString() || '')
   }, [competitions])
 
+  if (!isAuthLoaded) return null
+
   return (
-    <div className='flex flex-col gap-4 p-4'>
+    <div className='flex flex-col gap-8 p-4'>
       <Select
         onValueChange={setCompId}
         defaultValue={compId}
@@ -43,12 +48,51 @@ const CompDay = () => {
           ))}
         </SelectContent>
       </Select>
-      <Link href={`/comp-day/${compId}`}>
+      {userId === 'user_2gwhZNIkM0KAcvfZmds8HUtsIj8' && (
+        <Link href={`comp-day/${compId}`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Admin
+          </Button>
+        </Link>
+      )}
+
+      <Link href={`comp-day/${compId}`}>
         <Button
           size='lg'
           variant='secondary'
-        >Go</Button>
+        >
+          Screen
+        </Button>
       </Link>
+      <div className='flex gap-8'>
+        <Link href={`comp-day/${compId}/judge-1`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Judge 1
+          </Button>
+        </Link>
+        <Link href={`comp-day/${compId}/judge-2`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Judge 2
+          </Button>
+        </Link>
+        <Link href={`comp-day/${compId}/judge-3`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Judge 3
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }

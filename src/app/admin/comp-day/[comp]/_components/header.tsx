@@ -3,6 +3,7 @@ import { GetCompetitionByUuid } from '~/lib/types'
 import { Button } from '~/components/ui/button'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import Image from 'next/image'
 import { RefreshCw } from 'lucide-react'
 
 import { api } from '~/trpc/react'
@@ -25,27 +26,32 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
     <div className='relative flex w-full flex-col items-center justify-center'>
       <RefreshCw
         size={36}
-        className='absolute top-2 left-4 cursor-pointer text-muted-foreground hover:text-primary'
+        className='absolute left-4 top-2 cursor-pointer text-muted-foreground hover:text-primary'
         onClick={() => {
           toast('Refreshing')
           ctx.competition.getCompetitionByUuid.refetch()
         }}
       />
-      <h1 className='text-2xl lg:text-5xl font-bold'>{competition.name}</h1>
-      <h2 className='text-lg capitalize text-muted-foreground'>
-        {competition.currentState}
-      </h2>
-      <div className='hidden lg:flex absolute bottom-0 right-0 flex items-center gap-2'>
+      <Image
+        src='/RawWar_Logo.png'
+        alt='RawWar Logo'
+        width={200}
+        height={100}
+      />
+      <div className='absolute bottom-0 right-0 flex hidden items-center gap-2 lg:flex'>
         <Button
           variant='secondary'
           size='sm'
           className='w-[130px]'
         >
-          <Link href={`/comp-day/screen/${competition.uuid}`}>Screen</Link>
+          <Link href={`/admin/comp-day/screen/${competition.uuid}`}>
+            Screen
+          </Link>
         </Button>
         {competition.currentState === 'closed' ||
         competition.currentState === 'paused' ? (
           <Button
+            className='hidden'
             size='sm'
             onClick={() => {
               startCompetition(competition.id)
