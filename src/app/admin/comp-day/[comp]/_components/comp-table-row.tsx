@@ -190,9 +190,9 @@ const CompTableRow = ({
       key={lifter.id}
       className={cn(isLifter ? 'bg-secondary' : '', 'py-0')}
     >
-      <Cell className='py-0 p-0 sm:p-2'>{lifterOrder}</Cell>
-      <Cell className='py-0  p-0 sm:p-2'>{lifterName}</Cell>
-      <Cell className='py-0  p-0 sm:p-2'>
+      <Cell className='py-0 p-0 lg:p-2'>{lifterOrder}</Cell>
+      <Cell className='py-0  p-0 lg:p-2'>{lifterName}</Cell>
+      <Cell className='py-0  p-0 lg:p-2'>
         <Badge className='w-14 items-center justify-center'>{lifterWc}</Badge>
       </Cell>
       <SquatRackHeight
@@ -276,7 +276,7 @@ const CompTableRow = ({
         isHighlighted={isDeadliftFour}
       />
       <Cell
-        className='p-0 sm:p-2'
+        className='p-0 lg:p-2'
       >
         {+index === lifter.id ? (
           <Button

@@ -26,7 +26,7 @@ const Navbar = () => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
-              href='/'
+              href='/admin'
               legacyBehavior
               passHref
             >
@@ -37,7 +37,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href='/create'
+              href='/admin/create'
               legacyBehavior
               passHref
             >
@@ -48,7 +48,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href='/comp-admin'
+              href='/admin/comp-admin'
               legacyBehavior
               passHref
             >
@@ -59,7 +59,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href='/weigh-in'
+              href='/admin/weigh-in'
               legacyBehavior
               passHref
             >
@@ -70,7 +70,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href='/bracket'
+              href='/admin/bracket'
               legacyBehavior
               passHref
             >
@@ -81,7 +81,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href='/comp-day'
+              href='/admin/comp-day'
               legacyBehavior
               passHref
             >
@@ -90,25 +90,11 @@ const Navbar = () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link
-              href='/admin'
-              legacyBehavior
-              passHref
-            >
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Admin
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>
         <ModeToggle />
         <div className='flex w-8 items-center'>
-          <SignedOut>
-            <SignInButton mode='modal' />
-          </SignedOut>
           <SignedIn>
             <UserButton />
           </SignedIn>

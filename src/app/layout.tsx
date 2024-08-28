@@ -7,9 +7,6 @@ import { dark } from '@clerk/themes'
 
 import { ThemeProvider } from '~/app/_components/theme-provider'
 
-import Navbar from './_components/navbar'
-import Footer from './_components/footer'
-
 import { Toaster } from '~/components/ui/sonner'
 
 export const metadata = {
@@ -39,9 +36,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <main className={`flex min-h-screen flex-col `}>
-                <Navbar />
                 <div className='min-h-[calc(100vh-7.8rem)]'>{children}</div>
-                <Footer />
                 <Toaster />
               </main>
             </ThemeProvider>

@@ -18,7 +18,7 @@ export default function Admin() {
             },
         })
     const { data: fakeUsers } = api.user.getFakeUsers.useQuery()
-    const { data: user } = api.user.getCurrentUser.useQuery()
+    const { data: user, isLoading } = api.user.getCurrentUser.useQuery()
     const { mutate: deleteFakeUsers } = api.user.deleteFakeUsers.useMutation({
         onSettled: () => {
             ctx.user.getFakeUsers.refetch()
@@ -38,9 +38,7 @@ export default function Admin() {
         },
     })
 
-    if (!user) {
-        return <div>No Auth</div>
-    }
+    if (isLoading) return null
 
     return (
         <section className='mt-8 flex h-full grow flex-col gap-8'>
@@ -126,7 +124,7 @@ export default function Admin() {
                             wc_male: wcMData.join('/'),
                             wc_female: wcFData.join('/'),
                             wc_mix: '',
-                            equipment: 'Bare/Sleeeves/Multi Ply',
+                            equipment: 'Bare',
                             formular: Math.random() > 0.5 ? 'Total' : 'DOTS',
                             currentState: 'created',
                             competitorLimit: 100,

@@ -81,7 +81,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
         className='cursor-pointer'
         key={competition.id}
         onClick={() => {
-          router.push(`/comp-admin/${competition.uuid}`)
+          router.push(`/admin/comp-admin/${competition.uuid}`)
         }}
       >
         <TableCell>{competition.name}</TableCell>

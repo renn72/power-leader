@@ -21,6 +21,12 @@ export const ageDivisionsData: Array<{
         maxAge: '',
         info: 'Second powerlifting event',
     },
+    {
+        name: 'TeamBattle',
+        minAge: '',
+        maxAge: '',
+        info: 'Team Battle',
+    }
 ]
 
 export const eventsData = [
