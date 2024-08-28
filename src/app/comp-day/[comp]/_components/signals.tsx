@@ -20,7 +20,7 @@ const Sign = ({
   field: string
 }) => {
   return (
-    <div className='flex flex-col items-center gap-1'>
+    <div className='flex flex-col items-center lg:gap-1'>
       <Check
         className='cursor-pointer'
         onClick={() => {
@@ -36,11 +36,11 @@ const Sign = ({
         {currentLift ? (
           <div>
             {isGood === null ? (
-              <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+              <div className='h-8 w-8 lg:h-16 lg:w-16 rounded-full border border-4 border-white/60 '></div>
             ) : isGood ? (
-              <div className='good-lift h-16 w-16 rounded-full '></div>
+              <div className='good-lift h-8 w-8 lg:h-16 lg:w-16 rounded-full '></div>
             ) : (
-              <div className='bad-lift h-16 w-16 rounded-full '></div>
+              <div className='bad-lift h-8 w-8 lg:h-16 lg:w-16 rounded-full '></div>
             )}
           </div>
         ) : (
@@ -95,8 +95,8 @@ const Signals = ({
     })
   return (
     <Card>
-      <CardHeader></CardHeader>
-      <CardContent className='flex w-full justify-around'>
+      <CardHeader className='p-0'></CardHeader>
+      <CardContent className='flex w-full justify-around p-0 lg:p-6'>
         <Sign
           isGood={currentLift?.isGoodOne}
           updateIsLiftGood={updateIsLiftGood}
