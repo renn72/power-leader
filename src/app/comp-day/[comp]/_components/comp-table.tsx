@@ -60,34 +60,37 @@ const CompTable = ({
           return
         }
         console.log('data', data)
-        ctx.competition.getCompetitionByUuid.setData(competitonUuid, {
-          ...competition,
-          entries: competition.entries.map((entry) => {
-            return {
-              ...entry,
-              lift: entry.lift.map((i) => {
-                if (i.id === data.id && data.judge === 1) {
-                  return {
-                    ...i,
-                    isGoodOne: data.isGood,
+        ctx.competition.getCompetitionByUuid.setData(competitonUuid, (comp) => {
+          if (!comp) return
+          return {
+            ...comp,
+            entries: comp.entries.map((entry) => {
+              return {
+                ...entry,
+                lift: entry.lift.map((i) => {
+                  if (i.id === data.id && data.judge === 1) {
+                    return {
+                      ...i,
+                      isGoodOne: data.isGood,
+                    }
                   }
-                }
-                if (i.id === data.id && data.judge === 2) {
-                  return {
-                    ...i,
-                    isGoodTwo: data.isGood,
+                  if (i.id === data.id && data.judge === 2) {
+                    return {
+                      ...i,
+                      isGoodTwo: data.isGood,
+                    }
                   }
-                }
-                if (i.id === data.id && data.judge === 3) {
-                  return {
-                    ...i,
-                    isGoodThree: data.isGood,
+                  if (i.id === data.id && data.judge === 3) {
+                    return {
+                      ...i,
+                      isGoodThree: data.isGood,
+                    }
                   }
-                }
-                return i
-              }),
-            }
-          }),
+                  return i
+                }),
+              }
+            }),
+          }
         })
       },
     )
