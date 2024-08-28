@@ -7,6 +7,7 @@ import { pusherClient } from '~/lib/pusher'
 import Pusher from 'pusher-js'
 
 import { cn } from '~/lib/utils'
+import Image from 'next/image'
 
 const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   return (
@@ -141,8 +142,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           <div>round: {round}</div>
         </div>
         <div className='flex w-full flex-col items-center gap-12 text-8xl font-bold'>
+
           <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-7xl text-muted-foreground'>
-            RawWar
+            <Image
+              src='/RawWar_Logo.png'
+              alt='RawWar Logo'
+              width={400}
+              height={100}
+            />
           </div>
           <div>{lifter?.user?.name}</div>
           <div className='flex w-full justify-center relative'>

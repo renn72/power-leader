@@ -54,6 +54,63 @@ const getRandomInt = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min)) + min
 }
 
+export const calculateNewWilks = (
+  bodyWeight: number,
+  weightLifted: number,
+  isFemale: boolean,
+) => {
+  const maleCoeff = [
+    47.4617885411949, 8.47206137941125, 0.073694103462609, -1.39583381094385e-3,
+    7.07665973070743e-6, -1.20804336482315e-8,
+  ]
+  const femaleCoeff = [
+    -125.425539779509, 13.7121941940668, -0.0330725063103405,
+    -1.0504000506583e-3, 9.38773881462799e-6, -2.3334613884954e-8,
+  ]
+  let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0]
+  let coeff = isFemale ? femaleCoeff : maleCoeff
+  let minbw = 40
+  let maxbw = isFemale ? 150.95 : 200.95
+  let bw = Math.min(Math.max(bodyWeight, minbw), maxbw)
+
+  for (let i = 1; i < coeff.length; i++) {
+    // @ts-ignore
+    denominator += coeff[i] * Math.pow(bw, i)
+  }
+
+  // @ts-ignore
+  let score = (600 / denominator) * weightLifted
+  return score.toFixed(2)
+}
+
+export const calculateDOTS = (
+  bodyWeight: number,
+  weightLifted: number,
+  isFemale: boolean,
+) => {
+  const maleCoeff = [
+    -307.75076, 24.0900756, -0.1918759221, 0.0007391293, -0.000001093,
+  ]
+
+  const femaleCoeff = [
+    -57.96288, 13.6175032, -0.1126655495, 0.0005158568, -0.0000010706,
+  ]
+
+  let denominator = isFemale ? femaleCoeff[0] : maleCoeff[0]
+  if (!denominator) return '0.00'
+  const coeff = isFemale ? femaleCoeff : maleCoeff
+  const maxbw = isFemale ? 150 : 210
+  const bw = Math.min(Math.max(bodyWeight, 40), maxbw)
+
+  for (let i = 1; i < coeff.length; i++) {
+    // @ts-ignore
+    denominator += coeff[i] * Math.pow(bw, i)
+  }
+
+  const score = (500 / denominator) * weightLifted
+  return score.toFixed(2)
+}
+
 export function generateFullName() {
     const name1 = [
         'abandoned',
