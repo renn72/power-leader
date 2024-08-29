@@ -93,7 +93,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   const weight = lift.weight
 
   return (
-    <div className='flex h-screen w-screen flex-col items-center justify-between py-4 text-xl font-semibold text-primary/90'>
+    <div className='flex h-screen flex-col items-center justify-around text-xl font-semibold text-primary/90'>
       <Image
         src='/RawWar_Logo.png'
         alt='RawWar Logo'
@@ -140,7 +140,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
           }}
           className='rounded-full bg-muted p-8 active:bg-muted-foreground'
         >
-          <ThumbsUp size={104} />
+          <ThumbsUp size={96} />
         </div>
         <div
           onClick={() => {
@@ -159,13 +159,13 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
           className='rounded-full bg-muted p-8 active:bg-muted-foreground'
         >
           <ThumbsDown
-            size={104}
+            size={96}
             className='text-red-500'
           />
         </div>
       </div>
       <div
-        className='flex w-[70vw] items-center justify-center rounded-full bg-muted p-2 active:bg-muted-foreground'
+        className='flex w-[70vw] items-center justify-center rounded-full bg-muted p-1 active:bg-muted-foreground'
         onClick={() => {
           if (!competition.uuid) return
           let field = ''
