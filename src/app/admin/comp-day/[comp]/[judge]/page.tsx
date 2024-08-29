@@ -93,7 +93,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   const weight = lift.weight
 
   return (
-    <div className='flex h-screen flex-col items-center justify-around text-xl font-semibold text-primary/90'>
+    <div className='flex h-dvh flex-col items-center justify-around text-xl font-semibold text-primary/90'>
       <Image
         src='/RawWar_Logo.png'
         alt='RawWar Logo'
