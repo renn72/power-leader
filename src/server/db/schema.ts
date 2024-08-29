@@ -96,6 +96,8 @@ export const compEntry = createTable(
     squatDay: int('squat_day_id'),
     benchDay: int('bench_day_id'),
     deadliftDay: int('deadlift_day_id'),
+    team: text('team'),
+    teamLift: text('team_lift'),
     isLocked: int('is_locked', { mode: 'boolean' }),
     notes: text('notes'),
     createdAt: text('created_at')
@@ -147,6 +149,8 @@ export const lift = createTable(
     rackHeight: text('rack_height'),
     gender: text('gender'),
     userWeight: text('user_weight'),
+    team: text('team'),
+    teamLift: text('team_lift'),
     createdAt: text('created_at')
       .default(sql`(CURRENT_TIMESTAMP)`)
       .notNull(),

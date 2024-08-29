@@ -60,6 +60,8 @@ const updateAndLockSchema = z.object({
   squatPB: z.string(),
   benchPB: z.string(),
   deadliftPB: z.string(),
+  team: z.string().optional(),
+  teamLift: z.string().optional(),
   notes: z.string(),
   compId: z.number(),
   userId: z.number().optional(),
