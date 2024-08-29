@@ -105,7 +105,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     }
   }, [comp, lift])
 
-  // console.log('comp', competition)
+  console.log('comp', competition)
 
   useEffect(() => {
     setLiftName(competition?.compDayInfo.lift || '')
@@ -121,28 +121,72 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     setIsGoodThree(lift?.isGoodThree)
   }, [lift])
 
+  const bracketList = competition?.entries?.filter((e) => {
+    if (liftName == 'squat') {
+      return e.squatBracket === Number(bracket)
+    }
+    if (liftName == 'deadlift') {
+      return e.deadliftBracket === Number(bracket)
+    }
+    if (liftName == 'bench') {
+      return e.benchBracket === Number(bracket)
+    }
+    return false
+  })
+    .sort((a, b) => {
+      const orderA = a.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))?.order || null
+      const orderB = b.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))?.order || null
+      if (orderA == null || orderA == undefined) return 1
+      if (orderB == null || orderB == undefined) return -1
+
+      return orderA - orderB
+    }).filter((e) => {
+      if (liftName == 'squat') {
+        return e.squatOpener !== ''
+    }
+      if (liftName == 'deadlift') {
+        return e.deadliftOpener !== ''
+      }
+      if (liftName == 'bench') {
+        return e.benchOpener !== ''
+      }
+      return false
+  })
+
+  console.log('bracketList', bracketList)
   console.log('lift', lift)
-  console.log({ isGoodOne, isGoodTwo, isGoodThree })
 
   if (!lift) return null
 
   return (
-    <>
       <div
         className={cn(
-          'dark flex h-full min-h-[100vh] w-full flex-col',
-          ' relative items-center justify-center',
+          'dark grid grid-cols-7 h-full h-screen w-full relative overflow-hidden',
         )}
       >
-        <div className='absolute left-0 top-0 text-sm'>
+      <div className='flex flex-col col-span-1 items-center gap-4 mt-12'>
+        {
+          bracketList?.map((entry, ) => (
+            <div
+              key={entry.id}
+              className={cn('text-lg tracking-tight font-semibold rounded-full border border-4 border-muted p-1 w-full text-center',
+                index == entry.id ? 'bg-yellow-400 border-yellow-400 text-black font-black' : 'bg-muted',
+              )}
+            >
+              {entry.user?.name}
+              </div>
+          ))
+        }
+      </div>
+      <div className='flex flex-col col-span-6 items-center justify-center relative'>
+        <div className='absolute right-0 top-0 text-sm hidden'>
           <div className='capitalize'>{liftName}</div>
           <div>bracket: {bracket}</div>
           <div>index: {index}</div>
           <div>nextIndex: {nextIndex}</div>
           <div>round: {round}</div>
         </div>
-        <div className='flex w-full flex-col items-center gap-12 text-8xl font-bold'>
-
+        <div className='flex w-full flex-col items-center gap-4 text-8xl font-bold'>
           <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-7xl text-muted-foreground'>
             <Image
               src='/RawWar_Logo.png'
@@ -151,7 +195,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               height={100}
             />
           </div>
-          <div>{lifter?.user?.name}</div>
+          <div className='uppercase'>{lifter?.user?.name}</div>
           <div className='flex w-full justify-center relative'>
             <div>{lift?.weight}kg</div>
             {
@@ -173,7 +217,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           <div className='capitalize'>{lift2?.weight}kg</div>
         </div>
       </div>
-    </>
+      </div>
   )
 }
 

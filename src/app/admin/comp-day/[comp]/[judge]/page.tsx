@@ -131,6 +131,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
             if (judgeNumber === 1) field = 'isGoodOne'
             if (judgeNumber === 2) field = 'isGoodTwo'
             if (judgeNumber === 3) field = 'isGoodThree'
+            setIsGood(true)
             updateIsLiftGood({
               id: lift.id,
               entryId: lifter.id,
@@ -149,6 +150,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
             if (judgeNumber === 1) field = 'isGoodOne'
             if (judgeNumber === 2) field = 'isGoodTwo'
             if (judgeNumber === 3) field = 'isGoodThree'
+            setIsGood(false)
             updateIsLiftGood({
               id: lift.id,
               entryId: lifter.id,
@@ -172,6 +174,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
           if (judgeNumber === 1) field = 'isGoodOne'
           if (judgeNumber === 2) field = 'isGoodTwo'
           if (judgeNumber === 3) field = 'isGoodThree'
+          setIsGood(null)
           updateIsLiftGood({
             id: lift.id,
             entryId: lifter.id,
