@@ -43,9 +43,9 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
           return a
         }, false) || false
 
-      const squatOpener = roundPL(50 + Math.floor(Math.random() * 120))
-      const benchOpener = roundPL(50 + Math.floor(Math.random() * 120))
-      const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 120))
+      const squatOpener = roundPL(50 + Math.floor(Math.random() * 220))
+      const benchOpener = roundPL(50 + Math.floor(Math.random() * 220))
+      const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 220))
       const weight = Number(
         (40 + Math.floor(Math.random() * 100) + Math.random()).toFixed(1),
       )

@@ -67,23 +67,6 @@ const Competition = ({ params }: { params: { comp: string } }) => {
       if (orderB == null || orderB == undefined) return -1
 
       return orderA - orderB
-      // if (a.squatOrderOne == null || b.squatOrderOne == null) {
-      //   return 0
-      // }
-      // if (a.benchOrderOne == null || b.benchOrderOne == null) {
-      //   return 0
-      // }
-      // if (a.deadliftOrderOne == null || b.deadliftOrderOne == null) {
-      //   return 0
-      // }
-      // if (lift === 'squat') {
-      //   return a?.squatOrderOne - b?.squatOrderOne
-      // } else if (lift === 'bench') {
-      //   return a.benchOrderOne - b.benchOrderOne
-      // } else if (lift === 'deadlift') {
-      //   return a.deadliftOrderOne - b.deadliftOrderOne
-      // }
-      // return 0
     })
 
   const lifter = lifters.find((l) => {
