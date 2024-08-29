@@ -43,13 +43,10 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
           return a
         }, false) || false
 
-      const squatOpener = roundPL(50 + Math.floor(Math.random() * 220))
-      const benchOpener = roundPL(50 + Math.floor(Math.random() * 220))
-      const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 220))
-      const weight = Number(
-        (40 + Math.floor(Math.random() * 100) + Math.random()).toFixed(1),
-      )
-      //66
+      const squatOpener = roundPL(50 + Math.floor(Math.random() * 270))
+      const benchOpener = roundPL(50 + Math.floor(Math.random() * 270))
+      const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 270))
+      const weight = Number(entry?.weight) || 100
 
       let wc = ''
       if (entry?.gender?.toLowerCase() == 'female' && wc_female) {
@@ -76,7 +73,7 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
         equipment: entry?.equipment || '',
         gender: entry?.gender || '',
         predictedWeight: entry?.predictedWeight || '',
-        weight: weight.toString(),
+        weight: entry?.weight || '',
         wc: wc,
         event:
           entry?.events?.map((event) => event.event?.id.toString() || '') || [],
@@ -97,9 +94,9 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
             Math.ceil(Math.random() * 5).toString()
           : '',
         deadliftOpener: isDeadlift ? deadliftOpener.toString() : '',
-        squatPB: isSquat ? (squatOpener + 25).toString() : '',
-        benchPB: isBench ? (benchOpener + 25).toString() : '',
-        deadliftPB: isDeadlift ? (deadliftOpener + 25).toString() : '',
+        squatPB: '',
+        benchPB: '',
+        deadliftPB: '',
         compId: competition?.id || 0,
         userId: entry.userId || 0,
         notes: entry?.notes || '',

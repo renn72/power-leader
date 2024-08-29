@@ -4,8 +4,9 @@ import type { GetCompetitionById, } from '~/lib/types'
 import Bracket from './bracket'
 
 const Competition = ({ competition }: { competition: GetCompetitionById }) => {
+  console.log('competition', competition)
   const menSquat = competition.entries
-    .filter((entry) => entry.compEntryToDivisions?.find(d => d.divisionId == 6))
+    .filter((entry) => entry.compEntryToDivisions?.find(d => d.division?.name == 'TeamBattle'))
     .map((e) => {
       return {
         ...e,
@@ -40,7 +41,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
   console.log('menSquat', menSquat)
 
   const womenSquat = competition.entries
-    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.divisionId == 6))
+    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.division?.name == 'TeamBattle'))
     .map((e) => {
       return {
         ...e,
@@ -57,7 +58,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const menBench = competition.entries
-    .filter((entry) => entry.compEntryToDivisions?.find(d => d.divisionId == 6))
+    .filter((entry) => entry.compEntryToDivisions?.find(d => d.division?.name == 'TeamBattle'))
     .map((e) => {
       return {
         ...e,
@@ -74,7 +75,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const womenBench = competition.entries
-    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.divisionId == 6))
+    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.division?.name == 'TeamBattle'))
     .map((e) => {
       return {
         ...e,
@@ -91,7 +92,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const menDead = competition.entries
-    .filter((entry) => entry.compEntryToDivisions?.find(d => d.divisionId == 6))
+    .filter((entry) => entry.compEntryToDivisions?.find(d => d.division?.name == 'TeamBattle'))
     .map((e) => {
       return {
         ...e,
@@ -108,7 +109,7 @@ const Competition = ({ competition }: { competition: GetCompetitionById }) => {
     })
 
   const womenDead = competition.entries
-    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.divisionId == 6))
+    .filter((entry) => !entry.compEntryToDivisions?.find(d => d.division?.name == 'TeamBattle'))
     .map((e) => {
       return {
         ...e,
