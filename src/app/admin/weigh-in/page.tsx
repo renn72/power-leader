@@ -24,6 +24,7 @@ import {
 const WeighIn = () => {
   const [compId, setCompId] = useState('')
   const [entryId, setEntryId] = useState<number | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
 
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
@@ -70,7 +71,10 @@ const WeighIn = () => {
           ))}
         </SelectContent>
       </Select>
-      <Sheet>
+      <Sheet
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
         <div className='flex items-center gap-4'>
           <h2 className='text-lg font-bold'>Weight In</h2>
           {competition && <FakeUser competition={competition} />}
@@ -92,6 +96,8 @@ const WeighIn = () => {
             <SheetTitle>Weigh In</SheetTitle>
           </SheetHeader>
           <WeighInForm
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
             entry={entry || null}
             competition={competition}
           />

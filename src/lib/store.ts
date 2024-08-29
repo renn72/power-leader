@@ -29,6 +29,8 @@ export const ageDivisionsData: Array<{
     }
 ]
 
+export const teams = ['Team 1', 'Team 2', 'Team 3', 'Team 4']
+
 export const eventsData = [
     'Squat, Bench, Deadlift',
     'Squat only',

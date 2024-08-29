@@ -22,6 +22,7 @@ import Notes from './_components/notes'
 import WeighIn from './_components/weigh-in'
 
 import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
+import Team from './_components/team'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,32 +47,61 @@ const formSchema = z.object({
   benchPB: z.string(),
   deadliftPB: z.string(),
   notes: z.string(),
+  team: z.string().optional(),
+  teamLift: z.string().optional(),
 })
 
 const WeighInForm = ({
   entry,
   competition,
+  isOpen,
+  setIsOpen,
 }: {
   entry: GetCompetitionEntryById | null
   competition: GetCompetitionById
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [isPending, setIsPending] = useState(false)
   const [submitText, setSubmitText] = useState('Submit')
 
   const [isEditPersonal, setIsEditPersonal] = useState(true)
 
-  const isSquat = entry?.events.reduce((a, c) => {
-    if (c.event?.isSquat) return true
-    return a
-  }, false) || false
-  const isBench = entry?.events.reduce((a, c) => {
-    if (c.event?.isBench) return true
-    return a
-  }, false) || false
-  const isDeadlift = entry?.events.reduce((a, c) => {
-    if (c.event?.isDeadlift) return true
-    return a
-  }, false) || false
+  const ctx = api.useUtils()
+  const { mutate: updateAndLock } = api.compEntry.updateAndLock.useMutation({
+    onMutate: () => {
+      setIsPending(true)
+      setSubmitText('Submitting...')
+    },
+    onSettled: () => {
+      ctx.competition.getMyCompetitions.refetch()
+      setIsPending(false)
+      setSubmitText('Submit')
+    },
+    onSuccess: () => {
+      toast.success('Weight In Submitted')
+      setIsOpen(false)
+    },
+    onError: () => {
+      toast.error('Error Submitting Weight In')
+    },
+  })
+
+  const isSquat =
+    entry?.events.reduce((a, c) => {
+      if (c.event?.isSquat) return true
+      return a
+    }, false) || false
+  const isBench =
+    entry?.events.reduce((a, c) => {
+      if (c.event?.isBench) return true
+      return a
+    }, false) || false
+  const isDeadlift =
+    entry?.events.reduce((a, c) => {
+      if (c.event?.isDeadlift) return true
+      return a
+    }, false) || false
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,6 +125,8 @@ const WeighInForm = ({
         entry?.compEntryToDivisions?.map((division) =>
           division.division?.id.toString(),
         ) || [],
+      team: entry?.team ? entry.team : '',
+      teamLift: entry?.teamLift ? entry.teamLift : '',
       squatOpener: entry?.squatOpener ? entry.squatOpener : '',
       squarRackHeight: entry?.squarRackHeight ? entry.squarRackHeight : '',
       benchOpener: entry?.benchOpener ? entry.benchOpener : '',
@@ -109,6 +141,17 @@ const WeighInForm = ({
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log('formData', data)
+    if (!entry) return
+    if (!competition) return
+    updateAndLock({
+      ...data,
+      id: entry.id,
+      compId: competition.id,
+      event: entry.events.map((event) => event.event?.id.toString() || ''),
+      division: entry.compEntryToDivisions.map(
+        (division) => division.division?.id.toString() || '',
+      ),
+    })
   }
 
   useEffect(() => {
@@ -161,12 +204,21 @@ const WeighInForm = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className='flex w-full max-w-2xl flex-col items-center gap-2'
             >
-              {isEditPersonal ? <Personal name={entry?.user?.name || ''} /> : <PersonalInfo entry={entry} />}
+              {isEditPersonal ? (
+                <Personal name={entry?.user?.name || ''} />
+              ) : (
+                <PersonalInfo entry={entry} />
+              )}
               <Equipment competition={competition} />
               <Events competition={competition} />
               <Divisions competition={competition} />
+              <Team />
               <WeighIn />
-              <LiftInfo isSquat={isSquat} isBench={isBench} isDeadlift={isDeadlift} />
+              <LiftInfo
+                isSquat={isSquat}
+                isBench={isBench}
+                isDeadlift={isDeadlift}
+              />
               <Notes />
               <Button
                 className='mt-4 w-min min-w-[170px]'
