@@ -5,7 +5,6 @@ import { api } from '~/trpc/react'
 import { pusherClient } from '~/lib/pusher'
 import Pusher from 'pusher-js'
 
-import { toast } from 'sonner'
 import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import { ThumbsDown, ThumbsUp } from 'lucide-react'
@@ -36,35 +35,32 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
       onSettled: () => {
         ctx.competition.getCompetitionByUuid.refetch()
       },
-      onSuccess: () => {
-        toast('registered')
-      },
     })
 
-  // useEffect(() => {
-  //   console.log('channel', 'competition-' + comp)
-  //   Pusher.logToConsole = true
-  //   const channel = pusherClient.subscribe('competition-' + comp)
-  //   channel.bind(
-  //     'update',
-  //     (data: {
-  //       lift: string
-  //       round: string
-  //       bracket: string
-  //       index: number | null
-  //       nextIndex: string | null
-  //     }) => {
-  //       setLiftName(data.lift)
-  //       setBracket(data.bracket)
-  //       setIndex(data.index)
-  //       setRound(data.round)
-  //       setNextIndex(data.nextIndex?.toString() || '')
-  //     },
-  //   )
-  //   return () => {
-  //     pusherClient.unsubscribe('competition-' + comp)
-  //   }
-  // }, [comp])
+  useEffect(() => {
+    console.log('channel', 'competition-' + comp)
+    Pusher.logToConsole = true
+    const channel = pusherClient.subscribe('competition-' + comp)
+    channel.bind(
+      'update',
+      (data: {
+        lift: string
+        round: string
+        bracket: string
+        index: number | null
+        nextIndex: string | null
+      }) => {
+        setLiftName(data.lift)
+        setBracket(data.bracket)
+        setIndex(data.index)
+        setRound(data.round)
+        setNextIndex(data.nextIndex?.toString() || '')
+      },
+    )
+    return () => {
+      pusherClient.unsubscribe('competition-' + comp)
+    }
+  }, [comp])
 
   useEffect(() => {
     setLiftName(competition?.compDayInfo.lift || '')
@@ -128,19 +124,40 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
         )}
       />
       <div className='flex w-full justify-around'>
-        <div className='rounded-full bg-muted p-8'>
-          <ThumbsUp
-            onClick={() => {
-              updateIsLiftGood({
-                id: lift?.id || -1,
-                entryId: lifter?.id || -1,
-                uuid: uuid,
-                [`isGood${judgeNumber}`]: true,
-              })
-            }}
-            size={104} />
+        <div
+          onClick={() => {
+            if (!competition.uuid) return
+            let field = ''
+            if (judgeNumber === 1) field = 'isGoodOne'
+            if (judgeNumber === 2) field = 'isGoodTwo'
+            if (judgeNumber === 3) field = 'isGoodThree'
+            updateIsLiftGood({
+              id: lift.id,
+              entryId: lifter.id,
+              uuid: competition.uuid,
+              [`${field}`]: true,
+            })
+          }}
+          className='rounded-full bg-muted p-8 active:bg-muted-foreground'
+        >
+          <ThumbsUp size={104} />
         </div>
-        <div className='rounded-full bg-muted p-8'>
+        <div
+          onClick={() => {
+            if (!competition.uuid) return
+            let field = ''
+            if (judgeNumber === 1) field = 'isGoodOne'
+            if (judgeNumber === 2) field = 'isGoodTwo'
+            if (judgeNumber === 3) field = 'isGoodThree'
+            updateIsLiftGood({
+              id: lift.id,
+              entryId: lifter.id,
+              uuid: competition.uuid,
+              [`${field}`]: false,
+            })
+          }}
+          className='rounded-full bg-muted p-8 active:bg-muted-foreground'
+        >
           <ThumbsDown
             size={104}
             className='text-red-500'
@@ -148,10 +165,23 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
         </div>
       </div>
       <div
-        className='w-[70vw] rounded-full bg-muted p-2 flex justify-center items-center'
+        className='flex w-[70vw] items-center justify-center rounded-full bg-muted p-2 active:bg-muted-foreground'
+        onClick={() => {
+          if (!competition.uuid) return
+          let field = ''
+          if (judgeNumber === 1) field = 'isGoodOne'
+          if (judgeNumber === 2) field = 'isGoodTwo'
+          if (judgeNumber === 3) field = 'isGoodThree'
+          updateIsLiftGood({
+            id: lift.id,
+            entryId: lifter.id,
+            uuid: competition.uuid,
+            [`${field}`]: null,
+          })
+        }}
       >
         Clear
-        </div>
+      </div>
     </div>
   )
 }
