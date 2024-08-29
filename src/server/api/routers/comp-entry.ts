@@ -35,6 +35,8 @@ const createSchema = z.object({
   deadliftPB: z.string(),
   notes: z.string(),
   compId: z.number(),
+  team: z.string().optional(),
+  teamLift: z.string().optional(),
   userId: z.number().optional(),
 })
 
@@ -109,6 +111,8 @@ const createEntrySchema = z.object({
   deadliftOpener: z.string().optional(),
   squatRackHeight: z.string().optional(),
   benchRackHeight: z.string().optional(),
+  team: z.string().optional(),
+  teamLift: z.string().optional(),
   compId: z.number(),
   userId: z.number().optional(),
 })

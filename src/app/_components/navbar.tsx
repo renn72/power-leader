@@ -19,6 +19,7 @@ const Navbar = () => {
   if (pathname.includes('comp-day/screen/')) return null
   if (pathname.includes('judge')) return null
   if (pathname.includes('loading')) return null
+  if (pathname.includes('board')) return null
 
   return (
     <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-2'>
