@@ -13,13 +13,6 @@ import { toast } from 'sonner'
 import { cn } from '~/lib/utils'
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { api } from '~/trpc/react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 

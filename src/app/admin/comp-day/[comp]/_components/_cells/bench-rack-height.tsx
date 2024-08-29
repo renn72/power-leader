@@ -12,6 +12,7 @@ import { Button } from '~/components/ui/button'
 import { toast } from 'sonner'
 import { cn } from '~/lib/utils'
 
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { api } from '~/trpc/react'
 
 const BenchRackHeight = ({
@@ -23,7 +24,8 @@ const BenchRackHeight = ({
   entryId: number
   isHighlighted?: boolean
 }) => {
-  const [value, setValue] = useState(() => height)
+  const [valueOne, setValueOne] = useState(() => Number(height.split('/')[0]))
+  const [valueTwo, setValueTwo] = useState(() => Number(height.split('/')[1]))
   const [isOpen, setIsOpen] = useState(false)
 
   const ctx = api.useUtils()
@@ -40,7 +42,7 @@ const BenchRackHeight = ({
     updateField({
       id: entryId,
       field: 'benchRackHeight',
-      value: value,
+      value: valueOne + '/' + valueTwo,
     })
   }
   return (
@@ -54,7 +56,12 @@ const BenchRackHeight = ({
         }}
         modal={false}
       >
-        <DialogTrigger className={cn('flex justify-center w-full',isHighlighted && 'bg-accent')}>
+        <DialogTrigger
+          className={cn(
+            'flex w-full justify-center',
+            isHighlighted && 'bg-accent',
+          )}
+        >
           <div className={cn('cursor-pointer rounded-md text-center')}>
             {height}
           </div>
@@ -63,13 +70,56 @@ const BenchRackHeight = ({
           <DialogHeader>
             <DialogTitle>Bench Rack Height</DialogTitle>
           </DialogHeader>
-          <Input
-            className='text-lg'
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value)
-            }}
-          />
+          <div className='flex items-center justify-around gap-2'>
+            <div className='flex flex-col items-center gap-2'>
+              <ChevronUp
+                size={24}
+                className='cursor-pointer'
+                onClick={() => {
+                  setValueOne(valueOne + 1)
+                }}
+              />
+              <Input
+                className='w-36 text-center text-4xl font-bold'
+                value={valueOne}
+                type='number'
+                onChange={(e) => {
+                  setValueOne(Number(e.target.value))
+                }}
+              />
+              <ChevronDown
+                size={24}
+                className='cursor-pointer'
+                onClick={() => {
+                  setValueOne(valueOne - 1)
+                }}
+              />
+            </div>
+            <div className='flex flex-col items-center gap-2'>
+              <ChevronUp
+                size={24}
+                className='cursor-pointer'
+                onClick={() => {
+                  setValueTwo(valueTwo + 1)
+                }}
+              />
+              <Input
+                className='w-36 text-center text-4xl font-bold'
+                value={valueTwo}
+                type='number'
+                onChange={(e) => {
+                  setValueTwo(Number(e.target.value))
+                }}
+              />
+              <ChevronDown
+                size={24}
+                className='cursor-pointer'
+                onClick={() => {
+                  setValueTwo(valueTwo - 1)
+                }}
+              />
+            </div>
+          </div>
           <Button
             className='mt-2'
             variant='secondary'
