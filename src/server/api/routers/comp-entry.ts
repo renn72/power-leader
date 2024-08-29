@@ -609,6 +609,29 @@ export const compEntryRouter = createTRPCRouter({
         })
         .where(eq(compEntry.id, input.id))
 
+      if (input.field === 'squarRackHeight') {
+        await ctx.db.update(lift).set({
+          rackHeight: input.value,
+        }).where(
+        and(
+          eq(lift.compEntryId, input.id),
+          eq(lift.lift, 'squat')
+        )
+      )
+    }
+
+
+      if (input.field === 'benchRackHeight') {
+        await ctx.db.update(lift).set({
+          rackHeight: input.value,
+        }).where(
+        and(
+          eq(lift.compEntryId, input.id),
+          eq(lift.lift, 'bench')
+        )
+      )
+    }
+
       return res
     }),
 })

@@ -39,15 +39,6 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
         height={100}
       />
       <div className='absolute bottom-0 right-0 flex hidden items-center gap-2 lg:flex'>
-        <Button
-          variant='secondary'
-          size='sm'
-          className='w-[130px]'
-        >
-          <Link href={`/admin/comp-day/screen/${competition.uuid}`}>
-            Screen
-          </Link>
-        </Button>
         {competition.currentState === 'closed' ||
         competition.currentState === 'paused' ? (
           <Button
