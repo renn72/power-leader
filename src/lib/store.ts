@@ -240,7 +240,7 @@ export const ceUsers = [
     name: 'Jarrod Murray',
     gender: 'Male',
     birthDate: new Date('2003-01-01'),
-    email: '',
+    email: 'jarrod@gmail.com',
     team: 'YEAH THE GIRLS',
     teamLift: 'deadlift',
     division: ['Open', 'TeamBattle'],

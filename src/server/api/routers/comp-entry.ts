@@ -163,6 +163,12 @@ export const compEntryRouter = createTRPCRouter({
 
       let userId = input.userId
 
+        const isUser = await ctx.db.query.users.findFirst({
+            where: (users, { eq }) => eq(users.email, input.email || ''),
+        })
+
+      if (isUser) userId = isUser.id
+
       if (!input.userId) {
         const user = await ctx.db
           .insert(users)

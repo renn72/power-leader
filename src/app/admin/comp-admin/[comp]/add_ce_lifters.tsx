@@ -7,6 +7,8 @@ import { cn } from '~/lib/utils'
 
 import type { GetCompetitionByUuid } from '~/lib/types'
 
+import { ceUsers } from '~/lib/store'
+
 export const dynamic = 'force-dynamic'
 
 const AddCEUsers = ({
@@ -17,8 +19,6 @@ const AddCEUsers = ({
   className?: string
 }) => {
   const ctx = api.useUtils()
-
-  const { data: fakeUsers } = api.user.getFakeUsers.useQuery()
 
   const { mutate } = api.compEntry.createEntry.useMutation({
     onError: (err) => {
@@ -31,44 +31,38 @@ const AddCEUsers = ({
     },
   })
 
-  const createFake = () => {
-    if (!fakeUsers) {
-      return
-    }
-    const divisions = competition?.divisions?.map((division) =>
-      division.id.toString(),
-    )
+  const createCE = () => {
+    const divisions = competition?.divisions?.map((division) => ({
+      id: division.id.toString(),
+      name: division.name,
+    }))
     const equipment = competition?.equipment?.split('/') || []
-    const events = competition?.events?.map((event) => event.id.toString())
+    const events = competition?.events?.map((event) => ({
+      id: event.id.toString(),
+      name: event.name,
+    }))
 
-    for (const user of fakeUsers) {
-      if (!user.birthDate) continue
-      const birthDate = new Date(user.birthDate)
-
+    for (const user of ceUsers) {
       let pickedEvents = events
-        .filter((_) => Math.random() > 0.5)
-        .map((event) => event)
-      if (pickedEvents.length == 0 && events[0]) {
-        pickedEvents = [events[0]]
-      }
+        .filter((e) => user.events.includes(e.name))
+        .map((event) => event.id.toString())
 
       let pickedDivisions = divisions
-        .filter((_division) => Math.random() > 0.5)
-        .map((division) => division)
-      if (pickedDivisions.length == 0 && divisions[0]) {
-        pickedDivisions = [divisions[0]]
-      }
+        .filter((d) => user.division.includes(d.name))
+        .map((division) => division.id.toString())
 
+      console.log(user.name, pickedDivisions, pickedEvents)
       mutate({
-        name: user.name || '',
-        birthDate: birthDate,
-        address: user.address || '',
-        phone: user.phone || '',
-        equipment:
-          equipment[Math.floor(Math.random() * equipment.length)] || '',
-        gender: Math.random() > 0.5 ? 'Male' : 'Female',
+        name: user.name,
+        birthDate: user.birthDate,
+        address: '',
+        phone: '',
+        equipment: 'Bare',
+        gender: user.gender,
         events: pickedEvents,
         divisions: pickedDivisions,
+        team: user?.team || '',
+        teamLift: user?.teamLift || '',
         squatOpener: '',
         squatRackHeight: '',
         benchOpener: '',
@@ -76,7 +70,6 @@ const AddCEUsers = ({
         deadliftOpener: '',
         compId: competition?.id || 0,
         notes: '',
-        userId: user.id,
       })
     }
   }
@@ -84,7 +77,7 @@ const AddCEUsers = ({
   return (
     <Button
       className={cn(className)}
-      onClick={createFake}
+      onClick={createCE}
     >
       Add CE Lifters
     </Button>
