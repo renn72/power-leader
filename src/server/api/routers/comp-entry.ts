@@ -113,6 +113,7 @@ const createEntrySchema = z.object({
   benchRackHeight: z.string().optional(),
   team: z.string().optional(),
   teamLift: z.string().optional(),
+  weight: z.string().optional(),
   compId: z.number(),
   userId: z.number().optional(),
 })
@@ -205,6 +206,7 @@ export const compEntryRouter = createTRPCRouter({
           deadliftOpener: input.deadliftOpener,
           squarRackHeight: input.squatRackHeight,
           benchRackHeight: input.benchRackHeight,
+          weight: input.weight,
           compId: input.compId,
           userId: userId,
         })

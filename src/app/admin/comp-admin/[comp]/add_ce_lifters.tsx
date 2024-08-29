@@ -55,9 +55,11 @@ const AddCEUsers = ({
       mutate({
         name: user.name,
         birthDate: user.birthDate,
+        email: user.email,
         address: '',
         phone: '',
         equipment: 'Bare',
+        weight: user.weight,
         gender: user.gender,
         events: pickedEvents,
         divisions: pickedDivisions,
