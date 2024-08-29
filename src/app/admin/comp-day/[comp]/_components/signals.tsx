@@ -94,7 +94,7 @@ const Signals = ({
   const { mutate: updateIsLiftGood } =
     api.competitionDay.updateIsLiftGood.useMutation({
       onSettled: () => {
-        ctx.competition.get.refetch()
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     })
   return (
