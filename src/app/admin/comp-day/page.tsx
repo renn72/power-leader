@@ -59,7 +59,7 @@ const CompDay = () => {
         </Link>
       )}
 
-      <Link href={`comp-day/${compId}`}>
+      <Link href={`comp-day/screen/${compId}`}>
         <Button
           size='lg'
           variant='secondary'
