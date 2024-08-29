@@ -46,7 +46,7 @@ export default async function RootLayout({
   const _user = await currentUser()
 
   return (
-    <div className={`flex min-h-screen flex-col `}>
+    <div className={`flex h-dvh flex-col `}>
       <Navbar />
       <div className='min-h-[calc(100vh-7.8rem)]'>{children}</div>
       <Footer />
