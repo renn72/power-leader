@@ -201,11 +201,11 @@ const LeaderBoardRow = ({
       key={entry.id}
       className={cn(
         'text-xl font-extrabold uppercase leading-5 tracking-tighter',
-        isTeam ? 'text-2xl leading-5' : 'h-10',
+        isTeam ? 'text-2xl leading-5' : 'h-8',
       )}
     >
       {isTeam ? (
-        <TableCell className='uppercase text-xl leading-5 py-0'>
+        <TableCell className='uppercase text-2xl leading-5 py-0'>
           <div>{entry.user?.name}</div>
           <div className='text-sm text-foreground/80 capitalize hidden'>{names}</div>
         </TableCell>
