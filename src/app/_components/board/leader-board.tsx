@@ -64,7 +64,7 @@ const LeaderBoard = ({
     })
 
   return (
-    <div className='w-screen h-screen text-xl'>
+    <div className='w-full text-xl'>
       <Table className='h-dvh'>
         <TableHeader>
           <TableRow className='text-lg uppercase tracking-tighter'>
