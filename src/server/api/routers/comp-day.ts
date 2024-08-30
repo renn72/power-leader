@@ -86,13 +86,16 @@ export const competitionDayRouter = createTRPCRouter({
     }
 
     console.log('input', input)
+    let state = 'judged'
 
     if (input.isGoodOne !== undefined) {
+      if (input.isGoodOne === null) state = 'created'
       const res = await ctx.db
         .update(lift)
         .set({
           isGoodOne: input.isGoodOne,
           updatedAt: Date.now().toString(),
+          state: state,
         })
         .where(eq(lift.id, input.id))
         .returning({
@@ -113,11 +116,13 @@ export const competitionDayRouter = createTRPCRouter({
     }
 
     if (input.isGoodTwo !== undefined) {
+      if (input.isGoodTwo === null) state = 'created'
       const res = await ctx.db
         .update(lift)
         .set({
           isGoodTwo: input.isGoodTwo,
           updatedAt: Date.now().toString(),
+          state: state,
         })
         .where(eq(lift.id, input.id))
         .returning({
@@ -138,11 +143,13 @@ export const competitionDayRouter = createTRPCRouter({
     }
 
     if (input.isGoodThree !== undefined) {
+      if (input.isGoodThree === null) state = 'created'
       const res = await ctx.db
         .update(lift)
         .set({
           isGoodThree: input.isGoodThree,
           updatedAt: Date.now().toString(),
+          state: state,
         })
         .where(eq(lift.id, input.id))
         .returning({
