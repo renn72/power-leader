@@ -189,7 +189,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   return (
     <div
       className={cn(
-        'dark relative grid h-full h-screen w-full grid-cols-2 overflow-hidden',
+        'dark relative grid h-screen w-screen grid-cols-2 overflow-hidden',
       )}
     >
       <div className='col-span-1 mt-4 flex flex-col items-center gap-[1.3vh]'>
@@ -214,7 +214,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div
               key={entry.id}
               className={cn(
-                'w-min rounded-full border border-4 border-muted p-0 text-base leading-5 font-semibold tracking-tighter',
+                'w-full rounded-full border border-4 border-muted p-0 text-base leading-5 font-semibold tracking-tighter',
                 'grid grid-cols-6 items-center gap-2',
                 index == entry.id
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
