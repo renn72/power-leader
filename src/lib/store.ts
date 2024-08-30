@@ -76,7 +76,7 @@ export const ceUsers = [
     gender: 'Male',
     birthDate: new Date('2006-01-01'),
     email: 'jakequinn982@gmail.com',
-    team: 'Definately 6 Foot',
+    team: 'Definitely 6 Foot',
     teamLift: 'squat',
     division: ['Open', 'TeamBattle', 'Novice'],
     events: ['Squat only'],

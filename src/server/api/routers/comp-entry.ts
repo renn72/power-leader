@@ -41,6 +41,7 @@ const createSchema = z.object({
 })
 
 const updateAndLockSchema = z.object({
+  name: z.string().optional(),
   id: z.number(),
   address: z.string(),
   phone: z.string(),
@@ -320,6 +321,7 @@ export const compEntryRouter = createTRPCRouter({
           userWeight: input.weight,
           rackHeight: input.squarRackHeight,
           weight: input.squatOpener,
+          name: input.name,
         }),
         ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -332,6 +334,7 @@ export const compEntryRouter = createTRPCRouter({
           lift: 'squat',
           rackHeight: input.squarRackHeight,
           weight: '',
+          name: input.name,
         }),
         ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -344,6 +347,7 @@ export const compEntryRouter = createTRPCRouter({
           lift: 'squat',
           rackHeight: input.squarRackHeight,
           weight: '',
+          name: input.name,
         }),
       ]
 
@@ -359,6 +363,7 @@ export const compEntryRouter = createTRPCRouter({
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
           weight: input.benchOpener,
+          name: input.name,
         }),
         ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -371,6 +376,7 @@ export const compEntryRouter = createTRPCRouter({
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
           weight: '',
+          name: input.name,
         }),
         ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -383,6 +389,7 @@ export const compEntryRouter = createTRPCRouter({
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
           weight: '',
+          name: input.name,
         }),
       ]
 
@@ -397,6 +404,7 @@ export const compEntryRouter = createTRPCRouter({
           gender: input.gender,
           userWeight: input.weight,
           weight: input.deadliftOpener,
+          name: input.name,
         }),
         ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -408,6 +416,7 @@ export const compEntryRouter = createTRPCRouter({
           gender: input.gender,
           userWeight: input.weight,
           weight: '',
+          name: input.name,
         }),
         ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -419,6 +428,7 @@ export const compEntryRouter = createTRPCRouter({
           gender: input.gender,
           userWeight: input.weight,
           weight: '',
+          name: input.name,
         }),
       ]
 

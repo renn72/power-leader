@@ -7,14 +7,18 @@ import {
   GetLiftById,
 } from '~/lib/types'
 import { calculateDOTS, getliftDots } from '~/lib/utils'
+import { cn } from '~/lib/utils'
+
 const LeaderBoardRow = ({
   entry,
   entries,
   index,
+  isTeam = false,
 }: {
   entry: GetCompetitionEntryById
   entries: GetCompetitionEntryById[]
   index: number
+  isTeam?: boolean
 }) => {
   const squats = entry.lift.filter((l) => l.lift == 'squat')
 
@@ -129,6 +133,11 @@ const LeaderBoardRow = ({
     )
 
   const liftsDots = entries?.map((e) => getliftDots(e))
+  const check = liftsDots
+    ?.filter((l) => l.squat !== 0)
+    .sort((a, b) => b.squat - a.squat)
+    .map((l, i) => ({ id: l.id, place: i + 1 }))
+  console.log('liftsDots', check)
   const squatPlaceDots = liftsDots
     ?.filter((l) => l.squat !== 0)
     .sort((a, b) => b.squat - a.squat)
@@ -177,12 +186,33 @@ const LeaderBoardRow = ({
     (hasBench ? Number(bench?.weight) : Number(projectedBench?.weight)) +
     (hasDeadlift ? Number(deadlift?.weight) : Number(projectedDeadlift?.weight))
 
+  let names = ''
+  if (isTeam) {
+    names = entry.lift
+      .map((l) => l.name)
+      .filter(
+        (element, index) =>
+          entry.lift.map((l) => l.name).indexOf(element) === index,
+      )
+      .join(', ')
+  }
+
   return (
     <TableRow
       key={entry.id}
-      className='text-2xl font-extrabold uppercase leading-6 tracking-tight'
+      className={cn(
+        'text-2xl font-extrabold uppercase leading-6 tracking-tight',
+        isTeam ? 'text-3xl leading-10' : '',
+      )}
     >
-      <TableCell className=''>{entry.user?.name}</TableCell>
+      {isTeam ? (
+        <TableCell className='uppercase text-6xl'>
+          <div>{entry.user?.name}</div>
+          <div className='text-lg text-foreground/80 capitalize'>{names}</div>
+        </TableCell>
+      ) : (
+        <TableCell className=''>{entry.user?.name}</TableCell>
+      )}
       {hasSquat ? (
         <>
           <TableCell className='lowercase text-yellow-500'>
@@ -191,7 +221,9 @@ const LeaderBoardRow = ({
           <TableCell className='lowercase text-yellow-500'>
             {isNaN(+squatDots) ? '' : squatDots}
           </TableCell>
-          <TableCell className='font-semibold'>{squatPlaceDots?.place}</TableCell>
+          <TableCell className='font-semibold'>
+            {squatPlaceDots?.place}
+          </TableCell>
         </>
       ) : (
         <>
@@ -212,7 +244,9 @@ const LeaderBoardRow = ({
           <TableCell className='text-yellow-500'>
             {isNaN(+benchDots) ? '' : benchDots}
           </TableCell>
-          <TableCell className='font-semibold'>{benchPlaceDots?.place}</TableCell>
+          <TableCell className='font-semibold'>
+            {benchPlaceDots?.place}
+          </TableCell>
         </>
       ) : (
         <>
@@ -233,7 +267,9 @@ const LeaderBoardRow = ({
           <TableCell className='text-yellow-500'>
             {isNaN(+deadliftDots) ? '' : deadliftDots}
           </TableCell>
-          <TableCell className='font-semibold'>{deadliftPlaceDots?.place}</TableCell>
+          <TableCell className='font-semibold'>
+            {deadliftPlaceDots?.place}
+          </TableCell>
         </>
       ) : (
         <>

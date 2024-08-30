@@ -10,11 +10,12 @@ import {
 import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import LeaderBoardRow from './leader-board-row'
 import { getTotalDots } from '~/lib/utils'
+import { cn } from '~/lib/utils'
 
 const teamNames = [
   'MGMs',
   'YEAH THE GIRLS',
-  'Definatel 6 Foot',
+  'Definitely 6 Foot',
   'Iron Titans',
   'Next Gen',
   'CE Heavy Hitters',
@@ -28,17 +29,27 @@ const LeaderBoard = ({
   competition: GetCompetitionByUuid
   table: string
 }) => {
-  const teamEntries = teamNames.map((teamName) => {
-    const lifts = competition.entries.map((entry) => entry?.lift).flat().filter(
-      (lift) => lift.team?.toLowerCase() === teamName.toLowerCase(),
-    )
-    return {
-      name: teamName,
-      lifts : lifts,
-    }
-  })
+  const teamEntries = teamNames
+    .map((teamName) => {
+      const lifts = competition.entries
+        .map((entry) => entry?.lift)
+        .flat()
+        .filter((lift) => lift.team?.toLowerCase() === teamName.toLowerCase())
+        .filter((lift) => lift.teamLift == lift.lift)
+      return {
+        id: teamName,
+        name: teamName,
+        user: { name: teamName },
+        lift: lifts,
+      }
+    })
+    .sort((a, b) => {
+      // @ts-ignore
+      return getTotalDots(b) - getTotalDots(a)
+    })
 
-  console.log('team', teamEntries)
+  const isTeam = table == 'teambattle'
+  console.log('team', isTeam)
   const entries = competition.entries
     .filter((entry) => {
       const res = entry.compEntryToDivisions.find(
@@ -55,8 +66,8 @@ const LeaderBoard = ({
 
   console.log(entries)
   return (
-    <div className='w-fill h-screen p-4 text-3xl'>
-      <Table>
+    <div className='w-fill h-screen text-3xl'>
+      <Table className='h-dvh'>
         <TableHeader>
           <TableRow className='text-2xl uppercase tracking-tight'>
             <TableHead>Name</TableHead>
@@ -74,16 +85,32 @@ const LeaderBoard = ({
             <TableHead>Rank</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {entries.map((entry, index) => (
-            <LeaderBoardRow
-              entry={entry}
-              entries={entries}
-              index={index}
-              key={entry.id}
-            />
-          ))}
-        </TableBody>
+        {isTeam ? (
+          <TableBody>
+            {teamEntries.map((entry, index) => (
+              <LeaderBoardRow
+                // @ts-ignore
+                entry={entry}
+                // @ts-ignore
+                entries={teamEntries}
+                index={index}
+                key={entry.name}
+                isTeam={true}
+              />
+            ))}
+          </TableBody>
+        ) : (
+          <TableBody>
+            {entries.map((entry, index) => (
+              <LeaderBoardRow
+                entry={entry}
+                entries={entries}
+                index={index}
+                key={entry.id}
+              />
+            ))}
+          </TableBody>
+        )}
       </Table>
     </div>
   )

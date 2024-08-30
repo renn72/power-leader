@@ -151,6 +151,7 @@ export const lift = createTable(
     userWeight: text('user_weight'),
     team: text('team'),
     teamLift: text('team_lift'),
+    name: text('name'),
     createdAt: text('created_at')
       .default(sql`(CURRENT_TIMESTAMP)`)
       .notNull(),
