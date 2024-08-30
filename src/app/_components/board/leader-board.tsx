@@ -11,6 +11,16 @@ import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import LeaderBoardRow from './leader-board-row'
 import { getTotalDots } from '~/lib/utils'
 
+const teamNames = [
+  'MGMs',
+  'YEAH THE GIRLS',
+  'Definatel 6 Foot',
+  'Iron Titans',
+  'Next Gen',
+  'CE Heavy Hitters',
+  'Whiskey Pigness',
+]
+
 const LeaderBoard = ({
   competition,
   table,
@@ -18,21 +28,34 @@ const LeaderBoard = ({
   competition: GetCompetitionByUuid
   table: string
 }) => {
-  const entries = competition.entries.filter((entry) => {
-    const res = entry.compEntryToDivisions.find(
-      (d) =>
-        d.division?.name.replace(' ', '-').toLowerCase() == table.toLowerCase(),
+  const teamEntries = teamNames.map((teamName) => {
+    const lifts = competition.entries.map((entry) => entry?.lift).flat().filter(
+      (lift) => lift.team?.toLowerCase() === teamName.toLowerCase(),
     )
-    if (!res) return false
-    return true
-  }).sort((a,b) => {
-
-    return getTotalDots(b) - getTotalDots(a)
+    return {
+      name: teamName,
+      lifts : lifts,
+    }
   })
+
+  console.log('team', teamEntries)
+  const entries = competition.entries
+    .filter((entry) => {
+      const res = entry.compEntryToDivisions.find(
+        (d) =>
+          d.division?.name.replace(' ', '-').toLowerCase() ==
+          table.toLowerCase(),
+      )
+      if (!res) return false
+      return true
+    })
+    .sort((a, b) => {
+      return getTotalDots(b) - getTotalDots(a)
+    })
 
   console.log(entries)
   return (
-    <div className='w-fill h-screen text-3xl p-4'>
+    <div className='w-fill h-screen p-4 text-3xl'>
       <Table>
         <TableHeader>
           <TableRow className='text-2xl uppercase tracking-tight'>

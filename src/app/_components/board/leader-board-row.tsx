@@ -144,7 +144,6 @@ const LeaderBoardRow = ({
     .sort((a, b) => b.deadlift - a.deadlift)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
-  console.log(squatPlaceDots)
 
   const projectedDeadliftDots = calculateDOTS(
     Number(projectedDeadlift?.userWeight),
