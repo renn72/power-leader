@@ -143,15 +143,15 @@ const WeighInForm = ({
     console.log('formData', data)
     if (!entry) return
     if (!competition) return
-    updateAndLock({
-      ...data,
-      id: entry.id,
-      compId: competition.id,
-      event: entry.events.map((event) => event.event?.id.toString() || ''),
-      division: entry.compEntryToDivisions.map(
-        (division) => division.division?.id.toString() || '',
-      ),
-    })
+    // updateAndLock({
+    //   ...data,
+    //   id: entry.id,
+    //   compId: competition.id,
+    //   // event: entry.events.map((event) => event.event?.id.toString() || '') || [],
+    //   division: entry.compEntryToDivisions.map(
+    //     (division) => division.division?.id.toString() || '',
+    //   ),
+    // })
   }
 
   useEffect(() => {
