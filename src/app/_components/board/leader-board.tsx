@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/table'
 import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import LeaderBoardRow from './leader-board-row'
+import { getTotalDots } from '~/lib/utils'
+
 const LeaderBoard = ({
   competition,
   table,
@@ -25,16 +27,17 @@ const LeaderBoard = ({
     )
     if (!res) return false
     return true
+  }).sort((a,b) => {
+
+    return getTotalDots(b) - getTotalDots(a)
   })
   console.log({ competition, table, entries })
   return (
-    <div className='w-fill h-screen text-xl'>
+    <div className='w-fill h-screen text-3xl p-4'>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className='text-2xl uppercase tracking-tight'>
             <TableHead>Name</TableHead>
-            <TableHead>Is Squat</TableHead>
-            <TableHead>Has Squat</TableHead>
             <TableHead>Squat</TableHead>
             <TableHead>DOTS</TableHead>
             <TableHead>Bench</TableHead>

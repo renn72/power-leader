@@ -37,7 +37,7 @@ const LeaderBoardRow = ({
   const squatDots = calculateDOTS(
     Number(squat?.userWeight),
     Number(squat?.weight),
-    squat.gender == 'female',
+    squat.gender?.toLowerCase() == 'female',
   )
 
   const projectedSquat = squats?.reduce(
@@ -51,7 +51,7 @@ const LeaderBoardRow = ({
   const projectedSquatDots = calculateDOTS(
     Number(projectedSquat?.userWeight),
     Number(projectedSquat?.weight),
-    projectedSquat.gender == 'female',
+    projectedSquat.gender?.toLowerCase() == 'female',
   )
 
   const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
@@ -74,7 +74,7 @@ const LeaderBoardRow = ({
   const benchDots = calculateDOTS(
     Number(bench?.userWeight),
     Number(bench?.weight),
-    bench.gender == 'female',
+    bench.gender?.toLowerCase() == 'female',
   )
 
   const projectedBench = entry.lift
@@ -90,10 +90,11 @@ const LeaderBoardRow = ({
   const projectedBenchDots = calculateDOTS(
     Number(projectedBench?.userWeight),
     Number(projectedBench?.weight),
-    projectedBench.gender == 'female',
+    projectedBench.gender?.toLowerCase() == 'female',
   )
 
-  const isDeadlifting = entry.lift.filter((l) => l.lift == 'deadlift').length > 0
+  const isDeadlifting =
+    entry.lift.filter((l) => l.lift == 'deadlift').length > 0
   const hasDeadlift = entry.lift
     .filter((l) => l.lift == 'deadlift')
     .reduce((a, b) => (b.state == 'judged' ? true : a), false)
@@ -113,7 +114,7 @@ const LeaderBoardRow = ({
   const deadliftDots = calculateDOTS(
     Number(deadlift?.userWeight),
     Number(deadlift?.weight),
-    deadlift.gender == 'female',
+    deadlift.gender?.toLowerCase() == 'female',
   )
 
   const projectedDeadlift = entry.lift
@@ -129,27 +130,41 @@ const LeaderBoardRow = ({
   const projectedDeadliftDots = calculateDOTS(
     Number(projectedDeadlift?.userWeight),
     Number(projectedDeadlift?.weight),
-    projectedDeadlift.gender == 'female',
+    projectedDeadlift.gender?.toLowerCase() == 'female',
   )
 
   const totalDots =
-    (hasSquat ? Number(squatDots) : Number(projectedSquatDots)) +
-    (hasBench ? Number(benchDots) : Number(projectedBenchDots)) +
-    (hasDeadlift ? Number(deadliftDots) : Number(projectedDeadliftDots))
+    Number(isSquatting ? hasSquat ? Number(squatDots) : Number(projectedSquatDots) : 0) +
+    Number(isBenching ? hasBench ? Number(benchDots) : Number(projectedBenchDots) : 0) +
+    Number(isDeadlifting ? hasDeadlift ? Number(deadliftDots) : Number(projectedDeadliftDots) : 0)
 
   const totalWeight =
     (hasSquat ? Number(squat?.weight) : Number(projectedSquat?.weight)) +
     (hasBench ? Number(bench?.weight) : Number(projectedBench?.weight)) +
     (hasDeadlift ? Number(deadlift?.weight) : Number(projectedDeadlift?.weight))
 
+  console.log({
+    entry,
+    hasSquat,
+    hasBench,
+    hasDeadlift,
+    squat,
+    bench,
+    deadlift,
+    projectedSquat,
+    projectedBench,
+    projectedDeadlift,
+    projectedSquatDots,
+    projectedBenchDots,
+    projectedDeadliftDots,
+  })
+
   return (
     <TableRow
       key={entry.id}
-      className='text-lg font-extrabold uppercase tracking-tight'
+      className='text-2xl font-extrabold uppercase leading-6 tracking-tight'
     >
       <TableCell className=''>{entry.user?.name}</TableCell>
-      <TableCell className=''>{isSquatting ? 'Yes' : 'No'}</TableCell>
-      <TableCell className=''>{hasSquat ? 'Yes' : 'No'}</TableCell>
       {hasSquat ? (
         <>
           <TableCell className='lowercase text-yellow-500'>
@@ -188,32 +203,31 @@ const LeaderBoardRow = ({
           </TableCell>
         </>
       )}
-      {
-        hasDeadlift ? (
-          <>
-            <TableCell className='lowercase text-yellow-500'>
-              {deadlift?.weight == '0' ? '' : deadlift?.weight + 'kg'}
-            </TableCell>
-            <TableCell className='text-yellow-500'>
-              {isNaN(+deadliftDots) ? '' : deadliftDots}
-            </TableCell>
-          </>
-        ) : (
-          <>
-            <TableCell className='font-medium lowercase text-foreground/80'>
-              {projectedDeadlift?.weight == '0' ? '' : projectedDeadlift?.weight +
-                'kg'}
-            </TableCell>
-            <TableCell className='font-medium text-foreground/80'>
-              {isNaN(+projectedDeadliftDots) ? '' : projectedDeadliftDots}
-            </TableCell>
-          </>
-        )
-      }
-      <TableCell className='lowercase text-yellow-500'>
+      {hasDeadlift ? (
+        <>
+          <TableCell className='lowercase text-yellow-500'>
+            {deadlift?.weight == '0' ? '' : deadlift?.weight + 'kg'}
+          </TableCell>
+          <TableCell className='text-yellow-500'>
+            {isNaN(+deadliftDots) ? '' : deadliftDots}
+          </TableCell>
+        </>
+      ) : (
+        <>
+          <TableCell className='font-medium lowercase text-foreground/80'>
+            {projectedDeadlift?.weight == '0'
+              ? ''
+              : projectedDeadlift?.weight + 'kg'}
+          </TableCell>
+          <TableCell className='font-medium text-foreground/80'>
+            {isNaN(+projectedDeadliftDots) ? '' : projectedDeadliftDots}
+          </TableCell>
+        </>
+      )}
+      <TableCell className='lowercase text-white'>
         {totalWeight == 0 ? '' : totalWeight + 'kg'}
       </TableCell>
-      <TableCell className='text-yellow-500'>
+      <TableCell className='text-white'>
         {isNaN(+totalDots) ? '' : totalDots.toFixed(2)}
       </TableCell>
     </TableRow>
