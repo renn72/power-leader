@@ -26,7 +26,11 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   const [round, setRound] = useState('')
 
   const { data: competition, isLoading: competitionLoading } =
-    api.competition.getCompetitionByUuid.useQuery(comp)
+    api.competition.getCompetitionByUuid.useQuery(comp,
+    {
+      refetchInterval: 1000 * 60 * 5
+    }
+  )
 
   useEffect(() => {
     if (competition) {

@@ -18,7 +18,9 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   const { comp, judge } = params
   const judgeNumber = Number(judge.split('-')[1])
   const { data: competition, isLoading: competitionLoading } =
-    api.competition.getCompetitionByUuid.useQuery(comp)
+    api.competition.getCompetitionByUuid.useQuery(comp, {
+    refetchInterval: 1000 * 60 * 5
+  })
 
   const lifter = competition?.entries?.find(
     (entry) => entry.id === Number(index),
