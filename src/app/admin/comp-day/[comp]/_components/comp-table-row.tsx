@@ -192,7 +192,7 @@ const CompTableRow = ({
       <Cell className='py-0 p-0 lg:p-2'>{lifterOrder}</Cell>
       <Cell className='py-0  p-0 lg:p-2'>{lifterName}</Cell>
       <Cell className='py-0  p-0 lg:p-2'>
-        <Badge className='w-14 items-center justify-center'>{lifterWc}</Badge>
+        <Badge className='w-14 items-center justify-center'>wc</Badge>
       </Cell>
       <SquatRackHeight
         height={lifterSquatRackHeight}
