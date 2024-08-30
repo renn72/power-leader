@@ -67,7 +67,7 @@ const LeaderBoard = ({
     <div className='w-fill h-screen text-3xl'>
       <Table className='h-dvh'>
         <TableHeader>
-          <TableRow className='text-2xl uppercase tracking-tight'>
+          <TableRow className='text-xl uppercase tracking-tight'>
             <TableHead>Name</TableHead>
             <TableHead>Squat</TableHead>
             <TableHead>DOTS</TableHead>
