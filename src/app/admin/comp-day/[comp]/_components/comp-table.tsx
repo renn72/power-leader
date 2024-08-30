@@ -100,7 +100,7 @@ const CompTable = ({
   }, [])
 
   return (
-    <div className='rounded-md border border-input p-2'>
+    <div className='rounded-md border border-input p-1'>
       <ScrollArea className='h-[65vh]'>
         <Table className='text-sm lg:text-lg tracking-tighter'>
           <CompTableHeader

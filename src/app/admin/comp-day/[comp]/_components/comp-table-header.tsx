@@ -34,7 +34,7 @@ const TH = ({
   handleDeleteJudge: (liftName: string, num: number) => void
 }) => {
   return (
-    <TableHead>
+    <TableHead className='px-2'>
       <DropdownMenu>
         <DropdownMenuTrigger className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>

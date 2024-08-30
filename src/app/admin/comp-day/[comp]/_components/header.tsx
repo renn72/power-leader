@@ -35,8 +35,8 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
       <Image
         src='/RawWar_Logo.png'
         alt='RawWar Logo'
-        width={200}
-        height={100}
+        width={150}
+        height={90}
       />
       <div className='absolute bottom-0 right-0 flex hidden items-center gap-2 lg:flex'>
         {competition.currentState === 'closed' ||

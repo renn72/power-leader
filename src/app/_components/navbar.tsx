@@ -22,7 +22,7 @@ const Navbar = () => {
   if (pathname.includes('board')) return null
 
   return (
-    <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-2'>
+    <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-0'>
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>

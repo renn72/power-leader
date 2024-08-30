@@ -4,6 +4,8 @@ import { Check, X } from 'lucide-react'
 
 import { api } from '~/trpc/react'
 
+export const dynamic = 'force-dynamic'
+
 const Sign = ({
   isGood,
   updateIsLiftGood,
@@ -38,15 +40,15 @@ const Sign = ({
           {currentLift ? (
             <div>
               {isGood === null ? (
-                <div className='h-8 w-8 rounded-full border border-4 border-white/60 lg:h-16 lg:w-16 '></div>
+                <div className='h-8 w-8 rounded-full border border-4 border-white/60 lg:h-12 lg:w-12 '></div>
               ) : isGood ? (
-                <div className='good-lift h-8 w-8 rounded-full lg:h-16 lg:w-16 '></div>
+                <div className='good-lift h-8 w-8 rounded-full lg:h-12 lg:w-12 '></div>
               ) : (
-                <div className='bad-lift h-8 w-8 rounded-full lg:h-16 lg:w-16 '></div>
+                <div className='bad-lift h-8 w-8 rounded-full lg:h-12 lg:w-12 '></div>
               )}
             </div>
           ) : (
-            <div className=' h-16 w-16 rounded-full border border-4 border-white/60 '></div>
+            <div className=' h-12 w-12 rounded-full border border-4 border-white/60 '></div>
           )}
         </div>
         <X
@@ -64,7 +66,7 @@ const Sign = ({
       </div>
       <Button
         variant='outline'
-        className='opacity-50'
+        className='opacity-50 h-6'
         size='sm'
         onClick={() => {
           updateIsLiftGood({
@@ -100,7 +102,7 @@ const Signals = ({
   return (
     <Card>
       <CardHeader className='p-0'></CardHeader>
-      <CardContent className='flex w-full justify-around p-0 lg:p-4'>
+      <CardContent className='flex w-full justify-around p-0 lg:p-1'>
         <Sign
           isGood={currentLift?.isGoodOne}
           updateIsLiftGood={updateIsLiftGood}
