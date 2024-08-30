@@ -210,7 +210,7 @@ const LeaderBoardRow = ({
           <div className='text-sm text-foreground/80 capitalize hidden'>{names}</div>
         </TableCell>
       ) : (
-        <TableCell className='text-sm'>{entry.user?.name?.split(' ')[0]} {entry.user?.name?.split(' ')[2].slice(0, 1)}</TableCell>
+        <TableCell className='text-sm'>{entry.user?.name?.split(' ')[0]} {entry.user?.name?.split(' ')[2]?.slice(0, 1)}</TableCell>
       )}
       {hasSquat ? (
         <>
