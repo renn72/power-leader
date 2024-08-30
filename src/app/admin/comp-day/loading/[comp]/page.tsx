@@ -183,7 +183,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const dots = calculateDOTS(
     Number(lift.userWeight),
     Number(lift.weight),
-    lift.gender === 'female',
+    lift.gender?.toLowerCase() === 'female',
   )
 
   return (

@@ -6,14 +6,14 @@ import {
   GetCompetitionByUuid,
   GetLiftById,
 } from '~/lib/types'
-import { calculateDOTS } from '~/lib/utils'
+import { calculateDOTS, getliftDots } from '~/lib/utils'
 const LeaderBoardRow = ({
   entry,
-  competition,
+  entries,
   index,
 }: {
   entry: GetCompetitionEntryById
-  competition: GetCompetitionByUuid
+  entries: GetCompetitionEntryById[]
   index: number
 }) => {
   const squats = entry.lift.filter((l) => l.lift == 'squat')
@@ -127,16 +127,51 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
+
+  const liftsDots = entries?.map((e) => getliftDots(e))
+  const squatPlaceDots = liftsDots
+    ?.filter((l) => l.squat !== 0)
+    .sort((a, b) => b.squat - a.squat)
+    .map((l, i) => ({ id: l.id, place: i + 1 }))
+    .find((l) => l.id == entry.id)
+  const benchPlaceDots = liftsDots
+    ?.filter((l) => l.bench !== 0)
+    .sort((a, b) => b.bench - a.bench)
+    .map((l, i) => ({ id: l.id, place: i + 1 }))
+    .find((l) => l.id == entry.id)
+  const deadliftPlaceDots = liftsDots
+    ?.filter((l) => l.deadlift !== 0)
+    .sort((a, b) => b.deadlift - a.deadlift)
+    .map((l, i) => ({ id: l.id, place: i + 1 }))
+    .find((l) => l.id == entry.id)
+  console.log(squatPlaceDots)
+
   const projectedDeadliftDots = calculateDOTS(
     Number(projectedDeadlift?.userWeight),
     Number(projectedDeadlift?.weight),
     projectedDeadlift.gender?.toLowerCase() == 'female',
   )
 
+  const squatTotalDots = isSquatting
+    ? hasSquat
+      ? Number(squatDots)
+      : Number(projectedSquatDots)
+    : 0
+  const benchTotalDots = isBenching
+    ? hasBench
+      ? Number(benchDots)
+      : Number(projectedBenchDots)
+    : 0
+  const deadliftTotalDots = isDeadlifting
+    ? hasDeadlift
+      ? Number(deadliftDots)
+      : Number(projectedDeadliftDots)
+    : 0
+
   const totalDots =
-    Number(isSquatting ? hasSquat ? Number(squatDots) : Number(projectedSquatDots) : 0) +
-    Number(isBenching ? hasBench ? Number(benchDots) : Number(projectedBenchDots) : 0) +
-    Number(isDeadlifting ? hasDeadlift ? Number(deadliftDots) : Number(projectedDeadliftDots) : 0)
+    (isNaN(squatTotalDots) ? 0 : squatTotalDots) +
+    (isNaN(benchTotalDots) ? 0 : benchTotalDots) +
+    (isNaN(deadliftTotalDots) ? 0 : deadliftTotalDots)
 
   const totalWeight =
     (hasSquat ? Number(squat?.weight) : Number(projectedSquat?.weight)) +
@@ -157,6 +192,7 @@ const LeaderBoardRow = ({
           <TableCell className='lowercase text-yellow-500'>
             {isNaN(+squatDots) ? '' : squatDots}
           </TableCell>
+          <TableCell className='font-semibold'>{squatPlaceDots?.place}</TableCell>
         </>
       ) : (
         <>
@@ -166,6 +202,7 @@ const LeaderBoardRow = ({
           <TableCell className='font-medium text-foreground/80'>
             {isNaN(+projectedSquatDots) ? '' : projectedSquatDots}
           </TableCell>
+          <TableCell></TableCell>
         </>
       )}
       {hasBench ? (
@@ -176,6 +213,7 @@ const LeaderBoardRow = ({
           <TableCell className='text-yellow-500'>
             {isNaN(+benchDots) ? '' : benchDots}
           </TableCell>
+          <TableCell className='font-semibold'>{benchPlaceDots?.place}</TableCell>
         </>
       ) : (
         <>
@@ -185,6 +223,7 @@ const LeaderBoardRow = ({
           <TableCell className='font-medium text-foreground/80'>
             {isNaN(+projectedBenchDots) ? '' : projectedBenchDots}
           </TableCell>
+          <TableCell></TableCell>
         </>
       )}
       {hasDeadlift ? (
@@ -195,6 +234,7 @@ const LeaderBoardRow = ({
           <TableCell className='text-yellow-500'>
             {isNaN(+deadliftDots) ? '' : deadliftDots}
           </TableCell>
+          <TableCell className='font-semibold'>{deadliftPlaceDots?.place}</TableCell>
         </>
       ) : (
         <>
@@ -206,6 +246,7 @@ const LeaderBoardRow = ({
           <TableCell className='font-medium text-foreground/80'>
             {isNaN(+projectedDeadliftDots) ? '' : projectedDeadliftDots}
           </TableCell>
+          <TableCell></TableCell>
         </>
       )}
       <TableCell className='lowercase text-white'>
@@ -214,6 +255,7 @@ const LeaderBoardRow = ({
       <TableCell className='text-white'>
         {isNaN(+totalDots) ? '' : totalDots.toFixed(2)}
       </TableCell>
+      <TableCell>{index + 1}</TableCell>
     </TableRow>
   )
 }

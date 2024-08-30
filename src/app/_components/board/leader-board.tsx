@@ -29,6 +29,8 @@ const LeaderBoard = ({
 
     return getTotalDots(b) - getTotalDots(a)
   })
+
+  console.log(entries)
   return (
     <div className='w-fill h-screen text-3xl p-4'>
       <Table>
@@ -37,19 +39,23 @@ const LeaderBoard = ({
             <TableHead>Name</TableHead>
             <TableHead>Squat</TableHead>
             <TableHead>DOTS</TableHead>
+            <TableHead>Place</TableHead>
             <TableHead>Bench</TableHead>
             <TableHead>DOTS</TableHead>
+            <TableHead>Place</TableHead>
             <TableHead>Deadlift</TableHead>
             <TableHead>DOTS</TableHead>
+            <TableHead>Place</TableHead>
             <TableHead>Total Weight</TableHead>
             <TableHead>Total DOTS</TableHead>
+            <TableHead>Rank</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {entries.map((entry, index) => (
             <LeaderBoardRow
               entry={entry}
-              competition={competition}
+              entries={entries}
               index={index}
               key={entry.id}
             />
