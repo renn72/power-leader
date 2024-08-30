@@ -239,14 +239,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           )
         })}
       </div>
-      <div className='relative col-span-1 flex flex-col items-center w-full  justify-between text-4xl font-bold my-[2vh]'>
+      <div className='relative col-span-1 flex flex-col items-center w-full h-screen justify-between text-xl font-bold my-[2vh]'>
           <div className=''>
             <Image
               src='/RawWar_Logo.png'
               alt='RawWar Logo'
               width={400}
               height={100}
-              className='w-[20vw]'
+              className='w-[10vw]'
             />
           </div>
           <div className='text-sm'>

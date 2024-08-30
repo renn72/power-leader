@@ -1,25 +1,25 @@
 import { Dot } from 'lucide-react'
 
 const Red = () => (
-  <div className='flex h-36 w-14 items-center justify-center bg-red-600 '>
+  <div className='flex h-36 w-12 items-center justify-center bg-red-600 '>
     25
   </div>
 )
 
 const Blue = () => (
-  <div className='flex h-36 w-14 items-center justify-center bg-blue-500 '>
+  <div className='flex h-36 w-12 items-center justify-center bg-blue-500 '>
     20
   </div>
 )
 
 const Yellow = () => (
-  <div className='flex h-32 w-12 items-center justify-center bg-yellow-500 '>
+  <div className='flex h-32 w-10 items-center justify-center bg-yellow-500 '>
     15
   </div>
 )
 
 const Green = () => (
-  <div className='flex h-28 w-10 items-center justify-center bg-green-500 '>
+  <div className='flex h-28 w-8 items-center justify-center bg-green-500 '>
     10
   </div>
 )
@@ -40,7 +40,7 @@ const Black = () => (
 )
 
 const Gray = () => (
-  <div className='flex h-16 w-6 flex-col items-center justify-center bg-gray-200 leading-[1rem] '>
+  <div className='flex h-12 w-6 flex-col items-center justify-center bg-gray-200 leading-[1rem] '>
     <div>1</div>
     <Dot
       size={24}
@@ -85,7 +85,7 @@ const Loading = ({
   console.log(red, blue, yellow, green, white, black, gray)
 
   return (
-    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-xl'>
+    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-lg'>
       {isLifting ? (
         <div className='uppercase'>Lifting: {name}</div>
       ) : (
@@ -93,7 +93,7 @@ const Loading = ({
       )}
       <div>{weight}kg</div>
       <div className='flex w-full items-center gap-4'>
-        <div className='flex items-center justify-center gap-1 text-lg font-black tracking-tighter text-black'>
+        <div className='flex items-center justify-center gap-1 text-base font-black tracking-tighter text-black'>
           {Array.from({ length: red }).map((_, i) => (
             <Red key={i} />
           ))}
