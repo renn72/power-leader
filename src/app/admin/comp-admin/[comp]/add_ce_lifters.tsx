@@ -79,7 +79,10 @@ const AddCEUsers = ({
   return (
     <Button
       className={cn(className)}
-      onClick={createCE}
+      onClick={(e) => {
+        e.preventDefault()
+        createCE
+      }}
     >
       Add CE Lifters
     </Button>

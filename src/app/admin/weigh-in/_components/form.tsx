@@ -147,7 +147,7 @@ const WeighInForm = ({
     //   ...data,
     //   id: entry.id,
     //   compId: competition.id,
-    //   // event: entry.events.map((event) => event.event?.id.toString() || '') || [],
+    //   event: entry.events.map((event) => event.event?.id.toString() || '') || [],
     //   division: entry.compEntryToDivisions.map(
     //     (division) => division.division?.id.toString() || '',
     //   ),
