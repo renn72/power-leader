@@ -61,7 +61,7 @@ const AddCEUsers = ({
         equipment: 'Bare',
         weight: user.weight,
         gender: user.gender,
-        squatRackHeight: user.squarRackHeight,
+        squatRackHeight: user.squatRackHeight,
         squatOpener: user.squatOpener,
         benchOpener: user.benchOpener,
         benchRackHeight: user.benchRackHeight,
