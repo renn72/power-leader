@@ -75,7 +75,7 @@ const LeaderBoard = ({
             <TableHead>Bench</TableHead>
             <TableHead>DOTS</TableHead>
             <TableHead>Place</TableHead>
-            <TableHead>Deadlift</TableHead>
+            <TableHead>DL</TableHead>
             <TableHead>DOTS</TableHead>
             <TableHead>Place</TableHead>
             <TableHead>Total</TableHead>

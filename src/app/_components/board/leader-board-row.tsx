@@ -200,17 +200,17 @@ const LeaderBoardRow = ({
     <TableRow
       key={entry.id}
       className={cn(
-        'text-2xl font-extrabold uppercase leading-6 tracking-tighter',
+        'text-xl font-extrabold uppercase leading-5 tracking-tighter',
         isTeam ? 'text-2xl leading-5' : '',
       )}
     >
       {isTeam ? (
-        <TableCell className='uppercase text-4xl'>
+        <TableCell className='uppercase text-xl leading-4'>
           <div>{entry.user?.name}</div>
-          <div className='text-base text-foreground/80 capitalize'>{names}</div>
+          <div className='text-sm text-foreground/80 capitalize hidden'>{names}</div>
         </TableCell>
       ) : (
-        <TableCell className=''>{entry.user?.name}</TableCell>
+        <TableCell className='text-sm'>{entry.user?.name?.split(' ')[0]} {entry.user?.name?.split(' ')[2].slice(0, 1)}</TableCell>
       )}
       {hasSquat ? (
         <>
