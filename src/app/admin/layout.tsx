@@ -18,7 +18,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { userId } = auth()
+  // const { userId } = auth()
 
   // if (!userId) {
   //   return (
