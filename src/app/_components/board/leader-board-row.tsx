@@ -205,7 +205,7 @@ const LeaderBoardRow = ({
       )}
     >
       {isTeam ? (
-        <TableCell className='uppercase text-3xl leading-5 py-0'>
+        <TableCell className='uppercase text-3xl leading-7 py-0'>
           <div>{entry.user?.name}</div>
           <div className='text-sm text-foreground/80 capitalize hidden'>{names}</div>
         </TableCell>
