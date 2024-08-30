@@ -27,7 +27,7 @@ const TH = ({
   lifters: GetCompetitionEntryById[]
   lift: string
   round: number
-    bracket: number
+  bracket: number
   handleWieght: (liftName: string, num: number) => void
   handleJudge: (liftName: string, num: number) => void
   handleDeleteWeight: (liftName: string, num: number) => void
@@ -80,10 +80,10 @@ const TH = ({
 
 const CompTableHeader = ({
   lifters,
-  bracket
+  bracket,
 }: {
   lifters: GetCompetitionEntryById[]
-    bracket: number
+  bracket: number
 }) => {
   const debug = true
   const { mutate } = api.lift.update.useMutation({
@@ -178,6 +178,122 @@ const CompTableHeader = ({
 
   return (
     <TableHeader className='z-99 bg-secondary'>
+      <TableRow>
+        <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={1}
+            lift='squat'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={2}
+            lift='squat'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={3}
+            lift='squat'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={4}
+            lift='squat'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={1}
+            lift='bench'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={2}
+            lift='bench'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={3}
+            lift='bench'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={4}
+            lift='bench'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={1}
+            lift='deadlift'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={2}
+            lift='deadlift'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={3}
+            lift='deadlift'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+        <TableHead className='h-8 p-0'>
+          <CompTableHeaderBracket
+            lifters={lifters}
+            round={4}
+            lift='deadlift'
+            bracket={bracket}
+            isButton={true}
+          />
+        </TableHead>
+
+      </TableRow>
       <TableRow>
         <TableHead>#</TableHead>
         <TableHead>Name</TableHead>

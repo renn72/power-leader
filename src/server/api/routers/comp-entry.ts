@@ -206,6 +206,8 @@ export const compEntryRouter = createTRPCRouter({
           deadliftOpener: input.deadliftOpener,
           squarRackHeight: input.squatRackHeight,
           benchRackHeight: input.benchRackHeight,
+          team: input.team,
+          teamLift: input.teamLift,
           weight: input.weight,
           compId: input.compId,
           userId: userId,
