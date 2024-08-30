@@ -291,7 +291,25 @@ export const competitionRouter = createTRPCRouter({
       orderBy: (competitions, { desc }) => [desc(competitions.createdAt)],
       with: {
         divisions: true,
+        compDayInfo: true,
         events: true,
+        entries: {
+          with: {
+            lift: true,
+            user: true,
+            competition: true,
+            compEntryToDivisions: {
+              with: {
+                division: true,
+              },
+            },
+            events: {
+              with: {
+                event: true,
+              },
+            },
+          },
+        },
       },
     })
     return res

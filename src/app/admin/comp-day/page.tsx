@@ -20,13 +20,14 @@ const CompDay = () => {
   const { isLoaded: isAuthLoaded, userId } = useAuth()
 
   const { data: competitions, isLoading: competitionsLoading } =
-    api.competition.getMyCompetitions.useQuery()
+    api.competition.getAll.useQuery()
 
   useEffect(() => {
     setCompId(competitions?.[0]?.uuid?.toString() || '')
   }, [competitions])
 
   if (!isAuthLoaded) return null
+  if (competitionsLoading) return null
 
   return (
     <div className='flex flex-col gap-8 p-4'>

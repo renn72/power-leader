@@ -12,7 +12,10 @@ const LeaderBoardRow = ({
   index: number
 }) => {
   const squats = entry.lift.filter((l) => {
-    return l.lift == 'squat'
+    if (l.lift == 'squat') {
+
+    }
+    return false
   })
 
 
@@ -20,7 +23,7 @@ const LeaderBoardRow = ({
   return (
     <TableRow
       key={entry.id}
-      className=''
+      className='text-lg tracking-tight font-semibold'
     >
       <TableCell className=''>{entry.user?.name}</TableCell>
     </TableRow>

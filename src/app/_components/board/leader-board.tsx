@@ -28,7 +28,7 @@ const LeaderBoard = ({
   })
   console.log({ competition, table, entries })
   return (
-    <div className='w-fill h-screen'>
+    <div className='w-fill h-screen text-xl'>
       <Table>
         <TableHeader>
           <TableRow>
