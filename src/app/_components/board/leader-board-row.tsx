@@ -143,22 +143,6 @@ const LeaderBoardRow = ({
     (hasBench ? Number(bench?.weight) : Number(projectedBench?.weight)) +
     (hasDeadlift ? Number(deadlift?.weight) : Number(projectedDeadlift?.weight))
 
-  console.log({
-    entry,
-    hasSquat,
-    hasBench,
-    hasDeadlift,
-    squat,
-    bench,
-    deadlift,
-    projectedSquat,
-    projectedBench,
-    projectedDeadlift,
-    projectedSquatDots,
-    projectedBenchDots,
-    projectedDeadliftDots,
-  })
-
   return (
     <TableRow
       key={entry.id}

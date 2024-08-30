@@ -3,8 +3,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -31,7 +29,6 @@ const LeaderBoard = ({
 
     return getTotalDots(b) - getTotalDots(a)
   })
-  console.log({ competition, table, entries })
   return (
     <div className='w-fill h-screen text-3xl p-4'>
       <Table>
