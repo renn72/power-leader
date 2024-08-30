@@ -189,7 +189,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   return (
     <div
       className={cn(
-        'dark relative grid h-full h-screen w-full grid-cols-3 overflow-hidden',
+        'dark relative grid h-full h-screen w-full grid-cols-2 overflow-hidden',
       )}
     >
       <div className='col-span-1 mt-4 flex flex-col items-center gap-[1.3vh]'>
@@ -214,7 +214,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div
               key={entry.id}
               className={cn(
-                'w-full rounded-full border border-4 border-muted p-0 text-lg font-semibold tracking-tighter',
+                'w-full rounded-full border border-4 border-muted p-0 text-base leading-5 font-semibold tracking-tighter',
                 'grid grid-cols-7 items-center gap-2',
                 index == entry.id
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
@@ -239,14 +239,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           )
         })}
       </div>
-      <div className='relative col-span-2 flex flex-col items-center w-full  justify-between text-6xl font-bold my-[2vh]'>
+      <div className='relative col-span-1 flex flex-col items-center w-full  justify-between text-4xl font-bold my-[2vh]'>
           <div className=''>
             <Image
               src='/RawWar_Logo.png'
               alt='RawWar Logo'
               width={400}
               height={100}
-              className='w-[25vw]'
+              className='w-[20vw]'
             />
           </div>
           <div className='text-sm'>
