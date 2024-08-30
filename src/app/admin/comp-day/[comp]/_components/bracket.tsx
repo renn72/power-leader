@@ -5,9 +5,7 @@ import { cn } from '~/lib/utils'
 import { animations } from '@formkit/drag-and-drop'
 import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 import { Badge } from '~/components/ui/badge'
-import {
-  CardContent,
-} from '~/components/ui/card'
+import { CardContent } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 import { api } from '~/trpc/react'
 
@@ -17,12 +15,12 @@ const Bracket = ({
   lifters,
   round,
   lift,
-  bracket
+  bracket,
 }: {
   lifters: GetCompetitionEntryById[]
   round: number
   lift: string
-    bracket: number
+  bracket: number
 }) => {
   const ctx = api.useUtils()
   const { mutate: updateOrder } = api.lift.updateOrderMany.useMutation({
@@ -64,6 +62,7 @@ const Bracket = ({
   const [parent, entryList, setEntryList] = useDragAndDrop<
     HTMLDivElement,
     GetLiftById
+  // @ts-ignore
   >(sortedList, { plugins: [animations()], dragHandle: '.drag-handle' })
 
   const sortByWC = () => {}
@@ -73,17 +72,16 @@ const Bracket = ({
       id: entry.id,
       order: null,
       bracket: bracket,
-      state: 'unlocked'
+      state: 'unlocked',
     }))
     updateOrder(ins)
-
   }
   const lock = () => {
     const ins = entryList.map((entry, i) => ({
       id: entry.id,
       order: i + 1,
       bracket: bracket,
-      state: 'ordered'
+      state: 'ordered',
     }))
     updateOrder(ins)
   }
