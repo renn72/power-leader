@@ -64,10 +64,10 @@ const LeaderBoard = ({
     })
 
   return (
-    <div className='w-fill h-dvh text-3xl'>
+    <div className='w-fill h-dvh text-xl'>
       <Table className='h-dvh'>
         <TableHeader>
-          <TableRow className='text-xl uppercase tracking-tight'>
+          <TableRow className='text-lg uppercase tracking-tighter'>
             <TableHead>Name</TableHead>
             <TableHead>Squat</TableHead>
             <TableHead>DOTS</TableHead>
@@ -78,8 +78,8 @@ const LeaderBoard = ({
             <TableHead>Deadlift</TableHead>
             <TableHead>DOTS</TableHead>
             <TableHead>Place</TableHead>
-            <TableHead>Total Weight</TableHead>
-            <TableHead>Total DOTS</TableHead>
+            <TableHead>Total</TableHead>
+            <TableHead>DOTS</TableHead>
             <TableHead>Rank</TableHead>
           </TableRow>
         </TableHeader>

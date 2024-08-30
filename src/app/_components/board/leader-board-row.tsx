@@ -200,8 +200,8 @@ const LeaderBoardRow = ({
     <TableRow
       key={entry.id}
       className={cn(
-        'text-2xl font-extrabold uppercase leading-6 tracking-tight',
-        isTeam ? 'text-2xl leading-6' : '',
+        'text-2xl font-extrabold uppercase leading-6 tracking-tighter',
+        isTeam ? 'text-2xl leading-5' : '',
       )}
     >
       {isTeam ? (
