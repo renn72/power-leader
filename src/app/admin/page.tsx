@@ -42,7 +42,7 @@ export default function Admin() {
 
     return (
         <section className='mt-8 flex h-full grow flex-col gap-8'>
-            <div className='flex gap-4'>
+            <div className='flex gap-4 hidden'>
                 <Button
                     onClick={() => {
                         generateFakeUsers()
