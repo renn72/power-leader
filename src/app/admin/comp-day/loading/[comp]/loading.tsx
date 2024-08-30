@@ -1,37 +1,37 @@
 import { Dot } from 'lucide-react'
 
 const Red = () => (
-  <div className='flex h-48 w-14 items-center justify-center rounded-full bg-red-600 '>
+  <div className='flex h-48 w-14 items-center justify-center bg-red-600 '>
     25
   </div>
 )
 
 const Blue = () => (
-  <div className='flex h-48 w-14 items-center justify-center rounded-full bg-blue-500 '>
+  <div className='flex h-48 w-14 items-center justify-center bg-blue-500 '>
     20
   </div>
 )
 
 const Yellow = () => (
-  <div className='flex h-40 w-12 items-center justify-center rounded-full bg-yellow-500 '>
+  <div className='flex h-40 w-12 items-center justify-center bg-yellow-500 '>
     15
   </div>
 )
 
 const Green = () => (
-  <div className='flex h-32 w-10 items-center justify-center rounded-full bg-green-500 '>
+  <div className='flex h-32 w-10 items-center justify-center bg-green-500 '>
     10
   </div>
 )
 
 const White = () => (
-  <div className='flex h-24 w-8 items-center justify-center rounded-full bg-white '>
+  <div className='flex h-24 w-8 items-center justify-center bg-white '>
     5
   </div>
 )
 
 const Black = () => (
-  <div className='flex h-20 w-6 flex-col items-center justify-center rounded-full bg-gray-600 leading-[0.9rem] '>
+  <div className='flex h-20 w-6 flex-col items-center justify-center bg-gray-600 leading-[0.9rem] '>
     <div>2</div>
     <Dot
       size={24}
@@ -42,7 +42,7 @@ const Black = () => (
 )
 
 const Gray = () => (
-  <div className='flex h-16 w-6 flex-col items-center justify-center rounded-full bg-gray-200 leading-[1rem] '>
+  <div className='flex h-16 w-6 flex-col items-center justify-center bg-gray-200 leading-[1rem] '>
     <div>1</div>
     <Dot
       size={24}

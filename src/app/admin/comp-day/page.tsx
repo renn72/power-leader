@@ -68,6 +68,14 @@ const CompDay = () => {
           Screen
         </Button>
       </Link>
+      <Link href={`comp-day/loading/${compId}`}>
+        <Button
+          size='lg'
+          variant='secondary'
+        >
+          Loading
+        </Button>
+      </Link>
       <div className='flex gap-8'>
         <Link href={`comp-day/${compId}/judge-1`}>
           <Button
