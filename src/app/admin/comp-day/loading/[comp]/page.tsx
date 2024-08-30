@@ -192,7 +192,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         'dark relative grid h-dvh w-dvw grid-cols-3 overflow-hidden',
       )}
     >
-      <div className='col-span-1 mt-4 flex flex-col items-center gap-[1.3vh]'>
+      <div className='col-span-1 mt-4 flex flex-col items-center gap-[0.8vh]'>
         <div className='text-2xl font-bold text-muted-foreground'>
           Round: {round}
         </div>
@@ -215,7 +215,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               key={entry.id}
               className={cn(
                 'w-full rounded-full border border-4 border-muted p-0 text-base leading-5 font-semibold tracking-tighter',
-                'grid grid-cols-6 items-center gap-2',
+                'grid grid-cols-6 items-center gap-0',
                 index == entry.id
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
                   : 'bg-muted',
@@ -239,8 +239,8 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           )
         })}
       </div>
-      <div className='relative col-span-1 flex flex-col items-center w-full h-dvh justify-between text-xl font-bold my-[2vh]'>
-          <div className=''>
+      <div className='relative col-span-1 flex flex-col items-center w-full h-dvh justify-around text-xl font-bold my-[2vh]'>
+          <div className='absolute top-0 left-1/2 -translate-x-1/2 text-center'>
             <Image
               src='/RawWar_Logo.png'
               alt='RawWar Logo'
