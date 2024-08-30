@@ -49,7 +49,6 @@ const LeaderBoard = ({
     })
 
   const isTeam = table == 'teambattle'
-  console.log('team', isTeam)
   const entries = competition.entries
     .filter((entry) => {
       const res = entry.compEntryToDivisions.find(
@@ -64,7 +63,6 @@ const LeaderBoard = ({
       return getTotalDots(b) - getTotalDots(a)
     })
 
-  console.log(entries)
   return (
     <div className='w-fill h-screen text-3xl'>
       <Table className='h-dvh'>

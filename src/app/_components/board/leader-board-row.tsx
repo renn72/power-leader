@@ -137,7 +137,6 @@ const LeaderBoardRow = ({
     ?.filter((l) => l.squat !== 0)
     .sort((a, b) => b.squat - a.squat)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
-  console.log('liftsDots', check)
   const squatPlaceDots = liftsDots
     ?.filter((l) => l.squat !== 0)
     .sort((a, b) => b.squat - a.squat)
