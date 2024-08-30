@@ -74,26 +74,11 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
         gender: entry?.gender || '',
         predictedWeight: entry?.predictedWeight || '',
         weight: entry?.weight || '',
-        wc: wc,
-        event:
-          entry?.events?.map((event) => event.event?.id.toString() || '') || [],
-        division:
-          entry?.compEntryToDivisions?.map(
-            (division) => division.division?.id.toString() || '',
-          ) || [],
-        squatOpener: isSquat ? squatOpener.toString() : '',
-        squarRackHeight:
-          isSquat
-            ? Math.ceil(Math.random() * 15).toString() +
-              (Math.random() > 0.5 ? 'in' : 'out')
-            : '',
-        benchOpener: isBench ? benchOpener.toString() : '',
-        benchRackHeight: isBench
-          ? Math.ceil(Math.random() * 10).toString() +
-            '/' +
-            Math.ceil(Math.random() * 5).toString()
-          : '',
-        deadliftOpener: isDeadlift ? deadliftOpener.toString() : '',
+        squatOpener: entry.squatOpener || '',
+        squarRackHeight: entry.squarRackHeight || '',
+        benchOpener: entry.benchOpener || '',
+        benchRackHeight: entry.benchRackHeight || '',
+        deadliftOpener: entry.deadliftOpener || '',
         squatPB: '',
         benchPB: '',
         deadliftPB: '',
