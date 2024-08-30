@@ -56,6 +56,38 @@ export const liftRouter = createTRPCRouter({
 
       return res
     }),
+  create: publicProcedure
+    .input(
+      z.object({
+        compEntryId: z.number(),
+        lift: z.string(),
+        team: z.string().optional(),
+        teamLift: z.string().optional(),
+        bracket: z.number(),
+        gender: z.string(),
+        userWeight: z.string(),
+        rackHeight: z.string(),
+        weight: z.string(),
+        liftNumber: z.number(),
+        state: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      const res = await ctx.db
+        .insert(lift)
+        .values(input)
+        .returning({ id: lift.id, weight: lift.weight })
+
+      return res
+    }),
   updateOrderMany: publicProcedure
     .input(
       z.array(

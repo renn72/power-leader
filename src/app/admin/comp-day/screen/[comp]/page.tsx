@@ -166,87 +166,89 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   console.log('bracketList', bracketList)
   console.log('lift', lift)
 
-  if (!lift) return null
 
-  const dots = calculateDOTS(Number(lift.userWeight), Number(lift.weight), lift.gender === 'female')
+  const dots = calculateDOTS(
+    Number(lift?.userWeight),
+    Number(lift?.weight),
+    lift?.gender?.toLowerCase() === 'female',
+  )
 
   return (
-    <div
-      className={cn(
-        'dark relative grid h-full h-screen w-full grid-cols-7 overflow-hidden',
-      )}
-    >
-      <div className='col-span-1 mt-4 flex flex-col items-center gap-[1.3vh]'>
-        <div className='font-bold text-2xl text-muted-foreground'>Round: {round}</div>
-        {bracketList?.map((entry) => (
-          <div
-            key={entry.id}
-            className={cn(
-              'w-full rounded-full border border-4 border-muted p-0 text-center text-lg font-semibold tracking-tighter',
-              index == entry.id
-                ? 'border-yellow-400 bg-yellow-400 font-black text-black'
-                : 'bg-muted',
-            )}
-          >
-            {entry.user?.name}
-          </div>
-        ))}
+    <div className={cn('dark relative h-full h-screen w-full')}>
+      <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-muted-foreground'>
+        <Image
+          src='/RawWar_Logo.png'
+          alt='RawWar Logo'
+          width={400}
+          height={100}
+          className='w-[25vw]'
+        />
       </div>
-      <div className='relative col-span-6 flex flex-col items-center justify-center'>
-        <div className='absolute right-0 top-0 hidden text-sm'>
-          <div className='capitalize'>{liftName}</div>
-          <div>bracket: {bracket}</div>
-          <div>index: {index}</div>
-          <div>nextIndex: {nextIndex}</div>
-          <div>round: {round}</div>
-        </div>
-        <div className='flex w-full flex-col items-center gap-8 text-6xl font-bold'>
-          <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-muted-foreground'>
-            <Image
-              src='/RawWar_Logo.png'
-              alt='RawWar Logo'
-              width={400}
-              height={100}
-              className='w-[25vw]'
-            />
-
+      {!lift ? null : (
+        <div className='grid h-full w-full'>
+          <div className='flex flex-col items-center gap-[1.3vh] absolute left-10 top-4 '>
+            <div className='text-2xl font-bold text-muted-foreground'>
+              Round: {round}
+            </div>
+            {bracketList?.map((entry) => (
+              <div
+                key={entry.id}
+                className={cn(
+                  'w-full rounded-full border border-4 border-muted p-0 text-center text-lg font-semibold tracking-tighter',
+                  index == entry.id
+                    ? 'border-yellow-400 bg-yellow-400 font-black text-black'
+                    : 'bg-muted',
+                )}
+              >
+                {entry.user?.name}
+              </div>
+            ))}
           </div>
-            <div className='flex flex-col items-center'>
-          <div className='uppercase'>{lifter?.user?.name}</div>
-            {
-              lift?.team ? (
-                <div className='uppercase text-xl'>{lift.team}</div>
-              ) : null
-            }
-          </div>
-          <div className='relative flex w-full justify-center'>
-            <div>{lift?.weight}kg</div>
-            <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-xl text-muted-foreground'>
-              DOTS: {dots}
+          <div className='relative col-span-1 flex flex-col items-center justify-center'>
+            <div className='absolute right-0 top-0 hidden text-sm'>
+              <div className='capitalize'>{liftName}</div>
+              <div>bracket: {bracket}</div>
+              <div>index: {index}</div>
+              <div>nextIndex: {nextIndex}</div>
+              <div>round: {round}</div>
+            </div>
+            <div className='flex w-full flex-col items-center gap-8 text-6xl font-bold'>
+              <div className='flex flex-col items-center'>
+                <div className='uppercase'>{lifter?.user?.name}</div>
+                {lift?.team ? (
+                  <div className='text-xl uppercase'>{lift.team}</div>
+                ) : null}
+              </div>
+              <div className='relative flex w-full justify-center'>
+                <div>{lift?.weight}kg</div>
+                <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-xl text-muted-foreground'>
+                  DOTS: {dots}
+                </div>
+              </div>
+              <div className='relative flex w-full justify-center gap-24'>
+                <Sign isGood={isGoodOne} />
+                <Sign isGood={isGoodTwo} />
+                <Sign isGood={isGoodThree} />
+                {lift?.rackHeight && (
+                  <div className='absolute right-12 top-1/2 -translate-y-1/2 text-center text-4xl text-muted-foreground'>
+                    {lift?.rackHeight}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className='absolute bottom-0 left-[12vw] text-sm'>
+              {lifter2 && lift2 && (
+                <Loading
+                  name={lifter2.user?.name || ''}
+                  weight={Number(lift2.weight)}
+                  rack={lift2.rackHeight || ''}
+                  lift={liftName}
+                />
+              )}
             </div>
           </div>
-          <div className='flex w-full justify-center gap-24 relative'>
-            <Sign isGood={isGoodOne} />
-            <Sign isGood={isGoodTwo} />
-            <Sign isGood={isGoodThree} />
-            {lift?.rackHeight && (
-              <div className='absolute right-12 top-1/2 -translate-y-1/2 text-center text-4xl text-muted-foreground'>
-                {lift?.rackHeight}
-              </div>
-            )}
-          </div>
         </div>
-        <div className='absolute bottom-0 left-0 text-sm'>
-          {lifter2 && lift2 && (
-            <Loading
-              name={lifter2.user?.name || ''}
-              weight={Number(lift2.weight)}
-              rack={lift2.rackHeight || ''}
-              lift={liftName}
-            />
-          )}
-        </div>
-      </div>
+      )}
     </div>
   )
 }

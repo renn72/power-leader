@@ -9,7 +9,6 @@ import { Badge } from '~/components/ui/badge'
 import { TableCell as Cell, TableRow } from '~/components/ui/table-scroll'
 import { User, UserCheck, X } from 'lucide-react'
 import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
-import TableCell from './comp-table-cell'
 import SquatRackHeight from './_cells/squat-rack-height'
 import Lift from './_cells/lift'
 import BenchRackHeight from './_cells/bench-rack-height'
@@ -208,18 +207,21 @@ const CompTableRow = ({
       <Lift
         input={lifterSquatTwo}
         title='Squat 2'
+        previousLift={lifterSquatOneLift}
         lift={lifterSquatTwoLift}
         isHighlighted={isSquatTwo}
       />
       <Lift
         input={lifterSquatThree}
         title='Squat 3'
+        previousLift={lifterSquatTwoLift}
         lift={lifterSquatThreeLift}
         isHighlighted={isSquatThree}
       />
       <Lift
         input={lifterSquatFour}
         title='Squat 4'
+        previousLift={lifterSquatThreeLift}
         lift={lifterSquatFourLift}
         isHighlighted={isSquatFour}
       />
@@ -236,18 +238,21 @@ const CompTableRow = ({
       <Lift
         input={lifterBenchTwo}
         title='Bench 2'
+        previousLift={lifterBenchOneLift}
         lift={lifterBenchTwoLift}
         isHighlighted={isBenchTwo}
       />
       <Lift
         input={lifterBenchThree}
         title='Bench 3'
+        previousLift={lifterBenchTwoLift}
         lift={lifterBenchThreeLift}
         isHighlighted={isBenchThree}
       />
       <Lift
         input={lifterBenchFour}
         title='Bench 4'
+        previousLift={lifterBenchThreeLift}
         lift={lifterBenchFourLift}
         isHighlighted={isBenchFour}
       />
@@ -260,18 +265,21 @@ const CompTableRow = ({
       <Lift
         input={lifterDeadliftTwo}
         title='Deadlift 2'
+        previousLift={lifterDeadliftOneLift}
         lift={lifterDeadliftTwoLift}
         isHighlighted={isDeadliftTwo}
       />
       <Lift
         input={lifterDeadliftThree}
         title='Deadlift 3'
+        previousLift={lifterDeadliftTwoLift}
         lift={lifterDeadliftThreeLift}
         isHighlighted={isDeadliftThree}
       />
       <Lift
         input={lifterDeadliftFour}
         title='Deadlift 4'
+        previousLift={lifterDeadliftThreeLift}
         lift={lifterDeadliftFourLift}
         isHighlighted={isDeadliftFour}
       />
