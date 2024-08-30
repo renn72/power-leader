@@ -112,6 +112,38 @@ const CompDay = () => {
             Open
           </Button>
         </Link>
+        <Link href={`comp-day/${compId}/board?table=first-timers`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            First Timers
+          </Button>
+        </Link>
+        <Link href={`comp-day/${compId}/board?table=teen`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Teen
+          </Button>
+        </Link>
+        <Link href={`comp-day/${compId}/board?table=master`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Master
+          </Button>
+        </Link>
+        <Link href={`comp-day/${compId}/board?table=teambattle`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Team Battle
+          </Button>
+        </Link>
       </div>
     </div>
   )

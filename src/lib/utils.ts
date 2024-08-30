@@ -108,7 +108,7 @@ export const calculateDOTS = (
   }
 
   const score = (500 / denominator) * weightLifted
-  return score.toFixed(2)
+  return Number(score.toFixed(2))
 }
 
 export function generateFullName() {

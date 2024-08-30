@@ -14,7 +14,7 @@ const Board = ({ params }: { params: { comp: string } }) => {
   if (!table) return null
 
   return (
-    <div className='w-full h-screen overflow-hidden'>
+    <div className='w-full h-screen '>
       <LeaderBoard competition={data} table={table} />
     </div>
   )

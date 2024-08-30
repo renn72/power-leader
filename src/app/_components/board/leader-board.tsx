@@ -33,6 +33,16 @@ const LeaderBoard = ({
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
+            <TableHead>Is Squat</TableHead>
+            <TableHead>Has Squat</TableHead>
+            <TableHead>Squat</TableHead>
+            <TableHead>DOTS</TableHead>
+            <TableHead>Bench</TableHead>
+            <TableHead>DOTS</TableHead>
+            <TableHead>Deadlift</TableHead>
+            <TableHead>DOTS</TableHead>
+            <TableHead>Total Weight</TableHead>
+            <TableHead>Total DOTS</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
