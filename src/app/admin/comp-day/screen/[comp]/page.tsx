@@ -40,7 +40,9 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   )
   const { comp } = params
   const { data: competition } =
-    api.competition.getCompetitionByUuid.useQuery(comp)
+    api.competition.getCompetitionByUuid.useQuery(comp,{
+      refetchInterval: 1000 * 60 * 5,
+  })
 
   const lifter = competition?.entries?.find(
     (entry) => entry.id === Number(index),
