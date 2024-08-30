@@ -25,9 +25,7 @@ const Green = () => (
 )
 
 const White = () => (
-  <div className='flex h-24 w-8 items-center justify-center bg-white '>
-    5
-  </div>
+  <div className='flex h-24 w-8 items-center justify-center bg-white '>5</div>
 )
 
 const Black = () => (
@@ -96,13 +94,27 @@ const Loading = ({
       <div>{weight}kg</div>
       <div className='flex w-full items-center gap-4'>
         <div className='flex items-center justify-center gap-1 text-xl font-black tracking-tighter text-black'>
-          <Red />
-          <Blue />
-          <Yellow />
-          <Green />
-          <White />
-          <Black />
-          <Gray />
+          {Array.from({ length: red }).map((_, i) => (
+            <Red key={i} />
+          ))}
+          {Array.from({ length: blue }).map((_, i) => (
+            <Blue key={i} />
+          ))}
+          {Array.from({ length: yellow }).map((_, i) => (
+            <Yellow key={i} />
+          ))}
+          {Array.from({ length: green }).map((_, i) => (
+            <Green key={i} />
+          ))}
+          {Array.from({ length: white }).map((_, i) => (
+            <White key={i} />
+          ))}
+          {Array.from({ length: black }).map((_, i) => (
+            <Black key={i} />
+          ))}
+          {Array.from({ length: gray }).map((_, i) => (
+            <Gray key={i} />
+          ))}
         </div>
         {rack !== '' && <div>{rack}</div>}
       </div>
@@ -111,25 +123,3 @@ const Loading = ({
 }
 
 export default Loading
-
-// {Array.from({ length: red }).map((_, i) => (
-//   <Red key={i} />
-// ))}
-// {Array.from({ length: blue }).map((_, i) => (
-//   <Blue key={i} />
-// ))}
-// {Array.from({ length: yellow }).map((_, i) => (
-//   <Yellow key={i} />
-// ))}
-// {Array.from({ length: green }).map((_, i) => (
-//   <Green key={i} />
-// ))}
-// {Array.from({ length: white }).map((_, i) => (
-//   <White key={i} />
-// ))}
-// {Array.from({ length: black }).map((_, i) => (
-//   <Black key={i} />
-// ))}
-// {Array.from({ length: gray }).map((_, i) => (
-//   <Gray key={i} />
-// ))}
