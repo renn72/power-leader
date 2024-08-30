@@ -111,12 +111,18 @@ export const liftRouter = createTRPCRouter({
         })
       }
 
+      let state = 'created'
+      if (input.one !== null || input.two !== null || input.three !== null) {
+        state = 'judged'
+      }
+
       const res = await ctx.db
         .update(lift)
         .set({
           isGoodOne: input.one,
           isGoodTwo: input.two,
           isGoodThree: input.three,
+          state : state,
         })
         .where(eq(lift.id, input.id))
 

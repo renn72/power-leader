@@ -93,6 +93,17 @@ const CompDay = () => {
           </Button>
         </Link>
       </div>
+
+      <div className='flex gap-8'>
+        <Link href={`comp-day/${compId}/board?table=open`}>
+          <Button
+            size='lg'
+            variant='secondary'
+          >
+            Open
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }
