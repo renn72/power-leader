@@ -43,7 +43,7 @@ export default async function RootLayout({
   //   )
   // }
 
-  const _user = await currentUser()
+  // const _user = await currentUser()
 
   return (
     <div className={`flex h-dvh flex-col `}>
