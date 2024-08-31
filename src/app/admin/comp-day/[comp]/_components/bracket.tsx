@@ -128,7 +128,7 @@ const Bracket = ({
               <Badge className='flex w-16 items-center justify-center'>
                 {
                   // @ts-ignore
-                  entry?.wc.split('-')[0]
+                  entry?.wc?.split('-')[0]
                 }
                 kg
               </Badge>
