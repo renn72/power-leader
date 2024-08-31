@@ -1,13 +1,13 @@
 import { Dot } from 'lucide-react'
 
 const Red = () => (
-  <div className='flex h-68 w-12 items-center justify-center bg-red-600 '>
+  <div className='flex h-72 w-12 items-center justify-center bg-red-600 '>
     25
   </div>
 )
 
 const Blue = () => (
-  <div className='flex h-68 w-12 items-center justify-center bg-blue-500 '>
+  <div className='flex h-72 w-12 items-center justify-center bg-blue-500 '>
     20
   </div>
 )
