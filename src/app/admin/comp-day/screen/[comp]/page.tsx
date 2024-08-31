@@ -238,7 +238,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
                 )}
               </div>
             </div>
-            <div className='absolute bottom-0 left-[6vw] text-sm'>
+            <div className='absolute bottom-0 left-[1vw] text-sm'>
               {lifter2 && lift2 && (
                 <Loading
                   name={lifter2.user?.name || ''}

@@ -79,8 +79,8 @@ const Loading = ({
   console.log(red, blue, yellow, green, white, black, gray)
 
   return (
-    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-xl mb-1'>
-      <div className='uppercase'>Up Next: {name}</div>
+    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-lg mb-1'>
+      <div className='uppercase tracking-tight'>{name}</div>
       <div>{weight}kg</div>
       <div className='flex w-full items-center gap-4'>
         <div className='flex items-center justify-center gap-1 text-lg font-black tracking-tighter text-black'>
