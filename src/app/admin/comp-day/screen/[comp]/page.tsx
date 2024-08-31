@@ -183,12 +183,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
           alt='RawWar Logo'
           width={400}
           height={100}
-          className='w-[25vw]'
+          className='w-[15vw]'
         />
       </div>
       {!lift ? null : (
         <div className='grid h-full w-full'>
-          <div className='flex flex-col items-center gap-[1.3vh] absolute left-10 top-4 '>
+          <div className='flex flex-col items-center gap-[1.3vh] absolute left-10 top-4 hidden '>
             <div className='text-xl font-bold text-muted-foreground'>
               Round: {round}
             </div>
@@ -238,7 +238,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
                 )}
               </div>
             </div>
-            <div className='absolute bottom-0 left-[12vw] text-sm'>
+            <div className='absolute bottom-0 left-[6vw] text-sm'>
               {lifter2 && lift2 && (
                 <Loading
                   name={lifter2.user?.name || ''}
