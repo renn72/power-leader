@@ -214,7 +214,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div>nextIndex: {nextIndex}</div>
               <div>round: {round}</div>
             </div>
-            <div className='flex w-full flex-col items-center gap-8 text-4xl font-bold'>
+            <div className='flex w-full flex-col items-center gap-8 text-6xl font-bold'>
               <div className='flex flex-col items-center'>
                 <div className='uppercase'>{lifter?.user?.name}</div>
                 {lift?.team ? (
