@@ -41,7 +41,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const { comp } = params
   const { data: competition } =
     api.competition.getCompetitionByUuid.useQuery(comp,{
-      refetchInterval: 1000 * 60 * 5,
+      refetchInterval: 1000 * 60 * 1,
   })
 
   const lifter = competition?.entries?.find(
@@ -189,7 +189,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       {!lift ? null : (
         <div className='grid h-full w-full'>
           <div className='flex flex-col items-center gap-[1.3vh] absolute left-10 top-4 '>
-            <div className='text-2xl font-bold text-muted-foreground'>
+            <div className='text-xl font-bold text-muted-foreground'>
               Round: {round}
             </div>
             {bracketList?.map((entry) => (
@@ -214,7 +214,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div>nextIndex: {nextIndex}</div>
               <div>round: {round}</div>
             </div>
-            <div className='flex w-full flex-col items-center gap-8 text-6xl font-bold'>
+            <div className='flex w-full flex-col items-center gap-8 text-4xl font-bold'>
               <div className='flex flex-col items-center'>
                 <div className='uppercase'>{lifter?.user?.name}</div>
                 {lift?.team ? (

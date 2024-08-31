@@ -178,6 +178,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   console.log('bracketList', bracketList)
   console.log('lift', lift)
 
+
   if (!lift) return null
 
   const dots = calculateDOTS(
