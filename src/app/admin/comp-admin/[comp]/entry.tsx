@@ -18,7 +18,7 @@ const Cell = ({
   className?: string
 }) => {
   return (
-    <div className={cn('flex flex-col items-center gap-0', className)}>
+    <div className={cn('flex flex-col items-center gap-0 capitalize', className)}>
       <div className='text-xs text-muted-foreground'>{title}</div>
       <div
         className={cn(
