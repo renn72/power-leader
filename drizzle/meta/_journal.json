@@ -1,33 +1,12 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
       "version": "6",
-      "when": 1724833890524,
-      "tag": "0000_blue_morgan_stark",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1724834666356,
-      "tag": "0001_amusing_captain_universe",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1724896303720,
-      "tag": "0002_sticky_randall_flagg",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1724997965687,
-      "tag": "0003_green_morgan_stark",
+      "when": 1733279231195,
+      "tag": "0000_dry_shatterstar",
       "breakpoints": true
     }
   ]
