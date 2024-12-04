@@ -33,9 +33,18 @@ const ActionPanel = ({
     },
   })
 
+  const brackets =
+    lift === 'squat'
+      ? Number(competition.squatBrackets)
+      : lift === 'bench'
+        ? Number(competition.benchPressBrackets)
+        : Number(competition.deadliftBrackets)
+
+  console.log(competition)
+
   return (
     <div className='grid grid-cols-3 gap-2'>
-      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
+      <div className='flex items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
           type='single'
@@ -59,7 +68,7 @@ const ActionPanel = ({
           <ToggleGroupItem value='deadlift'>Deadlift</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
+      <div className='flex items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Round</div>
         <ToggleGroup
           type='single'
@@ -84,7 +93,7 @@ const ActionPanel = ({
           <ToggleGroupItem value='4'>4</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
+      <div className='flex items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Bracket</div>
         <ToggleGroup
           type='single'
@@ -103,8 +112,13 @@ const ActionPanel = ({
             })
           }}
         >
-          <ToggleGroupItem value='1'>1</ToggleGroupItem>
-          <ToggleGroupItem value='2'>2</ToggleGroupItem>
+          {
+            Array.from({ length: brackets }, (_, i) => i + 1).map((bracket) => (
+              <ToggleGroupItem key={bracket} value={bracket.toString()}>
+                {bracket}
+              </ToggleGroupItem>
+            ))
+          }
         </ToggleGroup>
       </div>
     </div>
