@@ -82,7 +82,7 @@ const AddAtlasUsers = ({
       className={cn(className)}
       onClick={createCE}
     >
-      Add CE Lifters
+      Add Atlas Lifters
     </Button>
   )
 }
