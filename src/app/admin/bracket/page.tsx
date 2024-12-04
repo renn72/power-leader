@@ -11,6 +11,7 @@ import {
 } from '~/components/ui/select'
 
 import Competition from './_components/competition'
+import CompBracket from './_components/comp-bracket'
 
 const Bracket = () => {
   const [compId, setCompId] = useState('')
@@ -54,7 +55,7 @@ const Bracket = () => {
           ))}
         </SelectContent>
       </Select>
-      {competition && <Competition competition={competition} />}
+      {competition && <CompBracket competition={competition} />}
     </div>
   )
 }

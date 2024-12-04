@@ -2,7 +2,7 @@
 import { api } from '~/trpc/react'
 import { useEffect } from 'react'
 
-import type { GetCompetitionEntryById } from '~/lib/types'
+import type { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 
 import { toast } from 'sonner'
@@ -18,20 +18,37 @@ import {
 } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 
-import { GripVertical } from 'lucide-react'
+import {
+  ChevronLeftCircle,
+  GripVertical,
+  ChevronRightCircle,
+} from 'lucide-react'
 
 const Bracket = ({
   entries,
+  competition,
   lift,
   title,
   bracket,
 }: {
   entries: GetCompetitionEntryById[]
+  competition: GetCompetitionById
   lift: string
   title: string
   bracket: number
 }) => {
   const ctx = api.useUtils()
+  const { mutate: updateBracket } = api.compEntry.updateBracket.useMutation({
+    onSettled: () => {
+      ctx.competition.getMyCompetitions.refetch()
+    },
+    onSuccess: () => {
+      toast.success('Order Updated')
+    },
+    onError: () => {
+      toast.error('Error Updating Order')
+    },
+  })
   const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
     onSettled: () => {
       ctx.competition.getMyCompetitions.refetch()
@@ -50,8 +67,41 @@ const Bracket = ({
   >(entries, { plugins: [animations()], dragHandle: '.drag-handle' })
 
   useEffect(() => {
-    setEntryList(entries)
+    if (lift === 'squat') {
+      setEntryList(entries.filter((entry) => entry.squatBracket == bracket))
+    }
+    if (lift === 'bench') {
+      setEntryList(entries.filter((entry) => entry.benchBracket == bracket))
+    }
+    if (lift === 'deadlift') {
+      setEntryList(entries.filter((entry) => entry.deadliftBracket == bracket))
+    }
   }, [entries])
+
+  const handleBracket = (bracket: number, id: number) => {
+    if (lift === 'squat') {
+      updateBracket({
+        id: id,
+        bracket: {
+          squatBracket: bracket,
+        },
+      })
+    } else if (lift === 'bench') {
+      updateBracket({
+        id: id,
+        bracket: {
+          benchBracket: bracket,
+        },
+      })
+    } else if (lift === 'deadlift') {
+      updateBracket({
+        id: id,
+        bracket: {
+          deadliftBracket: bracket,
+        },
+      })
+    }
+  }
 
   const lock = () => {
     console.log(
@@ -100,6 +150,7 @@ const Bracket = ({
       updateOrder(ins)
     }
   }
+
   const unlock = () => {
     if (lift === 'squat') {
       const ins = entryList.map((entry, _i) => ({
@@ -125,7 +176,18 @@ const Bracket = ({
     }
   }
 
-  const isLocked = entries.reduce((a, c) => {
+  const isLocked = entries.filter((e) => {
+    if (lift === 'squat') {
+      return e.squatBracket === bracket
+    }
+    if (lift === 'bench') {
+      return e.benchBracket === bracket
+    }
+    if (lift === 'deadlift') {
+      return e.deadliftBracket === bracket
+    }
+  })
+  .reduce((a, c) => {
     if (lift === 'squat' && c.squatOrderOne !== null) {
       return true
     }
@@ -189,8 +251,13 @@ const Bracket = ({
     setEntryList(sorted)
   }
 
+  const squatBrackets = Number(competition.squatBrackets)
+  const benchBrackets = Number(competition.benchPressBrackets)
+  const deadliftBrackets = Number(competition.deadliftBrackets)
+  const numberOfBrackets = lift === 'squat' ? squatBrackets : lift === 'bench' ? benchBrackets : deadliftBrackets
+
   return (
-    <Card className='relative'>
+    <Card className='relative min-w-[570px]'>
       <CardHeader className='mb-4'>
         <CardTitle className='flex items-center justify-around text-3xl'>
           <div className=''>{title}</div>
@@ -217,7 +284,7 @@ const Bracket = ({
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className='mb-12'>
+      <CardContent className='mb-12 px-2'>
         <div
           ref={parent}
           className='flex flex-col gap-1'
@@ -233,39 +300,63 @@ const Bracket = ({
               <div
                 key={entry.id}
                 data-label={entry.id}
-                className={cn(
-                  'grid grid-cols-7 place-items-center gap-2 border border-input text-base tracking-wide',
-                  'rounded-full p-[2px] ',
-                  isLocked ? '' : 'hover:bg-muted',
-                  lift === 'squat' &&
-                    entry.squatOrderOne !== null &&
-                    'border-0 border-complete bg-muted/80',
-                  lift === 'bench' &&
-                    entry.benchOrderOne !== null &&
-                    'border-0 border-complete bg-muted/80',
-                  lift === 'deadlift' &&
-                    entry.deadliftOrderOne !== null &&
-                    'border-0 border-complete bg-muted/80',
-                )}
+                className={cn('flex items-center gap-1')}
               >
-                <div className='font-extrabold tracking-wider text-muted-foreground'>
-                  {i + 1}
-                </div>
-                <Badge className='flex w-16 items-center justify-center'>
-                  {entry.wc?.split('-')[0]}kg
-                </Badge>
-                <div className='col-span-2'>{entry.user?.name}</div>
-                <div className='col-span-2'>
-                  {opener === '' ? '-' : opener + 'kg'}
-                </div>
-                <div className='drag-handle col-span-1 cursor-move'>
-                  {!isLocked && (
-                    <GripVertical
-                      size={20}
-                      className='text-muted-foreground/50'
-                    />
+                <ChevronLeftCircle
+                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                  onClick={() => {
+                    if (isLocked) return
+                    if (bracket !== 1) handleBracket(bracket - 1, entry.id)
+                  }}
+                />
+
+                <div
+                  className={cn(
+                    'grid grid-cols-9 place-items-center gap-1 border border-input text-base tracking-tight',
+                    'rounded-full p-[1px] ',
+                    isLocked ? '' : 'hover:bg-muted',
+                    lift === 'squat' &&
+                      entry.squatOrderOne !== null &&
+                      'border-0 border-complete bg-muted/80',
+                    lift === 'bench' &&
+                      entry.benchOrderOne !== null &&
+                      'border-0 border-complete bg-muted/80',
+                    lift === 'deadlift' &&
+                      entry.deadliftOrderOne !== null &&
+                      'border-0 border-complete bg-muted/80',
                   )}
+                >
+                  <div className='font-extrabold tracking-wider text-muted-foreground'>
+                    {i + 1}
+                  </div>
+                  <Badge className='flex w-16 items-center justify-center'>
+                    {entry.wc?.split('-')[0]}kg
+                  </Badge>
+                  <div className='text-sm font-extrabold '>
+                    {entry.gender?.toLowerCase() === 'female' ? 'F' : 'M'}
+                  </div>
+                  <div className='col-span-3 tracking-tighter'>
+                    {entry.user?.name}
+                  </div>
+                  <div className='col-span-2'>
+                    {opener === '' ? '-' : opener + 'kg'}
+                  </div>
+                  <div className='drag-handle col-span-1 cursor-move'>
+                    {!isLocked && (
+                      <GripVertical
+                        size={20}
+                        className='text-muted-foreground/50'
+                      />
+                    )}
+                  </div>
                 </div>
+                <ChevronRightCircle
+                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                  onClick={() => {
+                    if (isLocked) return
+                    if (bracket !== numberOfBrackets) handleBracket(bracket + 1, entry.id)
+                  }}
+                />
               </div>
             )
           })}

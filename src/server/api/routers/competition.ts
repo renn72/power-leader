@@ -285,6 +285,39 @@ export const competitionRouter = createTRPCRouter({
 
       return res
     }),
+  updateSquatBrackets: publicProcedure
+    .input(z.object({ id: z.number(), squatBrackets: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .update(competitions)
+        .set({
+          squatBrackets: input.squatBrackets,
+        })
+        .where(eq(competitions.id, input.id))
+      return res
+    }),
+  updateBenchPressBrackets: publicProcedure
+    .input(z.object({ id: z.number(), benchPressBrackets: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .update(competitions)
+        .set({
+          benchPressBrackets: input.benchPressBrackets,
+        })
+        .where(eq(competitions.id, input.id))
+      return res
+    }),
+  updateDeadliftBrackets: publicProcedure
+    .input(z.object({ id: z.number(), deadliftBrackets: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .update(competitions)
+        .set({
+          deadliftBrackets: input.deadliftBrackets,
+        })
+        .where(eq(competitions.id, input.id))
+      return res
+    }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
     const res = await ctx.db.query.competitions.findMany({

@@ -162,9 +162,9 @@ export const compEntryRouter = createTRPCRouter({
 
       let userId = input.userId
 
-        const isUser = await ctx.db.query.users.findFirst({
-            where: (users, { eq }) => eq(users.email, input.email || ''),
-        })
+      const isUser = await ctx.db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.email, input.email || ''),
+      })
 
       if (isUser?.id) userId = isUser.id
 
@@ -299,8 +299,12 @@ export const compEntryRouter = createTRPCRouter({
         })
       }
       const weight = Number(input.weight)
-      const wc_female = competition.wc_female?.split('/').map((item) => Number(item))
-      const wc_male = competition.wc_male?.split('/').map((item) => Number(item))
+      const wc_female = competition.wc_female
+        ?.split('/')
+        .map((item) => Number(item))
+      const wc_male = competition.wc_male
+        ?.split('/')
+        .map((item) => Number(item))
       let wc = ''
       if (input?.gender?.toLowerCase() == 'female' && wc_female) {
         wc =
@@ -506,6 +510,36 @@ export const compEntryRouter = createTRPCRouter({
 
       return res
     }),
+  updateBracket: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        bracket: z.object({
+          squatBracket: z.number().optional(),
+          benchBracket: z.number().optional(),
+          deadliftBracket: z.number().optional(),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+     console.log('input', input)
+
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          ...input.bracket,
+        })
+        .where(eq(compEntry.id, input.id))
+
+      return res
+    }),
   updateOrderBulk: publicProcedure
     .input(updateOrderBulkSchema)
     .mutation(async ({ ctx, input }) => {
@@ -519,7 +553,7 @@ export const compEntryRouter = createTRPCRouter({
 
       const ins = input
         .map((item) => {
-          const { liftId, ...rest } = item
+          const { liftId, squatBracket, benchBracket, deadliftBracket, ...rest } = item
           return rest
         })
         .map((item) =>
@@ -546,7 +580,12 @@ export const compEntryRouter = createTRPCRouter({
           if (item.squatOrderOne) order = item.squatOrderOne
           if (item.benchOrderOne) order = item.benchOrderOne
           if (item.deadliftOrderOne) order = item.deadliftOrderOne
-          return { liftId: item.liftId, order: order, bracket: bracket, rack: item.rack }
+          return {
+            liftId: item.liftId,
+            order: order,
+            bracket: bracket,
+            rack: item.rack,
+          }
         })
         .map((item) =>
           ctx.db
@@ -558,7 +597,6 @@ export const compEntryRouter = createTRPCRouter({
             })
             .where(eq(lift.id, Number(item.liftId))),
         )
-
 
       if (isTuple(ins2)) {
         await ctx.db.batch(ins2)
@@ -639,27 +677,22 @@ export const compEntryRouter = createTRPCRouter({
         .where(eq(compEntry.id, input.id))
 
       if (input.field === 'squarRackHeight') {
-        await ctx.db.update(lift).set({
-          rackHeight: input.value,
-        }).where(
-        and(
-          eq(lift.compEntryId, input.id),
-          eq(lift.lift, 'squat')
-        )
-      )
-    }
-
+        await ctx.db
+          .update(lift)
+          .set({
+            rackHeight: input.value,
+          })
+          .where(and(eq(lift.compEntryId, input.id), eq(lift.lift, 'squat')))
+      }
 
       if (input.field === 'benchRackHeight') {
-        await ctx.db.update(lift).set({
-          rackHeight: input.value,
-        }).where(
-        and(
-          eq(lift.compEntryId, input.id),
-          eq(lift.lift, 'bench')
-        )
-      )
-    }
+        await ctx.db
+          .update(lift)
+          .set({
+            rackHeight: input.value,
+          })
+          .where(and(eq(lift.compEntryId, input.id), eq(lift.lift, 'bench')))
+      }
 
       return res
     }),
