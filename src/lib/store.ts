@@ -43,6 +43,8 @@ export const eventsData = [
 ]
 
 export const equipmentData = [
+  'Classic',
+  'Raw',
   'Bare',
   'Sleeves',
   'Wraps',
@@ -58,13 +60,6 @@ export const wcFData = [
 ]
 
 export const winnerFormular = ['Total', 'Dots', 'Wilks']
-
-
-
-
-
-
-
 
 export const ceUsers = [
   {
@@ -586,7 +581,7 @@ export const ceUsers = [
     email: 'memckay2000@gmail.com',
     team: 'Next Gen',
     teamLift: 'bench',
-    division: ['Open',],
+    division: ['Open'],
     events: ['Bench only'],
     weight: '102.5',
     squatOpener: '',
@@ -666,7 +661,7 @@ export const ceUsers = [
     email: 'luke.d.smith85@gmail.com',
     team: '',
     teamLift: '',
-    division: ['Open',],
+    division: ['Open'],
     events: ['Deadlift only'],
     weight: '125',
     squatOpener: '',
@@ -682,7 +677,7 @@ export const ceUsers = [
     email: 'hchauntler@gmail.com',
     team: '',
     teamLift: '',
-    division: ['Open',],
+    division: ['Open'],
     events: ['Deadlift only'],
     weight: '101.8',
     squatOpener: '',

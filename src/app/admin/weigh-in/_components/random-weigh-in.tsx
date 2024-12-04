@@ -1,3 +1,4 @@
+
 'use client'
 import { api } from '~/trpc/react'
 
@@ -9,12 +10,11 @@ const roundPL = (num: number) => {
   return Math.round(num / 2.5) * 2.5
 }
 
-const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
+const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => {
   const ctx = api.useUtils()
   const { data: isAdmin } = api.user.isAdmin.useQuery()
   const { mutate: updateAndLock } = api.compEntry.updateAndLock.useMutation({
     onSettled: () => {
-      ctx.competition.getMyCompetitions.refetch()
     },
   })
 
@@ -46,7 +46,7 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
       const squatOpener = roundPL(50 + Math.floor(Math.random() * 270))
       const benchOpener = roundPL(50 + Math.floor(Math.random() * 270))
       const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 270))
-      const weight = Number(entry?.weight) || 100
+      const weight = 50 + Math.floor(Math.random() * 70)
 
       let wc = ''
       if (entry?.gender?.toLowerCase() == 'female' && wc_female) {
@@ -73,12 +73,13 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
         equipment: entry?.equipment || '',
         gender: entry?.gender || '',
         predictedWeight: entry?.predictedWeight || '',
-        weight: entry?.weight || '',
-        squatOpener: entry.squatOpener || '',
-        squarRackHeight: entry.squarRackHeight || '',
-        benchOpener: entry.benchOpener || '',
-        benchRackHeight: entry.benchRackHeight || '',
-        deadliftOpener: entry.deadliftOpener || '',
+        weight: weight.toString(),
+        wc: wc.toString(),
+        squatOpener: isSquat ? squatOpener.toString() : '',
+        squarRackHeight: isSquat ? '8out' : '',
+        benchOpener: isBench ? benchOpener.toString() : '',
+        benchRackHeight: isBench ? '8/4' : '',
+        deadliftOpener: isDeadlift ? deadliftOpener.toString() : '',
         squatPB: '',
         benchPB: '',
         deadliftPB: '',
@@ -99,7 +100,7 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
             variant='secondary'
             onClick={update}
           >
-            Weigh In Fake Users
+            Random Weigh In
           </Button>
         </div>
       )}
@@ -107,4 +108,4 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
   )
 }
 
-export default FakeUser
+export default RandomWeighIn

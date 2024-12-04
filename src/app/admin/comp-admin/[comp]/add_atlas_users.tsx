@@ -53,6 +53,7 @@ const AddAtlasUsers = ({
       let pickedDivisions = divisions
         .filter((d) => user.division.includes(d.name))
         .map((division) => division.id.toString())
+      const equipment = user.equipment === 'sleeves' ?  'Raw' : 'Classic'
 
       // console.log(user.name, pickedDivisions, pickedEvents)
       mutate({
@@ -61,7 +62,7 @@ const AddAtlasUsers = ({
         email: user.email,
         address: '',
         phone: '',
-        equipment: user.equipment,
+        equipment: equipment,
         weight: user.weight,
         gender: user.gender,
         squatRackHeight: user.squatRackHeight,

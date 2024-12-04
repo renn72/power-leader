@@ -115,6 +115,9 @@ input[type='number'] {
 .grid-cols-17 {
     grid-template-columns: repeat(17, minmax(0, 1fr));
 }
+.grid-cols-18 {
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+}
 
 .good-lift {
     /* background: radial-gradient(circle at center, #15803d 0%, #15803d 60%, #15803d50 80%, #15803d00 100% ); */

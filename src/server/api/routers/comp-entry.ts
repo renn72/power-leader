@@ -7,6 +7,7 @@ import {
   compEntry,
   compEntryToDivisions,
   compEntryToEvents,
+  competition,
   lift,
   users,
 } from '~/server/db/schema'
@@ -52,6 +53,7 @@ const updateAndLockSchema = z.object({
   gender: z.string(),
   predictedWeight: z.string(),
   weight: z.string(),
+  wc: z.string().optional(),
   squatOpener: z.string(),
   squarRackHeight: z.string(),
   benchOpener: z.string(),
@@ -60,8 +62,6 @@ const updateAndLockSchema = z.object({
   squatPB: z.string(),
   benchPB: z.string(),
   deadliftPB: z.string(),
-  team: z.string().optional(),
-  teamLift: z.string().optional(),
   notes: z.string(),
   compId: z.number(),
   userId: z.number().optional(),
@@ -204,8 +204,6 @@ export const compEntryRouter = createTRPCRouter({
           deadliftOpener: input.deadliftOpener,
           squarRackHeight: input.squatRackHeight,
           benchRackHeight: input.benchRackHeight,
-          team: input.team,
-          teamLift: input.teamLift,
           weight: input.weight,
           compId: input.compId,
           userId: userId,
@@ -291,6 +289,34 @@ export const compEntryRouter = createTRPCRouter({
           message: 'You are not authorized to access this resource.',
         })
       }
+      const competition = await ctx.db.query.competitions.findFirst({
+        where: (competition, { eq }) => eq(competition.id, input.compId),
+      })
+      if (!competition) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Competition not found.',
+        })
+      }
+      const weight = Number(input.weight)
+      const wc_female = competition.wc_female?.split('/').map((item) => Number(item))
+      const wc_male = competition.wc_male?.split('/').map((item) => Number(item))
+      let wc = ''
+      if (input?.gender?.toLowerCase() == 'female' && wc_female) {
+        wc =
+          wc_female
+            .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
+            .toString() + '-f'
+      } else {
+        if (wc_male && input?.gender?.toLowerCase() !== 'female') {
+          wc =
+            wc_male
+              .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
+              .toString() + '-m'
+        }
+      }
+
+      input.wc = wc
 
       const res = await ctx.db
         .update(compEntry)
@@ -312,8 +338,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'squat',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.squarRackHeight,
@@ -325,8 +349,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           gender: input.gender,
           userWeight: input.weight,
-          team: input.team,
-          teamLift: input.teamLift,
           state: 'created',
           lift: 'squat',
           rackHeight: input.squarRackHeight,
@@ -338,8 +360,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           gender: input.gender,
           userWeight: input.weight,
-          team: input.team,
-          teamLift: input.teamLift,
           state: 'created',
           lift: 'squat',
           rackHeight: input.squarRackHeight,
@@ -354,8 +374,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'bench',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
@@ -367,8 +385,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'bench',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
@@ -380,8 +396,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'bench',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
@@ -396,8 +410,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'deadlift',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           weight: input.deadliftOpener,
@@ -408,8 +420,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'deadlift',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           weight: '',
@@ -420,8 +430,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'deadlift',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           weight: '',

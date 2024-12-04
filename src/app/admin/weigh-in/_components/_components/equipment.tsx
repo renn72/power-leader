@@ -31,7 +31,7 @@ const Equipment = ({ competition }: { competition: GetCompetitionByUuid }) => {
                 value={selected}
                 onValueChange={(value) => {
                   setSelected(value)
-                  field.onChange(value)
+                  field.onChange(value.toLowerCase())
                 }}
               >
                 <div className='flex flex-wrap justify-around gap-2 px-6'>
@@ -47,9 +47,10 @@ const Equipment = ({ competition }: { competition: GetCompetitionByUuid }) => {
                               <ToggleGroupItem
                                 variant='secondary'
                                 className='rounded-md border border-input'
-                                value={item}
+                                value={item.toLowerCase()}
                                 onClick={(e) => {
-                                  item === selected && e.preventDefault()
+                                  item.toLowerCase()
+                                  e.preventDefault()
                                 }}
                               >
                                 {item}
