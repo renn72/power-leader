@@ -39,15 +39,48 @@ const Bracket = ({
 }) => {
   const ctx = api.useUtils()
   const { mutate: updateBracket } = api.compEntry.updateBracket.useMutation({
+    onMutate: async (newData) => {
+      await ctx.competition.getMyCompetitions.cancel()
+
+      const oldData = ctx.competition.getMyCompetitions.getData()
+
+      if (!oldData) return
+
+      ctx.competition.getMyCompetitions.setData(undefined, [
+        ...oldData.map((c) => {
+          if (c.id === competition.id) {
+            return {
+              ...c,
+              entries: c.entries.map((e) => {
+                if (e.id === newData.id) {
+                  return {
+                    ...e,
+                    squatBracket:
+                      newData.bracket.squatBracket || e.squatBracket || 1,
+                    benchBracket:
+                      newData.bracket.benchBracket || e.benchBracket || 1,
+                    deadliftBracket:
+                      newData.bracket.deadliftBracket || e.deadliftBracket || 1,
+                  }
+                }
+                return e
+              }),
+            }
+          }
+          return c
+        }),
+      ])
+      return { oldData }
+    },
+    onError: (err, newData, context) => {
+      toast.error('Error Updating Order')
+      if (!context?.oldData) return
+      ctx.competition.getMyCompetitions.setData(undefined, context.oldData)
+    },
     onSettled: () => {
       ctx.competition.getMyCompetitions.refetch()
     },
-    onSuccess: () => {
-      toast.success('Order Updated')
-    },
-    onError: () => {
-      toast.error('Error Updating Order')
-    },
+    onSuccess: () => {},
   })
   const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
     onSettled: () => {
@@ -176,29 +209,30 @@ const Bracket = ({
     }
   }
 
-  const isLocked = entries.filter((e) => {
-    if (lift === 'squat') {
-      return e.squatBracket === bracket
-    }
-    if (lift === 'bench') {
-      return e.benchBracket === bracket
-    }
-    if (lift === 'deadlift') {
-      return e.deadliftBracket === bracket
-    }
-  })
-  .reduce((a, c) => {
-    if (lift === 'squat' && c.squatOrderOne !== null) {
-      return true
-    }
-    if (lift === 'bench' && c.benchOrderOne !== null) {
-      return true
-    }
-    if (lift === 'deadlift' && c.deadliftOrderOne !== null) {
-      return true
-    }
-    return a
-  }, false)
+  const isLocked = entries
+    .filter((e) => {
+      if (lift === 'squat') {
+        return e.squatBracket === bracket
+      }
+      if (lift === 'bench') {
+        return e.benchBracket === bracket
+      }
+      if (lift === 'deadlift') {
+        return e.deadliftBracket === bracket
+      }
+    })
+    .reduce((a, c) => {
+      if (lift === 'squat' && c.squatOrderOne !== null) {
+        return true
+      }
+      if (lift === 'bench' && c.benchOrderOne !== null) {
+        return true
+      }
+      if (lift === 'deadlift' && c.deadliftOrderOne !== null) {
+        return true
+      }
+      return a
+    }, false)
 
   const sortByWC = () => {
     const sorted = entries
@@ -254,7 +288,12 @@ const Bracket = ({
   const squatBrackets = Number(competition.squatBrackets)
   const benchBrackets = Number(competition.benchPressBrackets)
   const deadliftBrackets = Number(competition.deadliftBrackets)
-  const numberOfBrackets = lift === 'squat' ? squatBrackets : lift === 'bench' ? benchBrackets : deadliftBrackets
+  const numberOfBrackets =
+    lift === 'squat'
+      ? squatBrackets
+      : lift === 'bench'
+        ? benchBrackets
+        : deadliftBrackets
 
   return (
     <Card className='relative min-w-[570px]'>
@@ -312,8 +351,8 @@ const Bracket = ({
 
                 <div
                   className={cn(
-                    'grid grid-cols-9 place-items-center gap-1 border border-input text-base tracking-tight',
-                    'rounded-full p-[1px] ',
+                    'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tight',
+                    'rounded-full px-[1px] py-[2px] ',
                     isLocked ? '' : 'hover:bg-muted',
                     lift === 'squat' &&
                       entry.squatOrderOne !== null &&
@@ -332,8 +371,22 @@ const Bracket = ({
                   <Badge className='flex w-16 items-center justify-center'>
                     {entry.wc?.split('-')[0]}kg
                   </Badge>
-                  <div className='text-sm font-extrabold '>
+                  <div
+                    className={cn(
+                      'text-sm font-extrabold ',
+                      entry.gender?.toLowerCase() === 'female'
+                        ? 'text-pink-400'
+                        : 'text-teal-400',
+                    )}
+                  >
                     {entry.gender?.toLowerCase() === 'female' ? 'F' : 'M'}
+                  </div>
+                  <div className={cn('text-sm font-extrabold ',
+                    entry.equipment?.toLowerCase() === 'classic'
+                      ? 'text-orange-400'
+                      : 'text-indigo-400',
+                  )}>
+                    {entry.equipment?.toLowerCase() === 'classic' ? 'C' : 'R'}
                   </div>
                   <div className='col-span-3 tracking-tighter'>
                     {entry.user?.name}
@@ -354,7 +407,8 @@ const Bracket = ({
                   className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
                   onClick={() => {
                     if (isLocked) return
-                    if (bracket !== numberOfBrackets) handleBracket(bracket + 1, entry.id)
+                    if (bracket !== numberOfBrackets)
+                      handleBracket(bracket + 1, entry.id)
                   }}
                 />
               </div>
