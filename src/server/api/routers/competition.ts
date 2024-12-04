@@ -198,7 +198,7 @@ export const competitionRouter = createTRPCRouter({
           })
         } else if (e.toLowerCase() === 'bench, deadlift') {
           return ctx.db.insert(events).values({
-            name: 'Bench, Deadlift',
+            name: 'Push Pull',
             isSquat: false,
             isBench: true,
             isDeadlift: true,

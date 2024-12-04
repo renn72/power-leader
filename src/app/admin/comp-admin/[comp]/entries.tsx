@@ -5,7 +5,7 @@ import { cn } from '~/lib/utils'
 import Entry from './entry'
 import EntryForm from './entry_form'
 import AddFakeUsers from './add_fake_users'
-import AddCeLifters from './add_ce_lifters'
+import AddAtlasUsers from './add_atlas_users'
 import DeleteAllEntries from './delete_all_entries'
 
 import type { GetCompetitionByUuid } from '~/lib/types'
@@ -35,7 +35,7 @@ const Entries = ({
             <div className='flex w-full justify-end gap-4'>
               <EntryForm competition={competition} />
               <AddFakeUsers competition={competition} />
-              <AddCeLifters competition={competition} />
+              <AddAtlasUsers competition={competition} />
             </div>
             {competition.entries?.map((entry) => (
               <Entry

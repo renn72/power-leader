@@ -44,7 +44,7 @@ export const eventsData = [
 
 export const equipmentData = [
   'Bare',
-  'Sleeeves',
+  'Sleeves',
   'Wraps',
   'Single Ply',
   'Multi Ply',
@@ -58,6 +58,13 @@ export const wcFData = [
 ]
 
 export const winnerFormular = ['Total', 'Dots', 'Wilks']
+
+
+
+
+
+
+
 
 export const ceUsers = [
   {
