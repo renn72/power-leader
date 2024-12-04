@@ -9,18 +9,95 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
   const ctx = api.useUtils()
   const { mutate: updateSquatBrackets } =
     api.competition.updateSquatBrackets.useMutation({
+      onMutate: async (newData) => {
+        await ctx.competition.getMyCompetitions.cancel()
+
+        const oldData = ctx.competition.getMyCompetitions.getData()
+
+        if (!oldData) return
+        const bracket = newData.squatBrackets.toString()
+
+        ctx.competition.getMyCompetitions.setData(undefined, [
+          ...oldData.map((c) => {
+            if (c.id === newData.id) {
+              return {
+                ...c,
+                squatBrackets: bracket,
+              }
+            }
+            return c
+          }),
+        ])
+        return { oldData }
+      },
+      onError: (err, newData, context) => {
+        if (!context?.oldData) return
+        ctx.competition.getMyCompetitions.setData(undefined, context.oldData)
+      },
       onSuccess: () => {
         ctx.competition.getMyCompetitions.refetch()
       },
     })
+
   const { mutate: updateBenchPressBrackets } =
     api.competition.updateBenchPressBrackets.useMutation({
+      onMutate: async (newData) => {
+        await ctx.competition.getMyCompetitions.cancel()
+
+        const oldData = ctx.competition.getMyCompetitions.getData()
+
+        if (!oldData) return
+        const bracket = newData.benchPressBrackets.toString()
+
+        ctx.competition.getMyCompetitions.setData(undefined, [
+          ...oldData.map((c) => {
+            if (c.id === newData.id) {
+              return {
+                ...c,
+                benchPressBrackets: bracket,
+              }
+            }
+            return c
+          }),
+        ])
+        return { oldData }
+      },
+      onError: (err, newData, context) => {
+        if (!context?.oldData) return
+        ctx.competition.getMyCompetitions.setData(undefined, context.oldData)
+      },
       onSuccess: () => {
         ctx.competition.getMyCompetitions.refetch()
       },
     })
+
   const { mutate: updateDeadliftBrackets } =
     api.competition.updateDeadliftBrackets.useMutation({
+      onMutate: async (newData) => {
+        await ctx.competition.getMyCompetitions.cancel()
+
+        const oldData = ctx.competition.getMyCompetitions.getData()
+
+        if (!oldData) return
+        const bracket = newData.deadliftBrackets.toString()
+
+        ctx.competition.getMyCompetitions.setData(undefined, [
+          ...oldData.map((c) => {
+            if (c.id === newData.id) {
+              return {
+                ...c,
+                deadliftBrackets: bracket,
+              }
+            }
+            return c
+          }),
+        ])
+        return { oldData }
+      },
+      onError: (err, newData, context) => {
+        if (!context?.oldData) return
+        ctx.competition.getMyCompetitions.setData(undefined, context.oldData)
+      },
       onSuccess: () => {
         ctx.competition.getMyCompetitions.refetch()
       },
