@@ -196,7 +196,7 @@ export const competitionRouter = createTRPCRouter({
             isOtherFive: false,
             compId: resComp[0]?.id || 0,
           })
-        } else if (e.toLowerCase() === 'bench, deadlift') {
+        } else if (e.toLowerCase() === 'push pull') {
           return ctx.db.insert(events).values({
             name: 'Push Pull',
             isSquat: false,

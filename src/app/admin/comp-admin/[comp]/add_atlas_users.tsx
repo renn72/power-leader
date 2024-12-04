@@ -8,7 +8,7 @@ import { cn } from '~/lib/utils'
 
 import type { GetCompetitionByUuid } from '~/lib/types'
 
-import { atlasUsers } from '~/lib/atlas-users'
+import { females, males } from '~/lib/atlas-users'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +20,8 @@ const AddAtlasUsers = ({
   className?: string
 }) => {
   const ctx = api.useUtils()
+
+  const atlasUsers = females.concat(males)
 
   const { mutate } = api.compEntry.createEntry.useMutation({
     onError: (err) => {
@@ -52,7 +54,7 @@ const AddAtlasUsers = ({
         .filter((d) => user.division.includes(d.name))
         .map((division) => division.id.toString())
 
-      console.log(user.name, pickedDivisions, pickedEvents)
+      // console.log(user.name, pickedDivisions, pickedEvents)
       mutate({
         name: user.name,
         birthDate: user.birthDate,
