@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
+import { api } from '~/trpc/react'
+import { Button } from '~/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -16,6 +17,13 @@ import { ModeToggle } from './mode-toggle'
 
 const Navbar = () => {
   const pathname = usePathname()
+  const ctx = api.useUtils()
+  const { mutate: sync } = api.user.sync.useMutation({
+    onSuccess: () => {
+      ctx.invalidate()
+    },
+  })
+  const { data: currentUser } = api.user.getCurrentUser.useQuery()
   if (pathname.includes('comp-day/screen/')) return null
   if (pathname.includes('judge')) return null
   if (pathname.includes('loading')) return null
@@ -94,6 +102,13 @@ const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>
+        <Button
+          onClick={() =>sync()}
+          className=''
+          variant='ghost'
+        >
+          Sync
+        </Button>
         <ModeToggle />
         <div className='flex w-8 items-center'>
           <SignedIn>
