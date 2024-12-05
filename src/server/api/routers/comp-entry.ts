@@ -7,7 +7,7 @@ import {
   compEntry,
   compEntryToDivisions,
   compEntryToEvents,
-  competition,
+  competitions,
   lift,
   users,
 } from '~/server/db/schema'
@@ -53,7 +53,9 @@ const updateAndLockSchema = z.object({
   gender: z.string(),
   predictedWeight: z.string(),
   weight: z.string(),
-  wc: z.string().optional(),
+  events: z.array(z.string()),
+  divisions: z.array(z.string()),
+  wc: z.string().optional().nullable(),
   squatOpener: z.string(),
   squarRackHeight: z.string(),
   benchOpener: z.string(),
@@ -282,6 +284,7 @@ export const compEntryRouter = createTRPCRouter({
   updateAndLock: publicProcedure
     .input(updateAndLockSchema)
     .mutation(async ({ ctx, input }) => {
+      console.log('input', input)
       const user = await getCurrentUser()
       if (!user) {
         throw new TRPCError({
@@ -320,19 +323,52 @@ export const compEntryRouter = createTRPCRouter({
         }
       }
 
-      input.wc = wc
+      input.wc = wc == '0-f' || wc == '0-m' ? null : wc
+      const { events, divisions, ...rest } = input
 
       const res = await ctx.db
         .update(compEntry)
         .set({
-          ...input,
-          isLocked: true,
+          ...rest,
+          isLocked: weight == 0 ? false : true,
         })
         .where(eq(compEntry.id, input.id))
 
       await ctx.db
         .delete(lift)
         .where(and(eq(lift.compEntryId, input.id), eq(lift.liftNumber, 1)))
+      const deletedDivisions = await ctx.db
+        .delete(compEntryToDivisions)
+        .where(eq(compEntryToDivisions.compEntryId, input.id)).returning({ id: compEntryToDivisions.divisionId })
+      console.log('deletedDivisions', deletedDivisions)
+      await ctx.db
+        .delete(compEntryToEvents)
+        .where(eq(compEntryToEvents.compEntryId, input.id))
+
+      const divisionIds = input.divisions.map((division) => {
+        console.log('division', division)
+        return ctx.db.insert(compEntryToDivisions).values({
+          compEntryId: input.id,
+          divisionId: Number(division),
+        })
+      })
+
+      if (isTuple(divisionIds)) {
+        console.log('divisionIds')
+        await ctx.db.batch(divisionIds)
+      }
+
+      const eventIds = input.events.map((event) => {
+        return ctx.db.insert(compEntryToEvents).values({
+          compEntryId: input.id,
+          eventId: Number(event),
+        })
+      })
+
+      if (isTuple(eventIds)) {
+        console.log('eventIds')
+        await ctx.db.batch(eventIds)
+      }
 
       // build batch inserts and check if doing lift
 
@@ -529,7 +565,7 @@ export const compEntryRouter = createTRPCRouter({
           message: 'You are not authorized to access this resource.',
         })
       }
-     console.log('input', input)
+      console.log('input', input)
 
       const res = await ctx.db
         .update(compEntry)
@@ -553,7 +589,13 @@ export const compEntryRouter = createTRPCRouter({
 
       const ins = input
         .map((item) => {
-          const { liftId, squatBracket, benchBracket, deadliftBracket, ...rest } = item
+          const {
+            liftId,
+            squatBracket,
+            benchBracket,
+            deadliftBracket,
+            ...rest
+          } = item
           return rest
         })
         .map((item) =>

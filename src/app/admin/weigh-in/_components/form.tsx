@@ -135,17 +135,15 @@ const WeighInForm = ({
   })
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log('formData', data)
+    // console.log('formData', data)
     if (!entry) return
     if (!competition) return
     updateAndLock({
       ...data,
       id: entry.id,
       compId: competition.id,
-      // event: entry.events.map((event) => event.event?.id.toString() || '') || [],
-      // division: entry.compEntryToDivisions.map(
-      //   (division) => division.division?.id.toString() || '',
-      // ),
+      divisions: data.division.map((division) => division.toString()),
+      events: data.events.map((event) => event.toString()),
     })
   }
 

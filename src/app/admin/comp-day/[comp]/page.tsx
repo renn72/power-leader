@@ -28,7 +28,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp,
     {
-      refetchInterval: 1000 * 60 * 5
+      refetchInterval: 1000 * 60 * 1
     }
   )
 
