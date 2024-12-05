@@ -189,7 +189,7 @@ const CompTableRow = ({
   return (
     <TableRow
       key={lifter.id}
-      className={cn(isLifter ? 'bg-secondary' : '', 'py-0')}
+      className={cn(isLifter ? 'bg-secondary/50' : '', 'py-0')}
     >
       <Cell className='p-0 py-0 lg:p-2'>{lifterOrder}</Cell>
       <Cell className='p-0  py-0 lg:p-2'>{lifterName}</Cell>

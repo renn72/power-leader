@@ -444,10 +444,11 @@ const Bracket = ({
                       'text-sm font-extrabold ',
                       entry.equipment?.toLowerCase() === 'classic'
                         ? 'text-orange-400'
-                        : 'text-indigo-400',
+                        : entry.equipment?.toLowerCase() === 'raw' ? 'text-indigo-400'
+                        : 'text-emerald-600',
                     )}
                   >
-                    {entry.equipment?.toLowerCase() === 'classic' ? 'C' : 'R'}
+                    {entry.equipment?.slice(0, 1).toUpperCase() === 'S' ? 'SP' : entry.equipment?.slice(0, 1).toUpperCase()}
                   </div>
                   <div className='col-span-3 tracking-tighter'>
                     {entry.user?.name}

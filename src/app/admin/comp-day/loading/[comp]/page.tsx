@@ -212,6 +212,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             isOne !== null && isTwo !== null && isThree !== null && lift
           const isGood =
             (isOne && isTwo) || (isTwo && isThree) || (isOne && isThree)
+          if (!entry.lift?.weight) return null
           return (
             <div
               key={entry.id}

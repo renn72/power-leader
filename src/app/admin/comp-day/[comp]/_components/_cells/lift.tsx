@@ -93,7 +93,7 @@ const Lift = ({
   }
   return (
     <TableCell
-      className={cn(isHighlighted && 'bg-accent', 'py-0', 'p-0 lg:p-2 lg:px-2 ')}
+      className={cn(isHighlighted && 'bg-yellow-800/10', 'py-0', 'p-0 lg:p-2 lg:px-2 ')}
     >
       <Dialog
         open={isOpen}

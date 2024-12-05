@@ -53,6 +53,7 @@ const MainScreenControl = ({
           size='lg'
           defaultValue={competition.compDayInfo.lift.toLowerCase()}
           onValueChange={(value) => {
+            if (value === '') return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -76,6 +77,7 @@ const MainScreenControl = ({
           variant='outline'
           defaultValue={competition.compDayInfo.round.toString()}
           onValueChange={(value) => {
+            if (value === '') return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -100,6 +102,7 @@ const MainScreenControl = ({
           variant='outline'
           defaultValue={competition.compDayInfo.bracket.toString() || '1'}
           onValueChange={(value) => {
+            if (value === '') return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
