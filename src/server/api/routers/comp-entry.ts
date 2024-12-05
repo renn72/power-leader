@@ -53,8 +53,8 @@ const updateAndLockSchema = z.object({
   gender: z.string(),
   predictedWeight: z.string(),
   weight: z.string(),
-  events: z.array(z.string()),
-  divisions: z.array(z.string()),
+  events: z.array(z.string()).optional(),
+  divisions: z.array(z.string()).optional(),
   wc: z.string().optional().nullable(),
   squatOpener: z.string(),
   squarRackHeight: z.string(),
@@ -67,6 +67,7 @@ const updateAndLockSchema = z.object({
   notes: z.string(),
   compId: z.number(),
   userId: z.number().optional(),
+  isFake: z.string().optional(),
 })
 
 const updateOrderSchema = z.object({
@@ -324,53 +325,22 @@ export const compEntryRouter = createTRPCRouter({
       }
 
       input.wc = wc == '0-f' || wc == '0-m' ? null : wc
-      const { events, divisions, ...rest } = input
+      const { isFake, events, divisions, ...rest } = input
 
-      const res = await ctx.db
-        .update(compEntry)
-        .set({
-          ...rest,
-          isLocked: weight == 0 ? false : true,
-        })
-        .where(eq(compEntry.id, input.id))
+      const res = true
 
-      await ctx.db
-        .delete(lift)
-        .where(and(eq(lift.compEntryId, input.id), eq(lift.liftNumber, 1)))
-      const deletedDivisions = await ctx.db
-        .delete(compEntryToDivisions)
-        .where(eq(compEntryToDivisions.compEntryId, input.id)).returning({ id: compEntryToDivisions.divisionId })
-      console.log('deletedDivisions', deletedDivisions)
-      await ctx.db
-        .delete(compEntryToEvents)
-        .where(eq(compEntryToEvents.compEntryId, input.id))
-
-      const divisionIds = input.divisions.map((division) => {
-        console.log('division', division)
-        return ctx.db.insert(compEntryToDivisions).values({
-          compEntryId: input.id,
-          divisionId: Number(division),
-        })
-      })
-
-      if (isTuple(divisionIds)) {
-        console.log('divisionIds')
-        await ctx.db.batch(divisionIds)
-      }
-
-      const eventIds = input.events.map((event) => {
-        return ctx.db.insert(compEntryToEvents).values({
-          compEntryId: input.id,
-          eventId: Number(event),
-        })
-      })
-
-      if (isTuple(eventIds)) {
-        console.log('eventIds')
-        await ctx.db.batch(eventIds)
-      }
+      // const res = await ctx.db
+      //   .update(compEntry)
+      //   .set({
+      //     ...rest,
+      //     isLocked: weight == 0 ? false : true,
+      //   })
+      //   .where(eq(compEntry.id, input.id))
+      console.log('entry updated')
 
       // build batch inserts and check if doing lift
+      await ctx.db.delete(lift).where(eq(lift.compEntryId, input.id))
+      console.log('deleted lift')
 
       const squat = [
         ctx.db.insert(lift).values({
@@ -476,17 +446,74 @@ export const compEntryRouter = createTRPCRouter({
           name: input.name,
         }),
       ]
+      const sOpen = input.squatOpener !== '' ? true : false
+      const bOpen = input.benchOpener !== '' ? true : false
+      const dOpen = input.deadliftOpener !== '' ? true : false
 
-      if (isTuple(squat) && input.squatOpener !== '') {
-        await ctx.db.batch(squat)
+      // if (isTuple(squat) && input.squatOpener !== '') {
+      //   console.log('squat')
+      //   await ctx.db.batch(squat)
+      // }
+      //
+      // if (isTuple(bench) && input.benchOpener !== '') {
+      //   console.log('bench')
+      //   await ctx.db.batch(bench)
+      // }
+      //
+      // if (isTuple(deadlift) && input.deadliftOpener !== '') {
+      //   console.log('deadlift')
+      //   await ctx.db.batch(deadlift)
+      // }
+      if (sOpen && bOpen && dOpen) {
+        if (isTuple(squat) && isTuple(bench) && isTuple(deadlift)) {
+          console.log('all')
+          await ctx.db.batch([
+            ...squat,
+            ...bench,
+            ...deadlift,
+            ctx.db
+              .update(compEntry)
+              .set({
+                ...rest,
+                isLocked: weight == 0 ? false : true,
+              })
+              .where(eq(compEntry.id, input.id)),
+          ])
+        }
       }
 
-      if (isTuple(bench) && input.benchOpener !== '') {
-        await ctx.db.batch(bench)
+      if (input.isFake == 'fake') return res
+      console.log('not fake')
+
+      await ctx.db
+        .delete(compEntryToDivisions)
+        .where(eq(compEntryToDivisions.compEntryId, input.id))
+        .returning({ id: compEntryToDivisions.divisionId })
+      await ctx.db
+        .delete(compEntryToEvents)
+        .where(eq(compEntryToEvents.compEntryId, input.id))
+
+      const divisionIds = input.divisions?.map((division) => {
+        return ctx.db.insert(compEntryToDivisions).values({
+          compEntryId: input.id,
+          divisionId: Number(division),
+        })
+      })
+
+      if (divisionIds && isTuple(divisionIds)) {
+        await ctx.db.batch(divisionIds)
       }
 
-      if (isTuple(deadlift) && input.deadliftOpener !== '') {
-        await ctx.db.batch(deadlift)
+      const eventIds = input.events?.map((event) => {
+        return ctx.db.insert(compEntryToEvents).values({
+          compEntryId: input.id,
+          eventId: Number(event),
+        })
+      })
+
+      if (eventIds && isTuple(eventIds)) {
+        console.log('eventIds')
+        await ctx.db.batch(eventIds)
       }
 
       return res

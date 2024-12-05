@@ -80,6 +80,7 @@ const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => 
         benchOpener: isBench ? benchOpener.toString() : '',
         benchRackHeight: isBench ? '8/4' : '',
         deadliftOpener: isDeadlift ? deadliftOpener.toString() : '',
+        isFake: 'fake',
         squatPB: '',
         benchPB: '',
         deadliftPB: '',
