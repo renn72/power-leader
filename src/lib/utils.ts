@@ -112,6 +112,283 @@ export const calculateDOTS = (
   return Number(score.toFixed(2))
 }
 
+export const getliftWilks= (
+  entry: GetCompetitionEntryById,
+) => {
+
+  const squats = entry.lift.filter((l) => l.lift == 'squat')
+
+  const isSquatting = squats?.length > 0
+  const hasSquat = squats?.reduce(
+    (a, b) => (b.state == 'judged' ? true : a),
+    false,
+  )
+  const squat = squats?.reduce(
+    (a, b) => {
+      const isGood =
+        (b.isGoodOne && b.isGoodTwo) ||
+        (b.isGoodTwo && b.isGoodThree) ||
+        (b.isGoodOne && b.isGoodThree)
+      if (isGood && Number(b.weight) > Number(a.weight)) return b
+      return a
+    },
+    { weight: '0' } as GetLiftById,
+  )
+  const squatDots = calculateNewWilks(
+    Number(squat?.userWeight),
+    Number(squat?.weight),
+    squat.gender?.toLowerCase() == 'female',
+  )
+
+  const projectedSquat = squats?.reduce(
+    (a, b) => {
+      const isGood = b.liftNumber == 1
+      if (isGood && Number(b.weight) > Number(a.weight)) return b
+      return a
+    },
+    { weight: '0' } as GetLiftById,
+  )
+  const projectedSquatDots = calculateNewWilks(
+    Number(projectedSquat?.userWeight),
+    Number(projectedSquat?.weight),
+    projectedSquat.gender?.toLowerCase() == 'female',
+  )
+
+  const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
+  const hasBench = entry.lift
+    .filter((l) => l.lift == 'bench')
+    .reduce((a, b) => (b.state == 'judged' ? true : a), false)
+  const bench = entry.lift
+    .filter((l) => l.lift == 'bench')
+    .reduce(
+      (a, b) => {
+        const isGood =
+          (b.isGoodOne && b.isGoodTwo) ||
+          (b.isGoodTwo && b.isGoodThree) ||
+          (b.isGoodOne && b.isGoodThree)
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const benchDots = calculateNewWilks(
+    Number(bench?.userWeight),
+    Number(bench?.weight),
+    bench.gender?.toLowerCase() == 'female',
+  )
+
+  const projectedBench = entry.lift
+    .filter((l) => l.lift == 'bench')
+    .reduce(
+      (a, b) => {
+        const isGood = b.liftNumber == 1
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const projectedBenchDots = calculateNewWilks(
+    Number(projectedBench?.userWeight),
+    Number(projectedBench?.weight),
+    projectedBench.gender?.toLowerCase() == 'female',
+  )
+
+  const isDeadlifting =
+    entry.lift.filter((l) => l.lift == 'deadlift').length > 0
+  const hasDeadlift = entry.lift
+    .filter((l) => l.lift == 'deadlift')
+    .reduce((a, b) => (b.state == 'judged' ? true : a), false)
+  const deadlift = entry.lift
+    .filter((l) => l.lift == 'deadlift')
+    .reduce(
+      (a, b) => {
+        const isGood =
+          (b.isGoodOne && b.isGoodTwo) ||
+          (b.isGoodTwo && b.isGoodThree) ||
+          (b.isGoodOne && b.isGoodThree)
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const deadliftDots = calculateNewWilks(
+    Number(deadlift?.userWeight),
+    Number(deadlift?.weight),
+    deadlift.gender?.toLowerCase() == 'female',
+  )
+
+  const projectedDeadlift = entry.lift
+    .filter((l) => l.lift == 'deadlift')
+    .reduce(
+      (a, b) => {
+        const isGood = b.liftNumber == 1
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const projectedDeadliftDots = calculateNewWilks(
+    Number(projectedDeadlift?.userWeight),
+    Number(projectedDeadlift?.weight),
+    projectedDeadlift.gender?.toLowerCase() == 'female',
+  )
+
+  const squatTotalDots = isSquatting
+    ? hasSquat
+      ? Number(squatDots)
+      : 0
+    : 0
+  const benchTotalDots = isBenching
+    ? hasBench
+      ? Number(benchDots)
+      : 0
+    : 0
+  const deadliftTotalDots = isDeadlifting
+    ? hasDeadlift
+      ? Number(deadliftDots)
+      : 0
+    : 0
+    return {
+      id: entry.id,
+      name: entry.user?.name,
+      squat: squatTotalDots,
+      bench: benchTotalDots,
+      deadlift: deadliftTotalDots,
+  }
+}
+
+export const getTotalWilks = (
+  entry: GetCompetitionEntryById,
+) => {
+  const squats = entry.lift.filter((l) => l.lift == 'squat')
+
+  const isSquatting = squats?.length > 0
+  const hasSquat = squats?.reduce(
+    (a, b) => (b.state == 'judged' ? true : a),
+    false,
+  )
+  const squat = squats?.reduce(
+    (a, b) => {
+      const isGood =
+        (b.isGoodOne && b.isGoodTwo) ||
+        (b.isGoodTwo && b.isGoodThree) ||
+        (b.isGoodOne && b.isGoodThree)
+      if (isGood && Number(b.weight) > Number(a.weight)) return b
+      return a
+    },
+    { weight: '0' } as GetLiftById,
+  )
+  const squatDots = calculateNewWilks(
+    Number(squat?.userWeight),
+    Number(squat?.weight),
+    squat.gender?.toLowerCase() == 'female',
+  )
+
+  const projectedSquat = squats?.reduce(
+    (a, b) => {
+      const isGood = b.liftNumber == 1
+      if (isGood && Number(b.weight) > Number(a.weight)) return b
+      return a
+    },
+    { weight: '0' } as GetLiftById,
+  )
+  const projectedSquatDots = calculateNewWilks(
+    Number(projectedSquat?.userWeight),
+    Number(projectedSquat?.weight),
+    projectedSquat.gender?.toLowerCase() == 'female',
+  )
+
+  const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
+  const hasBench = entry.lift
+    .filter((l) => l.lift == 'bench')
+    .reduce((a, b) => (b.state == 'judged' ? true : a), false)
+  const bench = entry.lift
+    .filter((l) => l.lift == 'bench')
+    .reduce(
+      (a, b) => {
+        const isGood =
+          (b.isGoodOne && b.isGoodTwo) ||
+          (b.isGoodTwo && b.isGoodThree) ||
+          (b.isGoodOne && b.isGoodThree)
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const benchDots = calculateNewWilks(
+    Number(bench?.userWeight),
+    Number(bench?.weight),
+    bench.gender?.toLowerCase() == 'female',
+  )
+
+  const projectedBench = entry.lift
+    .filter((l) => l.lift == 'bench')
+    .reduce(
+      (a, b) => {
+        const isGood = b.liftNumber == 1
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const projectedBenchDots = calculateNewWilks(
+    Number(projectedBench?.userWeight),
+    Number(projectedBench?.weight),
+    projectedBench.gender?.toLowerCase() == 'female',
+  )
+
+  const isDeadlifting =
+    entry.lift.filter((l) => l.lift == 'deadlift').length > 0
+  const hasDeadlift = entry.lift
+    .filter((l) => l.lift == 'deadlift')
+    .reduce((a, b) => (b.state == 'judged' ? true : a), false)
+  const deadlift = entry.lift
+    .filter((l) => l.lift == 'deadlift')
+    .reduce(
+      (a, b) => {
+        const isGood =
+          (b.isGoodOne && b.isGoodTwo) ||
+          (b.isGoodTwo && b.isGoodThree) ||
+          (b.isGoodOne && b.isGoodThree)
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const deadliftDots = calculateNewWilks(
+    Number(deadlift?.userWeight),
+    Number(deadlift?.weight),
+    deadlift.gender?.toLowerCase() == 'female',
+  )
+
+  const projectedDeadlift = entry.lift
+    .filter((l) => l.lift == 'deadlift')
+    .reduce(
+      (a, b) => {
+        const isGood = b.liftNumber == 1
+        if (isGood && Number(b.weight) > Number(a.weight)) return b
+        return a
+      },
+      { weight: '0' } as GetLiftById,
+    )
+  const projectedDeadliftDots = calculateNewWilks(
+    Number(projectedDeadlift?.userWeight),
+    Number(projectedDeadlift?.weight),
+    projectedDeadlift.gender?.toLowerCase() == 'female',
+  )
+
+  const totalDots =
+    Number(isSquatting ? hasSquat ? Number(squatDots) : 0 : 0) +
+    Number(isBenching ? hasBench ? Number(benchDots) : 0 : 0) +
+    Number(isDeadlifting ? hasDeadlift ? Number(deadliftDots) : 0 : 0)
+
+  const totalWeight =
+    (hasSquat ? Number(squat?.weight) : Number(projectedSquat?.weight)) +
+    (hasBench ? Number(bench?.weight) : Number(projectedBench?.weight)) +
+    (hasDeadlift ? Number(deadlift?.weight) : Number(projectedDeadlift?.weight))
+
+  return totalDots
+}
 export const getliftDots = (
   entry: GetCompetitionEntryById,
 ) => {

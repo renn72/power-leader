@@ -86,7 +86,9 @@ const Bracket = ({
     updateOrder(ins)
   }
   return (
-    <CardContent className='mb-12'>
+    <CardContent className={cn('m-1 mb-16 p-4 ',
+      isLocked ? 'border-amber-900/40 border-2 rounded-lg' : ''
+    )}>
       {!isLocked && (
         <div className='flex items-center gap-2'>
           <span className='text-base font-bold text-muted-foreground'>
