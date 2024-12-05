@@ -39,6 +39,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     null,
   )
   const { comp } = params
+  const ctx = api.useUtils()
   const { data: competition } =
     api.competition.getCompetitionByUuid.useQuery(comp,{
       refetchInterval: 1000 * 60 * 1,
@@ -82,6 +83,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         setIndex(data.index)
         setRound(data.round)
         setNextIndex(data.nextIndex?.toString() || '')
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     channel.bind(
@@ -104,14 +106,13 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         } else if (data.judge === 3) {
           setIsGoodThree(data.isGood)
         }
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     return () => {
       pusherClient.unsubscribe('competition-' + comp)
     }
   }, [comp, lift])
-
-  console.log('comp', competition)
 
   useEffect(() => {
     setLiftName(competition?.compDayInfo.lift || '')
@@ -165,10 +166,6 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       return false
     })
 
-  console.log('bracketList', bracketList)
-  console.log('lift', lift)
-
-
   const dots = calculateDOTS(
     Number(lift?.userWeight),
     Number(lift?.weight),
@@ -179,11 +176,11 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     <div className={cn('dark relative h-full h-screen w-full')}>
       <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-muted-foreground'>
         <Image
-          src='/RawWar_Logo.png'
+          src='/atlas.png'
           alt='RawWar Logo'
           width={400}
           height={100}
-          className='w-[15vw]'
+          className='w-[7vw]'
         />
       </div>
       {!lift ? null : (
@@ -214,7 +211,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div>nextIndex: {nextIndex}</div>
               <div>round: {round}</div>
             </div>
-            <div className='flex w-full flex-col items-center gap-8 text-7xl font-bold'>
+            <div className='flex w-full flex-col items-center gap-8 text-[6rem] font-bold'>
               <div className='flex flex-col items-center'>
                 <div className='uppercase'>{lifter?.user?.name}</div>
                 {lift?.team ? (
@@ -222,7 +219,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
                 ) : null}
               </div>
               <div className='relative flex w-full justify-center'>
-                <div>{lift?.weight}kg</div>
+                <div className='font-extrabold'>{lift?.weight}kg</div>
                 <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-xl text-muted-foreground'>
                   DOTS: {dots}
                 </div>
