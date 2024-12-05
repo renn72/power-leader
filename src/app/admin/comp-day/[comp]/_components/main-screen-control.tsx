@@ -24,7 +24,7 @@ const MainScreenControl = ({
   setLift: (lift: string) => void
   setBracket: (bracket: string) => void
   setRound: (round: string) => void
-    syncToCompetition: () => void
+  syncToCompetition: () => void
 }) => {
   const ctx = api.useUtils()
   const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
@@ -45,7 +45,7 @@ const MainScreenControl = ({
 
   return (
     <div className='flex flex-row items-center gap-2'>
-      <div className='flex gap-2 items-center justify-around rounded-md border border-input p-2'>
+      <div className='flex items-center justify-around gap-2 rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
           type='single'
@@ -68,7 +68,7 @@ const MainScreenControl = ({
           <ToggleGroupItem value='deadlift'>Deadlift</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='flex  gap-2 items-center justify-around rounded-md border border-input p-2'>
+      <div className='flex  items-center justify-around gap-2 rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Round</div>
         <ToggleGroup
           type='single'
@@ -92,7 +92,7 @@ const MainScreenControl = ({
           <ToggleGroupItem value='4'>4</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='flex  gap-2 items-center justify-around rounded-md border border-input p-2'>
+      <div className='flex  items-center justify-around gap-2 rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Bracket</div>
         <ToggleGroup
           type='single'
@@ -110,22 +110,23 @@ const MainScreenControl = ({
             })
           }}
         >
-          {
-            Array.from({ length: brackets }, (_, i) => i + 1).map((bracket) => (
-              <ToggleGroupItem key={bracket} value={bracket.toString()}>
-                {bracket}
-              </ToggleGroupItem>
-            ))
-          }
+          {Array.from({ length: brackets }, (_, i) => i + 1).map((bracket) => (
+            <ToggleGroupItem
+              key={bracket}
+              value={bracket.toString()}
+            >
+              {bracket}
+            </ToggleGroupItem>
+          ))}
         </ToggleGroup>
       </div>
-        <Button
-          className='rounded-full h-12 w-12 text-white'
-          variant='outline'
-          onClick={syncToCompetition}
-        >
-          Sync
-        </Button>
+      <Button
+        className='h-12 w-12 rounded-full text-white'
+        variant='outline'
+        onClick={syncToCompetition}
+      >
+        Sync
+      </Button>
     </div>
   )
 }

@@ -43,16 +43,16 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   )
 
   const lifters = competition?.entries
-    .map((entry) => {
-      return { ...entry }
-    })
     .filter((entry) => {
       if (liftName === 'squat') {
-        return entry.squatBracket == Number(bracket)
+        return entry.squatBracket == Number(bracket) && entry.squatOpener !== ''
       } else if (liftName === 'bench') {
-        return entry.benchBracket == Number(bracket)
+        return entry.benchBracket == Number(bracket) && entry.benchOpener !== ''
       } else if (liftName === 'deadlift') {
-        return entry.deadliftBracket == Number(bracket)
+        return (
+          entry.deadliftBracket == Number(bracket) &&
+          entry.deadliftOpener !== ''
+        )
       }
       return false
     })
@@ -193,16 +193,18 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
             Judge {params.judge.split('-')[1]}
           </div>
         </div>
-        <div className='flex flex-col items-center gap-2 w-full'>
+        <div className='flex w-full flex-col items-center gap-2'>
           <div className='relative flex w-full items-center justify-center'>
             <div className='rounded-full bg-muted px-4 py-2 text-yellow-400'>
               {name}
             </div>
-            <ChevronRightCircle
-              size={36}
-              className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground'
-              onClick={updateLifter}
-            />
+            {nextIndex ? (
+              <ChevronRightCircle
+                size={36}
+                className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground'
+                onClick={updateLifter}
+              />
+            ) : null}
           </div>
           <div className='flex gap-4'>
             <div>{weight}kg</div>

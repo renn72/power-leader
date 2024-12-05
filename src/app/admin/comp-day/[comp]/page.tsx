@@ -39,6 +39,11 @@ const Competition = ({ params }: { params: { comp: string } }) => {
     }
   }, [competition])
 
+  useEffect(() => {
+    if (competition) {
+      setIndex(competition.compDayInfo.index.toString())
+    }
+  }, [competition])
   const syncToCompetition = () => {
     if (competition) {
       setLift(competition.compDayInfo.lift)
