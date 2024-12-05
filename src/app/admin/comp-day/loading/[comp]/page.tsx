@@ -10,7 +10,7 @@ import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import Loading from './loading'
 
-import { calculateDOTS } from '~/lib/utils'
+import { calculateDOTS, calculateNewWilks } from '~/lib/utils'
 
 const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   const size = 19
@@ -199,6 +199,11 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             Number(entry.lift?.weight),
             entry.lift?.gender === 'female',
           )
+          const wilks = calculateNewWilks(
+            Number(entry.lift?.userWeight),
+            Number(entry.lift?.weight),
+            entry.lift?.gender === 'female',
+          )
           const isOne = entry.lift?.isGoodOne
           const isTwo = entry.lift?.isGoodTwo
           const isThree = entry.lift?.isGoodThree
@@ -231,7 +236,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div className='col-span-2'>{entry.name}</div>
               <div>{entry.lift?.weight}kg</div>
               <div>{entry.lift?.rackHeight}</div>
-              <div>{dots}</div>
+              <div>{wilks}</div>
             </div>
           )
         })}

@@ -10,7 +10,7 @@ import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import Loading from './loading'
 
-import { calculateDOTS } from '~/lib/utils'
+import { calculateDOTS, calculateNewWilks } from '~/lib/utils'
 
 const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   const size = 19
@@ -171,6 +171,11 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     Number(lift?.weight),
     lift?.gender?.toLowerCase() === 'female',
   )
+  const wilks = calculateNewWilks(
+    Number(lift?.userWeight),
+    Number(lift?.weight),
+    lift?.gender?.toLowerCase() === 'female',
+  )
 
   return (
     <div className={cn('dark relative h-full h-screen w-full')}>
@@ -221,7 +226,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div className='relative flex w-full justify-center'>
                 <div className='font-extrabold'>{lift?.weight}kg</div>
                 <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-xl text-muted-foreground'>
-                  DOTS: {dots}
+                  WILKS: {wilks}
                 </div>
               </div>
               <div className='relative flex w-full justify-center gap-24'>
