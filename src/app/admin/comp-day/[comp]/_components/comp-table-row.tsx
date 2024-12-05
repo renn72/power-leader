@@ -41,7 +41,7 @@ const CompTableRow = ({
   const lifterName = lifter?.user?.name
   const lifterWc = lifter?.wc?.split('-')[0] + 'kg'
   const lifterEquip = lifter?.equipment?.slice(0,1)
-  const gender = lifter?.user?.gender.slice(0,1)
+  const gender = lifter?.user?.gender?.slice(0,1)
   const lifterSquatRackHeight = lifter?.squarRackHeight || ''
   const lifterBenchRackHeight = lifter?.benchRackHeight || ''
 

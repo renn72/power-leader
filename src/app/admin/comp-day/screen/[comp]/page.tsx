@@ -1,9 +1,9 @@
 'use client'
 
+import Countdown from 'react-countdown'
 import { api } from '~/trpc/react'
-import { useEffect, useState } from 'react'
-
-import { pusherClient } from '~/lib/pusher'
+import { useEffect, useState, useRef } from 'react'
+import { env } from '~/env'
 import Pusher from 'pusher-js'
 
 import { cn } from '~/lib/utils'
@@ -28,6 +28,7 @@ const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
 }
 
 const CompDayScreen = ({ params }: { params: { comp: string } }) => {
+  const [dateNow, setDateNow] = useState<number>(Date.now())
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState<number | null | undefined>(null)
@@ -38,12 +39,15 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const [isGoodThree, setIsGoodThree] = useState<boolean | null | undefined>(
     null,
   )
+  const [timer, setTimer] = useState<number>(60)
   const { comp } = params
   const ctx = api.useUtils()
-  const { data: competition } =
-    api.competition.getCompetitionByUuid.useQuery(comp,{
+  const { data: competition } = api.competition.getCompetitionByUuid.useQuery(
+    comp,
+    {
       refetchInterval: 1000 * 60 * 1,
-  })
+    },
+  )
 
   const lifter = competition?.entries?.find(
     (entry) => entry.id === Number(index),
@@ -66,8 +70,10 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   console.log(competition)
 
   useEffect(() => {
-    console.log('channel', 'competition-' + comp)
-    Pusher.logToConsole = true
+    // console.log('channel', 'competition-' + comp)
+    const pusherClient = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
+      cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
+    })
     const channel = pusherClient.subscribe('competition-' + comp)
     channel.bind(
       'update',
@@ -77,7 +83,23 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         bracket: string
         index: number | null
         nextIndex: string | null
+        timerStarted: boolean
+        timerReset: boolean
+        timerStopped: boolean
       }) => {
+        console.log('update', data)
+        if (data.timerStarted) {
+          countdownRef.current?.start()
+          return
+        }
+        if (data.timerReset) {
+          countdownRef.current?.stop()
+          return
+        }
+        if (data.timerStopped) {
+          countdownRef.current?.pause()
+          return
+        }
         setLiftName(data.lift)
         setBracket(data.bracket)
         setIndex(data.index)
@@ -94,11 +116,11 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         judge: number
         isGood: boolean
       }) => {
-        console.log('ping', lift?.id, data.id)
+        // console.log('ping', lift?.id, data.id)
         if (lift?.id != data.entryId) {
-          console.log('not the same')
+          // console.log('not the same')
         }
-        console.log('passed')
+        // console.log('passed')
         if (data.judge === 1) {
           setIsGoodOne(data.isGood)
         } else if (data.judge === 2) {
@@ -111,6 +133,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     )
     return () => {
       pusherClient.unsubscribe('competition-' + comp)
+      pusherClient.disconnect()
     }
   }, [comp, lift])
 
@@ -177,6 +200,20 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     lift?.gender?.toLowerCase() === 'female',
   )
 
+  const countdownRef = useRef<any>()
+  // @ts-ignore
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return <>0</>
+    } else {
+      // Render a countdown
+      if (minutes > 0) {
+        return <span>{minutes}:00</span>
+      }
+      return <span>{seconds}</span>
+    }
+  }
   return (
     <div className={cn('dark relative h-full h-screen w-full')}>
       <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-muted-foreground'>
@@ -190,7 +227,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       </div>
       {!lift ? null : (
         <div className='grid h-full w-full'>
-          <div className='flex flex-col items-center gap-[1.3vh] absolute left-10 top-4 hidden '>
+          <div className='absolute left-10 top-4 flex hidden flex-col items-center gap-[1.3vh] '>
             <div className='text-xl font-bold text-muted-foreground'>
               Round: {round}
             </div>
@@ -216,7 +253,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div>nextIndex: {nextIndex}</div>
               <div>round: {round}</div>
             </div>
-            <div className='flex w-full flex-col items-center gap-8 text-[6rem] font-bold'>
+            <div className='mt-32 flex w-full flex-col items-center gap-12 text-[6rem] font-bold'>
               <div className='flex flex-col items-center'>
                 <div className='uppercase'>{lifter?.user?.name}</div>
                 {lift?.team ? (
@@ -238,6 +275,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
                     {lift?.rackHeight}
                   </div>
                 )}
+              </div>
+              <div className='text-6xl text-muted-foreground'>
+                <Countdown
+                  autoStart={false}
+                  ref={countdownRef}
+                  date={dateNow + 60000}
+                  renderer={renderer}
+                />
               </div>
             </div>
             <div className='absolute bottom-0 left-[1vw] text-sm'>
