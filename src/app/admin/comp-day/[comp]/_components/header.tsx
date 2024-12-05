@@ -25,8 +25,8 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
   return (
     <div className='relative flex w-full flex-col items-center justify-center'>
       <RefreshCw
-        size={36}
-        className='absolute left-4 top-2 cursor-pointer text-muted-foreground hover:text-primary'
+        size={20}
+        className='absolute left-1 top-1 cursor-pointer text-muted-foreground hover:text-primary'
         onClick={() => {
           toast('Refreshing')
           ctx.competition.getCompetitionByUuid.refetch()

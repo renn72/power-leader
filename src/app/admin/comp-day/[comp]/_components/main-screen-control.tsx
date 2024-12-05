@@ -3,8 +3,9 @@
 import { api } from '~/trpc/react'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group-bold'
 import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
 
-const ActionPanel = ({
+const MainScreenControl = ({
   competition,
   lift,
   bracket,
@@ -13,6 +14,7 @@ const ActionPanel = ({
   setLift,
   setBracket,
   setRound,
+  syncToCompetition,
 }: {
   competition: any
   lift: string
@@ -22,6 +24,7 @@ const ActionPanel = ({
   setLift: (lift: string) => void
   setBracket: (bracket: string) => void
   setRound: (round: string) => void
+    syncToCompetition: () => void
 }) => {
   const ctx = api.useUtils()
   const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
@@ -33,8 +36,6 @@ const ActionPanel = ({
     },
   })
 
-  console.log({ lift, bracket, index, round })
-
   const brackets =
     lift === 'squat'
       ? Number(competition.squatBrackets)
@@ -43,18 +44,15 @@ const ActionPanel = ({
         : Number(competition.deadliftBrackets)
 
   return (
-    <div className='grid grid-cols-3 gap-2'>
-      <div className='flex items-center justify-around rounded-md border border-input p-2'>
+    <div className='flex flex-row items-center gap-2'>
+      <div className='flex gap-2 items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
           type='single'
           variant='outline'
           size='lg'
-          value={lift}
           defaultValue={competition.compDayInfo.lift.toLowerCase()}
           onValueChange={(value) => {
-            setLift(value)
-            return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -70,17 +68,14 @@ const ActionPanel = ({
           <ToggleGroupItem value='deadlift'>Deadlift</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='flex items-center justify-around rounded-md border border-input p-2'>
+      <div className='flex  gap-2 items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Round</div>
         <ToggleGroup
           type='single'
           size='lg'
           variant='outline'
-          value={round}
           defaultValue={competition.compDayInfo.round.toString()}
           onValueChange={(value) => {
-            setRound(value)
-            return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -97,17 +92,14 @@ const ActionPanel = ({
           <ToggleGroupItem value='4'>4</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='flex items-center justify-around rounded-md border border-input p-2'>
+      <div className='flex  gap-2 items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Bracket</div>
         <ToggleGroup
           type='single'
           size='lg'
           variant='outline'
-          value={bracket}
           defaultValue={competition.compDayInfo.bracket.toString() || '1'}
           onValueChange={(value) => {
-            setBracket(value)
-            return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -127,8 +119,15 @@ const ActionPanel = ({
           }
         </ToggleGroup>
       </div>
+        <Button
+          className='rounded-full h-12 w-12 text-white'
+          variant='outline'
+          onClick={syncToCompetition}
+        >
+          Sync
+        </Button>
     </div>
   )
 }
 
-export default ActionPanel
+export default MainScreenControl
