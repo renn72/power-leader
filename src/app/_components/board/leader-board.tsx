@@ -15,11 +15,12 @@ import { cn } from '~/lib/utils'
 const LeaderBoard = ({
   competition,
   table,
+  gender,
 }: {
   competition: GetCompetitionByUuid
   table: string
+  gender: string | null
 }) => {
-
   const entries = competition.entries
     .filter((entry) => {
       const res = entry.compEntryToDivisions.find(
@@ -30,9 +31,15 @@ const LeaderBoard = ({
       if (!res) return false
       return true
     })
+    .filter((entry) => {
+      if (!gender) return true
+      return entry.gender?.toLowerCase() === gender.toLowerCase()
+    })
     .sort((a, b) => {
       return getTotalWilks(b) - getTotalWilks(a)
     })
+
+  console.log('gender', gender)
 
   return (
     <div className='w-full text-xl'>
