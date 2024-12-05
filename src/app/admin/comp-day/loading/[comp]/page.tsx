@@ -81,6 +81,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         setIndex(data.index)
         setRound(data.round)
         setNextIndex(data.nextIndex?.toString() || '')
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     channel.bind(
@@ -104,14 +105,13 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         } else if (data.judge === 3) {
           setIsGoodThree(data.isGood)
         }
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     return () => {
       pusherClient.unsubscribe('competition-' + comp)
     }
   }, [comp, lift])
-
-  console.log('comp', competition)
 
   useEffect(() => {
     setLiftName(competition?.compDayInfo.lift || '')
@@ -175,10 +175,6 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       }
     })
 
-  console.log('bracketList', bracketList)
-  console.log('lift', lift)
-
-
   if (!lift) return null
 
   const dots = calculateDOTS(
@@ -193,7 +189,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         'dark relative grid h-dvh w-dvw grid-cols-2 overflow-hidden',
       )}
     >
-      <div className='col-span-1 mt-4 flex flex-col items-center gap-[0.8vh]'>
+      <div className='col-span-1 mt-4 flex flex-col items-center gap-2'>
         <div className='text-2xl font-bold text-muted-foreground'>
           Round: {round}
         </div>
@@ -215,7 +211,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div
               key={entry.id}
               className={cn(
-                'w-full rounded-full border border-4 border-muted py-2 text-xl leading-8 font-semibold tracking-tighter',
+                'w-full rounded-full border border-4 border-muted py-1 text-xl leading-6 font-semibold tracking-tighter',
                 'grid grid-cols-6 items-center gap-0',
                 index == entry.id
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
@@ -243,11 +239,11 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       <div className='relative col-span-1 flex flex-col items-center w-full h-dvh justify-around text-xl font-bold my-[2vh]'>
           <div className='absolute top-0 left-1/2 -translate-x-1/2 text-center'>
             <Image
-              src='/RawWar_Logo.png'
+              src='/atlas.png'
               alt='RawWar Logo'
-              width={400}
+              width={100}
               height={100}
-              className='w-[10vw]'
+              className='w-[4vw]'
             />
           </div>
           <div className='text-sm'>

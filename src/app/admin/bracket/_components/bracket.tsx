@@ -101,13 +101,33 @@ const Bracket = ({
 
   useEffect(() => {
     if (lift === 'squat') {
-      setEntryList(entries.filter((entry) => entry.squatBracket == bracket))
+      setEntryList(
+        entries
+          .filter((entry) => entry.squatBracket == bracket)
+          .sort((a, b) => {
+            if (a.squatOrderOne == null) return 1
+            if (b.squatOrderOne == null) return -1
+            return a.squatOrderOne - b.squatOrderOne
+          }),
+      )
     }
     if (lift === 'bench') {
-      setEntryList(entries.filter((entry) => entry.benchBracket == bracket))
+      setEntryList(
+        entries
+          .filter((entry) => entry.benchBracket == bracket)
+          .sort((a, b) => {
+            if (a.benchOrderOne == null) return 1
+            if (b.benchOrderOne == null) return -1
+            return a.benchOrderOne - b.benchOrderOne
+          }),
+      )
     }
     if (lift === 'deadlift') {
-      setEntryList(entries.filter((entry) => entry.deadliftBracket == bracket))
+      setEntryList(entries.filter((entry) => entry.deadliftBracket == bracket).sort((a, b) => {
+        if (a.deadliftOrderOne == null) return 1
+        if (b.deadliftOrderOne == null) return -1
+        return a.deadliftOrderOne - b.deadliftOrderOne
+      }))
     }
   }, [entries])
 

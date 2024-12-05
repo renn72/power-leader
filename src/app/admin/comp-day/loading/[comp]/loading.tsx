@@ -85,7 +85,7 @@ const Loading = ({
   console.log(red, blue, yellow, green, white, black, gray)
 
   return (
-    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-lg'>
+    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-4xl'>
       {isLifting ? (
         <div className='uppercase'>Lifting: {name}</div>
       ) : (
