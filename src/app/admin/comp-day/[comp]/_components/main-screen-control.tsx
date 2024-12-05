@@ -46,7 +46,6 @@ const MainScreenControl = ({
   return (
     <div className='flex flex-row items-center gap-2'>
       <div className='flex items-center justify-around gap-2 rounded-md border border-input p-2'>
-        <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
           type='single'
           variant='outline'
@@ -70,7 +69,7 @@ const MainScreenControl = ({
         </ToggleGroup>
       </div>
       <div className='flex  items-center justify-around gap-2 rounded-md border border-input p-2'>
-        <div className='text-lg font-bold'>Round</div>
+        <div className='text-lg font-bold'>Rnd</div>
         <ToggleGroup
           type='single'
           size='lg'
@@ -95,7 +94,6 @@ const MainScreenControl = ({
         </ToggleGroup>
       </div>
       <div className='flex  items-center justify-around gap-2 rounded-md border border-input p-2'>
-        <div className='text-lg font-bold'>Bracket</div>
         <ToggleGroup
           type='single'
           size='lg'
@@ -129,6 +127,22 @@ const MainScreenControl = ({
         onClick={syncToCompetition}
       >
         Sync
+      </Button>
+      <Button
+        className='h-12 w-12 rounded-full bg-blue-600/80 font-extrabold text-slate-900'
+        variant='outline'
+        onClick={() => {
+          updateLift({
+            id: competition.id,
+            uuid: competition.uuid || '',
+            round: +round,
+            lift: lift,
+            bracket: +bracket,
+            index: +index,
+          })
+        }}
+      >
+        Ping
       </Button>
     </div>
   )
