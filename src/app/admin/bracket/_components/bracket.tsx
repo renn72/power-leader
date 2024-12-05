@@ -236,6 +236,15 @@ const Bracket = ({
 
   const sortByWC = () => {
     const sorted = entries
+      .filter((entry) => {
+        if (lift === 'squat') {
+          return entry.squatBracket == bracket
+        } else if (lift === 'bench') {
+          return entry.benchBracket == bracket
+        } else if (lift === 'deadlift') {
+          return entry.deadliftBracket == bracket
+        }
+      })
       .map((e) => {
         let value = 0
         if (lift === 'squat') {
@@ -262,6 +271,15 @@ const Bracket = ({
   }
   const sortByWeight = () => {
     const sorted = entries
+      .filter((entry) => {
+        if (lift === 'squat') {
+          return entry.squatBracket == bracket
+        } else if (lift === 'bench') {
+          return entry.benchBracket == bracket
+        } else if (lift === 'deadlift') {
+          return entry.deadliftBracket == bracket
+        }
+      })
       .map((e) => {
         let value = 0
         if (lift === 'squat') {
@@ -381,11 +399,14 @@ const Bracket = ({
                   >
                     {entry.gender?.toLowerCase() === 'female' ? 'F' : 'M'}
                   </div>
-                  <div className={cn('text-sm font-extrabold ',
-                    entry.equipment?.toLowerCase() === 'classic'
-                      ? 'text-orange-400'
-                      : 'text-indigo-400',
-                  )}>
+                  <div
+                    className={cn(
+                      'text-sm font-extrabold ',
+                      entry.equipment?.toLowerCase() === 'classic'
+                        ? 'text-orange-400'
+                        : 'text-indigo-400',
+                    )}
+                  >
                     {entry.equipment?.toLowerCase() === 'classic' ? 'C' : 'R'}
                   </div>
                   <div className='col-span-3 tracking-tighter'>

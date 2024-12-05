@@ -32,12 +32,6 @@ const Header = ({ competition }: { competition: GetCompetitionByUuid }) => {
           ctx.competition.getCompetitionByUuid.refetch()
         }}
       />
-      <Image
-        src='/RawWar_Logo.png'
-        alt='RawWar Logo'
-        width={150}
-        height={90}
-      />
       <div className='absolute bottom-0 right-0 flex hidden items-center gap-2 lg:flex'>
         {competition.currentState === 'closed' ||
         competition.currentState === 'paused' ? (

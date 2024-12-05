@@ -56,10 +56,7 @@ const CompTable = ({
         judge: number
         isGood: boolean
       }) => {
-        if (!competition) {
-          return
-        }
-        console.log('data', data)
+        if (!competition) return
         ctx.competition.getCompetitionByUuid.setData(competitonUuid, (comp) => {
           if (!comp) return
           return {
@@ -92,6 +89,7 @@ const CompTable = ({
             }),
           }
         })
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     return () => {
@@ -101,7 +99,7 @@ const CompTable = ({
 
   return (
     <div className='rounded-md border border-input p-1'>
-      <ScrollArea className='h-[75vh]'>
+      <ScrollArea className='h-[80vh]'>
         <Table className='text-sm lg:text-lg tracking-tighter'>
           <CompTableHeader
             lifters={lifters}

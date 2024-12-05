@@ -40,6 +40,8 @@ const CompTableRow = ({
   const lifterId = lifter.id
   const lifterName = lifter?.user?.name
   const lifterWc = lifter?.wc?.split('-')[0] + 'kg'
+  const lifterEquip = lifter?.equipment?.slice(0,1)
+  const gender = lifter?.user?.gender.slice(0,1)
   const lifterSquatRackHeight = lifter?.squarRackHeight || ''
   const lifterBenchRackHeight = lifter?.benchRackHeight || ''
 
@@ -189,10 +191,12 @@ const CompTableRow = ({
       key={lifter.id}
       className={cn(isLifter ? 'bg-secondary' : '', 'py-0')}
     >
-      <Cell className='py-0 p-0 lg:p-2'>{lifterOrder}</Cell>
-      <Cell className='py-0  p-0 lg:p-2'>{lifterName}</Cell>
-      <Cell className='py-0  p-0 lg:p-2'>
-        <Badge className='w-14 items-center justify-center'>wc</Badge>
+      <Cell className='p-0 py-0 lg:p-2'>{lifterOrder}</Cell>
+      <Cell className='p-0  py-0 lg:p-2'>{lifterName}</Cell>
+      <Cell className='p-0  py-0 capitalize lg:p-2'>{lifterEquip}</Cell>
+      <Cell className='p-0  py-0 capitalize lg:p-2'>{gender}</Cell>
+      <Cell className='p-0  py-0 lg:p-2'>
+        <Badge className='w-14 items-center justify-center'>{lifterWc}</Badge>
       </Cell>
       <SquatRackHeight
         height={lifterSquatRackHeight}
@@ -283,9 +287,7 @@ const CompTableRow = ({
         lift={lifterDeadliftFourLift}
         isHighlighted={isDeadliftFour}
       />
-      <Cell
-        className='p-0 lg:p-2'
-      >
+      <Cell className='p-0 lg:p-2'>
         {+index === lifter.id ? (
           <Button
             variant='ghost'
