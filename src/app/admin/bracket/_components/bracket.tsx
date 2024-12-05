@@ -105,6 +105,11 @@ const Bracket = ({
         entries
           .filter((entry) => entry.squatBracket == bracket)
           .sort((a, b) => {
+            if (Number(a.squatOpener) === 0) return 1
+            if (Number(b.squatOpener) === 0) return -1
+            return Number(a.squatOpener) - Number(b.squatOpener)
+          })
+          .sort((a, b) => {
             if (a.squatOrderOne == null) return 1
             if (b.squatOrderOne == null) return -1
             return a.squatOrderOne - b.squatOrderOne
@@ -116,6 +121,11 @@ const Bracket = ({
         entries
           .filter((entry) => entry.benchBracket == bracket)
           .sort((a, b) => {
+            if (Number(a.benchOpener) === 0) return 1
+            if (Number(b.benchOpener) === 0) return -1
+            return Number(a.benchOpener) - Number(b.benchOpener)
+          })
+          .sort((a, b) => {
             if (a.benchOrderOne == null) return 1
             if (b.benchOrderOne == null) return -1
             return a.benchOrderOne - b.benchOrderOne
@@ -123,11 +133,20 @@ const Bracket = ({
       )
     }
     if (lift === 'deadlift') {
-      setEntryList(entries.filter((entry) => entry.deadliftBracket == bracket).sort((a, b) => {
-        if (a.deadliftOrderOne == null) return 1
-        if (b.deadliftOrderOne == null) return -1
-        return a.deadliftOrderOne - b.deadliftOrderOne
-      }))
+      setEntryList(
+        entries
+          .filter((entry) => entry.deadliftBracket == bracket)
+          .sort((a, b) => {
+            if (Number(a.deadliftOpener) === 0) return 1
+            if (Number(b.deadliftOpener) === 0) return -1
+            return Number(a.deadliftOpener) - Number(b.deadliftOpener)
+          })
+          .sort((a, b) => {
+            if (a.deadliftOrderOne == null) return 1
+            if (b.deadliftOrderOne == null) return -1
+            return a.deadliftOrderOne - b.deadliftOrderOne
+          }),
+      )
     }
   }, [entries])
 
@@ -286,7 +305,6 @@ const Bracket = ({
         if (b.liftWeight === 0) return -1
         return Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0])
       })
-    console.log(sorted)
     setEntryList(sorted)
   }
   const sortByWeight = () => {
@@ -379,13 +397,15 @@ const Bracket = ({
                 data-label={entry.id}
                 className={cn('flex items-center gap-1')}
               >
-                <ChevronLeftCircle
-                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
-                  onClick={() => {
-                    if (isLocked) return
-                    if (bracket !== 1) handleBracket(bracket - 1, entry.id)
-                  }}
-                />
+                {isLocked ? null : (
+                  <ChevronLeftCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (isLocked) return
+                      if (bracket !== 1) handleBracket(bracket - 1, entry.id)
+                    }}
+                  />
+                )}
 
                 <div
                   className={cn(
@@ -444,14 +464,16 @@ const Bracket = ({
                     )}
                   </div>
                 </div>
-                <ChevronRightCircle
-                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
-                  onClick={() => {
-                    if (isLocked) return
-                    if (bracket !== numberOfBrackets)
-                      handleBracket(bracket + 1, entry.id)
-                  }}
-                />
+                {isLocked ? null : (
+                  <ChevronRightCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (isLocked) return
+                      if (bracket !== numberOfBrackets)
+                        handleBracket(bracket + 1, entry.id)
+                    }}
+                  />
+                )}
               </div>
             )
           })}

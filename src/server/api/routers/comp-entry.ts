@@ -480,10 +480,34 @@ export const compEntryRouter = createTRPCRouter({
               .where(eq(compEntry.id, input.id)),
           ])
         }
+      } else {
+        console.log('not fake')
+
+        await ctx.db
+          .update(compEntry)
+          .set({
+            ...rest,
+            isLocked: weight == 0 ? false : true,
+          })
+          .where(eq(compEntry.id, input.id))
+
+        if (isTuple(squat) && input.squatOpener !== '') {
+          console.log('squat')
+          await ctx.db.batch(squat)
+        }
+
+        if (isTuple(bench) && input.benchOpener !== '') {
+          console.log('bench')
+          await ctx.db.batch(bench)
+        }
+
+        if (isTuple(deadlift) && input.deadliftOpener !== '') {
+          console.log('deadlift')
+          await ctx.db.batch(deadlift)
+        }
       }
 
       if (input.isFake == 'fake') return res
-      console.log('not fake')
 
       await ctx.db
         .delete(compEntryToDivisions)
