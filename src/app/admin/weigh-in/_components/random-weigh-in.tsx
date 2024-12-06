@@ -43,10 +43,12 @@ const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => 
           return a
         }, false) || false
 
-      const squatOpener = roundPL(50 + Math.floor(Math.random() * 270))
-      const benchOpener = roundPL(50 + Math.floor(Math.random() * 270))
-      const deadliftOpener = roundPL(50 + Math.floor(Math.random() * 270))
-      const weight = 50 + Math.floor(Math.random() * 70)
+      const squatOpener = entry?.squatOpener !== '' ? Number(entry?.squatOpener) : roundPL(50 + Math.floor(Math.random() * 270))
+      const benchOpener = entry?.benchOpener !== '' ? Number(entry?.benchOpener) : roundPL(50 + Math.floor(Math.random() * 270))
+      const deadliftOpener = entry?.deadliftOpener !== '' ? Number(entry?.deadliftOpener) : roundPL(50 + Math.floor(Math.random() * 270))
+      const weight = entry?.weight == '' ? 50 + Math.floor(Math.random() * 70) : Number(entry?.weight)
+      const squarRackHeight = entry?.squarRackHeight !== '' ? entry?.squarRackHeight : '8out'
+      const benchRackHeight = entry?.benchRackHeight !== '' ? entry?.benchRackHeight : '8/4'
 
       let wc = ''
       if (entry?.gender?.toLowerCase() == 'female' && wc_female) {
@@ -73,12 +75,12 @@ const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => 
         equipment: entry?.equipment || '',
         gender: entry?.gender || '',
         predictedWeight: entry?.predictedWeight || '',
-        weight: weight.toString(),
+        weight: entry?.weight || weight.toString(),
         wc: wc.toString(),
         squatOpener: isSquat ? squatOpener.toString() : '',
-        squarRackHeight: isSquat ? '8out' : '',
+        squarRackHeight: isSquat && squarRackHeight ? squarRackHeight : '',
         benchOpener: isBench ? benchOpener.toString() : '',
-        benchRackHeight: isBench ? '8/4' : '',
+        benchRackHeight: isBench && benchRackHeight ? benchRackHeight : '',
         deadliftOpener: isDeadlift ? deadliftOpener.toString() : '',
         isFake: 'fake',
         squatPB: '',
