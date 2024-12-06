@@ -267,9 +267,9 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
                 </div>
               </div>
               <div className='relative flex w-full justify-center gap-24'>
-                <Sign isGood={isGoodOne} />
-                <Sign isGood={isGoodTwo} />
-                <Sign isGood={isGoodThree} />
+                <Sign isGood={isGoodOne === null || isGoodTwo === null || isGoodThree === null ? null : isGoodOne} />
+                <Sign isGood={isGoodOne === null || isGoodTwo === null || isGoodThree === null ? null : isGoodTwo} />
+                <Sign isGood={isGoodOne === null || isGoodTwo === null || isGoodThree === null ? null : isGoodThree} />
                 {lift?.rackHeight && (
                   <div className='absolute right-12 top-1/2 -translate-y-1/2 text-center text-4xl text-muted-foreground'>
                     {lift?.rackHeight}
