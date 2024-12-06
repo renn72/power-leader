@@ -450,7 +450,7 @@ const Bracket = ({
                   >
                     {entry.equipment?.slice(0, 1).toUpperCase() === 'S' ? 'SP' : entry.equipment?.slice(0, 1).toUpperCase()}
                   </div>
-                  <div className='col-span-3 tracking-tighter'>
+                  <div className='col-span-3 tracking-tighter truncate'>
                     {entry.user?.name}
                   </div>
                   <div className='col-span-2'>
