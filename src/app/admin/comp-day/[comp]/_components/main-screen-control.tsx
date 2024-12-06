@@ -77,6 +77,7 @@ const MainScreenControl = ({
           defaultValue={competition.compDayInfo.round.toString()}
           onValueChange={(value) => {
             if (value === '') return
+            setRound(value)
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
