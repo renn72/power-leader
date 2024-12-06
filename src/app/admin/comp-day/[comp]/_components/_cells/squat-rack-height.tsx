@@ -26,8 +26,8 @@ const SquatRackHeight = ({
   isHighlighted?: boolean
 }) => {
   const [value, setValue] = useState(() => {
-    if (height.includes('in')) return Number(height.replace('in', ''))
-    return Number(height.replace('out', ''))
+    if (height.includes('in')) return height.replace('in', '')
+    return height.replace('out', '')
   })
   const [inOrOut, setInOrOut] = useState(() => {
     if (height.includes('in')) return 'in'
@@ -81,22 +81,20 @@ const SquatRackHeight = ({
                 size={24}
                 className='cursor-pointer'
                 onClick={() => {
-                  setValue(value + 1)
                 }}
               />
               <Input
                 className='w-36 text-center text-2xl'
                 value={value}
-                type='number'
+                type='text'
                 onChange={(e) => {
-                  setValue(Number(e.target.value))
+                  setValue(e.target.value)
                 }}
               />
               <ChevronDown
                 size={24}
                 className='cursor-pointer'
                 onClick={() => {
-                  setValue(value - 1)
                 }}
               />
             </div>
