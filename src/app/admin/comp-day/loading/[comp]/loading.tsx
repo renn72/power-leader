@@ -51,6 +51,25 @@ const Gray = () => (
   </div>
 )
 
+const Mini = () => (
+  <div className='flex h-24 w-6 flex-col items-center justify-center bg-gray-200 leading-[1rem] '>
+    <div>1</div>
+    <Dot
+      size={24}
+      className='my-[-0.6rem]'
+    />
+  </div>
+)
+const Micro = () => (
+  <div className='flex h-24 w-6 flex-col items-center justify-center bg-gray-200 leading-[1rem] '>
+    <div>0</div>
+    <Dot
+      size={24}
+      className='my-[-0.6rem]'
+    />
+    <div>5</div>
+  </div>
+)
 const Loading = ({
   name,
   weight,
@@ -81,6 +100,11 @@ const Loading = ({
   let black = Math.floor(i / 5)
   i = i % 5
   let gray = Math.floor(i / 2.5)
+  i = i % 2.5
+  let mini = Math.floor(i / 1)
+  i = i % 1
+  let micro = Math.floor(i / 0.5)
+
 
   console.log(red, blue, yellow, green, white, black, gray)
 
@@ -114,6 +138,12 @@ const Loading = ({
           ))}
           {Array.from({ length: gray }).map((_, i) => (
             <Gray key={i} />
+          ))}
+          {Array.from({ length: mini }).map((_, i) => (
+            <Mini key={i} />
+          ))}
+          {Array.from({ length: micro }).map((_, i) => (
+            <Micro key={i} />
           ))}
         </div>
         {rack !== '' && <div>{rack}</div>}
