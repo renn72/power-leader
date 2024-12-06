@@ -216,13 +216,13 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   }
   return (
     <div className={cn('dark relative h-full h-screen w-full')}>
-      <div className='absolute left-1/2 top-10 -translate-x-1/2 text-center text-muted-foreground'>
+      <div className='absolute left-1/2 top-6 -translate-x-1/2 text-center text-muted-foreground'>
         <Image
-          src='/atlas.png'
+          src='/mary.jpg'
           alt='RawWar Logo'
           width={400}
           height={100}
-          className='w-[7vw]'
+          className='w-[10vw]'
         />
       </div>
       {!lift ? null : (
