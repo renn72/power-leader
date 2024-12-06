@@ -192,7 +192,7 @@ const CompTableRow = ({
       className={cn(isLifter ? 'bg-secondary/50' : '', 'py-0')}
     >
       <Cell className='p-0 py-0 lg:p-2'>{lifterOrder}</Cell>
-      <Cell className='p-0  py-0 lg:p-2'>{lifterName}</Cell>
+      <Cell className='p-0  py-0 lg:p-2 truncate max-w-[155px]'>{lifterName}</Cell>
       <Cell className='p-0  py-0 capitalize lg:p-2'>{lifterEquip}</Cell>
       <Cell className='p-0  py-0 capitalize lg:p-2'>{gender}</Cell>
       <Cell className='p-0  py-0 lg:p-2'>

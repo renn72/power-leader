@@ -134,21 +134,21 @@ const LeaderBoardRow = ({
 
   const liftsDots = entries?.map((e) => getliftWilks(e))
   const check = liftsDots
-    ?.filter((l) => l.squat !== 0)
-    .sort((a, b) => b.squat - a.squat)
-    .map((l, i) => ({ id: l.id, place: i + 1 }))
+    ?.filter((l) => l.squat !== 0 && !isNaN(l.squat))
+    // .sort((a, b) => b.squat - a.squat)
+    // .map((l, i) => ({ id: l.id, place: i + 1 }))
   const squatPlaceDots = liftsDots
-    ?.filter((l) => l.squat !== 0)
+    ?.filter((l) => l.squat !== 0 && !isNaN(l.squat))
     .sort((a, b) => b.squat - a.squat)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const benchPlaceDots = liftsDots
-    ?.filter((l) => l.bench !== 0)
+    ?.filter((l) => l.bench !== 0 && !isNaN(l.bench))
     .sort((a, b) => b.bench - a.bench)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const deadliftPlaceDots = liftsDots
-    ?.filter((l) => l.deadlift !== 0)
+    ?.filter((l) => l.deadlift !== 0 && !isNaN(l.deadlift))
     .sort((a, b) => b.deadlift - a.deadlift)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
@@ -181,10 +181,10 @@ const LeaderBoardRow = ({
     <TableRow
       key={entry.id}
       className={cn(
-        'text-xl font-extrabold uppercase leading-5 tracking-tighter',
+        'text-sm md:text-xl font-extrabold uppercase leading-5 tracking-tightest',
       )}
     >
-      <TableCell className='py-0 text-lg'>
+      <TableCell className='py-0 truncate'>
         {entry.user?.name?.split(' ')[0]}{' '}
         {entry.user?.name?.split(' ')[1]?.slice(0, 1)}
       </TableCell>

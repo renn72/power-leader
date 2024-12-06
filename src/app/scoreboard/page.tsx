@@ -4,6 +4,7 @@ import { api } from '~/trpc/react'
 import { useSearchParams } from 'next/navigation'
 import LeaderBoard from '~/app/_components/board/leader-board'
 
+export const dynamic = 'force-dynamic'
 const Board = () => {
   const searchParams = useSearchParams()
   const table = searchParams.get('table')

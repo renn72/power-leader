@@ -93,7 +93,7 @@ const Lift = ({
   }
   return (
     <TableCell
-      className={cn(isHighlighted && 'bg-yellow-800/10', 'py-0', 'p-0 lg:p-2 lg:px-2 ')}
+      className={cn(isHighlighted && 'bg-yellow-800/10', 'py-0', 'p-0 lg:p-2 lg:px-1 w-[105px] ', )}
     >
       <Dialog
         open={isOpen}
@@ -103,12 +103,12 @@ const Lift = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between gap-2 p-2',
-            input === '' ? '' : 'rounded-md border-2 border-input',
+            'flex w-full cursor-pointer items-center justify-between gap-1 px-1 py-2 tracling-tighter',
+            input === '' ? '' : 'rounded-md outline outline-border',
             isJudged
               ? isGood
-                ? 'border-0 bg-green-600/20 font-bold'
-                : 'border-0 bg-red-600/20 font-bold'
+                ? 'border-0 outline-0 bg-green-600/20 font-bold'
+                : 'border-0 outline-0 bg-red-600/20 font-bold'
               : '',
           )}
         >

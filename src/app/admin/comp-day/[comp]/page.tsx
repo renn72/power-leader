@@ -44,12 +44,16 @@ const Competition = ({ params }: { params: { comp: string } }) => {
       setIndex(competition.compDayInfo.index.toString())
     }
   }, [competition])
+
   const syncToCompetition = () => {
+    console.log('sync')
     if (competition) {
+      console.log('syncing')
       setLift(competition.compDayInfo.lift)
       setBracket(competition.compDayInfo.bracket.toString())
       setIndex(competition.compDayInfo.index.toString())
       setRound(competition.compDayInfo.round.toString())
+      console.log(competition.compDayInfo.round.toString(), round)
     }
   }
 

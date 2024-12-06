@@ -56,10 +56,10 @@ const MainScreenControl = ({
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
-              round: +round,
+              round: competition.compDayInfo.round,
               lift: value,
-              bracket: +bracket,
-              index: +index,
+              bracket: competition.compDayInfo.bracket,
+              index: competition.compDayInfo.index,
             })
           }}
         >
@@ -81,9 +81,9 @@ const MainScreenControl = ({
               id: competition.id,
               uuid: competition.uuid || '',
               round: +value,
-              lift: lift,
-              bracket: +bracket,
-              index: +index,
+              lift: competition.compDayInfo.lift,
+              bracket: competition.compDayInfo.bracket,
+              index: competition.compDayInfo.index,
             })
           }}
         >
@@ -104,10 +104,10 @@ const MainScreenControl = ({
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
-              round: +round,
-              lift: lift,
+              round: competition.compDayInfo.round,
+              lift: competition.compDayInfo.lift,
               bracket: +value,
-              index: +index,
+              index: competition.compDayInfo.index,
             })
           }}
         >
@@ -135,10 +135,10 @@ const MainScreenControl = ({
           updateLift({
             id: competition.id,
             uuid: competition.uuid || '',
-            round: +round,
-            lift: lift,
-            bracket: +bracket,
-            index: +index,
+            round: competition.compDayInfo.round,
+            lift: competition.compDayInfo.lift,
+            bracket: competition.compDayInfo.bracket,
+            index: competition.compDayInfo.index,
           })
         }}
       >

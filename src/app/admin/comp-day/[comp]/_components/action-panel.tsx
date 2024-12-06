@@ -33,8 +33,6 @@ const ActionPanel = ({
     },
   })
 
-  console.log({ lift, bracket, index, round })
-
   const brackets =
     lift === 'squat'
       ? Number(competition.squatBrackets)
