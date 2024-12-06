@@ -217,7 +217,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             <div
               key={entry.id}
               className={cn(
-                'w-full rounded-full border border-4 border-muted py-1 text-xl leading-6 font-semibold tracking-tighter',
+                'w-full rounded-full border border-4 border-muted py-1 text-3xl leading-7 font-semibold tracking-tighter',
                 'grid grid-cols-6 items-center gap-0',
                 index == entry.id
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
