@@ -197,11 +197,6 @@ const WeighInForm = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className='flex w-full max-w-2xl flex-col items-center gap-2'
             >
-              {isEditPersonal ? (
-                <Personal name={entry?.user?.name || ''} />
-              ) : (
-                <PersonalInfo entry={entry} />
-              )}
               <Equipment competition={competition} />
               <Events competition={competition} />
               <Divisions competition={competition} />

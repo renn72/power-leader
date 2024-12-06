@@ -313,13 +313,13 @@ export const compEntryRouter = createTRPCRouter({
       if (input?.gender?.toLowerCase() == 'female' && wc_female) {
         wc =
           wc_female
-            .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
+            .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
             .toString() + '-f'
       } else {
         if (wc_male && input?.gender?.toLowerCase() !== 'female') {
           wc =
             wc_male
-              .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
+              .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
               .toString() + '-m'
         }
       }

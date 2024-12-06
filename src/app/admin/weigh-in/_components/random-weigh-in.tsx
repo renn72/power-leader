@@ -27,6 +27,8 @@ const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => 
       .map((item) => Number(item))
 
     for (const entry of competition.entries) {
+      if (entry.weight == '') continue
+      if (entry.isLocked) continue
       const isSquat =
         entry?.events.reduce((a, c) => {
           if (c.event?.isSquat) return true
@@ -54,13 +56,13 @@ const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => 
       if (entry?.gender?.toLowerCase() == 'female' && wc_female) {
         wc =
           wc_female
-            .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
+            .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
             .toString() + '-f'
       } else {
         if (wc_male && entry?.gender?.toLowerCase() !== 'female') {
           wc =
             wc_male
-              .reduce((a, c) => (weight < c && weight > a ? c : a), 0)
+              .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
               .toString() + '-m'
         }
       }
@@ -103,7 +105,7 @@ const RandomWeighIn = ({ competition }: { competition: GetCompetitionById }) => 
             variant='secondary'
             onClick={update}
           >
-            Random Weigh In
+            Weigh In Atlas
           </Button>
         </div>
       )}
