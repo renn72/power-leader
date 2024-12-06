@@ -89,6 +89,10 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
       index: Number(nextIndex),
       nextIndex: newNextLifterId,
     })
+    resetTimer({
+      id: competition.id,
+      uuid: competition.uuid || '',
+    })
   }
 
   const { mutate: updateIsLiftGood } =
