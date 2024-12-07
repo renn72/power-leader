@@ -49,18 +49,6 @@ const Board = () => {
           </SelectContent>
         </Select>
         <Select
-          value={wc}
-          onValueChange={(value) => {
-            setWC(value)
-          }}
-        >
-          <SelectTrigger className='w-[180px]'>
-            <SelectValue placeholder='wc' />
-          </SelectTrigger>
-          <SelectContent>
-          </SelectContent>
-        </Select>
-        <Select
           value={gender}
           onValueChange={(value) => {
             setGender(value)
