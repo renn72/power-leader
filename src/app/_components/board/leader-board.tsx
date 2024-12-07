@@ -16,10 +16,12 @@ const LeaderBoard = ({
   competition,
   table,
   gender,
+  wc,
 }: {
   competition: GetCompetitionByUuid
   table: string
   gender: string | null
+  wc: string
 }) => {
   if (table === '') return null
 
@@ -40,6 +42,10 @@ const LeaderBoard = ({
       if (gender === 'all') return true
       return entry.gender?.toLowerCase() === gender.toLowerCase()
     })
+    .filter((entry) => {
+      if (wc === '') return true
+      return entry.wc?.split('-')[0]?.toLowerCase() === wc.toLowerCase()
+    })
     .sort((a, b) => {
       if (getTotalWilks(a) == 0) return 1
       if (isNaN(getTotalWilks(a))) return 1
@@ -49,10 +55,9 @@ const LeaderBoard = ({
 
   const check = entries.map((e) => getTotalWilks(e))
 
-
   return (
     <Table className='h-vh'>
-      <TableHeader className='sticky top-0 bg-muted z-99'>
+      <TableHeader className='z-99 sticky top-0 bg-muted'>
         <TableRow className='text-base tracking-tighter'>
           <TableHead className=''>Name</TableHead>
           <TableHead>Squat</TableHead>

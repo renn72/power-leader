@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { api } from '~/trpc/react'
 import { useSearchParams } from 'next/navigation'
 import LeaderBoard from '~/app/_components/board/leader-board'
-
+import { wcFData, wcMData } from '~/lib/store'
 import {
   Select,
   SelectContent,
@@ -17,6 +17,7 @@ import {
 const Board = () => {
   const [table, setTable] = useState('all')
   const [gender, setGender] = useState('')
+  const [wc, setWC] = useState('')
 
   const g = gender ? gender : null
   const comp = 'Atlas-Classic-7-12-2024'
@@ -48,6 +49,18 @@ const Board = () => {
           </SelectContent>
         </Select>
         <Select
+          value={wc}
+          onValueChange={(value) => {
+            setWC(value)
+          }}
+        >
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='wc' />
+          </SelectTrigger>
+          <SelectContent>
+          </SelectContent>
+        </Select>
+        <Select
           value={gender}
           onValueChange={(value) => {
             setGender(value)
@@ -63,10 +76,28 @@ const Board = () => {
           </SelectContent>
         </Select>
       </div>
+        <Select
+          value={wc}
+          onValueChange={(value) => {
+            setWC(value)
+          }}
+        >
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='wc' />
+          </SelectTrigger>
+          <SelectContent>
+            {
+              wcFData.map((i) => {
+                return <SelectItem value={i.toString()}>{i}</SelectItem>
+              })
+          }
+          </SelectContent>
+        </Select>
         <LeaderBoard
           competition={data}
           table={table}
           gender={g}
+          wc={wc}
         />
     </div>
   )
