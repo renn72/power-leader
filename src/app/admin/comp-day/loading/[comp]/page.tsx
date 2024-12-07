@@ -77,11 +77,11 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         index: number | null
         nextIndex: string | null
       }) => {
-        setLiftName(data.lift)
-        setBracket(data.bracket)
-        setIndex(data.index)
-        setRound(data.round)
-        setNextIndex(data.nextIndex?.toString() || '')
+        // setLiftName(data.lift)
+        // setBracket(data.bracket)
+        // setIndex(data.index)
+        // setRound(data.round)
+        // setNextIndex(data.nextIndex?.toString() || '')
         ctx.competition.getCompetitionByUuid.refetch()
       },
     )
