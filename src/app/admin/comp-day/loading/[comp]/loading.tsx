@@ -53,11 +53,12 @@ const Gray = () => (
 
 const Mini = () => (
   <div className='flex h-24 w-6 flex-col items-center justify-center bg-gray-200 leading-[1rem] '>
-    <div>1</div>
+    <div>0</div>
     <Dot
       size={24}
       className='my-[-0.6rem]'
     />
+    <div>5</div>
   </div>
 )
 const Micro = () => (
@@ -67,6 +68,7 @@ const Micro = () => (
       size={24}
       className='my-[-0.6rem]'
     />
+    <div>2</div>
     <div>5</div>
   </div>
 )

@@ -115,13 +115,10 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
 
   useEffect(() => {
     if (competition?.compDayInfo.lift) setLiftName(competition?.compDayInfo.lift)
-    if (competition?.compDayInfo.bracket)
-      setBracket(competition?.compDayInfo.bracket.toString())
+    if (competition?.compDayInfo.bracket) setBracket(competition?.compDayInfo.bracket.toString())
     if (competition?.compDayInfo.index) setIndex(competition?.compDayInfo.index)
-    if (competition?.compDayInfo?.nextIndex)
-      setNextIndex(competition?.compDayInfo?.nextIndex?.toString())
-    if (competition?.compDayInfo.round)
-      setRound(competition?.compDayInfo.round.toString())
+    if (competition?.compDayInfo?.nextIndex) setNextIndex(competition?.compDayInfo?.nextIndex?.toString())
+    if (competition?.compDayInfo.round) setRound(competition?.compDayInfo.round.toString())
   }, [competition])
 
   useEffect(() => {
