@@ -22,7 +22,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   const ctx = api.useUtils()
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 60 * 1,
+      refetchInterval: 1000 * 10 * 1,
     })
   const { mutate: startTimer } = api.competitionDay.startTimer.useMutation()
   const { mutate: stopTimer } = api.competitionDay.stopTimer.useMutation()
