@@ -94,6 +94,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         }
         if (data.timerReset) {
           countdownRef.current?.stop()
+          setDateNow(Date.now())
           return
         }
         if (data.timerStopped) {
