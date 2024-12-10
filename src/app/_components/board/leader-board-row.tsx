@@ -186,7 +186,7 @@ const LeaderBoardRow = ({
     >
       <TableCell className='py-0 truncate'>
         {entry.user?.name?.split(' ')[0]}{' '}
-        {entry.user?.name?.split(' ')[1]?.slice(0, 1)}
+        {entry.user?.name?.split(' ')[1]}
       </TableCell>
       {hasSquat ? (
         <>
