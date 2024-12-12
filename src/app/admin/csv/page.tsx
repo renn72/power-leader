@@ -180,9 +180,9 @@ const Page = () => {
       d2Weight = d2Weight ? d2Weight : 0
       d3Weight = d3Weight ? d3Weight : 0
       d4Weight = d4Weight ? d4Weight : 0
-      const bestSquat = Math.max(s1Weight, s2Weight, s3Weight, s4Weight)
-      const bestBench = Math.max(b1Weight, b2Weight, b3Weight, b4Weight)
-      const bestDeadlift = Math.max(d1Weight, d2Weight, d3Weight, d4Weight)
+      const bestSquat = Math.max(s1Weight, s2Weight, s3Weight)
+      const bestBench = Math.max(b1Weight, b2Weight, b3Weight)
+      const bestDeadlift = Math.max(d1Weight, d2Weight, d3Weight)
 
       const total = bestSquat + bestBench + bestDeadlift
 
@@ -213,6 +213,7 @@ const Page = () => {
         Deadlift4Kg: d4Weight == 0 ? null : d4Weight,
         Best3DeadliftKg: bestDeadlift,
         TotalKg: total,
+        Event: e.events.map((e) => e.event?.name).join(''),
       }
     }),
   }
@@ -227,11 +228,7 @@ const Page = () => {
       >
         Download CSV
       </CSVDownload>
-      <CSVLink
-        data={formatedComp.entries}
-      >
-        Download me
-      </CSVLink>
+      <CSVLink data={formatedComp.entries}>Download me</CSVLink>
     </div>
   )
 }
