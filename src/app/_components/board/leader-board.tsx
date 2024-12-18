@@ -9,108 +9,82 @@ import {
 } from '@/components/ui/table'
 import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import LeaderBoardRow from './leader-board-row'
-import { getTotalDots } from '~/lib/utils'
+import { getTotalDots, getTotalWilks } from '~/lib/utils'
 import { cn } from '~/lib/utils'
-
-const teamNames = [
-  'MGMs',
-  'YEAH THE GIRLS',
-  'Definitely 6 Foot',
-  'Iron Titans',
-  'Next Gen',
-  'CE Heavy Hitters',
-  'Whiskey Pigness',
-]
 
 const LeaderBoard = ({
   competition,
   table,
+  gender,
+  wc,
 }: {
   competition: GetCompetitionByUuid
   table: string
+  gender: string | null
+  wc: string
 }) => {
-  const teamEntries = teamNames
-    .map((teamName) => {
-      const lifts = competition.entries
-        .map((entry) => entry?.lift)
-        .flat()
-        .filter((lift) => lift.team?.toLowerCase() === teamName.toLowerCase())
-        .filter((lift) => lift.teamLift == lift.lift)
-      return {
-        id: teamName,
-        name: teamName,
-        user: { name: teamName },
-        lift: lifts,
-      }
-    })
-    .sort((a, b) => {
-      // @ts-ignore
-      return getTotalDots(b) - getTotalDots(a)
-    })
+  if (table === '') return null
 
-  const isTeam = table == 'teambattle'
   const entries = competition.entries
     .filter((entry) => {
-      const res = entry.compEntryToDivisions.find(
-        (d) =>
+      const res = entry.compEntryToDivisions.find((d) => {
+        if (table === 'all') return true
+        return (
           d.division?.name.replace(' ', '-').toLowerCase() ==
-          table.toLowerCase(),
-      )
+          table.toLowerCase()
+        )
+      })
       if (!res) return false
       return true
     })
+    .filter((entry) => {
+      if (!gender) return true
+      if (gender === 'all') return true
+      return entry.gender?.toLowerCase() === gender.toLowerCase()
+    })
+    .filter((entry) => {
+      if (wc === '') return true
+      return entry.wc?.split('-')[0]?.toLowerCase() === wc.toLowerCase()
+    })
     .sort((a, b) => {
-      return getTotalDots(b) - getTotalDots(a)
+      if (getTotalWilks(a) == 0) return 1
+      if (isNaN(getTotalWilks(a))) return 1
+      if (getTotalWilks(b) == 0) return -1
+      return getTotalWilks(b) - getTotalWilks(a)
     })
 
+  const check = entries.map((e) => getTotalWilks(e))
+
   return (
-    <div className='w-full text-xl'>
-      <Table className='h-lvh'>
-        <TableHeader>
-          <TableRow className='text-lg uppercase tracking-tighter'>
-            <TableHead>Name</TableHead>
-            <TableHead>Squat</TableHead>
-            <TableHead>DOTS</TableHead>
-            <TableHead>Place</TableHead>
-            <TableHead>Bench</TableHead>
-            <TableHead>DOTS</TableHead>
-            <TableHead>Place</TableHead>
-            <TableHead>DL</TableHead>
-            <TableHead>DOTS</TableHead>
-            <TableHead>Place</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>DOTS</TableHead>
-            <TableHead>Rank</TableHead>
-          </TableRow>
-        </TableHeader>
-        {isTeam ? (
-          <TableBody>
-            {teamEntries.map((entry, index) => (
-              <LeaderBoardRow
-                // @ts-ignore
-                entry={entry}
-                // @ts-ignore
-                entries={teamEntries}
-                index={index}
-                key={entry.name}
-                isTeam={true}
-              />
-            ))}
-          </TableBody>
-        ) : (
-          <TableBody>
-            {entries.map((entry, index) => (
-              <LeaderBoardRow
-                entry={entry}
-                entries={entries}
-                index={index}
-                key={entry.id}
-              />
-            ))}
-          </TableBody>
-        )}
-      </Table>
-    </div>
+    <Table className='h-vh'>
+      <TableHeader className='z-99 sticky top-0 bg-muted'>
+        <TableRow className='text-base tracking-tighter'>
+          <TableHead className=''>Name</TableHead>
+          <TableHead>Squat</TableHead>
+          <TableHead>WILKS</TableHead>
+          <TableHead>Place</TableHead>
+          <TableHead>Bench</TableHead>
+          <TableHead>WILKS</TableHead>
+          <TableHead>Place</TableHead>
+          <TableHead>DL</TableHead>
+          <TableHead>WILKS</TableHead>
+          <TableHead>Place</TableHead>
+          <TableHead>Total</TableHead>
+          <TableHead>WILKS</TableHead>
+          <TableHead>Rank</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {entries.map((entry, index) => (
+          <LeaderBoardRow
+            entry={entry}
+            entries={entries}
+            index={index}
+            key={entry.id}
+          />
+        ))}
+      </TableBody>
+    </Table>
   )
 }
 

@@ -7,10 +7,10 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z.string().url(),
     CLERK_SECRET_KEY: z.string(),
-    TURSO_DATABASE_URL: z.string().url(),
-    TURSO_AUTH_TOKEN: z.string(),
+    DATABASE_URL: z.string().url(),
+    DATABASE_SYNC_URL: z.string().url(),
+    DATABASE_AUTH_TOKEN: z.string(),
     PUSHER_APP_ID: z.string(),
     PUSHER_KEY: z.string(),
     PUSHER_SECRET: z.string(),
@@ -38,13 +38,13 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
-    TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
+    DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_SYNC_URL: process.env.DATABASE_SYNC_URL,
+    DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN,
     NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
     NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
     NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL:

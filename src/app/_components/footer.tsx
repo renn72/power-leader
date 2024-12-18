@@ -8,7 +8,7 @@ const Footer = () => {
     }
 
     return (
-        <footer className='h-16 border-t border-input'>
+        <footer className=''>
         </footer>
     )
 }

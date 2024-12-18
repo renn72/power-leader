@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9b988aa9-ed82-417f-b429-94a144a33efe",
-  "prevId": "5dc9f1f2-e99a-4d73-9649-c1f8f5d53919",
+  "id": "c36d8155-acfb-43eb-b42e-b6f8da5ced9b",
+  "prevId": "f81cbf5d-cf2e-42ed-b27c-1aac38009141",
   "tables": {
     "pb_bracket_judge": {
       "name": "pb_bracket_judge",
@@ -552,6 +552,20 @@
           "notNull": false,
           "autoincrement": false
         },
+        "team": {
+          "name": "team",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "team_lift": {
+          "name": "team_lift",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "is_locked": {
           "name": "is_locked",
           "type": "integer",
@@ -862,6 +876,27 @@
         },
         "wc_mix": {
           "name": "wc_mix",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "squat_brackets": {
+          "name": "squat_brackets",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bench_press_brackets": {
+          "name": "bench_press_brackets",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deadlift_brackets": {
+          "name": "deadlift_brackets",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -1416,6 +1451,27 @@
           "notNull": false,
           "autoincrement": false
         },
+        "team": {
+          "name": "team",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "team_lift": {
+          "name": "team_lift",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "text",
@@ -1573,5 +1629,8 @@
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "indexes": {}
   }
 }

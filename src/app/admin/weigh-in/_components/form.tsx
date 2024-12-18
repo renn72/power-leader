@@ -22,7 +22,6 @@ import Notes from './_components/notes'
 import WeighIn from './_components/weigh-in'
 
 import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
-import Team from './_components/team'
 
 export const dynamic = 'force-dynamic'
 
@@ -47,8 +46,6 @@ const formSchema = z.object({
   benchPB: z.string(),
   deadliftPB: z.string(),
   notes: z.string(),
-  team: z.string().optional(),
-  teamLift: z.string().optional(),
 })
 
 const WeighInForm = ({
@@ -125,8 +122,6 @@ const WeighInForm = ({
         entry?.compEntryToDivisions?.map((division) =>
           division.division?.id.toString(),
         ) || [],
-      team: entry?.team ? entry.team : '',
-      teamLift: entry?.teamLift ? entry.teamLift : '',
       squatOpener: entry?.squatOpener ? entry.squatOpener : '',
       squarRackHeight: entry?.squarRackHeight ? entry.squarRackHeight : '',
       benchOpener: entry?.benchOpener ? entry.benchOpener : '',
@@ -140,18 +135,16 @@ const WeighInForm = ({
   })
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log('formData', data)
+    // console.log('formData', data)
     if (!entry) return
     if (!competition) return
-    // updateAndLock({
-    //   ...data,
-    //   id: entry.id,
-    //   compId: competition.id,
-    //   event: entry.events.map((event) => event.event?.id.toString() || '') || [],
-    //   division: entry.compEntryToDivisions.map(
-    //     (division) => division.division?.id.toString() || '',
-    //   ),
-    // })
+    updateAndLock({
+      ...data,
+      id: entry.id,
+      compId: competition.id,
+      divisions: data.division.map((division) => division.toString()),
+      events: data.events.map((event) => event.toString()),
+    })
   }
 
   useEffect(() => {
@@ -204,15 +197,9 @@ const WeighInForm = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className='flex w-full max-w-2xl flex-col items-center gap-2'
             >
-              {isEditPersonal ? (
-                <Personal name={entry?.user?.name || ''} />
-              ) : (
-                <PersonalInfo entry={entry} />
-              )}
               <Equipment competition={competition} />
               <Events competition={competition} />
               <Divisions competition={competition} />
-              <Team />
               <WeighIn />
               <LiftInfo
                 isSquat={isSquat}

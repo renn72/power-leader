@@ -33,7 +33,7 @@ const Cell = ({
   className?: string
 }) => {
   return (
-    <div className={cn('flex flex-col items-center gap-0', className)}>
+    <div className={cn('flex flex-col items-center gap-0 capitalize', className)}>
       <div className='text-xs text-muted-foreground'>{title}</div>
       <div
         className={cn(
@@ -137,7 +137,7 @@ const Entry = ({
       <div
         onClick={() => setEntryId(entry.id)}
         className={cn(
-          'grid-cols-17 grid cursor-pointer grid-flow-row justify-between rounded-full',
+          'grid-cols-18 grid cursor-pointer grid-flow-row justify-between rounded-full',
           'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
           entry.isLocked && 'border-4 bg-muted/50',
         )}
@@ -210,6 +210,10 @@ const Entry = ({
         ) : (
           <EmptyCell title='Deadlift' />
         )}
+        <Cell
+          title='Equipment'
+          info={entry.equipment}
+        />
         <CellArray
           title='Events'
           className='col-span-4 tracking-tighter'

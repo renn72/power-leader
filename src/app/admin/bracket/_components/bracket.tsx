@@ -2,7 +2,7 @@
 import { api } from '~/trpc/react'
 import { useEffect } from 'react'
 
-import type { GetCompetitionEntryById } from '~/lib/types'
+import type { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 
 import { toast } from 'sonner'
@@ -18,20 +18,70 @@ import {
 } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 
-import { GripVertical } from 'lucide-react'
+import {
+  ChevronLeftCircle,
+  GripVertical,
+  ChevronRightCircle,
+} from 'lucide-react'
 
 const Bracket = ({
   entries,
+  competition,
   lift,
   title,
   bracket,
 }: {
   entries: GetCompetitionEntryById[]
+  competition: GetCompetitionById
   lift: string
   title: string
   bracket: number
 }) => {
   const ctx = api.useUtils()
+  const { mutate: updateBracket } = api.compEntry.updateBracket.useMutation({
+    onMutate: async (newData) => {
+      await ctx.competition.getMyCompetitions.cancel()
+
+      const oldData = ctx.competition.getMyCompetitions.getData()
+
+      if (!oldData) return
+
+      ctx.competition.getMyCompetitions.setData(undefined, [
+        ...oldData.map((c) => {
+          if (c.id === competition.id) {
+            return {
+              ...c,
+              entries: c.entries.map((e) => {
+                if (e.id === newData.id) {
+                  return {
+                    ...e,
+                    squatBracket:
+                      newData.bracket.squatBracket || e.squatBracket || 1,
+                    benchBracket:
+                      newData.bracket.benchBracket || e.benchBracket || 1,
+                    deadliftBracket:
+                      newData.bracket.deadliftBracket || e.deadliftBracket || 1,
+                  }
+                }
+                return e
+              }),
+            }
+          }
+          return c
+        }),
+      ])
+      return { oldData }
+    },
+    onError: (err, newData, context) => {
+      toast.error('Error Updating Order')
+      if (!context?.oldData) return
+      ctx.competition.getMyCompetitions.setData(undefined, context.oldData)
+    },
+    onSettled: () => {
+      ctx.competition.getMyCompetitions.refetch()
+    },
+    onSuccess: () => {},
+  })
   const { mutate: updateOrder } = api.compEntry.updateOrderBulk.useMutation({
     onSettled: () => {
       ctx.competition.getMyCompetitions.refetch()
@@ -50,8 +100,80 @@ const Bracket = ({
   >(entries, { plugins: [animations()], dragHandle: '.drag-handle' })
 
   useEffect(() => {
-    setEntryList(entries)
+    if (lift === 'squat') {
+      setEntryList(
+        entries
+          .filter((entry) => entry.squatBracket == bracket)
+          .sort((a, b) => {
+            if (Number(a.squatOpener) === 0) return 1
+            if (Number(b.squatOpener) === 0) return -1
+            return Number(a.squatOpener) - Number(b.squatOpener)
+          })
+          .sort((a, b) => {
+            if (a.squatOrderOne == null) return 1
+            if (b.squatOrderOne == null) return -1
+            return a.squatOrderOne - b.squatOrderOne
+          }),
+      )
+    }
+    if (lift === 'bench') {
+      setEntryList(
+        entries
+          .filter((entry) => entry.benchBracket == bracket)
+          .sort((a, b) => {
+            if (Number(a.benchOpener) === 0) return 1
+            if (Number(b.benchOpener) === 0) return -1
+            return Number(a.benchOpener) - Number(b.benchOpener)
+          })
+          .sort((a, b) => {
+            if (a.benchOrderOne == null) return 1
+            if (b.benchOrderOne == null) return -1
+            return a.benchOrderOne - b.benchOrderOne
+          }),
+      )
+    }
+    if (lift === 'deadlift') {
+      setEntryList(
+        entries
+          .filter((entry) => entry.deadliftBracket == bracket)
+          .sort((a, b) => {
+            if (Number(a.deadliftOpener) === 0) return 1
+            if (Number(b.deadliftOpener) === 0) return -1
+            return Number(a.deadliftOpener) - Number(b.deadliftOpener)
+          })
+          .sort((a, b) => {
+            if (a.deadliftOrderOne == null) return 1
+            if (b.deadliftOrderOne == null) return -1
+            return a.deadliftOrderOne - b.deadliftOrderOne
+          }),
+      )
+    }
   }, [entries])
+
+  const handleBracket = (bracket: number, id: number) => {
+    if (lift === 'squat') {
+      updateBracket({
+        id: id,
+        bracket: {
+          squatBracket: bracket,
+        },
+      })
+    } else if (lift === 'bench') {
+      updateBracket({
+        id: id,
+        bracket: {
+          benchBracket: bracket,
+        },
+      })
+    } else if (lift === 'deadlift') {
+      updateBracket({
+        id: id,
+        bracket: {
+          deadliftBracket: bracket,
+        },
+      })
+    }
+  }
 
   const lock = () => {
     console.log(
@@ -100,6 +222,7 @@ const Bracket = ({
       updateOrder(ins)
     }
   }
+
   const unlock = () => {
     if (lift === 'squat') {
       const ins = entryList.map((entry, _i) => ({
@@ -125,21 +248,42 @@ const Bracket = ({
     }
   }
 
-  const isLocked = entries.reduce((a, c) => {
-    if (lift === 'squat' && c.squatOrderOne !== null) {
-      return true
-    }
-    if (lift === 'bench' && c.benchOrderOne !== null) {
-      return true
-    }
-    if (lift === 'deadlift' && c.deadliftOrderOne !== null) {
-      return true
-    }
-    return a
-  }, false)
+  const isLocked = entries
+    .filter((e) => {
+      if (lift === 'squat') {
+        return e.squatBracket === bracket
+      }
+      if (lift === 'bench') {
+        return e.benchBracket === bracket
+      }
+      if (lift === 'deadlift') {
+        return e.deadliftBracket === bracket
+      }
+    })
+    .reduce((a, c) => {
+      if (lift === 'squat' && c.squatOrderOne !== null) {
+        return true
+      }
+      if (lift === 'bench' && c.benchOrderOne !== null) {
+        return true
+      }
+      if (lift === 'deadlift' && c.deadliftOrderOne !== null) {
+        return true
+      }
+      return a
+    }, false)
 
   const sortByWC = () => {
     const sorted = entries
+      .filter((entry) => {
+        if (lift === 'squat') {
+          return entry.squatBracket == bracket
+        } else if (lift === 'bench') {
+          return entry.benchBracket == bracket
+        } else if (lift === 'deadlift') {
+          return entry.deadliftBracket == bracket
+        }
+      })
       .map((e) => {
         let value = 0
         if (lift === 'squat') {
@@ -161,11 +305,19 @@ const Bracket = ({
         if (b.liftWeight === 0) return -1
         return Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0])
       })
-    console.log(sorted)
     setEntryList(sorted)
   }
   const sortByWeight = () => {
     const sorted = entries
+      .filter((entry) => {
+        if (lift === 'squat') {
+          return entry.squatBracket == bracket
+        } else if (lift === 'bench') {
+          return entry.benchBracket == bracket
+        } else if (lift === 'deadlift') {
+          return entry.deadliftBracket == bracket
+        }
+      })
       .map((e) => {
         let value = 0
         if (lift === 'squat') {
@@ -189,8 +341,18 @@ const Bracket = ({
     setEntryList(sorted)
   }
 
+  const squatBrackets = Number(competition.squatBrackets)
+  const benchBrackets = Number(competition.benchPressBrackets)
+  const deadliftBrackets = Number(competition.deadliftBrackets)
+  const numberOfBrackets =
+    lift === 'squat'
+      ? squatBrackets
+      : lift === 'bench'
+        ? benchBrackets
+        : deadliftBrackets
+
   return (
-    <Card className='relative'>
+    <Card className='relative min-w-[570px]'>
       <CardHeader className='mb-4'>
         <CardTitle className='flex items-center justify-around text-3xl'>
           <div className=''>{title}</div>
@@ -217,7 +379,7 @@ const Bracket = ({
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className='mb-12'>
+      <CardContent className='mb-12 px-2'>
         <div
           ref={parent}
           className='flex flex-col gap-1'
@@ -233,39 +395,86 @@ const Bracket = ({
               <div
                 key={entry.id}
                 data-label={entry.id}
-                className={cn(
-                  'grid grid-cols-7 place-items-center gap-2 border border-input text-base tracking-wide',
-                  'rounded-full p-[2px] ',
-                  isLocked ? '' : 'hover:bg-muted',
-                  lift === 'squat' &&
-                    entry.squatOrderOne !== null &&
-                    'border-0 border-complete bg-muted/80',
-                  lift === 'bench' &&
-                    entry.benchOrderOne !== null &&
-                    'border-0 border-complete bg-muted/80',
-                  lift === 'deadlift' &&
-                    entry.deadliftOrderOne !== null &&
-                    'border-0 border-complete bg-muted/80',
-                )}
+                className={cn('flex items-center gap-1')}
               >
-                <div className='font-extrabold tracking-wider text-muted-foreground'>
-                  {i + 1}
-                </div>
-                <Badge className='flex w-16 items-center justify-center'>
-                  {entry.wc?.split('-')[0]}kg
-                </Badge>
-                <div className='col-span-2'>{entry.user?.name}</div>
-                <div className='col-span-2'>
-                  {opener === '' ? '-' : opener + 'kg'}
-                </div>
-                <div className='drag-handle col-span-1 cursor-move'>
-                  {!isLocked && (
-                    <GripVertical
-                      size={20}
-                      className='text-muted-foreground/50'
-                    />
+                {isLocked ? null : (
+                  <ChevronLeftCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (isLocked) return
+                      if (bracket !== 1) handleBracket(bracket - 1, entry.id)
+                    }}
+                  />
+                )}
+
+                <div
+                  className={cn(
+                    'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tight',
+                    'rounded-full px-[1px] py-[2px] ',
+                    isLocked ? '' : 'hover:bg-muted',
+                    lift === 'squat' &&
+                      entry.squatOrderOne !== null &&
+                      'border-0 border-complete bg-muted/80',
+                    lift === 'bench' &&
+                      entry.benchOrderOne !== null &&
+                      'border-0 border-complete bg-muted/80',
+                    lift === 'deadlift' &&
+                      entry.deadliftOrderOne !== null &&
+                      'border-0 border-complete bg-muted/80',
                   )}
+                >
+                  <div className='font-extrabold tracking-wider text-muted-foreground'>
+                    {i + 1}
+                  </div>
+                  <Badge className='flex w-16 items-center justify-center'>
+                    {entry.wc?.split('-')[0]}kg
+                  </Badge>
+                  <div
+                    className={cn(
+                      'text-sm font-extrabold ',
+                      entry.gender?.toLowerCase() === 'female'
+                        ? 'text-pink-400'
+                        : 'text-teal-400',
+                    )}
+                  >
+                    {entry.gender?.toLowerCase() === 'female' ? 'F' : 'M'}
+                  </div>
+                  <div
+                    className={cn(
+                      'text-sm font-extrabold ',
+                      entry.equipment?.toLowerCase() === 'classic'
+                        ? 'text-orange-400'
+                        : entry.equipment?.toLowerCase() === 'raw' ? 'text-indigo-400'
+                        : 'text-emerald-600',
+                    )}
+                  >
+                    {entry.equipment?.slice(0, 1).toUpperCase() === 'S' ? 'SP' : entry.equipment?.slice(0, 1).toUpperCase()}
+                  </div>
+                  <div className='col-span-3 tracking-tighter truncate'>
+                    {entry.user?.name}
+                  </div>
+                  <div className='col-span-2'>
+                    {opener === '' ? '-' : opener + 'kg'}
+                  </div>
+                  <div className='drag-handle col-span-1 cursor-move'>
+                    {!isLocked && (
+                      <GripVertical
+                        size={20}
+                        className='text-muted-foreground/50'
+                      />
+                    )}
+                  </div>
                 </div>
+                {isLocked ? null : (
+                  <ChevronRightCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (isLocked) return
+                      if (bracket !== numberOfBrackets)
+                        handleBracket(bracket + 1, entry.id)
+                    }}
+                  />
+                )}
               </div>
             )
           })}

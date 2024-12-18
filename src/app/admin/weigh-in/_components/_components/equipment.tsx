@@ -49,7 +49,6 @@ const Equipment = ({ competition }: { competition: GetCompetitionByUuid }) => {
                                 className='rounded-md border border-input'
                                 value={item}
                                 onClick={(e) => {
-                                  item === selected && e.preventDefault()
                                 }}
                               >
                                 {item}

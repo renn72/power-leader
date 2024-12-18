@@ -196,9 +196,9 @@ export const competitionRouter = createTRPCRouter({
             isOtherFive: false,
             compId: resComp[0]?.id || 0,
           })
-        } else if (e.toLowerCase() === 'bench, deadlift') {
+        } else if (e.toLowerCase() === 'push pull') {
           return ctx.db.insert(events).values({
-            name: 'Bench, Deadlift',
+            name: 'Push Pull',
             isSquat: false,
             isBench: true,
             isDeadlift: true,
@@ -283,6 +283,39 @@ export const competitionRouter = createTRPCRouter({
         })
         .where(eq(competitions.id, input.id))
 
+      return res
+    }),
+  updateSquatBrackets: publicProcedure
+    .input(z.object({ id: z.number(), squatBrackets: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .update(competitions)
+        .set({
+          squatBrackets: input.squatBrackets,
+        })
+        .where(eq(competitions.id, input.id))
+      return res
+    }),
+  updateBenchPressBrackets: publicProcedure
+    .input(z.object({ id: z.number(), benchPressBrackets: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .update(competitions)
+        .set({
+          benchPressBrackets: input.benchPressBrackets,
+        })
+        .where(eq(competitions.id, input.id))
+      return res
+    }),
+  updateDeadliftBrackets: publicProcedure
+    .input(z.object({ id: z.number(), deadliftBrackets: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.db
+        .update(competitions)
+        .set({
+          deadliftBrackets: input.deadliftBrackets,
+        })
+        .where(eq(competitions.id, input.id))
       return res
     }),
 

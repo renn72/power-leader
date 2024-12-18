@@ -14,9 +14,11 @@ const globalForDb = globalThis as unknown as {
 
 export const client =
   globalForDb.client ?? createClient({
-    url: env.TURSO_DATABASE_URL,
-    authToken: env.TURSO_AUTH_TOKEN,
+    url: env.DATABASE_URL,
+    syncUrl: env.DATABASE_SYNC_URL,
+    authToken: env.DATABASE_AUTH_TOKEN,
+    syncInterval: 600,
   })
 if (env.NODE_ENV !== 'production') globalForDb.client = client
 
-export const db = drizzle(client, { schema })
+export const db = drizzle(client, { schema, logger: false })

@@ -7,6 +7,7 @@ import {
   compEntry,
   compEntryToDivisions,
   compEntryToEvents,
+  competitions,
   lift,
   users,
 } from '~/server/db/schema'
@@ -52,6 +53,9 @@ const updateAndLockSchema = z.object({
   gender: z.string(),
   predictedWeight: z.string(),
   weight: z.string(),
+  events: z.array(z.string()).optional(),
+  divisions: z.array(z.string()).optional(),
+  wc: z.string().optional().nullable(),
   squatOpener: z.string(),
   squarRackHeight: z.string(),
   benchOpener: z.string(),
@@ -60,11 +64,10 @@ const updateAndLockSchema = z.object({
   squatPB: z.string(),
   benchPB: z.string(),
   deadliftPB: z.string(),
-  team: z.string().optional(),
-  teamLift: z.string().optional(),
   notes: z.string(),
   compId: z.number(),
   userId: z.number().optional(),
+  isFake: z.string().optional(),
 })
 
 const updateOrderSchema = z.object({
@@ -162,9 +165,9 @@ export const compEntryRouter = createTRPCRouter({
 
       let userId = input.userId
 
-        const isUser = await ctx.db.query.users.findFirst({
-            where: (users, { eq }) => eq(users.email, input.email || ''),
-        })
+      const isUser = await ctx.db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.email, input.email || ''),
+      })
 
       if (isUser?.id) userId = isUser.id
 
@@ -204,8 +207,6 @@ export const compEntryRouter = createTRPCRouter({
           deadliftOpener: input.deadliftOpener,
           squarRackHeight: input.squatRackHeight,
           benchRackHeight: input.benchRackHeight,
-          team: input.team,
-          teamLift: input.teamLift,
           weight: input.weight,
           compId: input.compId,
           userId: userId,
@@ -284,6 +285,7 @@ export const compEntryRouter = createTRPCRouter({
   updateAndLock: publicProcedure
     .input(updateAndLockSchema)
     .mutation(async ({ ctx, input }) => {
+      console.log('input', input)
       const user = await getCurrentUser()
       if (!user) {
         throw new TRPCError({
@@ -291,20 +293,54 @@ export const compEntryRouter = createTRPCRouter({
           message: 'You are not authorized to access this resource.',
         })
       }
-
-      const res = await ctx.db
-        .update(compEntry)
-        .set({
-          ...input,
-          isLocked: true,
+      const competition = await ctx.db.query.competitions.findFirst({
+        where: (competition, { eq }) => eq(competition.id, input.compId),
+      })
+      if (!competition) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Competition not found.',
         })
-        .where(eq(compEntry.id, input.id))
+      }
+      const weight = Number(input.weight)
+      const wc_female = competition.wc_female
+        ?.split('/')
+        .map((item) => Number(item))
+      const wc_male = competition.wc_male
+        ?.split('/')
+        .map((item) => Number(item))
+      let wc = ''
+      if (input?.gender?.toLowerCase() == 'female' && wc_female) {
+        wc =
+          wc_female
+            .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
+            .toString() + '-f'
+      } else {
+        if (wc_male && input?.gender?.toLowerCase() !== 'female') {
+          wc =
+            wc_male
+              .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
+              .toString() + '-m'
+        }
+      }
 
-      await ctx.db
-        .delete(lift)
-        .where(and(eq(lift.compEntryId, input.id), eq(lift.liftNumber, 1)))
+      input.wc = wc == '0-f' || wc == '0-m' ? null : wc
+      const { isFake, events, divisions, ...rest } = input
+
+      const res = true
+
+      // const res = await ctx.db
+      //   .update(compEntry)
+      //   .set({
+      //     ...rest,
+      //     isLocked: weight == 0 ? false : true,
+      //   })
+      //   .where(eq(compEntry.id, input.id))
+      console.log('entry updated')
 
       // build batch inserts and check if doing lift
+      await ctx.db.delete(lift).where(eq(lift.compEntryId, input.id))
+      console.log('deleted lift')
 
       const squat = [
         ctx.db.insert(lift).values({
@@ -312,8 +348,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'squat',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.squarRackHeight,
@@ -325,8 +359,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           gender: input.gender,
           userWeight: input.weight,
-          team: input.team,
-          teamLift: input.teamLift,
           state: 'created',
           lift: 'squat',
           rackHeight: input.squarRackHeight,
@@ -338,8 +370,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           gender: input.gender,
           userWeight: input.weight,
-          team: input.team,
-          teamLift: input.teamLift,
           state: 'created',
           lift: 'squat',
           rackHeight: input.squarRackHeight,
@@ -354,8 +384,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'bench',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
@@ -367,8 +395,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'bench',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
@@ -380,8 +406,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'bench',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           rackHeight: input.benchRackHeight,
@@ -396,8 +420,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 1,
           state: 'created',
           lift: 'deadlift',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           weight: input.deadliftOpener,
@@ -408,8 +430,6 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 2,
           state: 'created',
           lift: 'deadlift',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           weight: '',
@@ -420,25 +440,104 @@ export const compEntryRouter = createTRPCRouter({
           liftNumber: 3,
           state: 'created',
           lift: 'deadlift',
-          team: input.team,
-          teamLift: input.teamLift,
           gender: input.gender,
           userWeight: input.weight,
           weight: '',
           name: input.name,
         }),
       ]
+      const sOpen = input.squatOpener !== '' ? true : false
+      const bOpen = input.benchOpener !== '' ? true : false
+      const dOpen = input.deadliftOpener !== '' ? true : false
 
-      if (isTuple(squat) && input.squatOpener !== '') {
-        await ctx.db.batch(squat)
+      // if (isTuple(squat) && input.squatOpener !== '') {
+      //   console.log('squat')
+      //   await ctx.db.batch(squat)
+      // }
+      //
+      // if (isTuple(bench) && input.benchOpener !== '') {
+      //   console.log('bench')
+      //   await ctx.db.batch(bench)
+      // }
+      //
+      // if (isTuple(deadlift) && input.deadliftOpener !== '') {
+      //   console.log('deadlift')
+      //   await ctx.db.batch(deadlift)
+      // }
+      if (sOpen && bOpen && dOpen) {
+        if (isTuple(squat) && isTuple(bench) && isTuple(deadlift)) {
+          console.log('all')
+          await ctx.db.batch([
+            ...squat,
+            ...bench,
+            ...deadlift,
+            ctx.db
+              .update(compEntry)
+              .set({
+                ...rest,
+                isLocked: weight == 0 ? false : true,
+              })
+              .where(eq(compEntry.id, input.id)),
+          ])
+        }
+      } else {
+        console.log('not fake')
+
+        await ctx.db
+          .update(compEntry)
+          .set({
+            ...rest,
+            isLocked: weight == 0 ? false : true,
+          })
+          .where(eq(compEntry.id, input.id))
+
+        if (isTuple(squat) && input.squatOpener !== '') {
+          console.log('squat')
+          await ctx.db.batch(squat)
+        }
+
+        if (isTuple(bench) && input.benchOpener !== '') {
+          console.log('bench')
+          await ctx.db.batch(bench)
+        }
+
+        if (isTuple(deadlift) && input.deadliftOpener !== '') {
+          console.log('deadlift')
+          await ctx.db.batch(deadlift)
+        }
       }
 
-      if (isTuple(bench) && input.benchOpener !== '') {
-        await ctx.db.batch(bench)
+      if (input.isFake == 'fake') return res
+
+      await ctx.db
+        .delete(compEntryToDivisions)
+        .where(eq(compEntryToDivisions.compEntryId, input.id))
+        .returning({ id: compEntryToDivisions.divisionId })
+      await ctx.db
+        .delete(compEntryToEvents)
+        .where(eq(compEntryToEvents.compEntryId, input.id))
+
+      const divisionIds = input.divisions?.map((division) => {
+        return ctx.db.insert(compEntryToDivisions).values({
+          compEntryId: input.id,
+          divisionId: Number(division),
+        })
+      })
+
+      if (divisionIds && isTuple(divisionIds)) {
+        await ctx.db.batch(divisionIds)
       }
 
-      if (isTuple(deadlift) && input.deadliftOpener !== '') {
-        await ctx.db.batch(deadlift)
+      const eventIds = input.events?.map((event) => {
+        return ctx.db.insert(compEntryToEvents).values({
+          compEntryId: input.id,
+          eventId: Number(event),
+        })
+      })
+
+      if (eventIds && isTuple(eventIds)) {
+        console.log('eventIds')
+        await ctx.db.batch(eventIds)
       }
 
       return res
@@ -498,6 +597,36 @@ export const compEntryRouter = createTRPCRouter({
 
       return res
     }),
+  updateBracket: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        bracket: z.object({
+          squatBracket: z.number().optional(),
+          benchBracket: z.number().optional(),
+          deadliftBracket: z.number().optional(),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+      console.log('input', input)
+
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          ...input.bracket,
+        })
+        .where(eq(compEntry.id, input.id))
+
+      return res
+    }),
   updateOrderBulk: publicProcedure
     .input(updateOrderBulkSchema)
     .mutation(async ({ ctx, input }) => {
@@ -511,7 +640,13 @@ export const compEntryRouter = createTRPCRouter({
 
       const ins = input
         .map((item) => {
-          const { liftId, ...rest } = item
+          const {
+            liftId,
+            squatBracket,
+            benchBracket,
+            deadliftBracket,
+            ...rest
+          } = item
           return rest
         })
         .map((item) =>
@@ -538,7 +673,12 @@ export const compEntryRouter = createTRPCRouter({
           if (item.squatOrderOne) order = item.squatOrderOne
           if (item.benchOrderOne) order = item.benchOrderOne
           if (item.deadliftOrderOne) order = item.deadliftOrderOne
-          return { liftId: item.liftId, order: order, bracket: bracket, rack: item.rack }
+          return {
+            liftId: item.liftId,
+            order: order,
+            bracket: bracket,
+            rack: item.rack,
+          }
         })
         .map((item) =>
           ctx.db
@@ -550,7 +690,6 @@ export const compEntryRouter = createTRPCRouter({
             })
             .where(eq(lift.id, Number(item.liftId))),
         )
-
 
       if (isTuple(ins2)) {
         await ctx.db.batch(ins2)
@@ -631,27 +770,22 @@ export const compEntryRouter = createTRPCRouter({
         .where(eq(compEntry.id, input.id))
 
       if (input.field === 'squarRackHeight') {
-        await ctx.db.update(lift).set({
-          rackHeight: input.value,
-        }).where(
-        and(
-          eq(lift.compEntryId, input.id),
-          eq(lift.lift, 'squat')
-        )
-      )
-    }
-
+        await ctx.db
+          .update(lift)
+          .set({
+            rackHeight: input.value,
+          })
+          .where(and(eq(lift.compEntryId, input.id), eq(lift.lift, 'squat')))
+      }
 
       if (input.field === 'benchRackHeight') {
-        await ctx.db.update(lift).set({
-          rackHeight: input.value,
-        }).where(
-        and(
-          eq(lift.compEntryId, input.id),
-          eq(lift.lift, 'bench')
-        )
-      )
-    }
+        await ctx.db
+          .update(lift)
+          .set({
+            rackHeight: input.value,
+          })
+          .where(and(eq(lift.compEntryId, input.id), eq(lift.lift, 'bench')))
+      }
 
       return res
     }),

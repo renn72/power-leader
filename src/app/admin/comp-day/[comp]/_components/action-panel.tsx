@@ -3,6 +3,7 @@
 import { api } from '~/trpc/react'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group-bold'
 import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
 
 const ActionPanel = ({
   competition,
@@ -32,18 +33,30 @@ const ActionPanel = ({
       toast(JSON.stringify(e))
     },
   })
+  const { mutate: startTimer } = api.competitionDay.startTimer.useMutation()
+  const { mutate: stopTimer } = api.competitionDay.stopTimer.useMutation()
+  const { mutate: resetTimer } = api.competitionDay.resetTimer.useMutation()
+
+  const brackets =
+    lift === 'squat'
+      ? Number(competition.squatBrackets)
+      : lift === 'bench'
+        ? Number(competition.benchPressBrackets)
+        : Number(competition.deadliftBrackets)
 
   return (
     <div className='grid grid-cols-3 gap-2'>
-      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
+      <div className='flex items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
           type='single'
           variant='outline'
           size='lg'
+          value={lift}
           defaultValue={competition.compDayInfo.lift.toLowerCase()}
           onValueChange={(value) => {
             setLift(value)
+            return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -59,40 +72,17 @@ const ActionPanel = ({
           <ToggleGroupItem value='deadlift'>Deadlift</ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
-        <div className='text-lg font-bold'>Round</div>
-        <ToggleGroup
-          type='single'
-          size='lg'
-          variant='outline'
-          defaultValue={competition.compDayInfo.round.toString()}
-          onValueChange={(value) => {
-            setRound(value)
-            updateLift({
-              id: competition.id,
-              uuid: competition.uuid || '',
-              round: +value,
-              lift: lift,
-              bracket: +bracket,
-              index: +index,
-            })
-          }}
-        >
-          <ToggleGroupItem value='1'>1</ToggleGroupItem>
-          <ToggleGroupItem value='2'>2</ToggleGroupItem>
-          <ToggleGroupItem value='3'>3</ToggleGroupItem>
-          <ToggleGroupItem value='4'>4</ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-      <div className='rounded-md border border-input p-2 flex items-center justify-around'>
+      <div className='flex items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Bracket</div>
         <ToggleGroup
           type='single'
           size='lg'
           variant='outline'
+          value={bracket}
           defaultValue={competition.compDayInfo.bracket.toString() || '1'}
           onValueChange={(value) => {
             setBracket(value)
+            return
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -103,9 +93,51 @@ const ActionPanel = ({
             })
           }}
         >
-          <ToggleGroupItem value='1'>1</ToggleGroupItem>
-          <ToggleGroupItem value='2'>2</ToggleGroupItem>
+          {Array.from({ length: brackets }, (_, i) => i + 1).map((bracket) => (
+            <ToggleGroupItem
+              key={bracket}
+              value={bracket.toString()}
+            >
+              {bracket}
+            </ToggleGroupItem>
+          ))}
         </ToggleGroup>
+      </div>
+      <div className='flex items-center justify-around rounded-md border border-input p-2'>
+        <div>Timer</div>
+        <Button
+          onClick={() => {
+            startTimer({
+              id: competition.id,
+              uuid: competition.uuid || '',
+            })
+          }}
+          variant='secondary'
+        >
+          Start
+        </Button>
+        <Button
+          onClick={() => {
+            resetTimer({
+              id: competition.id,
+              uuid: competition.uuid || '',
+            })
+          }}
+          variant='secondary'
+        >
+          Reset
+        </Button>
+        <Button
+          onClick={() => {
+            stopTimer({
+              id: competition.id,
+              uuid: competition.uuid || '',
+            })
+          }}
+          variant='secondary'
+        >
+          Stop
+        </Button>
       </div>
     </div>
   )

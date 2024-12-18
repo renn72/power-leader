@@ -6,7 +6,7 @@ import {
   GetCompetitionByUuid,
   GetLiftById,
 } from '~/lib/types'
-import { calculateDOTS, getliftDots } from '~/lib/utils'
+import { calculateDOTS, getliftDots, calculateNewWilks, getliftWilks } from '~/lib/utils'
 import { cn } from '~/lib/utils'
 
 const LeaderBoardRow = ({
@@ -38,7 +38,7 @@ const LeaderBoardRow = ({
     },
     { weight: '0' } as GetLiftById,
   )
-  const squatDots = calculateDOTS(
+  const squatDots = calculateNewWilks(
     Number(squat?.userWeight),
     Number(squat?.weight),
     squat.gender?.toLowerCase() == 'female',
@@ -52,7 +52,7 @@ const LeaderBoardRow = ({
     },
     { weight: '0' } as GetLiftById,
   )
-  const projectedSquatDots = calculateDOTS(
+  const projectedSquatDots = calculateNewWilks(
     Number(projectedSquat?.userWeight),
     Number(projectedSquat?.weight),
     projectedSquat.gender?.toLowerCase() == 'female',
@@ -75,7 +75,7 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const benchDots = calculateDOTS(
+  const benchDots = calculateNewWilks(
     Number(bench?.userWeight),
     Number(bench?.weight),
     bench.gender?.toLowerCase() == 'female',
@@ -91,7 +91,7 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const projectedBenchDots = calculateDOTS(
+  const projectedBenchDots = calculateNewWilks(
     Number(projectedBench?.userWeight),
     Number(projectedBench?.weight),
     projectedBench.gender?.toLowerCase() == 'female',
@@ -115,7 +115,7 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const deadliftDots = calculateDOTS(
+  const deadliftDots = calculateNewWilks(
     Number(deadlift?.userWeight),
     Number(deadlift?.weight),
     deadlift.gender?.toLowerCase() == 'female',
@@ -132,47 +132,39 @@ const LeaderBoardRow = ({
       { weight: '0' } as GetLiftById,
     )
 
-  const liftsDots = entries?.map((e) => getliftDots(e))
+  const liftsDots = entries?.map((e) => getliftWilks(e))
   const check = liftsDots
-    ?.filter((l) => l.squat !== 0)
-    .sort((a, b) => b.squat - a.squat)
-    .map((l, i) => ({ id: l.id, place: i + 1 }))
+    ?.filter((l) => l.squat !== 0 && !isNaN(l.squat))
+    // .sort((a, b) => b.squat - a.squat)
+    // .map((l, i) => ({ id: l.id, place: i + 1 }))
   const squatPlaceDots = liftsDots
-    ?.filter((l) => l.squat !== 0)
+    ?.filter((l) => l.squat !== 0 && !isNaN(l.squat))
     .sort((a, b) => b.squat - a.squat)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const benchPlaceDots = liftsDots
-    ?.filter((l) => l.bench !== 0)
+    ?.filter((l) => l.bench !== 0 && !isNaN(l.bench))
     .sort((a, b) => b.bench - a.bench)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const deadliftPlaceDots = liftsDots
-    ?.filter((l) => l.deadlift !== 0)
+    ?.filter((l) => l.deadlift !== 0 && !isNaN(l.deadlift))
     .sort((a, b) => b.deadlift - a.deadlift)
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
 
-  const projectedDeadliftDots = calculateDOTS(
+  const projectedDeadliftDots = calculateNewWilks(
     Number(projectedDeadlift?.userWeight),
     Number(projectedDeadlift?.weight),
     projectedDeadlift.gender?.toLowerCase() == 'female',
   )
 
-  const squatTotalDots = isSquatting
-    ? hasSquat
-      ? Number(squatDots)
-      : Number(projectedSquatDots)
-    : 0
-  const benchTotalDots = isBenching
-    ? hasBench
-      ? Number(benchDots)
-      : Number(projectedBenchDots)
-    : 0
+  const squatTotalDots = isSquatting ? (hasSquat ? Number(squatDots) : 0) : 0
+  const benchTotalDots = isBenching ? (hasBench ? Number(benchDots) : 0) : 0
   const deadliftTotalDots = isDeadlifting
     ? hasDeadlift
       ? Number(deadliftDots)
-      : Number(projectedDeadliftDots)
+      : 0
     : 0
 
   const totalDots =
@@ -181,37 +173,21 @@ const LeaderBoardRow = ({
     (isNaN(deadliftTotalDots) ? 0 : deadliftTotalDots)
 
   const totalWeight =
-    (hasSquat ? Number(squat?.weight) : Number(projectedSquat?.weight)) +
-    (hasBench ? Number(bench?.weight) : Number(projectedBench?.weight)) +
-    (hasDeadlift ? Number(deadlift?.weight) : Number(projectedDeadlift?.weight))
-
-  let names = ''
-  if (isTeam) {
-    names = entry.lift
-      .map((l) => l.name)
-      .filter(
-        (element, index) =>
-          entry.lift.map((l) => l.name).indexOf(element) === index,
-      )
-      .join(', ')
-  }
+    (hasSquat ? Number(squat?.weight) : 0) +
+    (hasBench ? Number(bench?.weight) : 0) +
+    (hasDeadlift ? Number(deadlift?.weight) : 0)
 
   return (
     <TableRow
       key={entry.id}
       className={cn(
-        'text-xl font-extrabold uppercase leading-5 tracking-tighter',
-        isTeam ? 'text-2xl leading-5' : 'h-6',
+        'text-sm md:text-xl font-extrabold uppercase leading-5 tracking-tightest',
       )}
     >
-      {isTeam ? (
-        <TableCell className='uppercase text-3xl leading-8 py-0'>
-          <div>{entry.user?.name}</div>
-          <div className='text-sm text-foreground/80 capitalize '>{names}</div>
-        </TableCell>
-      ) : (
-        <TableCell className='text-lg py-0'>{entry.user?.name?.split(' ')[0]} {entry.user?.name?.split(' ')[1]?.slice(0, 1)}</TableCell>
-      )}
+      <TableCell className='py-0 truncate'>
+        {entry.user?.name?.split(' ')[0]}{' '}
+        {entry.user?.name?.split(' ')[1]}
+      </TableCell>
       {hasSquat ? (
         <>
           <TableCell className='lowercase text-yellow-500'>
@@ -227,10 +203,8 @@ const LeaderBoardRow = ({
       ) : (
         <>
           <TableCell className='font-medium lowercase text-foreground/80'>
-            {projectedSquat?.weight == '0' ? '' : projectedSquat?.weight + 'kg'}
           </TableCell>
           <TableCell className='font-medium text-foreground/80'>
-            {isNaN(+projectedSquatDots) ? '' : projectedSquatDots}
           </TableCell>
           <TableCell></TableCell>
         </>
@@ -250,10 +224,8 @@ const LeaderBoardRow = ({
       ) : (
         <>
           <TableCell className='font-medium lowercase text-foreground/80'>
-            {projectedBench?.weight == '0' ? '' : projectedBench?.weight + 'kg'}
           </TableCell>
           <TableCell className='font-medium text-foreground/80'>
-            {isNaN(+projectedBenchDots) ? '' : projectedBenchDots}
           </TableCell>
           <TableCell></TableCell>
         </>
@@ -273,12 +245,8 @@ const LeaderBoardRow = ({
       ) : (
         <>
           <TableCell className='font-medium lowercase text-foreground/80'>
-            {projectedDeadlift?.weight == '0'
-              ? ''
-              : projectedDeadlift?.weight + 'kg'}
           </TableCell>
           <TableCell className='font-medium text-foreground/80'>
-            {isNaN(+projectedDeadliftDots) ? '' : projectedDeadliftDots}
           </TableCell>
           <TableCell></TableCell>
         </>

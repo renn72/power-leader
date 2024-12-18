@@ -6,11 +6,9 @@ import { useState, useEffect } from 'react'
 
 import { api } from '~/trpc/react'
 
-import {
-  Card,
-  CardContent,
-} from '~/components/ui/card'
+import { Card, CardContent } from '~/components/ui/card'
 import Header from './_components/header'
+import MainScreenControl from './_components/main-screen-control'
 import LifterInfo from './_components/lifter-info'
 import Signals from './_components/signals'
 import ActionPanel from './_components/action-panel'
@@ -24,22 +22,40 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState('')
   const [round, setRound] = useState('')
+  const [compSet, setCompSet] = useState(false)
 
   const { data: competition, isLoading: competitionLoading } =
-    api.competition.getCompetitionByUuid.useQuery(comp,
-    {
-      refetchInterval: 1000 * 60 * 5
-    }
-  )
+    api.competition.getCompetitionByUuid.useQuery(comp, {
+      refetchInterval: 1000 * 60 * 1,
+    })
 
   useEffect(() => {
-    if (competition) {
+    if (competition && !compSet) {
       setLift(competition.compDayInfo.lift)
       setBracket(competition.compDayInfo.bracket.toString())
       setIndex(competition.compDayInfo.index.toString())
       setRound(competition.compDayInfo.round.toString())
+      setCompSet(true)
     }
   }, [competition])
+
+  useEffect(() => {
+    if (competition) {
+      setIndex(competition.compDayInfo.index.toString())
+    }
+  }, [competition])
+
+  const syncToCompetition = () => {
+    console.log('sync')
+    if (competition) {
+      console.log('syncing')
+      setLift(competition.compDayInfo.lift)
+      setBracket(competition.compDayInfo.bracket.toString())
+      setIndex(competition.compDayInfo.index.toString())
+      setRound(competition.compDayInfo.round.toString())
+      console.log(competition.compDayInfo.round.toString(), round)
+    }
+  }
 
   if (competitionLoading) return <CompTableSkeletion />
   if (!competition) {
@@ -56,17 +72,24 @@ const Competition = ({ params }: { params: { comp: string } }) => {
     })
     .filter((entry) => {
       if (lift === 'squat') {
-        return entry.squatBracket == Number(bracket)
+        return entry.squatBracket == Number(bracket) && entry.squatOpener !== ''
       } else if (lift === 'bench') {
-        return entry.benchBracket == Number(bracket)
+        return entry.benchBracket == Number(bracket) && entry.benchOpener !== ''
       } else if (lift === 'deadlift') {
-        return entry.deadliftBracket == Number(bracket)
+        return (
+          entry.deadliftBracket == Number(bracket) &&
+          entry.deadliftOpener !== ''
+        )
       }
       return false
     })
     .sort((a, b) => {
-      const orderA = a.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))?.order || null
-      const orderB = b.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))?.order || null
+      const orderA =
+        a.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))
+          ?.order || null
+      const orderB =
+        b.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))
+          ?.order || null
       if (orderA == null || orderA == undefined) return 1
       if (orderB == null || orderB == undefined) return -1
 
@@ -96,16 +119,21 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   // console.log('lifters', lifters)
 
   return (
-    <div className='flex flex-col items-center justify-center gap-2 relative'>
+    <div className='relative flex flex-col items-center justify-center gap-2'>
       <Header competition={competition} />
       <Card className=''>
-        <CardContent className='flex flex-col gap-2 py-2 px-2'>
+        <CardContent className='flex flex-col gap-2 px-2 py-2'>
           <div className='grid grid-cols-2 gap-2'>
-            <LifterInfo
-              lifter={lifter}
-              round={round}
-              currentLift={currentLift}
+            <MainScreenControl
+              competition={competition}
               lift={lift}
+              bracket={bracket}
+              round={round}
+              index={index}
+              setLift={setLift}
+              setBracket={setBracket}
+              setRound={setRound}
+              syncToCompetition={syncToCompetition}
             />
             <Signals
               currentLift={currentLift}

@@ -61,6 +61,7 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
                               >
                                 <div className='grid w-full grid-cols-6 gap-1 divide-x divide-muted'>
                                   <div className='col-span-1'>
+                                    {item.id}
                                     {item.name.length > 12 ? (
                                       <HoverCard>
                                         <HoverCardTrigger>

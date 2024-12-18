@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect } from 'react'
 import { api } from '~/trpc/react'
 
-import { pusherClient } from '~/lib/pusher'
+import { env } from '~/env'
 import Pusher from 'pusher-js'
 
 import { toast } from 'sonner'
@@ -45,9 +45,14 @@ const CompTable = ({
   })
 
   useEffect(() => {
-    Pusher.logToConsole = true
+    const pusherClient = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
+      cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
+    })
     const channel = pusherClient.subscribe('competition-' + competitonUuid)
 
+    channel.bind('update', () => {
+      ctx.competition.getCompetitionByUuid.refetch()
+    })
     channel.bind(
       'judge',
       (data: {
@@ -56,10 +61,7 @@ const CompTable = ({
         judge: number
         isGood: boolean
       }) => {
-        if (!competition) {
-          return
-        }
-        console.log('data', data)
+        if (!competition) return
         ctx.competition.getCompetitionByUuid.setData(competitonUuid, (comp) => {
           if (!comp) return
           return {
@@ -92,17 +94,19 @@ const CompTable = ({
             }),
           }
         })
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     return () => {
       pusherClient.unsubscribe('competition-' + competitonUuid)
+      pusherClient.disconnect()
     }
   }, [])
 
   return (
     <div className='rounded-md border border-input p-1'>
-      <ScrollArea className='h-[65vh]'>
-        <Table className='text-sm lg:text-lg tracking-tighter'>
+      <ScrollArea className='h-[75vh]'>
+        <Table className='text-sm tracking-tighter lg:text-lg'>
           <CompTableHeader
             lifters={lifters}
             bracket={Number(bracket)}

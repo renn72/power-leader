@@ -25,7 +25,6 @@ export default async function RootLayout({
       <div
         className={`flex min-h-screen flex-col items-center justify-center `}
       >
-        ping
         <SignInButton
           fallbackRedirectUrl={`/admin`}
           signUpForceRedirectUrl={`/admin`}

@@ -10,7 +10,7 @@ import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import Loading from './loading'
 
-import { calculateDOTS } from '~/lib/utils'
+import { calculateDOTS, calculateNewWilks } from '~/lib/utils'
 
 const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   const size = 19
@@ -40,8 +40,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   )
   const { comp } = params
   const ctx = api.useUtils()
-  const { data: competition } =
-    api.competition.getCompetitionByUuid.useQuery(comp)
+  const { data: competition } = api.competition.getCompetitionByUuid.useQuery(
+    comp,
+    {
+      refetchInterval: 1000 * 60 * 1,
+    },
+  )
 
   const lifter = competition?.entries?.find(
     (entry) => entry.id === Number(index),
@@ -61,11 +65,8 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
   )
 
-  console.log(competition)
-
   useEffect(() => {
     console.log('channel', 'competition-' + comp)
-    Pusher.logToConsole = true
     const channel = pusherClient.subscribe('competition-' + comp)
     channel.bind(
       'update',
@@ -76,11 +77,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         index: number | null
         nextIndex: string | null
       }) => {
-        setLiftName(data.lift)
-        setBracket(data.bracket)
-        setIndex(data.index)
-        setRound(data.round)
-        setNextIndex(data.nextIndex?.toString() || '')
+        // setLiftName(data.lift)
+        // setBracket(data.bracket)
+        // setIndex(data.index)
+        // setRound(data.round)
+        // setNextIndex(data.nextIndex?.toString() || '')
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     channel.bind(
@@ -96,7 +98,6 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         if (lift?.id != data.entryId) {
           console.log('not the same')
         }
-        console.log('passed')
         if (data.judge === 1) {
           setIsGoodOne(data.isGood)
         } else if (data.judge === 2) {
@@ -104,6 +105,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         } else if (data.judge === 3) {
           setIsGoodThree(data.isGood)
         }
+        ctx.competition.getCompetitionByUuid.refetch()
       },
     )
     return () => {
@@ -111,14 +113,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     }
   }, [comp, lift])
 
-  console.log('comp', competition)
-
   useEffect(() => {
-    setLiftName(competition?.compDayInfo.lift || '')
-    setBracket(competition?.compDayInfo.bracket.toString() || '')
-    setIndex(competition?.compDayInfo.index)
-    setNextIndex(competition?.compDayInfo?.nextIndex?.toString() || '')
-    setRound(competition?.compDayInfo.round.toString() || '')
+    if (competition?.compDayInfo.lift) setLiftName(competition?.compDayInfo.lift)
+    if (competition?.compDayInfo.bracket) setBracket(competition?.compDayInfo.bracket.toString())
+    if (competition?.compDayInfo.index) setIndex(competition?.compDayInfo.index)
+    if (competition?.compDayInfo?.nextIndex) setNextIndex(competition?.compDayInfo?.nextIndex?.toString())
+    if (competition?.compDayInfo.round) setRound(competition?.compDayInfo.round.toString())
   }, [competition])
 
   useEffect(() => {
@@ -175,10 +175,6 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       }
     })
 
-  console.log('bracketList', bracketList)
-  console.log('lift', lift)
-
-
   if (!lift) return null
 
   const dots = calculateDOTS(
@@ -193,12 +189,17 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
         'dark relative grid h-dvh w-dvw grid-cols-2 overflow-hidden',
       )}
     >
-      <div className='col-span-1 mt-4 flex flex-col items-center gap-[0.8vh]'>
+      <div className='col-span-1 mt-4 flex flex-col items-center gap-2'>
         <div className='text-2xl font-bold text-muted-foreground'>
           Round: {round}
         </div>
         {bracketList?.map((entry) => {
           const dots = calculateDOTS(
+            Number(entry.lift?.userWeight),
+            Number(entry.lift?.weight),
+            entry.lift?.gender === 'female',
+          )
+          const wilks = calculateNewWilks(
             Number(entry.lift?.userWeight),
             Number(entry.lift?.weight),
             entry.lift?.gender === 'female',
@@ -211,11 +212,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             isOne !== null && isTwo !== null && isThree !== null && lift
           const isGood =
             (isOne && isTwo) || (isTwo && isThree) || (isOne && isThree)
+          if (!entry.lift?.weight) return null
           return (
             <div
               key={entry.id}
               className={cn(
-                'w-full rounded-full border border-4 border-muted py-2 text-xl leading-8 font-semibold tracking-tighter',
+                'w-full rounded-full border border-4 border-muted py-1 text-2xl font-semibold leading-7 tracking-tighter',
                 'grid grid-cols-6 items-center gap-0',
                 index == entry.id
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
@@ -224,7 +226,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             >
               <div
                 className={cn(
-                    'rounded-full h-4 w-4 place-self-center',
+                  'h-4 w-4 place-self-center rounded-full',
                   isJudged
                     ? isGood
                       ? 'border-0 bg-white/80 font-bold'
@@ -235,41 +237,41 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               <div className='col-span-2'>{entry.name}</div>
               <div>{entry.lift?.weight}kg</div>
               <div>{entry.lift?.rackHeight}</div>
-              <div>{dots}</div>
+              <div>{wilks}</div>
             </div>
           )
         })}
       </div>
-      <div className='relative col-span-1 flex flex-col items-center w-full h-dvh justify-around text-xl font-bold my-[2vh]'>
-          <div className='absolute top-0 left-1/2 -translate-x-1/2 text-center'>
-            <Image
-              src='/RawWar_Logo.png'
-              alt='RawWar Logo'
-              width={400}
-              height={100}
-              className='w-[10vw]'
+      <div className='relative col-span-1 my-[2vh] flex h-dvh w-full flex-col items-center justify-around text-xl font-bold'>
+        <div className='absolute left-1/2 top-0 -translate-x-1/2 text-center'>
+          <Image
+            src='/atlas.png'
+            alt='RawWar Logo'
+            width={100}
+            height={100}
+            className='w-[4vw]'
+          />
+        </div>
+        <div className='text-sm'>
+          {lifter && lift && (
+            <Loading
+              isLifting={true}
+              name={lifter.user?.name || ''}
+              weight={Number(lift.weight)}
+              rack={lift.rackHeight || ''}
+              lift={liftName}
             />
-          </div>
-          <div className='text-sm'>
-            {lifter && lift && (
-              <Loading
-                isLifting={true}
-                name={lifter.user?.name || ''}
-                weight={Number(lift.weight)}
-                rack={lift.rackHeight || ''}
-                lift={liftName}
-              />
-            )}
-          </div>
-          <div className='text-sm'>
-            {lifter2 && lift2 && (
-              <Loading
-                name={lifter2.user?.name || ''}
-                weight={Number(lift2.weight)}
-                rack={lift2.rackHeight || ''}
-                lift={liftName}
-              />
-            )}
+          )}
+        </div>
+        <div className='text-sm'>
+          {lifter2 && lift2 && (
+            <Loading
+              name={lifter2.user?.name || ''}
+              weight={Number(lift2.weight)}
+              rack={lift2.rackHeight || ''}
+              lift={liftName}
+            />
+          )}
         </div>
       </div>
     </div>

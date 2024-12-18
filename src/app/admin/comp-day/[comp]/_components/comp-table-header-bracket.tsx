@@ -1,6 +1,7 @@
 'use client'
 import { GetCompetitionEntryById } from '~/lib/types'
 
+import { api } from '~/trpc/react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   Card,
@@ -24,6 +25,7 @@ const CompTableHeaderBracket = ({
   bracket: number
   isButton?: boolean
 }) => {
+  const ctx = api.useUtils()
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -47,8 +49,13 @@ const CompTableHeaderBracket = ({
       >
         <Card className='relative'>
           <CardHeader className='mb-4'>
-            <CardTitle className='flex items-center justify-around text-3xl'>
+            <CardTitle className='flex items-center justify-around gap-8 text-3xl'>
               <div className='capitalize'>{lift}</div>
+              <Button
+                onClick={() => {
+                  ctx.competition.getCompetitionByUuid.refetch()
+                }}
+                variant='ghost'>refresh</Button>
             </CardTitle>
             <CardDescription className=''></CardDescription>
           </CardHeader>

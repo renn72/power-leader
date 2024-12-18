@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams, useRouter, } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 

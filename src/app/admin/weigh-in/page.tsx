@@ -20,6 +20,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '~/components/ui/sheet'
+import RandomWeighIn from './_components/random-weigh-in'
 
 const WeighIn = () => {
   const [compId, setCompId] = useState('')
@@ -76,12 +77,13 @@ const WeighIn = () => {
         onOpenChange={setIsOpen}
       >
         <div className='flex items-center gap-4'>
-          <h2 className='text-lg font-bold'>Weight In</h2>
-          {competition && <FakeUser competition={competition} />}
+          <h2 className='text-lg font-bold'>Weigh In</h2>
+          <div className=''>
+            {competition && <RandomWeighIn competition={competition} />}
+          </div>
         </div>
         {competition && (
           <div className='mx-4 flex flex-col gap-2'>
-            <WeightClasses competition={competition} />
             {competition.entries?.map((entry) => (
               <Entry
                 entry={entry}

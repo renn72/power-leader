@@ -82,8 +82,6 @@ const FakeUser = ({ competition }: { competition: GetCompetitionById }) => {
         squatPB: '',
         benchPB: '',
         deadliftPB: '',
-        team: entry?.team || '',
-        teamLift: entry?.teamLift || '',
         name: entry?.user?.name || '',
         compId: competition?.id || 0,
         userId: entry.userId || 0,

@@ -102,7 +102,7 @@ const Signals = ({
   return (
     <Card>
       <CardHeader className='p-0'></CardHeader>
-      <CardContent className='flex w-full justify-around p-0 lg:p-1'>
+      <CardContent className='flex w-full justify-around p-1'>
         <Sign
           isGood={currentLift?.isGoodOne}
           updateIsLiftGood={updateIsLiftGood}

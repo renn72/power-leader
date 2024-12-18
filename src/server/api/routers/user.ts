@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { currentUser } from '@clerk/nextjs/server'
-import { db } from '~/server/db'
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 import { users } from '~/server/db/schema'
 
+import { client, db } from '~/server/db'
 import { eq } from 'drizzle-orm'
 
 import { generateFullName, generateName } from '~/lib/utils'
@@ -25,6 +25,10 @@ const createSchema = z.object({
 })
 
 export const userRouter = createTRPCRouter({
+  sync: publicProcedure.mutation(async () => {
+    await client.sync()
+    return true
+  }),
     getCurrentUser: publicProcedure.query(async ({ ctx }) => {
         const user = await currentUser()
         if (!user) {

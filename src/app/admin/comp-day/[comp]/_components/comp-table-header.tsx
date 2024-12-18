@@ -183,6 +183,8 @@ const CompTableHeader = ({
         <TableHead className='h-8 p-0'></TableHead>
         <TableHead className='h-8 p-0'></TableHead>
         <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'></TableHead>
+        <TableHead className='h-8 p-0'></TableHead>
         <TableHead className='h-8 p-0'>
           <CompTableHeaderBracket
             lifters={lifters}
@@ -297,6 +299,8 @@ const CompTableHeader = ({
       <TableRow>
         <TableHead>#</TableHead>
         <TableHead>Name</TableHead>
+        <TableHead>E</TableHead>
+        <TableHead>G</TableHead>
         <TableHead>WC</TableHead>
         <TableHead>Squat Rack</TableHead>
         <TH
