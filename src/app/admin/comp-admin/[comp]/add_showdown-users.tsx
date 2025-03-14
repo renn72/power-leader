@@ -1,0 +1,92 @@
+'use client'
+import { api } from '~/trpc/react'
+
+import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
+import { cn } from '~/lib/utils'
+
+import type { GetCompetitionByUuid } from '~/lib/types'
+
+import {users} from '~/lib/showdown'
+
+export const dynamic = 'force-dynamic'
+
+const AddShowdownUsers = ({
+  competition,
+  className,
+}: {
+  competition: GetCompetitionByUuid
+  className?: string
+}) => {
+  const ctx = api.useUtils()
+
+  const { mutate } = api.compEntry.createEntry.useMutation({
+    onError: (err) => {
+      console.log(err)
+      toast('Error')
+    },
+    onSuccess: () => {
+      toast('Created')
+      void ctx.competition.getCompetitionByUuid.invalidate()
+    },
+  })
+
+  const createCE = () => {
+    const divisions = competition?.divisions?.map((division) => ({
+      id: division.id.toString(),
+      name: division.name,
+    }))
+    const equipment = competition?.equipment?.split('/') || []
+    const events = competition?.events?.map((event) => ({
+      id: event.id.toString(),
+      name: event.name,
+    }))
+
+    for (const user of users.slice(0, 2)) {
+
+      const bench = events.find((e) => e.name.toLowerCase() === 'bench only')?.id
+      const deadlift = events.find((e) => e.name.toLowerCase() === 'deadlift only')?.id
+      const pushPull = events.find((e) => e.name.toLowerCase() === 'push pull')?.id
+      const all = events.find((e) => e.name.toLowerCase() === 'squat, bench, deadlift')?.id
+
+      const pickedEvents = user.isBench ? bench : user.isDeadlift ? deadlift : user.isPushPull ? pushPull : all
+
+      let pickedDivisions = divisions
+        .filter((d) => user.category === 'first' ? d.name === 'First Timers' : user.category == d.name.toLowerCase())
+        .map((division) => division.id.toString())
+      const equipment = user.equip
+
+      console.log(user, pickedDivisions, pickedEvents)
+      // mutate({
+      //   name: user.name,
+      //   birthDate: user.birthDate,
+      //   email: user.email,
+      //   address: '',
+      //   phone: '',
+      //   equipment: equipment,
+      //   weight: user.weight,
+      //   gender: user.gender,
+      //   squatRackHeight: user.squatRackHeight,
+      //   squatOpener: user.squatOpener,
+      //   benchOpener: user.benchOpener,
+      //   benchRackHeight: user.benchRackHeight,
+      //   deadliftOpener: user.deadliftOpener,
+      //   events: pickedEvents,
+      //   divisions: pickedDivisions,
+      //   compId: competition?.id || 0,
+      //   notes: '',
+      // })
+    }
+  }
+
+  return (
+    <Button
+      className={cn(className)}
+      onClick={createCE}
+    >
+      Add Showdown Lifters
+    </Button>
+  )
+}
+
+export default AddShowdownUsers

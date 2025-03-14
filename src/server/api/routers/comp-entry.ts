@@ -116,6 +116,7 @@ const createEntrySchema = z.object({
   teamLift: z.string().optional(),
   weight: z.string().optional(),
   compId: z.number(),
+  notes: z.string().optional(),
   userId: z.number().optional(),
 })
 
@@ -209,6 +210,7 @@ export const compEntryRouter = createTRPCRouter({
           benchRackHeight: input.benchRackHeight,
           weight: input.weight,
           compId: input.compId,
+          notes: input.notes,
           userId: userId,
         })
         .returning({ id: compEntry.id })
@@ -697,28 +699,28 @@ export const compEntryRouter = createTRPCRouter({
       return true
     }),
   getUserCompEntries: publicProcedure
-  .input(z.number())
-  .query(async ({ ctx, input }) => {
-    const res = await ctx.db.query.compEntry.findMany({
-      where: (compEntry, { eq }) => eq(compEntry.userId, input),
-      orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
-      with: {
-        competition: true,
-        user: true,
-        compEntryToDivisions: {
-          with: {
-            division: true,
+    .input(z.number())
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.db.query.compEntry.findMany({
+        where: (compEntry, { eq }) => eq(compEntry.userId, input),
+        orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
+        with: {
+          competition: true,
+          user: true,
+          compEntryToDivisions: {
+            with: {
+              division: true,
+            },
+          },
+          events: {
+            with: {
+              event: true,
+            },
           },
         },
-        events: {
-          with: {
-            event: true,
-          },
-        },
-      },
-    })
-    return res
-  }),
+      })
+      return res
+    }),
   getMyCompEntries: publicProcedure.query(async ({ ctx }) => {
     const user = await getCurrentUser()
     if (!user) {
