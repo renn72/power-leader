@@ -116,7 +116,6 @@ const createEntrySchema = z.object({
   teamLift: z.string().optional(),
   weight: z.string().optional(),
   compId: z.number(),
-  notes: z.string().optional(),
   userId: z.number().optional(),
 })
 

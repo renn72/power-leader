@@ -56,26 +56,25 @@ const AddShowdownUsers = ({
         .map((division) => division.id.toString())
       const equipment = user.equip
 
-      console.log(user, pickedDivisions, pickedEvents)
-      // mutate({
-      //   name: user.name,
-      //   birthDate: user.birthDate,
-      //   email: user.email,
-      //   address: '',
-      //   phone: '',
-      //   equipment: equipment,
-      //   weight: user.weight,
-      //   gender: user.gender,
-      //   squatRackHeight: user.squatRackHeight,
-      //   squatOpener: user.squatOpener,
-      //   benchOpener: user.benchOpener,
-      //   benchRackHeight: user.benchRackHeight,
-      //   deadliftOpener: user.deadliftOpener,
-      //   events: pickedEvents,
-      //   divisions: pickedDivisions,
-      //   compId: competition?.id || 0,
-      //   notes: '',
-      // })
+      const today = new Date(new Date().getTime() - (22 * 24 * 60 * 60 * 1000))
+      const birthDate = new Date(today.getTime() - (365 * 24 * 60 * 60 * 1000 * user.age))
+
+      console.log(user, pickedDivisions, pickedEvents, birthDate)
+
+
+      mutate({
+        name: user.name,
+        birthDate: birthDate,
+        email: user.email,
+        address: '',
+        phone: '',
+        equipment: equipment,
+        gender: user.sex === 'f' ? 'female' : 'male',
+        events: [pickedEvents ?? ''],
+        divisions: pickedDivisions,
+        compId: competition?.id || 0,
+        notes: '',
+      })
     }
   }
 
