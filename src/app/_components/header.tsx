@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { UserButton } from "@clerk/nextjs";
+import { UserButton } from '@clerk/nextjs'
 
 const DotIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 512 512"
-      fill="currentColor"
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 512 512'
+      fill='currentColor'
     >
-      <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+      <path d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z' />
     </svg>
   )
 }
@@ -20,16 +20,16 @@ const CustomPage = () => {
       <h1>Custom Profile Page</h1>
       <p>This is the custom profile page</p>
     </div>
-  );
-};
+  )
+}
 
 const Header = () => (
   <header>
     <UserButton afterSignOutUrl='/'>
       {/* You can pass the content as a component */}
       <UserButton.UserProfilePage
-        label="Custom Page"
-        url="custom"
+        label='Custom Page'
+        url='custom'
         labelIcon={<DotIcon />}
       >
         <CustomPage />
@@ -37,9 +37,9 @@ const Header = () => (
 
       {/* You can also pass the content as direct children */}
       <UserButton.UserProfilePage
-        label="Terms"
+        label='Terms'
         labelIcon={<DotIcon />}
-        url="terms"
+        url='terms'
       >
         <div>
           <h1>Custom Terms Page</h1>
@@ -48,6 +48,6 @@ const Header = () => (
       </UserButton.UserProfilePage>
     </UserButton>
   </header>
-);
+)
 
-export default Header;
+export default Header

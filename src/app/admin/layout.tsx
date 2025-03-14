@@ -1,7 +1,6 @@
 import '~/styles/globals.css'
 
 import Navbar from '~/app/_components/navbar'
-import Footer from '~/app/_components/footer'
 
 import { SignInButton, SignIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { auth, currentUser } from '@clerk/nextjs/server'
@@ -42,13 +41,10 @@ export default async function RootLayout({
     )
   }
 
-  const _user = await currentUser()
-
   return (
     <div className={`flex h-dvh flex-col `}>
       <Navbar />
       <div className='xl:min-h-[calc(100vh-7.8rem)]'>{children}</div>
-      <Footer />
     </div>
   )
 }

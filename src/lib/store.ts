@@ -7,8 +7,6 @@ export const ageDivisionsData: Array<{
   info: string
 }> = [
   { name: 'Open', minAge: '', maxAge: '', info: 'Open' },
-  { name: 'Teen', minAge: 13, maxAge: 19, info: 'Teen' },
-  { name: 'Master', minAge: 50, maxAge: '', info: 'Masters' },
   {
     name: 'First Timers',
     minAge: '',
@@ -22,10 +20,10 @@ export const ageDivisionsData: Array<{
     info: 'Second powerlifting event',
   },
   {
-    name: 'TeamBattle',
+    name: 'Pro',
     minAge: '',
     maxAge: '',
-    info: 'Team Battle',
+    info: 'Pro',
   },
 ]
 
@@ -45,6 +43,7 @@ export const eventsData = [
 export const equipmentData = [
   'Classic',
   'Raw',
+  'Equipped',
   'Bare',
   'Sleeves',
   'Wraps',

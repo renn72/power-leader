@@ -23,7 +23,6 @@ const Navbar = () => {
       ctx.invalidate()
     },
   })
-  const { data: currentUser } = api.user.getCurrentUser.useQuery()
   if (pathname.includes('comp-day/screen/')) return null
   if (pathname.includes('judge')) return null
   if (pathname.includes('loading')) return null
