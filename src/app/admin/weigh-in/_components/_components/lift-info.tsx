@@ -27,7 +27,6 @@ const LiftInfo = ({ isSquat, isBench, isDeadlift } : { isSquat: boolean, isBench
             <CardHeader>
               <CardTitle className='text-xl'>Squat</CardTitle>
               <CardDescription className='text-sm font-medium text-muted-foreground'>
-                in kg
               </CardDescription>
             </CardHeader>
             <CardContent className='grid grid-cols-3 gap-4'>
@@ -90,7 +89,6 @@ const LiftInfo = ({ isSquat, isBench, isDeadlift } : { isSquat: boolean, isBench
             <CardHeader>
               <CardTitle className='text-xl'>Bench</CardTitle>
               <CardDescription className='text-sm font-medium text-muted-foreground'>
-                in kg
               </CardDescription>
             </CardHeader>
             <CardContent className='grid grid-cols-3 gap-4'>
@@ -153,7 +151,6 @@ const LiftInfo = ({ isSquat, isBench, isDeadlift } : { isSquat: boolean, isBench
             <CardHeader>
               <CardTitle className='text-xl'>Deadlift</CardTitle>
               <CardDescription className='text-sm font-medium text-muted-foreground'>
-                in kg
               </CardDescription>
             </CardHeader>
             <CardContent className='grid grid-cols-3 gap-4'>

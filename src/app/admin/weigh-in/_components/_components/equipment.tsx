@@ -15,7 +15,7 @@ const Equipment = ({ competition }: { competition: GetCompetitionByUuid }) => {
   const form = useFormContext()
   const [selected, setSelected] = useState<string>()
   return (
-    <Card className='w-full sm:max-w-2xl'>
+    <Card className='w-full sm:max-w-2xl flex flex-col lg:flex-row items-baseline'>
       <CardHeader>
         <CardTitle>Equipment</CardTitle>
       </CardHeader>
@@ -47,7 +47,7 @@ const Equipment = ({ competition }: { competition: GetCompetitionByUuid }) => {
                               <ToggleGroupItem
                                 variant='secondary'
                                 className='rounded-md border border-input'
-                                value={item}
+                                value={item.toLowerCase()}
                                 onClick={(e) => {
                                 }}
                               >

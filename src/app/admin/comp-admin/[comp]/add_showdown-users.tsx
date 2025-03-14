@@ -20,7 +20,7 @@ const AddShowdownUsers = ({
 }) => {
   const ctx = api.useUtils()
 
-  const { mutate } = api.compEntry.createEntry.useMutation({
+  const { mutate } = api.compEntry.createEntryWithClerk.useMutation({
     onError: (err) => {
       console.log(err)
       toast('Error')
@@ -42,7 +42,7 @@ const AddShowdownUsers = ({
       name: event.name,
     }))
 
-    for (const user of users.slice(0, 2)) {
+    for (const user of users) {
 
       const bench = events.find((e) => e.name.toLowerCase() === 'bench only')?.id
       const deadlift = events.find((e) => e.name.toLowerCase() === 'deadlift only')?.id
@@ -73,7 +73,8 @@ const AddShowdownUsers = ({
         events: [pickedEvents ?? ''],
         divisions: pickedDivisions,
         compId: competition?.id || 0,
-        notes: '',
+        notes: user.div,
+        wc: user.wc.toString(),
       })
     }
   }

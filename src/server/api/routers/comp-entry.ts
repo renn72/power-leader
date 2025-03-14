@@ -1,6 +1,8 @@
 import { z } from 'zod'
 import { eq, and } from 'drizzle-orm'
 
+import { createClerkClient } from '@clerk/nextjs/server'
+
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 
 import {
@@ -14,6 +16,7 @@ import {
 
 import { getCurrentUser } from './user'
 import { TRPCError } from '@trpc/server'
+import { env } from '~/env'
 
 const createSchema = z.object({
   address: z.string(),
@@ -102,7 +105,7 @@ const createEntrySchema = z.object({
   gender: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
-  email: z.string().optional(),
+  email: z.string(),
   equipment: z.string().optional(),
   events: z.array(z.string()),
   divisions: z.array(z.string()),
@@ -112,6 +115,7 @@ const createEntrySchema = z.object({
   deadliftOpener: z.string().optional(),
   squatRackHeight: z.string().optional(),
   benchRackHeight: z.string().optional(),
+  wc: z.string().optional(),
   team: z.string().optional(),
   teamLift: z.string().optional(),
   weight: z.string().optional(),
@@ -121,6 +125,37 @@ const createEntrySchema = z.object({
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
   return array.length > 0
+}
+
+const createClerkUser = async (userEmail: string, name: string) => {
+  const clerkClient = createClerkClient({
+    secretKey: env.CLERK_SECRET_KEY,
+  })
+
+  const userListClerk = await clerkClient.users.getUserList()
+
+  const userList = userListClerk?.data?.map((user) => {
+    return {
+      id: user.id,
+      email: user.emailAddresses[0]?.emailAddress,
+    }
+  })
+
+  if (userList.find((user) => user.email?.toLowerCase() === userEmail.toLowerCase())) {
+    return userList.find((user) => user.email?.toLowerCase() === userEmail.toLowerCase())
+  }
+
+  try {
+    const user = await clerkClient.users.createUser({
+      emailAddress: [userEmail],
+      firstName: name.split(' ')[0],
+      lastName: name.split(' ')[1] || '',
+      password: 'proshowdown',
+    })
+    return user
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const compEntryRouter = createTRPCRouter({
@@ -157,6 +192,97 @@ export const compEntryRouter = createTRPCRouter({
         .where(eq(compEntry.id, input.entryId))
 
       return res
+    }),
+  createEntryWithClerk: publicProcedure
+    .input(createEntrySchema)
+    .mutation(async ({ ctx, input }) => {
+      let userId = input.userId
+
+      const clerkUser = await createClerkUser(input.email, input.name)
+
+      const isUser = await ctx.db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.email, input.email || ''),
+      })
+
+      if (isUser?.id) userId = isUser.id
+
+      if (!userId) {
+        const user = await ctx.db
+          .insert(users)
+          .values({
+            name: input.name,
+            email: input.email,
+            birthDate: input.birthDate,
+            gender: input.gender,
+            address: input.address,
+            phone: input.phone,
+            clerkId: clerkUser?.id || '',
+          })
+          .returning({ id: users.id })
+
+        userId = user[0]?.id
+      }
+
+      if (!userId) {
+        throw new TRPCError({
+          code: 'PARSE_ERROR',
+          message: 'Error creating user',
+        })
+      }
+
+      const entry = await ctx.db
+        .insert(compEntry)
+        .values({
+          birthDate: input.birthDate,
+          gender: input.gender,
+          address: input.address,
+          phone: input.phone,
+          equipment: input.equipment,
+          squatOpener: input.squatOpener,
+          benchOpener: input.benchOpener,
+          deadliftOpener: input.deadliftOpener,
+          squarRackHeight: input.squatRackHeight,
+          benchRackHeight: input.benchRackHeight,
+          weight: input.weight,
+          compId: input.compId,
+          notes: input.notes,
+          wc: input.wc,
+          userId: userId,
+        })
+        .returning({ id: compEntry.id })
+
+      const entryId = entry[0]?.id
+
+      if (!entryId) {
+        throw new TRPCError({
+          code: 'PARSE_ERROR',
+          message: 'Error creating entry',
+        })
+      }
+
+      const divisionIds = input.divisions.map((division) => {
+        return ctx.db.insert(compEntryToDivisions).values({
+          compEntryId: entryId,
+          divisionId: Number(division),
+        })
+      })
+
+      if (isTuple(divisionIds)) {
+        await ctx.db.batch(divisionIds)
+      }
+
+      const eventIds = input.events.map((event) => {
+        return ctx.db.insert(compEntryToEvents).values({
+          compEntryId: entryId,
+          eventId: Number(event),
+        })
+      })
+
+      if (isTuple(eventIds)) {
+        await ctx.db.batch(eventIds)
+      }
+
+      return true
     }),
   createEntry: publicProcedure
     .input(createEntrySchema)

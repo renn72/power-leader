@@ -23,7 +23,7 @@ import {
 import RandomWeighIn from './_components/random-weigh-in'
 
 const WeighIn = () => {
-  const [compId, setCompId] = useState('')
+  const [compId, setCompId] = useState('1')
   const [entryId, setEntryId] = useState<number | null>(null)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -54,48 +54,54 @@ const WeighIn = () => {
 
   return (
     <div className='flex flex-col gap-4'>
-      <Select
-        onValueChange={setCompId}
-        defaultValue={compId}
-      >
-        <SelectTrigger className='w-[180px]'>
-          <SelectValue placeholder={competitions?.[0]?.name} />
-        </SelectTrigger>
-        <SelectContent>
-          {competitions?.map((competition) => (
-            <SelectItem
-              key={competition.id}
-              value={competition.id.toString()}
-            >
-              {competition.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className='hidden'>
+        <Select
+          onValueChange={setCompId}
+          defaultValue={compId}
+        >
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder={competitions?.[0]?.name} />
+          </SelectTrigger>
+          <SelectContent>
+            {competitions?.map((competition) => (
+              <SelectItem
+                key={competition.id}
+                value={competition.id.toString()}
+              >
+                {competition.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       <Sheet
         open={isOpen}
         onOpenChange={setIsOpen}
       >
-        <div className='flex items-center gap-4'>
-          <h2 className='text-lg font-bold'>Weigh In</h2>
-          <div className=''>
+        <div className='mt-3 flex items-center justify-center gap-4 '>
+          <h2 className='text-2xl font-extrabold'>Weigh In</h2>
+          <div className='hidden'>
             {competition && <RandomWeighIn competition={competition} />}
           </div>
         </div>
         {competition && (
           <div className='mx-4 flex flex-col gap-2'>
-            {competition.entries?.map((entry) => (
-              <Entry
-                entry={entry}
-                key={entry.id}
-                setEntryId={setEntryId}
-              />
-            ))}
+            {competition.entries
+              ?.sort((a, b) => Number(a.weight) - Number(b.weight))
+              ?.map((entry) => (
+                <Entry
+                  entry={entry}
+                  key={entry.id}
+                  setEntryId={setEntryId}
+                />
+              ))}
           </div>
         )}
-        <SheetContent className='w-[400px] overflow-y-auto sm:w-[940px] sm:max-w-3xl'>
+        <SheetContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className='w-[400px] overflow-y-auto sm:w-[940px] sm:max-w-3xl'>
           <SheetHeader>
-            <SheetTitle>Weigh In</SheetTitle>
+            <SheetTitle></SheetTitle>
           </SheetHeader>
           <WeighInForm
             isOpen={isOpen}

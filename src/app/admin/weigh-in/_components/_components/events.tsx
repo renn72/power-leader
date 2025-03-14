@@ -13,11 +13,11 @@ import type { GetCompetitionByUuid } from '~/lib/types'
 const Events = ({ competition }: { competition: GetCompetitionByUuid }) => {
   const form = useFormContext()
   return (
-    <Card className='w-full sm:max-w-2xl'>
-      <CardHeader>
+    <Card className='w-full sm:max-w-2xl flex flex-col lg:flex-row items-baseline'>
+      <CardHeader className='pr-0'>
         <CardTitle>Events</CardTitle>
       </CardHeader>
-      <CardContent className='mt-4 flex flex-col gap-2'>
+      <CardContent className='mt-4 flex flex-col gap-2 px-0'>
         <FormField
           control={form.control}
           name='events'
@@ -43,10 +43,12 @@ const Events = ({ competition }: { competition: GetCompetitionByUuid }) => {
                             <FormControl>
                               <ToggleGroupItem
                                 variant='secondary'
-                                className='rounded-md border border-input'
+                                className='rounded-md border border-input tracking-tight'
                                 value={item.id.toString()}
                               >
-                                {item.name}
+                                {item.name === 'Squat, Bench, Deadlift'
+                                  ? 'Squat, Bench, Dead'
+                                  : item.name}
                               </ToggleGroupItem>
                             </FormControl>
                           </FormItem>

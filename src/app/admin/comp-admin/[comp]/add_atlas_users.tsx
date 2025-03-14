@@ -22,7 +22,7 @@ const AddAtlasUsers = ({
 
   const atlasUsers = females.concat(males)
 
-  const { mutate } = api.compEntry.createEntry.useMutation({
+  const { mutate } = api.compEntry.createEntryWithClerk.useMutation({
     onError: (err) => {
       console.log(err)
       toast('Error')

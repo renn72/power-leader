@@ -1,11 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 import { api } from '~/trpc/react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useFieldArray, FormProvider } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
@@ -13,8 +12,6 @@ import { Form } from '~/components/ui/form'
 import { toast } from 'sonner'
 
 import Equipment from './_components/equipment'
-import Personal from './_components/personal'
-import PersonalInfo from './_components/personal-info'
 import Events from './_components/events'
 import Divisions from './_components/divisions'
 import LiftInfo from './_components/lift-info'
@@ -61,8 +58,6 @@ const WeighInForm = ({
 }) => {
   const [isPending, setIsPending] = useState(false)
   const [submitText, setSubmitText] = useState('Submit')
-
-  const [isEditPersonal, setIsEditPersonal] = useState(true)
 
   const ctx = api.useUtils()
   const { mutate: updateAndLock } = api.compEntry.updateAndLock.useMutation({

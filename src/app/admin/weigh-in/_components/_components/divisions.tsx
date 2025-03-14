@@ -18,7 +18,7 @@ import type { GetCompetitionByUuid } from '~/lib/types'
 const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
   const form = useFormContext()
   return (
-    <Card className='w-full sm:max-w-2xl'>
+    <Card className='w-full sm:max-w-2xl flex flex-col lg:flex-row items-baseline'>
       <CardHeader>
         <CardTitle>Divisions</CardTitle>
       </CardHeader>
@@ -31,20 +31,13 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
             <FormItem>
               <ToggleGroup
                 type='multiple'
+                orientation='horizontal'
                 defaultValue={form.getValues('division') || []}
                 onValueChange={(value) => {
                   field.onChange(value)
                 }}
               >
-                <div className='flex w-full flex-col gap-2 px-6'>
-                  <div className='w-full'>
-                    <div className='grid w-full grid-cols-6 place-items-center gap-1 text-xs'>
-                      <div className='col-span-1'>Name</div>
-                      <div>min age</div>
-                      <div>max age</div>
-                      <div className='col-span-2'>info</div>
-                    </div>
-                  </div>
+                <div className='flex w-full gap-2 px-6'>
                   {competition.divisions.map((item) => (
                     <FormField
                       key={item.name}
@@ -56,42 +49,10 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
                             <FormControl>
                               <ToggleGroupItem
                                 variant='secondary'
-                                className='w-full rounded-md border border-input tracking-tight'
+                                className='h-8 w-rounded-md border border-input tracking-tight'
                                 value={item.id.toString()}
                               >
-                                <div className='grid w-full grid-cols-6 gap-1 divide-x divide-muted'>
-                                  <div className='col-span-1'>
-                                    {item.id}
-                                    {item.name.length > 12 ? (
-                                      <HoverCard>
-                                        <HoverCardTrigger>
-                                          {item.name.slice(0, 12) + '...'}
-                                        </HoverCardTrigger>
-                                        <HoverCardContent>
-                                          {item.name}
-                                        </HoverCardContent>
-                                      </HoverCard>
-                                    ) : (
-                                      item.name
-                                    )}
-                                  </div>
-                                  <div>{item.minAge || '.'}</div>
-                                  <div>{item.maxAge || '.'}</div>
-                                  <div className='col-span-3'>
-                                    {item.info.length > 24 ? (
-                                      <HoverCard>
-                                        <HoverCardTrigger>
-                                          {item.info.slice(0, 24) + '...'}
-                                        </HoverCardTrigger>
-                                        <HoverCardContent>
-                                          {item.info}
-                                        </HoverCardContent>
-                                      </HoverCard>
-                                    ) : (
-                                      item.info
-                                    )}
-                                  </div>
-                                </div>
+                                {item.name}
                               </ToggleGroupItem>
                             </FormControl>
                           </FormItem>
