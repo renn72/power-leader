@@ -17,7 +17,7 @@ const EmptyCell = ({title, className}: {title: string, className?: string}) => {
           'text-center text-lg font-medium text-muted',
         )}
       >
-        {title === '' ? '' : <CircleOff size={20} className='mt-1' />}
+        {title === '' ? '' : <CircleOff size={16} className='mt-1' />}
       </div>
     </div>
   )
@@ -37,12 +37,12 @@ const Cell = ({
       <div className='text-xs text-muted-foreground'>{title}</div>
       <div
         className={cn(
-          'text-center text-lg font-medium',
-          info ? 'text-primary' : 'text-warning',
-          title === 'Weight' && 'text-xl',
+          'text-center text-base font-medium truncate leading-6',
+          info ? 'text-primary' : 'text-destructive',
+          title === 'Weight' && ' font-extrabold',
         )}
       >
-        {info || <Minus size={24} className='mt-1' />}
+        {info || <Minus size={20} strokeWidth={4} className='mt-1 -mb-1' />}
       </div>
     </div>
   )
@@ -57,10 +57,10 @@ const CellBadge = ({
   className?: string
 }) => {
   return (
-    <div className={cn('flex flex-col items-center gap-1', className)}>
+    <div className={cn('flex flex-col items-center gap-0', className)}>
       <div className='text-xs text-muted-foreground'>{title}</div>
       {info && (
-        <Badge className='flex w-16 items-center justify-center'>
+        <Badge className='flex w-[52px] items-center justify-center'>
           {info}kg
         </Badge>
       )}
@@ -83,7 +83,7 @@ const CellArray = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-between gap-2',
+        'flex flex-col items-center justify-between',
         className,
       )}
     >
@@ -137,8 +137,8 @@ const Entry = ({
       <div
         onClick={() => setEntryId(entry.id)}
         className={cn(
-          'grid-cols-18 grid cursor-pointer grid-flow-row justify-between rounded-full',
-          'relative border border-input px-8 py-2 hover:bg-input hover:bg-opacity-10',
+          'grid-cols-17 grid cursor-pointer grid-flow-row justify-between rounded-full',
+          'relative border border-input px-8 py-1 hover:bg-input hover:bg-opacity-10',
           entry.isLocked && 'border-4 bg-muted/50',
         )}
       >
@@ -146,7 +146,7 @@ const Entry = ({
           <CircleCheck
             size={24}
             strokeWidth={3}
-            className='absolute left-6 top-1/2 -translate-y-1/2 text-complete '
+            className='absolute left-2 top-1/2 -translate-y-1/2 text-complete '
           />
         )}
         <Cell
@@ -216,7 +216,7 @@ const Entry = ({
         />
         <CellArray
           title='Events'
-          className='col-span-4 tracking-tighter'
+          className='col-span-3 tracking-tighter'
           info={entry.events?.map((event) => event.event?.name || '')}
         />
         <CellArray

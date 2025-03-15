@@ -11,6 +11,8 @@ import {
 } from '~/components/ui/table'
 import { Skeleton } from '~/components/ui/skeleton'
 
+import { useRouter } from 'next/navigation'
+
 import Competition from './competition'
 
 export const dynamic = 'force-dynamic'
@@ -18,6 +20,11 @@ export const dynamic = 'force-dynamic'
 const Competitions = () => {
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
+
+
+  const router = useRouter()
+
+  router.push('comp-admin/Show-Down-22-3-2025')
 
   return (
     <section className='min-h-[calc(100vh - 10rem)] grid w-full grid-cols-1 place-content-between gap-4'>

@@ -8,6 +8,11 @@ import FakeUser from './_components/fake-user'
 import WeightClasses from './_components/weight-classes'
 
 import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from '~/components/ui/toggle-group'
+
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -26,6 +31,8 @@ const WeighIn = () => {
   const [compId, setCompId] = useState('1')
   const [entryId, setEntryId] = useState<number | null>(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  const [selection, setSelection] = useState<string>('all')
 
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
@@ -80,14 +87,32 @@ const WeighIn = () => {
       >
         <div className='mt-3 flex items-center justify-center gap-4 '>
           <h2 className='text-2xl font-extrabold'>Weigh In</h2>
-          <div className='hidden'>
-            {competition && <RandomWeighIn competition={competition} />}
-          </div>
+          <ToggleGroup
+            type='single'
+            value={selection}
+            onValueChange={setSelection}
+          >
+            <ToggleGroupItem value='all'>All</ToggleGroupItem>
+            <ToggleGroupItem value='notWeight'>Not Weighed In</ToggleGroupItem>
+            <ToggleGroupItem value='weight'>Weighed In</ToggleGroupItem>
+          </ToggleGroup>
+
         </div>
         {competition && (
-          <div className='mx-4 flex flex-col gap-2'>
+          <div className='mx-4 flex flex-col gap-1 max-w-[1400px] w-full mx-auto'>
             {competition.entries
-              ?.sort((a, b) => Number(a.weight) - Number(b.weight))
+              ?.filter((entry) => {
+                if (selection === 'all') return true
+                if (selection === 'notWeight') {
+                  return !entry.weight
+                }
+                if (selection === 'weight') {
+                  return entry.weight
+                }
+              })
+              ?.sort((a, b) =>
+                (a.user?.name ?? '') > (b.user?.name ?? '') ? 1 : -1,
+              )
               ?.map((entry) => (
                 <Entry
                   entry={entry}
@@ -99,7 +124,8 @@ const WeighIn = () => {
         )}
         <SheetContent
           onOpenAutoFocus={(e) => e.preventDefault()}
-          className='w-[400px] overflow-y-auto sm:w-[940px] sm:max-w-3xl'>
+          className='w-[400px] overflow-y-auto sm:w-[940px] sm:max-w-3xl'
+        >
           <SheetHeader>
             <SheetTitle></SheetTitle>
           </SheetHeader>

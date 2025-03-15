@@ -29,10 +29,11 @@ const Navbar = () => {
   if (pathname.includes('board')) return null
 
   return (
-    <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-0'>
+    <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-1'>
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem>
+          <NavigationMenuItem
+            className='hidden'>
             <Link
               href='/admin'
               legacyBehavior
@@ -43,7 +44,7 @@ const Navbar = () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem className='hidden'>
             <Link
               href='/admin/create'
               legacyBehavior
@@ -114,6 +115,7 @@ const Navbar = () => {
       <div className='flex items-center gap-4'>
         <Button
           onClick={() =>sync()}
+          size='sm'
           className=''
           variant='ghost'
         >
