@@ -38,7 +38,7 @@ export default function Home() {
 
   if (!userId) return null
   return (
-    <section className='relative flex h-[80vh] w-full flex-col items-center justify-center gap-8 overflow-hidden'>
+    <section className='relative flex h-[100svh] w-full flex-col items-center justify-center gap-8'>
       <div
         className='absolute top-1 right-1'
       ><ModeToggle /></div>

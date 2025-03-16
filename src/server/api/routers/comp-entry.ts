@@ -1,22 +1,20 @@
-import { z } from 'zod'
-import { eq, and } from 'drizzle-orm'
-
+import { db } from '@/server/db'
 import { createClerkClient } from '@clerk/nextjs/server'
-
+import { TRPCError } from '@trpc/server'
+import { env } from '~/env'
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
-
 import {
   compEntry,
   compEntryToDivisions,
   compEntryToEvents,
-  competitions,
   lift,
+  logs,
   users,
 } from '~/server/db/schema'
+import { and, eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { getCurrentUser } from './user'
-import { TRPCError } from '@trpc/server'
-import { env } from '~/env'
 
 const createSchema = z.object({
   address: z.string(),
@@ -132,7 +130,7 @@ const createClerkUser = async (userEmail: string, name: string) => {
     secretKey: env.CLERK_SECRET_KEY,
   })
 
-  const userListClerk = await clerkClient.users.getUserList({limit: 500})
+  const userListClerk = await clerkClient.users.getUserList({ limit: 500 })
 
   const userList = userListClerk?.data?.map((user) => {
     return {
@@ -141,8 +139,14 @@ const createClerkUser = async (userEmail: string, name: string) => {
     }
   })
 
-  if (userList.find((user) => user.email?.toLowerCase() === userEmail.toLowerCase())) {
-    return userList.find((user) => user.email?.toLowerCase() === userEmail.toLowerCase())
+  if (
+    userList.find(
+      (user) => user.email?.toLowerCase() === userEmail.toLowerCase(),
+    )
+  ) {
+    return userList.find(
+      (user) => user.email?.toLowerCase() === userEmail.toLowerCase(),
+    )
   }
 
   try {
@@ -158,7 +162,49 @@ const createClerkUser = async (userEmail: string, name: string) => {
   }
 }
 
+const createLog = async ({
+  userId,
+  userName,
+  action,
+  data,
+}: {
+  userId: number
+  userName: string
+  action: string
+  data: string
+}) => {
+  await db.insert(logs).values({
+    userId: userId,
+    userName: userName,
+    action: action,
+    data: data,
+  })
+}
 export const compEntryRouter = createTRPCRouter({
+  updateSquatOpener: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        squatOpener: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update squat opener',
+        data: input.squatOpener,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          squatOpener: input.squatOpener,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
   deleteAllEntries: publicProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
@@ -830,7 +876,7 @@ export const compEntryRouter = createTRPCRouter({
         where: (compEntry, { eq }) => eq(compEntry.userId, input),
         orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
         with: {
-        lift: true,
+          lift: true,
           competition: true,
           user: true,
           compEntryToDivisions: {

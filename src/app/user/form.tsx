@@ -114,7 +114,7 @@ const DialogWrapper = ({
       <DialogTrigger asChild>
         <div
           className={cn(
-            'flex gap-2 items-center justify-around flex-col bg-secondary px-4 py-2 rounded-md shadow-sm',
+            'flex gap-2 items-center justify-around flex-col bg-secondary px-4 py-1 rounded-md shadow-sm',
             'active:scale-90 active:shadow-none transition-transform cursor-pointer',
             isOpen ? 'scale-90 shadow-none' : '',
           )}
@@ -142,7 +142,7 @@ const Value = ({ value, title }: { value: string; title: string }) => {
   return (
     <div
       className={cn(
-        'flex gap-2 items-center justify-around flex-col bg-secondary px-4 py-2 rounded-md shadow-sm',
+        'flex gap-2 items-center justify-around flex-col bg-secondary px-4 py-1 rounded-md shadow-sm',
         'active:scale-90 active:shadow-none transition-transform cursor-pointer',
       )}
     >
@@ -164,9 +164,33 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
   const [squatPB, setSquatPB] = useState<number | null>(
     Number(entry?.squatPB) || null,
   )
+  const [benchOpener, setBenchOpener] = useState<number | null>(
+    Number(entry?.benchOpener) || null,
+  )
+  const [benchRackHeight, setBenchRackHeight] = useState<string | null>(
+    entry?.benchRackHeight || null,
+  )
+  const [benchPB, setBenchPB] = useState<number | null>(
+    Number(entry?.benchPB) || null,
+  )
+  const [deadliftOpener, setDeadliftOpener] = useState<number | null>(
+    Number(entry?.deadliftOpener) || null,
+  )
+  const [deadliftPB, setDeadliftPB] = useState<number | null>(
+    Number(entry?.deadliftPB) || null,
+  )
+
+  const { mutate: updateSquatOpener } = api.compEntry.updateSquatOpener.useMutation({
+    onError: (err) => {
+      console.log(err)
+    },
+    onSuccess: () => {
+      void ctx.compEntry.invalidate()
+    },
+  })
 
   return (
-    <div className='flex flex-col gap-3 px-4'>
+    <div className='flex flex-col gap-2 px-4'>
       <div className='flex gap-4 w-full justify-around'>
         <Value
           title='Name'
@@ -181,7 +205,21 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
           value={getAge(entry.birthDate, entry.competition?.date).toString()}
         />
       </div>
-      <div className='flex flex-col gap-3 p-4 border border-border rounded-xl'>
+      <div className='flex gap-4 w-full justify-around'>
+        <Value
+          title='Category'
+          value={entry.compEntryToDivisions?.[0]?.division?.name || ''}
+        />
+        <Value
+          title='Div'
+          value={entry?.notes || ''}
+        />
+        <Value
+          title='Equipment'
+          value={entry?.equipment || ''}
+        />
+      </div>
+      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl'>
         <div className='flex gap-4 w-full justify-around'>Squat</div>
         <div className='grid grid-cols-3 gap-4 w-full justify-around'>
           <DialogWrapper
@@ -207,7 +245,14 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
                 <Button
                   variant='default'
                   size='lg'
-                  onClick={() => {}}
+                  onClick={() => {
+                    updateSquatOpener({
+                      id: entry.id,
+                      squatOpener: squatOpener?.toString() || '',
+                      userId: entry.user?.id || 0,
+                      userName: entry.user?.name || '',
+                    })
+                  }}
                 >
                   Save
                 </Button>
@@ -277,6 +322,172 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
           </DialogWrapper>
         </div>
       </div>
+      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl'>
+        <div className='flex gap-4 w-full justify-around'>Bench</div>
+        <div className='grid grid-cols-3 gap-4 w-full justify-around'>
+          <DialogWrapper
+            title='Opener'
+            value={entry?.benchOpener || ''}
+          >
+            <DialogHeader>
+              <DialogTitle>Bench Opener</DialogTitle>
+              <DialogDescription>Enter your Bench Opener</DialogDescription>
+            </DialogHeader>
+
+            <div className='flex justify-center '>
+              <NumberInput
+                value={benchOpener}
+                setValue={setBenchOpener}
+                fixed={1}
+                scale={0.1}
+                postfix='kg'
+              />
+            </div>
+            <DialogClose asChild>
+              <div className='flex  w-full items-center justify-around'>
+                <Button
+                  variant='default'
+                  size='lg'
+                  onClick={() => {
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogClose>
+          </DialogWrapper>
+          <DialogWrapper
+            title='Rack Height'
+            value={entry?.benchRackHeight || ''}
+          >
+            <DialogHeader>
+              <DialogTitle>Bench Rack Height</DialogTitle>
+              <DialogDescription>Enter your Bench Rack Height, your pin height and if you want the arms 'in' or 'out'</DialogDescription>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+
+            <div className='flex justify-center '>
+              <Input
+                placeholder='eg. 12in or 4out'
+                value={benchRackHeight ?? ''}
+                onChange={(e) => {
+                  setBenchRackHeight(e.target.value)
+                }}
+              />
+            </div>
+            <DialogClose asChild>
+              <div className='flex  w-full items-center justify-around'>
+                <Button
+                  variant='default'
+                  size='lg'
+                  onClick={() => {}}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogClose>
+          </DialogWrapper>
+          <DialogWrapper
+            title='PB'
+            value={entry?.benchPB || ''}
+          >
+            <DialogHeader>
+              <DialogTitle>Personal Best</DialogTitle>
+              <DialogDescription>Enter your PB</DialogDescription>
+            </DialogHeader>
+
+            <div className='flex justify-center '>
+              <NumberInput
+                value={benchPB}
+                setValue={setBenchPB}
+                fixed={1}
+                scale={0.1}
+                postfix='kg'
+              />
+            </div>
+            <DialogClose asChild>
+              <div className='flex  w-full items-center justify-around'>
+                <Button
+                  variant='default'
+                  size='lg'
+                  onClick={() => {
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogClose>
+          </DialogWrapper>
+        </div>
+      </div>
+
+      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl'>
+        <div className='flex gap-4 w-full justify-around'>Deadlift</div>
+        <div className='grid grid-cols-2 gap-4 w-full justify-around'>
+          <DialogWrapper
+            title='Opener'
+            value={entry?.deadliftOpener || ''}
+          >
+            <DialogHeader>
+              <DialogTitle>Deadlift Opener</DialogTitle>
+              <DialogDescription>Enter your Deadlift Opener</DialogDescription>
+            </DialogHeader>
+
+            <div className='flex justify-center '>
+              <NumberInput
+                value={deadliftOpener}
+                setValue={setDeadliftOpener}
+                fixed={1}
+                scale={0.1}
+                postfix='kg'
+              />
+            </div>
+            <DialogClose asChild>
+              <div className='flex  w-full items-center justify-around'>
+                <Button
+                  variant='default'
+                  size='lg'
+                  onClick={() => {
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogClose>
+          </DialogWrapper>
+          <DialogWrapper
+            title='PB'
+            value={entry?.deadliftPB || ''}
+          >
+            <DialogHeader>
+              <DialogTitle>Personal Best</DialogTitle>
+              <DialogDescription>Enter your PB</DialogDescription>
+            </DialogHeader>
+
+            <div className='flex justify-center '>
+              <NumberInput
+                value={deadliftPB}
+                setValue={setDeadliftPB}
+                fixed={1}
+                scale={0.1}
+                postfix='kg'
+              />
+            </div>
+            <DialogClose asChild>
+              <div className='flex  w-full items-center justify-around'>
+                <Button
+                  variant='default'
+                  size='lg'
+                  onClick={() => {
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogClose>
+          </DialogWrapper>
+        </div>
+        </div>
     </div>
   )
 }
