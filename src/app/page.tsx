@@ -49,7 +49,15 @@ export default function Home() {
             <Button className='bg-white/90 text-black'>
               Flights</Button>
           </Link>
+          <Link
+            href='/user?user=user_2uIX1uaa1SjoQPXAEeCBJzKqsWH'
+            className=''
+          >
+            <Button className='bg-white/90 text-black'>
+              user test</Button>
+          </Link>
         </div>
+
         <Link
           href='/admin'
           className=''
