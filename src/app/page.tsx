@@ -1,5 +1,10 @@
 'use client'
-import { useSearchParams, useRouter } from 'next/navigation'
+
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+
+import { Button } from '~/components/ui/button'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,11 +19,46 @@ export default function Home() {
   }
 
   return (
-    <section className='relative flex h-[80vh] w-full flex-col items-center justify-center gap-8 overflow-hidden'>
-      <div className='relative z-10 max-w-3xl px-4 text-center sm:px-6 lg:px-8'>
-        <h1 className='text-4xl font-bold sm:text-5xl lg:text-6xl'>Power</h1>
+    <section className='flex h-[100vh] w-full flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white'>
+      <Image
+        src='/showdown.jpeg'
+        alt='board'
+        width={1040}
+        height={1040}
+        style={{
+          objectFit: 'cover',
+          height: '60vh',
+        }}
+      />
+      <div className='flex flex-col items-center justify-between gap-4 h-[30vh]'>
+        <div className='flex items-center justify-center gap-4'>
+          <Link
+            href='/scoreboard'
+            className=''
+          >
+            <Button
+              className='bg-white/90 text-black'
+            >
+              Scoreboard
+            </Button>
+          </Link>
+          <Link
+            href='/flights'
+            className=''
+          >
+            <Button className='bg-white/90 text-black'>
+              Flights</Button>
+          </Link>
+        </div>
+        <Link
+          href='/admin'
+          className=''
+        >
+          <Button className='bg-black text-slate-200 border-slate-200/20 border'>
+            Admin
+          </Button>
+        </Link>
       </div>
-      <div className='inset-0 z-0 flex flex-col items-center justify-center gap-2'></div>
     </section>
   )
 }
