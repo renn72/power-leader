@@ -24,7 +24,7 @@ export default function Home() {
   console.log(user)
 
   return (
-    <section className='flex h-[100vh] w-full flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white'>
+    <section className='flex h-[100svh] w-full flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white'>
       <Image
         src='/showdown.jpeg'
         alt='board'

@@ -12,6 +12,17 @@ import { createInsertSchema } from 'drizzle-zod'
 
 export const createTable = sqliteTableCreator((name) => `pb_${name}`)
 
+export const logs = createTable('logs', {
+  id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
+  userId: int('user_id', { mode: 'number' }),
+  userName: text('user_name'),
+  action: text('action'),
+  data: text('data'),
+})
+
 export const users = createTable('user', {
   id: int('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   clerkId: text('clerk_id'),
