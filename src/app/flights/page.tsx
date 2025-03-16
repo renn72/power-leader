@@ -1,8 +1,8 @@
 'use client'
 import Image from 'next/image'
-const Board = () => {
+const Page = () => {
   return (
-    <div className='h-screen w-full flex flex-col items-center justify-center'>
+    <div className='flex h-screen w-full flex-col items-center justify-center'>
       <Image
         src='/showdown.jpeg'
         alt='board'
@@ -16,4 +16,4 @@ const Board = () => {
   )
 }
 
-export default Board
+export default Page
