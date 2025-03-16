@@ -140,7 +140,6 @@ const Value = ({ value, title }: { value: string; title: string }) => {
     <div
       className={cn(
         'flex gap-1 items-center justify-around flex-col bg-secondary px-4 py-1 rounded-md shadow-sm',
-        'active:scale-90 active:shadow-none transition-transform cursor-pointer',
       )}
     >
       <div className='text-muted-foreground text-center text-sm font-semibold'>
@@ -250,470 +249,498 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
       },
     })
 
+  const isSquat = entry.events.reduce((a, c) => {
+    if (c.event?.isSquat) return true
+    return a
+  }, false)
+  const isBench = entry.events.reduce((a, c) => {
+    if (c.event?.isBench) return true
+    return a
+  }, false)
+  const isDeadlift = entry.events.reduce((a, c) => {
+    if (c.event?.isDeadlift) return true
+    return a
+  }, false)
+
   return (
-    <div className='flex flex-col gap-2 px-4'>
-      <div className='flex gap-4 w-full justify-around'>
-        <Value
-          title='Name'
-          value={entry.user?.name || ''}
-        />
-        <Value
-          title='Gender'
-          value={entry?.gender || ''}
-        />
-        <Value
-          title='Age'
-          value={getAge(entry.birthDate, entry.competition?.date).toString()}
-        />
-      </div>
-      <div className='flex gap-4 w-full justify-around'>
-        <Value
-          title='Category'
-          value={entry.compEntryToDivisions?.[0]?.division?.name || ''}
-        />
-        <Value
-          title='Div'
-          value={entry?.notes || ''}
-        />
-        <Value
-          title='Equipment'
-          value={entry?.equipment || ''}
-        />
-      </div>
-      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl'>
-        <div className='flex gap-4 w-full justify-around font-bold'>Squat</div>
-        <div className='grid grid-cols-3 gap-4 w-full justify-around'>
-          <DialogWrapper
-            title='Opener'
-            value={entry?.squatOpener || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Squat Opener</DialogTitle>
-              <DialogDescription>Enter your Squat Opener</DialogDescription>
-            </DialogHeader>
-
-            <div className='flex justify-center '>
-              <NumberInput
-                value={squatOpener}
-                setValue={setSquatOpener}
-                fixed={2}
-                scale={0.25}
-                postfix='kg'
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      if (Number(squatOpener) % 0.25 !== 0) {
-                        e.preventDefault()
-                        toast.error(
-                          'Please enter a number in 0.25kg increments',
-                        )
-                        return
-                      }
-                      updateSquatOpener({
-                        id: entry.id,
-                        squatOpener: squatOpener?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setSquatOpener(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
-          </DialogWrapper>
-          <DialogWrapper
-            title='Rack'
-            value={entry?.squarRackHeight || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Squat Rack Height</DialogTitle>
-              <DialogDescription>
-                Enter your Squat Rack Height, your pin height and if you want
-                the arms 'in' or 'out', <br /> eg. '12in' or '4out'
-              </DialogDescription>
-              <DialogDescription></DialogDescription>
-            </DialogHeader>
-
-            <div className='flex justify-center '>
-              <Input
-                placeholder='eg. 12in or 4out'
-                value={squatRackHeight ?? ''}
-                onChange={(e) => {
-                  setSquatRackHeight(e.target.value)
-                }}
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      updateSquatRackHeight({
-                        id: entry.id,
-                        squatRackHeight: squatRackHeight?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setSquatRackHeight(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
-          </DialogWrapper>
-          <DialogWrapper
-            title='PB'
-            value={entry?.squatPB || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Personal Best</DialogTitle>
-              <DialogDescription>Enter your PB</DialogDescription>
-            </DialogHeader>
-
-            <div className='flex justify-center '>
-              <NumberInput
-                value={squatPB}
-                setValue={setSquatPB}
-                fixed={2}
-                scale={0.25}
-                postfix='kg'
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      updateSquatPB({
-                        id: entry.id,
-                        squatPB: squatPB?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setSquatPB(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
-
-          </DialogWrapper>
+    <div className='flex flex-col gap-4 px-4'>
+      <h1
+        className='text-center text-3xl font-extrabold text-primary'
+      >WRPF Showdown V</h1>
+      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
+        <div className='flex gap-4 w-full justify-around'>
+          <Value
+            title='Name'
+            value={entry.user?.name || ''}
+          />
+          <Value
+            title='Gender'
+            value={entry?.gender || ''}
+          />
+          <Value
+            title='Age'
+            value={getAge(entry.birthDate, entry.competition?.date).toString()}
+          />
+        </div>
+        <div className='flex gap-4 w-full justify-around'>
+          <Value
+            title='Category'
+            value={entry.compEntryToDivisions?.[0]?.division?.name || ''}
+          />
+          <Value
+            title='Div'
+            value={entry?.notes || ''}
+          />
+          <Value
+            title='Equipment'
+            value={entry?.equipment || ''}
+          />
         </div>
       </div>
-      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl'>
-        <div className='flex gap-4 w-full justify-around font-bold'>Bench</div>
-        <div className='grid grid-cols-3 gap-4 w-full justify-around'>
-          <DialogWrapper
-            title='Opener'
-            value={entry?.benchOpener || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Bench Opener</DialogTitle>
-              <DialogDescription>Enter your Bench Opener</DialogDescription>
-            </DialogHeader>
+      {isSquat ? (
+        <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
+          <div className='flex gap-4 w-full justify-around font-bold'>
+            Squat
+          </div>
+          <div className='grid grid-cols-3 gap-4 w-full justify-around'>
+            <DialogWrapper
+              title='Opener'
+              value={entry?.squatOpener || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Squat Opener</DialogTitle>
+                <DialogDescription>Enter your Squat Opener</DialogDescription>
+              </DialogHeader>
 
-            <div className='flex justify-center '>
-              <NumberInput
-                value={benchOpener}
-                setValue={setBenchOpener}
-                fixed={1}
-                scale={0.1}
-                postfix='kg'
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      if (Number(benchOpener) % 0.25 !== 0) {
-                        e.preventDefault()
-                        toast.error(
-                          'Please enter a number in 0.25kg increments',
-                        )
-                        return
-                      }
-                      updateBenchOpener({
-                        id: entry.id,
-                        benchOpener: benchOpener?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setBenchOpener(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
+              <div className='flex justify-center '>
+                <NumberInput
+                  value={squatOpener}
+                  setValue={setSquatOpener}
+                  fixed={2}
+                  scale={0.25}
+                  postfix='kg'
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        if (Number(squatOpener) % 0.25 !== 0) {
+                          e.preventDefault()
+                          toast.error(
+                            'Please enter a number in 0.25kg increments',
+                          )
+                          return
+                        }
+                        updateSquatOpener({
+                          id: entry.id,
+                          squatOpener: squatOpener?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setSquatOpener(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+            <DialogWrapper
+              title='Rack'
+              value={entry?.squarRackHeight || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Squat Rack Height</DialogTitle>
+                <DialogDescription>
+                  Enter your Squat Rack Height, your pin height and if you want
+                  the arms 'in' or 'out', <br /> eg. '12in' or '4out'
+                </DialogDescription>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
 
-          </DialogWrapper>
-          <DialogWrapper
-            title='Rack'
-            value={entry?.benchRackHeight || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Bench Rack Height</DialogTitle>
-              <DialogDescription>
-                Enter your Bench Rack Height,(safety is optional). e.g. 8/4, or just 8 if you don't want the safety
-              </DialogDescription>
-              <DialogDescription></DialogDescription>
-            </DialogHeader>
+              <div className='flex justify-center '>
+                <Input
+                  placeholder='eg. 12in or 4out'
+                  value={squatRackHeight ?? ''}
+                  onChange={(e) => {
+                    setSquatRackHeight(e.target.value)
+                  }}
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        updateSquatRackHeight({
+                          id: entry.id,
+                          squatRackHeight: squatRackHeight?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setSquatRackHeight(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+            <DialogWrapper
+              title='PB'
+              value={entry?.squatPB || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Personal Best</DialogTitle>
+                <DialogDescription>Enter your PB</DialogDescription>
+              </DialogHeader>
 
-            <div className='flex justify-center '>
-              <Input
-                placeholder='eg. 8/4 or 8'
-                value={benchRackHeight ?? ''}
-                onChange={(e) => {
-                  setBenchRackHeight(e.target.value)
-                }}
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      updateBenchRackHeight({
-                        id: entry.id,
-                        benchRackHeight: benchRackHeight?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setBenchRackHeight(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
-
-          </DialogWrapper>
-          <DialogWrapper
-            title='PB'
-            value={entry?.benchPB || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Personal Best</DialogTitle>
-              <DialogDescription>Enter your PB</DialogDescription>
-            </DialogHeader>
-
-            <div className='flex justify-center '>
-              <NumberInput
-                value={benchPB}
-                setValue={setBenchPB}
-                fixed={1}
-                scale={0.1}
-                postfix='kg'
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      updateBenchPB({
-                        id: entry.id,
-                        benchPB: benchPB?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setBenchPB(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
-          </DialogWrapper>
+              <div className='flex justify-center '>
+                <NumberInput
+                  value={squatPB}
+                  setValue={setSquatPB}
+                  fixed={2}
+                  scale={0.25}
+                  postfix='kg'
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        updateSquatPB({
+                          id: entry.id,
+                          squatPB: squatPB?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setSquatPB(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+          </div>
         </div>
-      </div>
+      ) : null}
 
-      <div className='flex flex-col gap-3 p-2 border border-border rounded-xl'>
-        <div className='flex gap-4 w-full justify-around font-bold'>
-          Deadlift
+      {isBench ? (
+        <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
+          <div className='flex gap-4 w-full justify-around font-bold'>
+            Bench
+          </div>
+          <div className='grid grid-cols-3 gap-4 w-full justify-around'>
+            <DialogWrapper
+              title='Opener'
+              value={entry?.benchOpener || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Bench Opener</DialogTitle>
+                <DialogDescription>Enter your Bench Opener</DialogDescription>
+              </DialogHeader>
+
+              <div className='flex justify-center '>
+                <NumberInput
+                  value={benchOpener}
+                  setValue={setBenchOpener}
+                  fixed={1}
+                  scale={0.1}
+                  postfix='kg'
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        if (Number(benchOpener) % 0.25 !== 0) {
+                          e.preventDefault()
+                          toast.error(
+                            'Please enter a number in 0.25kg increments',
+                          )
+                          return
+                        }
+                        updateBenchOpener({
+                          id: entry.id,
+                          benchOpener: benchOpener?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setBenchOpener(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+            <DialogWrapper
+              title='Rack'
+              value={entry?.benchRackHeight || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Bench Rack Height</DialogTitle>
+                <DialogDescription>
+                  Enter your Bench Rack Height,(safety is optional). e.g. 8/4,
+                  or just 8 if you don't want the safety
+                </DialogDescription>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+
+              <div className='flex justify-center '>
+                <Input
+                  placeholder='eg. 8/4 or 8'
+                  value={benchRackHeight ?? ''}
+                  onChange={(e) => {
+                    setBenchRackHeight(e.target.value)
+                  }}
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        updateBenchRackHeight({
+                          id: entry.id,
+                          benchRackHeight: benchRackHeight?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setBenchRackHeight(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+            <DialogWrapper
+              title='PB'
+              value={entry?.benchPB || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Personal Best</DialogTitle>
+                <DialogDescription>Enter your PB</DialogDescription>
+              </DialogHeader>
+
+              <div className='flex justify-center '>
+                <NumberInput
+                  value={benchPB}
+                  setValue={setBenchPB}
+                  fixed={1}
+                  scale={0.1}
+                  postfix='kg'
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        updateBenchPB({
+                          id: entry.id,
+                          benchPB: benchPB?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setBenchPB(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+          </div>
         </div>
-        <div className='grid grid-cols-2 gap-4 w-full justify-around'>
-          <DialogWrapper
-            title='Opener'
-            value={entry?.deadliftOpener || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Deadlift Opener</DialogTitle>
-              <DialogDescription>Enter your Deadlift Opener</DialogDescription>
-            </DialogHeader>
+      ) : null}
 
-            <div className='flex justify-center '>
-              <NumberInput
-                value={deadliftOpener}
-                setValue={setDeadliftOpener}
-                fixed={1}
-                scale={0.1}
-                postfix='kg'
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      if (Number(deadliftOpener) % 0.25 !== 0) {
-                        e.preventDefault()
-                        toast.error(
-                          'Please enter a number in 0.25kg increments',
-                        )
-                        return
-                      }
-                      updateDeadliftOpener({
-                        id: entry.id,
-                        deadliftOpener: deadliftOpener?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setDeadliftOpener(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
-          </DialogWrapper>
-          <DialogWrapper
-            title='PB'
-            value={entry?.deadliftPB || ''}
-          >
-            <DialogHeader>
-              <DialogTitle>Personal Best</DialogTitle>
-              <DialogDescription>Enter your PB</DialogDescription>
-            </DialogHeader>
+      {isDeadlift ? (
+        <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
+          <div className='flex gap-4 w-full justify-around font-bold'>
+            Deadlift
+          </div>
+          <div className='grid grid-cols-2 gap-4 w-full justify-around'>
+            <DialogWrapper
+              title='Opener'
+              value={entry?.deadliftOpener || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Deadlift Opener</DialogTitle>
+                <DialogDescription>
+                  Enter your Deadlift Opener
+                </DialogDescription>
+              </DialogHeader>
 
-            <div className='flex justify-center '>
-              <NumberInput
-                value={deadliftPB}
-                setValue={setDeadliftPB}
-                fixed={1}
-                scale={0.1}
-                postfix='kg'
-              />
-            </div>
-            <div className='flex  w-full items-center justify-around'>
-              <DialogClose asChild>
-                <div className='flex  w-full items-center justify-around'>
-                  <Button
-                    variant='default'
-                    size='lg'
-                    onClick={(e) => {
-                      updateDeadliftPB({
-                        id: entry.id,
-                        deadliftPB: deadliftPB?.toString() || '',
-                        userId: entry.user?.id || 0,
-                        userName: entry.user?.name || '',
-                      })
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </DialogClose>
-              <Button
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  setDeadliftPB(null)
-                }}
-              >
-                Clear
-              </Button>
-            </div>
+              <div className='flex justify-center '>
+                <NumberInput
+                  value={deadliftOpener}
+                  setValue={setDeadliftOpener}
+                  fixed={1}
+                  scale={0.1}
+                  postfix='kg'
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        if (Number(deadliftOpener) % 0.25 !== 0) {
+                          e.preventDefault()
+                          toast.error(
+                            'Please enter a number in 0.25kg increments',
+                          )
+                          return
+                        }
+                        updateDeadliftOpener({
+                          id: entry.id,
+                          deadliftOpener: deadliftOpener?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setDeadliftOpener(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+            <DialogWrapper
+              title='PB'
+              value={entry?.deadliftPB || ''}
+            >
+              <DialogHeader>
+                <DialogTitle>Personal Best</DialogTitle>
+                <DialogDescription>Enter your PB</DialogDescription>
+              </DialogHeader>
 
-          </DialogWrapper>
+              <div className='flex justify-center '>
+                <NumberInput
+                  value={deadliftPB}
+                  setValue={setDeadliftPB}
+                  fixed={1}
+                  scale={0.1}
+                  postfix='kg'
+                />
+              </div>
+              <div className='flex  w-full items-center justify-around'>
+                <DialogClose asChild>
+                  <div className='flex  w-full items-center justify-around'>
+                    <Button
+                      variant='default'
+                      size='lg'
+                      onClick={(e) => {
+                        updateDeadliftPB({
+                          id: entry.id,
+                          deadliftPB: deadliftPB?.toString() || '',
+                          userId: entry.user?.id || 0,
+                          userName: entry.user?.name || '',
+                        })
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogClose>
+                <Button
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    setDeadliftPB(null)
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </DialogWrapper>
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   )
 }
