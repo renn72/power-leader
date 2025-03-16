@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '~/components/ui/button'
+import { api } from '~/trpc/react'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +18,10 @@ export default function Home() {
     router.push(pathname)
     return null
   }
+
+  const { data: user } = api.user.isAdmin.useQuery()
+
+  console.log(user)
 
   return (
     <section className='flex h-[100vh] w-full flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white'>
@@ -36,26 +41,22 @@ export default function Home() {
             href='/scoreboard'
             className=''
           >
-            <Button
-              className='bg-white/90 text-black'
-            >
-              Scoreboard
-            </Button>
+            <Button className='bg-white/90 text-black'>Scoreboard</Button>
           </Link>
           <Link
             href='/flights'
             className=''
           >
-            <Button className='bg-white/90 text-black'>
-              Flights</Button>
+            <Button className='bg-white/90 text-black'>Flights</Button>
           </Link>
-          <Link
-            href='/user?user=user_2uIX1uaa1SjoQPXAEeCBJzKqsWH'
-            className=''
-          >
-            <Button className='bg-white/90 text-black'>
-              user test</Button>
-          </Link>
+          {user === true ? (
+            <Link
+              href='/user?user=user_2uIX1uaa1SjoQPXAEeCBJzKqsWH'
+              className=''
+            >
+              <Button className='bg-white/90 text-black'>user test</Button>
+            </Link>
+          ) : null}
         </div>
 
         <Link
