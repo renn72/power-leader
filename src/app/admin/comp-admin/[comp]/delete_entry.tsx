@@ -58,20 +58,12 @@ const DeleteEntry = ({ entry }: { entry: GetCompetitionEntryById }) => {
             className='w-full'
             type='button'
             variant='secondary'
-            onClick={() => deleteEntry(entry.id)}
-          >
-            Delete
-          </Button>
-          <Button
-            className='w-full'
-            type='button'
-            variant='secondary'
             onClick={() => {
               if (!entry.user?.id) return
               deleteEntryAndUser({ userId: entry.user.id, entryId: entry.id })
             }}
           >
-            Delete and User
+            Delete
           </Button>
         </DialogFooter>
       </DialogContent>

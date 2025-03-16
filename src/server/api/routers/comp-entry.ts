@@ -132,7 +132,7 @@ const createClerkUser = async (userEmail: string, name: string) => {
     secretKey: env.CLERK_SECRET_KEY,
   })
 
-  const userListClerk = await clerkClient.users.getUserList()
+  const userListClerk = await clerkClient.users.getUserList({limit: 500})
 
   const userList = userListClerk?.data?.map((user) => {
     return {
@@ -830,6 +830,7 @@ export const compEntryRouter = createTRPCRouter({
         where: (compEntry, { eq }) => eq(compEntry.userId, input),
         orderBy: (compEntry, { desc }) => [desc(compEntry.createdAt)],
         with: {
+        lift: true,
           competition: true,
           user: true,
           compEntryToDivisions: {

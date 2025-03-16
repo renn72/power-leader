@@ -1,9 +1,13 @@
 'use client'
-import { useSearchParams, useRouter } from 'next/navigation'
 
+import { useRouter, useSearchParams } from 'next/navigation'
+
+import { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
 import { api } from '~/trpc/react'
 
-import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
+import { ModeToggle } from '~/app/_components/mode-toggle'
+
+import { EntryForm } from './form'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,17 +15,21 @@ const Entry = ({ userId }: { userId: number }) => {
   const { data: compEntries } =
     api.compEntry.getUserCompEntries.useQuery(userId)
 
-  console.log(compEntries)
+  if (!compEntries) return null
 
-  return <div>entry</div>
+  const entry = compEntries[0]
+
+  if (!entry) return null
+
+  return <EntryForm entry={entry} />
 }
 
 const User = ({ userId }: { userId: string }) => {
   const { data: user } = api.user.getUser.useQuery(userId)
 
-  console.log(user)
+  if (!user) return null
 
-  return <div>{user?.name}</div>
+  return <Entry userId={user.id} />
 }
 
 export default function Home() {
@@ -31,8 +39,11 @@ export default function Home() {
   if (!userId) return null
   return (
     <section className='relative flex h-[80vh] w-full flex-col items-center justify-center gap-8 overflow-hidden'>
+      <div
+        className='absolute top-1 right-1'
+      ><ModeToggle /></div>
+
       <div>
-        {`user ${userId}`}
         <User userId={userId} />
       </div>
     </section>

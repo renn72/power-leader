@@ -28,14 +28,18 @@ const Entries = ({
       )}
     >
       <Card className='w-full'>
-        <CardHeader>Entries</CardHeader>
+        <CardHeader>Entries {competition.entries?.length}</CardHeader>
         <CardContent>
           <div className='flex w-full flex-col gap-4'>
             <div className='flex w-full justify-end gap-4'>
               <EntryForm competition={competition} />
               <AddShowdownUsers competition={competition} />
             </div>
-            {competition.entries?.map((entry) => (
+            {competition.entries
+              ?.sort((a, b) =>
+                (a.user?.name ?? '') > (b.user?.name ?? '') ? 1 : -1,
+              )
+              ?.map((entry) => (
               <Entry
                 key={entry.id}
                 entry={entry}
