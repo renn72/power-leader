@@ -27,7 +27,7 @@ export default function Home() {
         height={1040}
         style={{
           objectFit: 'cover',
-          height: '60vh',
+          height: '50vh',
         }}
       />
       <div className='flex flex-col items-center justify-between gap-4 h-[30vh]'>

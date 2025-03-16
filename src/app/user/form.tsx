@@ -183,7 +183,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
       </div>
       <div className='flex flex-col gap-3 p-4 border border-border rounded-xl'>
         <div className='flex gap-4 w-full justify-around'>Squat</div>
-        <div className='flex gap-4 w-full justify-around'>
+        <div className='grid grid-cols-3 gap-4 w-full justify-around'>
           <DialogWrapper
             title='Opener'
             value={entry?.squatOpener || ''}
