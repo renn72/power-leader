@@ -205,6 +205,174 @@ export const compEntryRouter = createTRPCRouter({
         .where(eq(compEntry.id, input.id))
       return res
     }),
+  updateSquatRackHeight: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        squatRackHeight: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update squat rack height',
+        data: input.squatRackHeight,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          squarRackHeight: input.squatRackHeight,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
+  updateSquatPB: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        squatPB: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update squat PB',
+        data: input.squatPB,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          squatPB: input.squatPB,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
+  updateBenchOpener: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        benchOpener: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update bench opener',
+        data: input.benchOpener,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          benchOpener: input.benchOpener,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
+  updateBenchRackHeight: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        benchRackHeight: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update bench rack height',
+        data: input.benchRackHeight,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          benchRackHeight: input.benchRackHeight,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
+  updateBenchPB: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        benchPB: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update bench PB',
+        data: input.benchPB,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          benchPB: input.benchPB,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
+  updateDeadliftOpener: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        deadliftOpener: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update deadlift opener',
+        data: input.deadliftOpener,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          deadliftOpener: input.deadliftOpener,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
+  updateDeadliftPB: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        deadliftPB: z.string(),
+        userId: z.number(),
+        userName: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      createLog({
+        userId: input.userId,
+        userName: input.userName,
+        action: 'update deadlift PB',
+        data: input.deadliftPB,
+      })
+      const res = await ctx.db
+        .update(compEntry)
+        .set({
+          deadliftPB: input.deadliftPB,
+        })
+        .where(eq(compEntry.id, input.id))
+      return res
+    }),
   deleteAllEntries: publicProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
