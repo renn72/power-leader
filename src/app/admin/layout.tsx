@@ -2,9 +2,9 @@ import '~/styles/globals.css'
 
 import Navbar from '~/app/_components/navbar'
 
-import { SignInButton, SignIn, SignedOut, UserButton } from '@clerk/nextjs'
-import { auth, currentUser } from '@clerk/nextjs/server'
-import { LogIn } from 'lucide-react'
+import { Button } from '~/components/ui/button'
+import { SignInButton,  } from '@clerk/nextjs'
+import { auth, } from '@clerk/nextjs/server'
 
 export const metadata = {
   title: 'Scoreboard',
@@ -29,13 +29,11 @@ export default async function RootLayout({
           signUpForceRedirectUrl={`/admin`}
           mode='modal'
         >
-          <div className='flex items-center gap-2 cursor-pointer hover:underline text-xl text-primary/60 hover:text-primary font-bold'>
-            <LogIn
-              size={36}
-              strokeWidth={2}
-            />
+          <Button
+            variant='outline'
+            >
             Sign In
-          </div>
+            </Button>
         </SignInButton>
       </div>
     )

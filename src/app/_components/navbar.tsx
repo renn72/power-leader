@@ -57,7 +57,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link
-              href='/admin/comp-admin'
+              href='/admin/comp-admin/Show-Down-22-3-2025'
               legacyBehavior
               passHref
             >
@@ -84,7 +84,7 @@ const Navbar = () => {
               passHref
             >
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Bracket's
+                Flights
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
