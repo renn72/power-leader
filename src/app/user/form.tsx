@@ -264,9 +264,12 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
 
   return (
     <div className='flex flex-col gap-4 px-4'>
+    <div className='flex flex-col gap-0'>
       <h1 className='text-center text-3xl font-extrabold text-primary'>
         WRPF Showdown V
       </h1>
+      <div className='text-xs text-center font-light'>(you can update this as many times as you wish)</div>
+      </div>
       <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
         <div className='flex gap-4 w-full justify-around'>
           <Value

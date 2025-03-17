@@ -26,6 +26,7 @@ const CompTableHeaderBracket = ({
   isButton?: boolean
 }) => {
   const ctx = api.useUtils()
+  return null
   return (
     <Dialog>
       <DialogTrigger asChild>
