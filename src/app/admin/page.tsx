@@ -1,22 +1,21 @@
 'use client'
+
+import { useRouter } from 'next/navigation'
+
 import { api } from '~/trpc/react'
-
-import { Button } from '~/components/ui/button'
-import { toast } from 'sonner'
-
-import { generateFullName, generateName, generateInitals } from '~/lib/utils'
-import { wcFData, wcMData } from '~/lib/store'
 
 export const dynamic = 'force-dynamic'
 
 export default function Admin() {
-    const ctx = api.useUtils()
-    const { data: user, isLoading } = api.user.getCurrentUser.useQuery()
+  const { data: user, isLoading } = api.user.getCurrentUser.useQuery()
 
-    if (isLoading) return null
+  const router = useRouter()
 
-    return (
-        <section className='mt-8 flex h-full grow flex-col gap-8'>
-        </section>
-    )
+  if (isLoading) return null
+
+  console.log(user)
+
+  if (user?.id === 230) router.push('/admin/weigh-in')
+
+  return <section className='mt-8 flex h-full grow flex-col gap-8'></section>
 }

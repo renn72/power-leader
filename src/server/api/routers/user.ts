@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { currentUser } from '@clerk/nextjs/server'
-
+import { TRPCError } from '@trpc/server'
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 import { users } from '~/server/db/schema'
 
@@ -40,7 +40,10 @@ export const userRouter = createTRPCRouter({
   getCurrentUser: publicProcedure.query(async ({ ctx }) => {
     const user = await currentUser()
     if (!user) {
-      return true
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'You are not authorized to access this resource.',
+      })
     }
     const res = await ctx.db.query.users.findFirst({
       where: (users, { eq }) => eq(users.clerkId, user.id),

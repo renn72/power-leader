@@ -1,18 +1,19 @@
-import { z } from 'zod'
-import { eq } from 'drizzle-orm'
-
+import { TRPCError } from '@trpc/server'
+import { ShowdownEmail } from '~/components/email-templates/update-email'
+import { env } from '~/env'
+import { getDateFromDate } from '~/lib/utils'
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
-
 import {
+  compDayInfo,
   competitions,
   divisions,
-  compDayInfo,
   events,
 } from '~/server/db/schema'
+import { eq } from 'drizzle-orm'
+import { Resend } from 'resend'
+import { z } from 'zod'
 
 import { getCurrentUser } from './user'
-import { TRPCError } from '@trpc/server'
-import { getDateFromDate } from '~/lib/utils'
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
   return array.length > 0
@@ -61,7 +62,25 @@ const updatePlatformsSchema = z.object({
   platforms: z.number().nonnegative().int().min(1),
 })
 
+const resend = new Resend(env.EMAIL_SERVER_PASSWORD)
+
 export const competitionRouter = createTRPCRouter({
+  testEmail: publicProcedure.mutation(async ({ ctx }) => {
+    const { data, error } = await resend.emails.send({
+      from: 'CE <showdown@ce.warner.systems>',
+      to: ['mitchlee021@gmail.com'],
+      subject: 'Showdown V Important information',
+      react: ShowdownEmail({ username: 'Mitch Lee', updateLink: '?user=user_2uIX283UG8SgWRkN93A4S4dK1nb' }),
+    })
+
+    console.log(data, error)
+
+    if (error) {
+      return error
+    }
+
+    return data
+  }),
   create: publicProcedure
     .input(createSchema)
     .mutation(async ({ ctx, input }) => {

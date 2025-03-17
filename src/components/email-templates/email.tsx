@@ -20,14 +20,14 @@ interface ShowdownEmailProps {
 
 export const ShowdownEmail = ({
   username = '',
-  updateLink = 'https://yourapp.com/profile',
-  flightInfoLink = 'https://yourapp.com/flights',
-  leaderboardLink = 'https://yourapp.com/leaderboard',
+  updateLink = '',
+  flightInfoLink = 'https://www.showdown.warner.systems/flights',
+  leaderboardLink = 'https://www.showdown.warner.systems/scoreboard',
 }: ShowdownEmailProps) => {
   return (
     <Html>
       <Head />
-      <Preview>Showdown V is coming up this weekend!</Preview>
+      <Preview>Showdown V, Important information</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>Showdown V</Heading>
@@ -38,14 +38,14 @@ export const ShowdownEmail = ({
               Showdown V is coming up this weekend on the 22nd.
             </Text>
             <Text style={text}>
-              If you get a chance this week, log into our app and update your
+              If you get a chance, log into our app and update your
               lift openers, rack heights and PB's (you can update this as many
               times as you like).
             </Text>
 
             <Button
               style={button}
-              href={updateLink}
+              href={ `https://www.showdown.warner.systems/user` + updateLink}
             >
               Update Your Profile
             </Button>
@@ -75,12 +75,12 @@ export const ShowdownEmail = ({
 
           <Section style={section}>
             <Text style={text}>See you this weekend!</Text>
-            <Text style={signature}>The Showdown Team</Text>
+            <Text style={signature}>The CE Team</Text>
           </Section>
 
           <Section style={footer}>
             <Text style={footerText}>
-              © 2025 Showdown Events. All rights reserved.
+              © 2025 WS. All rights reserved.
             </Text>
           </Section>
         </Container>

@@ -35,7 +35,7 @@ const WeighIn = () => {
   const [selection, setSelection] = useState<string>('all')
 
   const { data: competitions, isLoading: competitionsLoading } =
-    api.competition.getMyCompetitions.useQuery()
+    api.competition.getAll.useQuery()
 
   const competition = competitions?.find(
     (competition) => competition.id === +compId,

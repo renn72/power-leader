@@ -2,17 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { api } from '~/trpc/react'
+
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import { Button } from '~/components/ui/button'
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '~/components/ui/navigation-menu'
+import { api } from '~/trpc/react'
+import { toast } from 'sonner'
 
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { ModeToggle } from './mode-toggle'
 
 const Navbar = () => {
@@ -23,6 +25,14 @@ const Navbar = () => {
       ctx.invalidate()
     },
   })
+  const { mutate: testEmail } = api.competition.testEmail.useMutation({
+    onSuccess: () => {
+      toast.success('Email sent!')
+    },
+  })
+
+  const { data: isAdmin } = api.user.isAdmin.useQuery()
+
   if (pathname.includes('comp-day/screen/')) return null
   if (pathname.includes('judge')) return null
   if (pathname.includes('loading')) return null
@@ -32,8 +42,7 @@ const Navbar = () => {
     <div className='left-0 top-0 z-50 flex w-full items-center justify-between border-b border-gray-800 px-4 py-1'>
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem
-            className='hidden'>
+          <NavigationMenuItem className='hidden'>
             <Link
               href='/admin'
               legacyBehavior
@@ -55,17 +64,20 @@ const Navbar = () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link
-              href='/admin/comp-admin/Show-Down-22-3-2025'
-              legacyBehavior
-              passHref
-            >
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Comp Admin
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          {isAdmin ? (
+            <NavigationMenuItem>
+              <Link
+                href='/admin/comp-admin/Show-Down-22-3-2025'
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Comp Admin
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
+
           <NavigationMenuItem>
             <Link
               href='/admin/weigh-in'
@@ -77,50 +89,58 @@ const Navbar = () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link
-              href='/admin/bracket'
-              legacyBehavior
-              passHref
-            >
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Flights
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link
-              href='/admin/comp-day'
-              legacyBehavior
-              passHref
-            >
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Comp Day
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link
-              href='/admin/csv'
-              legacyBehavior
-              passHref
-            >
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                csv
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          {isAdmin ? (
+            <NavigationMenuItem>
+              <Link
+                href='/admin/bracket'
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Flights
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
+
+          {isAdmin ? (
+            <NavigationMenuItem>
+              <Link
+                href='/admin/comp-day'
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Comp Day
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
+
+          {isAdmin ? (
+            <NavigationMenuItem>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => testEmail()}
+              >
+                Test Email
+              </Button>
+            </NavigationMenuItem>
+          ) : null}
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>
-        <Button
-          onClick={() =>sync()}
-          size='sm'
-          className=''
-          variant='ghost'
-        >
-          Sync
-        </Button>
+        {
+          isAdmin ? <Button
+            onClick={() => sync()}
+            size='sm'
+            className=''
+            variant='ghost'
+          >
+            Sync
+          </Button> : null
+        }
         <ModeToggle />
         <div className='flex w-8 items-center'>
           <SignedIn>
