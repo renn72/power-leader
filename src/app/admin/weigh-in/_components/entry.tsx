@@ -138,7 +138,7 @@ const Entry = ({
         onClick={() => setEntryId(entry.id)}
         className={cn(
           'grid-cols-5 lg:grid-cols-17 grid cursor-pointer grid-flow-row justify-between rounded-xl lg:rounded-full mx-2 lg:mx-0',
-          'relative border border-input px-2 lg:px-8 py-1 hover:bg-input hover:bg-opacity-10',
+          'relative border border-input px-2 lg:px-8 py-1 hover:bg-input hover:bg-opacity-10 shadow-md',
           entry.isLocked && 'border-4 bg-muted/50',
         )}
       >

@@ -96,7 +96,7 @@ const WeighIn = () => {
 
         </div>
         {competition && (
-          <div className='mx-4 flex flex-col gap-1 max-w-[1400px] w-full mx-auto'>
+          <div className='mx-4 flex flex-col gap-[6px] max-w-[1400px] w-full mx-auto'>
             {competition.entries
               ?.filter((entry) => {
                 if (selection === 'all') return true

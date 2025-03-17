@@ -27,7 +27,7 @@ const LiftInfo = ({
   const form = useFormContext()
   return (
     <>
-      <Card className='w-full sm:max-w-2xl'>
+      <Card className='w-full sm:max-w-2xl shadow'>
         <CardHeader>
           <CardTitle>Lift Info</CardTitle>
         </CardHeader>
