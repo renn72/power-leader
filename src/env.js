@@ -15,6 +15,11 @@ export const env = createEnv({
     PUSHER_KEY: z.string(),
     PUSHER_SECRET: z.string(),
     PUSHER_CLUSTER: z.string(),
+    EMAIL_SERVER_PASSWORD: z.string(),
+    EMAIL_SERVER_USER: z.string(),
+    EMAIL_SERVER_HOST: z.string(),
+    EMAIL_SERVER_PORT: z.number(),
+    EMAIL_FROM: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
@@ -53,6 +58,11 @@ export const env = createEnv({
     PUSHER_KEY: process.env.PUSHER_KEY,
     PUSHER_SECRET: process.env.PUSHER_SECRET,
     PUSHER_CLUSTER: process.env.PUSHER_CLUSTER,
+    EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
+    EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
+    EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
+    EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
+    EMAIL_FROM: process.env.EMAIL_FROM,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
