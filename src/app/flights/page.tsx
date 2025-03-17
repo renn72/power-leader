@@ -25,7 +25,7 @@ const Page = () => {
         />
         </div>
       ) : (
-        <div className='flex h-screen w-full flex-col items-center justify-center'>
+        <div className='flex h-[100svh] w-full flex-col items-center justify-center bg-black'>
           <Image
             src='/showdown.jpeg'
             alt='board'

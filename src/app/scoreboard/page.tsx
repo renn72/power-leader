@@ -2,7 +2,7 @@
 import Image from 'next/image'
 const Board = () => {
   return (
-    <div className='h-screen w-full flex flex-col items-center justify-center'>
+    <div className='h-[100svh] bg-black w-full flex flex-col items-center justify-center'>
       <Image
         src='/showdown.jpeg'
         alt='board'
