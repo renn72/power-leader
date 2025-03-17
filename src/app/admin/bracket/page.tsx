@@ -1,6 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { api } from '~/trpc/react'
+
+import { useEffect, useState } from 'react'
 
 import {
   Select,
@@ -9,9 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select'
+import { api } from '~/trpc/react'
 
-import Competition from './_components/competition'
 import CompBracket from './_components/comp-bracket'
+import Competition from './_components/competition'
 
 const Bracket = () => {
   const [compId, setCompId] = useState('1')
@@ -38,25 +39,25 @@ const Bracket = () => {
   return (
     <div className='flex flex-col gap-4 p-4'>
       <div className='hidden'>
-      <Select
-        onValueChange={setCompId}
-        defaultValue={compId}
-      >
-        <SelectTrigger className='w-[180px]'>
-          <SelectValue placeholder={competitions?.[0]?.name} />
-        </SelectTrigger>
-        <SelectContent>
-          {competitions?.map((competition) => (
-            <SelectItem
-              key={competition.id}
-              value={competition.id.toString()}
-            >
-              {competition.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+        <Select
+          onValueChange={setCompId}
+          defaultValue={compId}
+        >
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder={competitions?.[0]?.name} />
+          </SelectTrigger>
+          <SelectContent>
+            {competitions?.map((competition) => (
+              <SelectItem
+                key={competition.id}
+                value={competition.id.toString()}
+              >
+                {competition.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       {competition && <CompBracket competition={competition} />}
     </div>
   )

@@ -70,7 +70,10 @@ export const competitionRouter = createTRPCRouter({
       from: 'CE <showdown@ce.warner.systems>',
       to: ['mitchlee021@gmail.com'],
       subject: 'Showdown V Important information',
-      react: ShowdownEmail({ username: 'Mitch Lee', updateLink: '?user=user_2uIX283UG8SgWRkN93A4S4dK1nb' }),
+      react: ShowdownEmail({
+        username: 'Mitch Lee',
+        updateLink: '?user=user_2uIX283UG8SgWRkN93A4S4dK1nb',
+      }),
     })
 
     console.log(data, error)
@@ -81,6 +84,34 @@ export const competitionRouter = createTRPCRouter({
 
     return data
   }),
+  email: publicProcedure
+    .input(z.object({ email: z.string(), link: z.string(), name: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      let name = input.name
+
+      name = name
+        .split(' ')
+        .map((i) => i.slice(0, 1).toUpperCase() + i.slice(1))
+        .join(' ')
+
+      const { data, error } = await resend.emails.send({
+        from: 'CE <showdown@ce.warner.systems>',
+        to: [input.email],
+        subject: 'Showdown V Important information',
+        react: ShowdownEmail({
+          username: name,
+          updateLink: `?user=${input.link}`,
+        }),
+      })
+
+      console.log(data, error)
+
+      if (error) {
+        return error
+      }
+
+      return data
+    }),
   create: publicProcedure
     .input(createSchema)
     .mutation(async ({ ctx, input }) => {

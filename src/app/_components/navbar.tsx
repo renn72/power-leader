@@ -17,6 +17,10 @@ import { toast } from 'sonner'
 
 import { ModeToggle } from './mode-toggle'
 
+function sleep(ms : number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const Navbar = () => {
   const pathname = usePathname()
   const ctx = api.useUtils()
@@ -25,11 +29,29 @@ const Navbar = () => {
       ctx.invalidate()
     },
   })
-  const { mutate: testEmail } = api.competition.testEmail.useMutation({
+  const { data: competition } = api.competition.get.useQuery(1)
+
+  const { mutate: email } = api.competition.email.useMutation({
     onSuccess: () => {
       toast.success('Email sent!')
     },
   })
+
+  const onSendEmail = async () => {
+    if (!competition) return
+    for (const entry of competition.entries.filter((e) => e.user?.email !== 'anthonyx@harpersbathroom.com.au' && e.user?.email !== 'akcornish2@gmail.com')) {
+      if (!entry.user?.email) continue
+      if (!entry.user?.clerkId) continue
+      if (!entry.user?.name) continue
+      email({
+        email: entry.user?.email,
+        link: entry.user?.clerkId,
+        name: entry.user?.name,
+      })
+      await sleep(1100)
+    }
+
+  }
 
   const { data: isAdmin } = api.user.isAdmin.useQuery()
 
@@ -117,30 +139,19 @@ const Navbar = () => {
             </NavigationMenuItem>
           ) : null}
 
-          {isAdmin ? (
-            <NavigationMenuItem>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={() => testEmail()}
-              >
-                Test Email
-              </Button>
-            </NavigationMenuItem>
-          ) : null}
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>
-        {
-          isAdmin ? <Button
+        {isAdmin ? (
+          <Button
             onClick={() => sync()}
             size='sm'
             className=''
             variant='ghost'
           >
             Sync
-          </Button> : null
-        }
+          </Button>
+        ) : null}
         <ModeToggle />
         <div className='flex w-8 items-center'>
           <SignedIn>

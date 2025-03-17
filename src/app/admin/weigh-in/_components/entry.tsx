@@ -119,6 +119,7 @@ const Entry = ({
   entry: GetCompetitionEntryById
   setEntryId: (id: number) => void
 }) => {
+
   const isSquat = entry.events.reduce((a, c) => {
     if (c.event?.isSquat) return true
     return a
