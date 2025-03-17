@@ -31,7 +31,7 @@ const Events = ({ competition }: { competition: GetCompetitionByUuid }) => {
                   field.onChange(value)
                 }}
               >
-                <div className='flex flex-wrap justify-around gap-2 px-6'>
+                <div className='flex flex-wrap justify-around gap-2 px-2 lg:px-6'>
                   {competition.events.map((item) => (
                     <FormField
                       key={item.id}

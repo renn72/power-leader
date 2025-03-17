@@ -19,7 +19,7 @@ const Equipment = ({ competition }: { competition: GetCompetitionByUuid }) => {
       <CardHeader>
         <CardTitle>Equipment</CardTitle>
       </CardHeader>
-      <CardContent className='mt-4 flex flex-col gap-2'>
+      <CardContent className='mt-4 flex flex-col gap-2 px-2 lg:px-6'>
         <FormField
           control={form.control}
           name='equipment'

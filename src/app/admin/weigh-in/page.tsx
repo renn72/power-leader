@@ -4,8 +4,6 @@ import { api } from '~/trpc/react'
 
 import WeighInForm from './_components/form'
 import Entry from './_components/entry'
-import FakeUser from './_components/fake-user'
-import WeightClasses from './_components/weight-classes'
 
 import {
   ToggleGroup,
@@ -25,7 +23,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from '~/components/ui/sheet'
-import RandomWeighIn from './_components/random-weigh-in'
 
 const WeighIn = () => {
   const [compId, setCompId] = useState('1')
@@ -85,7 +82,7 @@ const WeighIn = () => {
         open={isOpen}
         onOpenChange={setIsOpen}
       >
-        <div className='mt-3 flex items-center justify-center gap-4 '>
+        <div className='mt-3 flex flex-col lg:flex-row items-center justify-center lg:gap-4 '>
           <h2 className='text-2xl font-extrabold'>Weigh In</h2>
           <ToggleGroup
             type='single'
@@ -124,10 +121,10 @@ const WeighIn = () => {
         )}
         <SheetContent
           onOpenAutoFocus={(e) => e.preventDefault()}
-          className='w-[400px] overflow-y-auto sm:w-[940px] sm:max-w-3xl'
+          className='w-full overflow-y-auto lg:w-[940px] lg:max-w-3xl px-2 py-4 lg:p-6'
         >
           <SheetHeader>
-            <SheetTitle></SheetTitle>
+            <SheetTitle className='capitalize mb-1'>{entry?.user?.name}</SheetTitle>
           </SheetHeader>
           <WeighInForm
             isOpen={isOpen}

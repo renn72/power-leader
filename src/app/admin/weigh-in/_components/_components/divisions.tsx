@@ -8,11 +8,6 @@ import {
 } from '~/components/ui/form'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
 import { Card, CardContent, CardTitle, CardHeader } from '~/components/ui/card'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '~/components/ui/hover-card'
 import type { GetCompetitionByUuid } from '~/lib/types'
 
 const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
@@ -22,7 +17,7 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
       <CardHeader>
         <CardTitle>Divisions</CardTitle>
       </CardHeader>
-      <CardContent className='mt-4 flex flex-col gap-2'>
+      <CardContent className='mt-4 flex flex-col gap-2 px-0 lg:px-6'>
         <FormField
           control={form.control}
           name='division'
@@ -37,7 +32,7 @@ const Divisions = ({ competition }: { competition: GetCompetitionByUuid }) => {
                   field.onChange(value)
                 }}
               >
-                <div className='flex w-full gap-2 px-6'>
+                <div className='flex w-full gap-2 px-2 lg:px-6'>
                   {competition.divisions.map((item) => (
                     <FormField
                       key={item.name}

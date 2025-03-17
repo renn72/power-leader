@@ -1,4 +1,10 @@
-import { useFormContext } from 'react-hook-form'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
 import {
   FormControl,
   FormField,
@@ -6,15 +12,18 @@ import {
   FormLabel,
   FormMessage,
 } from '~/components/ui/form'
-import {
-  Card,
-  CardContent,
-  CardTitle,
-  CardHeader,
-  CardDescription,
-} from '~/components/ui/card'
 import { Input } from '~/components/ui/input'
-const LiftInfo = ({ isSquat, isBench, isDeadlift } : { isSquat: boolean, isBench: boolean, isDeadlift: boolean }) => {
+import { useFormContext } from 'react-hook-form'
+
+const LiftInfo = ({
+  isSquat,
+  isBench,
+  isDeadlift,
+}: {
+  isSquat: boolean
+  isBench: boolean
+  isDeadlift: boolean
+}) => {
   const form = useFormContext()
   return (
     <>
@@ -22,176 +31,181 @@ const LiftInfo = ({ isSquat, isBench, isDeadlift } : { isSquat: boolean, isBench
         <CardHeader>
           <CardTitle>Lift Info</CardTitle>
         </CardHeader>
-        <CardContent className='mt-2 flex flex-col gap-2 tracking-tight'>
-          <Card>
-            <CardHeader>
-              <CardTitle className='text-xl'>Squat</CardTitle>
-              <CardDescription className='text-sm font-medium text-muted-foreground'>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className='grid grid-cols-3 gap-4'>
-              <FormField
-                control={form.control}
-                name='squatOpener'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Opener</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder=''
-                        disabled={!isSquat}
-                        type='number'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='squarRackHeight'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Rack Height</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='eg. 12in or 4out'
-                        type='text'
-                        disabled={!isSquat}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='squatPB'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Squat PB</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder=''
-                        type='number'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className='text-xl'>Bench</CardTitle>
-              <CardDescription className='text-sm font-medium text-muted-foreground'>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className='grid grid-cols-3 gap-4'>
-              <FormField
-                control={form.control}
-                name='benchOpener'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Opener</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder=''
-                        type='number'
-                        disabled={!isBench}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='benchRackHeight'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Rack Height</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='eg. 8/4 8=rack, 4=safety'
-                        type='text'
-                        disabled={!isBench}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='benchPB'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>PB</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder=''
-                        type='number'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className='text-xl'>Deadlift</CardTitle>
-              <CardDescription className='text-sm font-medium text-muted-foreground'>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className='grid grid-cols-3 gap-4'>
-              <FormField
-                control={form.control}
-                name='deadliftOpener'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>Opener</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder=''
-                        type='number'
-                        disabled={!isDeadlift}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div></div>
-              <FormField
-                control={form.control}
-                name='deadliftPB'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormLabel>PB</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder=''
-                        type='number'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+        <CardContent className='mt-2 flex flex-col gap-2 tracking-tight px-2 lg:px-6'>
+          {isSquat ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className='text-xl'>Squat</CardTitle>
+                <CardDescription className='text-sm font-medium text-muted-foreground'></CardDescription>
+              </CardHeader>
+              <CardContent className='grid grid-cols-3 gap-4 px-2 lg:px-6'>
+                <FormField
+                  control={form.control}
+                  name='squatOpener'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Opener</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=''
+                          disabled={!isSquat}
+                          type='number'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='squarRackHeight'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Rack Height</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='eg. 12in or 4out'
+                          type='text'
+                          disabled={!isSquat}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='squatPB'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Squat PB</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=''
+                          type='number'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {isBench ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className='text-xl'>Bench</CardTitle>
+                <CardDescription className='text-sm font-medium text-muted-foreground'></CardDescription>
+              </CardHeader>
+              <CardContent className='grid grid-cols-3 gap-4 px-2 lg:px-6'>
+                <FormField
+                  control={form.control}
+                  name='benchOpener'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Opener</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=''
+                          type='number'
+                          disabled={!isBench}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='benchRackHeight'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Rack Height</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='eg. 8/4 8=rack, 4=safety'
+                          type='text'
+                          disabled={!isBench}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='benchPB'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>PB</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=''
+                          type='number'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          ) : null}
+
+          {isDeadlift ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className='text-xl'>Deadlift</CardTitle>
+                <CardDescription className='text-sm font-medium text-muted-foreground'></CardDescription>
+              </CardHeader>
+              <CardContent className='grid grid-cols-3 gap-4 px-2 lg:px-6'>
+                <FormField
+                  control={form.control}
+                  name='deadliftOpener'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>Opener</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=''
+                          type='number'
+                          disabled={!isDeadlift}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div></div>
+                <FormField
+                  control={form.control}
+                  name='deadliftPB'
+                  render={({ field }) => (
+                    <FormItem className='w-full'>
+                      <FormLabel>PB</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder=''
+                          type='number'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          ) : null}
         </CardContent>
       </Card>
     </>

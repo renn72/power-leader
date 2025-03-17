@@ -185,7 +185,7 @@ const WeighInForm = ({
 
   return (
     <>
-      <div className='flex w-full flex-col items-center gap-4'>
+      <div className='flex w-full flex-col items-center'>
         <FormProvider {...form}>
           <Form {...form}>
             <form

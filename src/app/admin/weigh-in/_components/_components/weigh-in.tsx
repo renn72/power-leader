@@ -26,7 +26,7 @@ const WeighIn = () => {
               <FormControl>
                 <div className='relative w-full'>
                 <Input
-                  className='h-24 text-center text-5xl font-medium'
+                  className='h-16 lg:h-24 text-center text-3xl  lg:text-5xl font-medium'
                   placeholder='Weight'
                   type='number'
                   {...field}

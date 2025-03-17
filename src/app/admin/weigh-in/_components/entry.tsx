@@ -137,8 +137,8 @@ const Entry = ({
       <div
         onClick={() => setEntryId(entry.id)}
         className={cn(
-          'grid-cols-17 grid cursor-pointer grid-flow-row justify-between rounded-full',
-          'relative border border-input px-8 py-1 hover:bg-input hover:bg-opacity-10',
+          'grid-cols-5 lg:grid-cols-17 grid cursor-pointer grid-flow-row justify-between rounded-xl lg:rounded-full mx-2 lg:mx-0',
+          'relative border border-input px-2 lg:px-8 py-1 hover:bg-input hover:bg-opacity-10',
           entry.isLocked && 'border-4 bg-muted/50',
         )}
       >
@@ -162,13 +162,14 @@ const Entry = ({
           title='Age'
           info={getAge(entry.birthDate, entry.competition?.date)}
         />
-        <Cell
-          title='Weight'
-          info={entry.weight}
-        />
         <CellBadge
           title='WC'
           info={entry.wc?.split('-')[0]}
+        />
+        <Cell
+          title='Weight'
+          className='col-span-5 lg:col-span-1'
+          info={entry.weight}
         />
         {isSquat ? (
           <Cell
@@ -216,12 +217,12 @@ const Entry = ({
         />
         <CellArray
           title='Events'
-          className='col-span-3 tracking-tighter'
+          className='col-span-3 lg:col-span-3 tracking-tighter'
           info={entry.events?.map((event) => event.event?.name || '')}
         />
         <CellArray
           title='Divisions'
-          className='col-span-2'
+          className='lg:col-span-2'
           info={entry.compEntryToDivisions?.map(
             (division) => division.division?.name || '',
           )}
