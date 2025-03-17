@@ -1,9 +1,10 @@
 'use client'
+
 import type { GetCompetitionById } from '~/lib/types'
 import { api } from '~/trpc/react'
+import { CircleMinus, CirclePlus } from 'lucide-react'
 
 import Bracket from './bracket'
-import { CircleMinus, CirclePlus } from 'lucide-react'
 
 const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
   const ctx = api.useUtils()
@@ -113,7 +114,7 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
     <div className=' flex w-full flex-col  items-center gap-8'>
       <div className='flex w-full items-center justify-around text-3xl'>
         <div className='flex items-center gap-16'>
-          <div>Squat Brackets</div>
+          <div>Squat Flights</div>
           <div className='flex items-center gap-4'>
             <CircleMinus
               className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
@@ -138,7 +139,7 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
           </div>
         </div>
         <div className='flex items-center gap-4'>
-          <div>Bench Press Brackets</div>
+          <div>Bench Press Flights</div>
           <div className='flex items-center gap-4'>
             <CircleMinus
               className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
@@ -163,7 +164,7 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
           </div>
         </div>
         <div className='flex items-center gap-4'>
-          <div>Deadlift Brackets</div>
+          <div>Deadlift Flights</div>
           <div className='flex items-center gap-4'>
             <CircleMinus
               className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
@@ -191,7 +192,13 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
       <div className='flex w-full justify-center gap-16'>
         {Array.from(Array(squatBrackets).keys()).map((b) => (
           <Bracket
-            entries={competition.entries.filter((e) => e.squatOpener !== '')}
+            entries={competition.entries.filter((e) => {
+              const isSquat = e.events.reduce((a, c) => {
+                if (c.event?.isSquat) return true
+                return a
+              }, false)
+              return isSquat
+            })}
             competition={competition}
             lift='squat'
             title={`Squat ${b + 1}`}
@@ -203,7 +210,13 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
       <div className='flex w-full justify-center gap-16'>
         {Array.from(Array(benchPressBrackets).keys()).map((b) => (
           <Bracket
-            entries={competition.entries.filter((e) => e.benchOpener !== '')}
+            entries={competition.entries.filter((e) => {
+              const isBench = e.events.reduce((a, c) => {
+                if (c.event?.isBench) return true
+                return a
+              }, false)
+              return isBench
+            })}
             competition={competition}
             lift='bench'
             title={`Bench ${b + 1}`}
@@ -215,7 +228,13 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
       <div className='flex w-full justify-center gap-16'>
         {Array.from(Array(deadliftBrackets).keys()).map((b) => (
           <Bracket
-            entries={competition.entries.filter((e) => e.deadliftOpener !== '')}
+            entries={competition.entries.filter((e) => {
+              const isDeadlift = e.events.reduce((a, c) => {
+                if (c.event?.isDeadlift) return true
+                return a
+              }, false)
+              return isDeadlift
+            })}
             competition={competition}
             lift='deadlift'
             title={`Deadlift ${b + 1}`}

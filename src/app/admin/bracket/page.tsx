@@ -14,7 +14,7 @@ import Competition from './_components/competition'
 import CompBracket from './_components/comp-bracket'
 
 const Bracket = () => {
-  const [compId, setCompId] = useState('')
+  const [compId, setCompId] = useState('1')
 
   const { data: competitions, isLoading: competitionsLoading } =
     api.competition.getMyCompetitions.useQuery()
@@ -37,6 +37,7 @@ const Bracket = () => {
 
   return (
     <div className='flex flex-col gap-4 p-4'>
+      <div className='hidden'>
       <Select
         onValueChange={setCompId}
         defaultValue={compId}
@@ -55,6 +56,7 @@ const Bracket = () => {
           ))}
         </SelectContent>
       </Select>
+    </div>
       {competition && <CompBracket competition={competition} />}
     </div>
   )

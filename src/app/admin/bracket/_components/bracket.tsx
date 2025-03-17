@@ -1,14 +1,11 @@
 'use client'
-import { api } from '~/trpc/react'
-import { useEffect } from 'react'
 
-import type { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
-import { cn } from '~/lib/utils'
+import { useEffect, useState } from 'react'
 
-import { toast } from 'sonner'
 import { animations } from '@formkit/drag-and-drop'
 import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import {
   Card,
   CardContent,
@@ -16,13 +13,11 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
-
-import {
-  ChevronLeftCircle,
-  GripVertical,
-  ChevronRightCircle,
-} from 'lucide-react'
+import type { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
+import { cn } from '~/lib/utils'
+import { api } from '~/trpc/react'
+import { ChevronLeftCircle, ChevronRightCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 const Bracket = ({
   entries,
@@ -94,10 +89,9 @@ const Bracket = ({
     },
   })
 
-  const [parent, entryList, setEntryList] = useDragAndDrop<
-    HTMLDivElement,
-    GetCompetitionEntryById
-  >(entries, { plugins: [animations()], dragHandle: '.drag-handle' })
+  const [entryList, setEntryList] = useState<GetCompetitionEntryById[]>(
+    () => entries,
+  )
 
   useEffect(() => {
     if (lift === 'squat') {
@@ -156,6 +150,8 @@ const Bracket = ({
         id: id,
         bracket: {
           squatBracket: bracket,
+          benchBracket: bracket,
+          deadliftBracket: bracket,
         },
       })
     } else if (lift === 'bench') {
@@ -163,6 +159,7 @@ const Bracket = ({
         id: id,
         bracket: {
           benchBracket: bracket,
+          deadliftBracket: bracket,
         },
       })
     } else if (lift === 'deadlift') {
@@ -173,172 +170,6 @@ const Bracket = ({
         },
       })
     }
-  }
-
-  const lock = () => {
-    console.log(
-      entryList.map((entry, i) => {
-        return {
-          id: entry.id,
-          lift: entry.squatOpener,
-          index: i + 1,
-          liftId: entry.lift.find(
-            (l) => l.lift === 'squat' && l.liftNumber === 1,
-          )?.id,
-          sRack: entry.squarRackHeight,
-          bRack: entry.benchRackHeight,
-        }
-      }),
-    )
-    if (lift === 'squat') {
-      const ins = entryList.map((entry, i) => ({
-        id: entry.id,
-        squatOrderOne: i + 1,
-        squatBracket: bracket,
-        liftId: entry.lift.find((l) => l.lift === 'squat' && l.liftNumber === 1)
-          ?.id,
-        rack: entry.squarRackHeight,
-      }))
-      updateOrder(ins)
-    } else if (lift === 'bench') {
-      const ins = entryList.map((entry, i) => ({
-        id: entry.id,
-        benchOrderOne: i + 1,
-        benchBracket: bracket,
-        liftId: entry.lift.find((l) => l.lift === 'bench' && l.liftNumber === 1)
-          ?.id,
-        rack: entry.benchRackHeight,
-      }))
-      updateOrder(ins)
-    } else if (lift === 'deadlift') {
-      const ins = entryList.map((entry, i) => ({
-        id: entry.id,
-        deadliftOrderOne: i + 1,
-        deadliftBracket: bracket,
-        liftId: entry.lift.find(
-          (l) => l.lift === 'deadlift' && l.liftNumber === 1,
-        )?.id,
-      }))
-      updateOrder(ins)
-    }
-  }
-
-  const unlock = () => {
-    if (lift === 'squat') {
-      const ins = entryList.map((entry, _i) => ({
-        id: entry.id,
-        squatOrderOne: null,
-        squatBracket: null,
-      }))
-      updateOrder(ins)
-    } else if (lift === 'bench') {
-      const ins = entryList.map((entry, _i) => ({
-        id: entry.id,
-        benchOrderOne: null,
-        benchBracket: null,
-      }))
-      updateOrder(ins)
-    } else if (lift === 'deadlift') {
-      const ins = entryList.map((entry, _i) => ({
-        id: entry.id,
-        deadliftOrderOne: null,
-        deadliftBracket: null,
-      }))
-      updateOrder(ins)
-    }
-  }
-
-  const isLocked = entries
-    .filter((e) => {
-      if (lift === 'squat') {
-        return e.squatBracket === bracket
-      }
-      if (lift === 'bench') {
-        return e.benchBracket === bracket
-      }
-      if (lift === 'deadlift') {
-        return e.deadliftBracket === bracket
-      }
-    })
-    .reduce((a, c) => {
-      if (lift === 'squat' && c.squatOrderOne !== null) {
-        return true
-      }
-      if (lift === 'bench' && c.benchOrderOne !== null) {
-        return true
-      }
-      if (lift === 'deadlift' && c.deadliftOrderOne !== null) {
-        return true
-      }
-      return a
-    }, false)
-
-  const sortByWC = () => {
-    const sorted = entries
-      .filter((entry) => {
-        if (lift === 'squat') {
-          return entry.squatBracket == bracket
-        } else if (lift === 'bench') {
-          return entry.benchBracket == bracket
-        } else if (lift === 'deadlift') {
-          return entry.deadliftBracket == bracket
-        }
-      })
-      .map((e) => {
-        let value = 0
-        if (lift === 'squat') {
-          value = Number(e.squatOpener)
-        } else if (lift === 'bench') {
-          value = Number(e.benchOpener)
-        } else if (lift === 'deadlift') {
-          value = Number(e.deadliftOpener)
-        }
-        return {
-          ...e,
-          liftWeight: value,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => a.liftWeight - b.liftWeight)
-      .sort((a, b) => {
-        if (a.liftWeight === 0) return 1
-        if (b.liftWeight === 0) return -1
-        return Number(a.wc.split('-')[0]) - Number(b.wc.split('-')[0])
-      })
-    setEntryList(sorted)
-  }
-  const sortByWeight = () => {
-    const sorted = entries
-      .filter((entry) => {
-        if (lift === 'squat') {
-          return entry.squatBracket == bracket
-        } else if (lift === 'bench') {
-          return entry.benchBracket == bracket
-        } else if (lift === 'deadlift') {
-          return entry.deadliftBracket == bracket
-        }
-      })
-      .map((e) => {
-        let value = 0
-        if (lift === 'squat') {
-          value = Number(e.squatOpener)
-        } else if (lift === 'bench') {
-          value = Number(e.benchOpener)
-        } else if (lift === 'deadlift') {
-          value = Number(e.deadliftOpener)
-        }
-        return {
-          ...e,
-          liftWeight: value,
-          wc: e.wc || '',
-        }
-      })
-      .sort((a, b) => {
-        if (a.liftWeight === 0) return 1
-        if (b.liftWeight === 0) return -1
-        return a.liftWeight - b.liftWeight
-      })
-    setEntryList(sorted)
   }
 
   const squatBrackets = Number(competition.squatBrackets)
@@ -357,33 +188,10 @@ const Bracket = ({
         <CardTitle className='flex items-center justify-around text-3xl'>
           <div className=''>{title}</div>
         </CardTitle>
-        <CardDescription className=''>
-          {!isLocked && (
-            <div className='flex items-center gap-2'>
-              <span className='text-base font-bold text-muted-foreground'>
-                Sort By
-              </span>
-              <Button
-                variant='link'
-                onClick={sortByWC}
-              >
-                WC
-              </Button>
-              <Button
-                variant='link'
-                onClick={sortByWeight}
-              >
-                Weight
-              </Button>
-            </div>
-          )}
-        </CardDescription>
+        <CardDescription className=''></CardDescription>
       </CardHeader>
       <CardContent className='mb-12 px-2'>
-        <div
-          ref={parent}
-          className='flex flex-col gap-1'
-        >
+        <div className='flex flex-col gap-1'>
           {entryList.map((entry, i) => {
             const opener =
               lift === 'squat'
@@ -397,21 +205,17 @@ const Bracket = ({
                 data-label={entry.id}
                 className={cn('flex items-center gap-1')}
               >
-                {isLocked ? null : (
-                  <ChevronLeftCircle
-                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
-                    onClick={() => {
-                      if (isLocked) return
-                      if (bracket !== 1) handleBracket(bracket - 1, entry.id)
-                    }}
-                  />
-                )}
+                <ChevronLeftCircle
+                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                  onClick={() => {
+                    if (bracket !== 1) handleBracket(bracket - 1, entry.id)
+                  }}
+                />
 
                 <div
                   className={cn(
                     'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tight',
                     'rounded-full px-[1px] py-[2px] ',
-                    isLocked ? '' : 'hover:bg-muted',
                     lift === 'squat' &&
                       entry.squatOrderOne !== null &&
                       'border-0 border-complete bg-muted/80',
@@ -442,61 +246,53 @@ const Bracket = ({
                   <div
                     className={cn(
                       'text-sm font-extrabold ',
-                      entry.equipment?.toLowerCase() === 'classic'
-                        ? 'text-orange-400'
-                        : entry.equipment?.toLowerCase() === 'raw' ? 'text-indigo-400'
-                        : 'text-emerald-600',
+                      entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
+                        'open'
+                        ? 'text-slate-400'
+                        : entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
+                            'pro'
+                          ? 'text-red-500'
+                          : 'text-green-600',
                     )}
                   >
-                    {entry.equipment?.slice(0, 1).toUpperCase() === 'S' ? 'SP' : entry.equipment?.slice(0, 1).toUpperCase()}
+                    {entry.compEntryToDivisions?.[0]?.division?.name
+                      .slice(0, 4)
+                      .toUpperCase() === 'NOVI'
+                      ? 'NOVICE'
+                      : entry.compEntryToDivisions?.[0]?.division?.name
+                          .slice(0, 4)
+                          .toUpperCase() === 'FIRS' ? 'FIRST' : entry.compEntryToDivisions?.[0]?.division?.name.slice(0, 4).toUpperCase()
+                  }
+                  </div>
+                  <div
+                    className={cn(
+                      'text-sm font-extrabold ',
+                      entry.equipment?.toLowerCase() === 'classic'
+                        ? 'text-orange-400'
+                        : entry.equipment?.toLowerCase() === 'raw'
+                          ? 'text-indigo-400'
+                          : 'text-emerald-500',
+                    )}
+                  >
+                    {entry.equipment?.slice(0, 1).toUpperCase()}
                   </div>
                   <div className='col-span-3 tracking-tighter truncate'>
                     {entry.user?.name}
                   </div>
                   <div className='col-span-2'>
-                    {opener === '' ? '-' : opener + 'kg'}
-                  </div>
-                  <div className='drag-handle col-span-1 cursor-move'>
-                    {!isLocked && (
-                      <GripVertical
-                        size={20}
-                        className='text-muted-foreground/50'
-                      />
-                    )}
+                    {opener === '' || opener === null ? '-' : opener + 'kg'}
                   </div>
                 </div>
-                {isLocked ? null : (
-                  <ChevronRightCircle
-                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
-                    onClick={() => {
-                      if (isLocked) return
-                      if (bracket !== numberOfBrackets)
-                        handleBracket(bracket + 1, entry.id)
-                    }}
-                  />
-                )}
+                <ChevronRightCircle
+                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                  onClick={() => {
+                    if (bracket !== numberOfBrackets)
+                      handleBracket(bracket + 1, entry.id)
+                  }}
+                />
               </div>
             )
           })}
-        </div>
-        <div className='absolute bottom-2 left-0 flex w-full justify-center gap-2'>
-          {isLocked ? (
-            <Button
-              onClick={unlock}
-              size='lg'
-              variant='secondary'
-            >
-              Unlock
-            </Button>
-          ) : (
-            <Button
-              onClick={lock}
-              size='lg'
-              variant='secondary'
-            >
-              Lock
-            </Button>
-          )}
         </div>
       </CardContent>
     </Card>

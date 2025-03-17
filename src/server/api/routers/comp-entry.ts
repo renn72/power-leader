@@ -1094,6 +1094,7 @@ export const compEntryRouter = createTRPCRouter({
       where: (compEntry, { eq }) => eq(compEntry.id, input),
       with: {
         lift: true,
+        user: true,
         competition: true,
         compEntryToDivisions: {
           with: {
@@ -1105,7 +1106,6 @@ export const compEntryRouter = createTRPCRouter({
             event: true,
           },
         },
-        user: true,
       },
     })
     if (!res) {
