@@ -1,17 +1,17 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
-import { cn } from '~/lib/utils'
-
-import { Button } from '~/components/ui/button'
 import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import { TableCell as Cell, TableRow } from '~/components/ui/table-scroll'
+import { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
+import { cn } from '~/lib/utils'
 import { User, UserCheck, X } from 'lucide-react'
-import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
-import SquatRackHeight from './_cells/squat-rack-height'
-import Lift from './_cells/lift'
+
 import BenchRackHeight from './_cells/bench-rack-height'
+import Lift from './_cells/lift'
+import SquatRackHeight from './_cells/squat-rack-height'
+
+export const dynamic = 'force-dynamic'
 
 const CompTableRow = ({
   lifter,
@@ -36,12 +36,12 @@ const CompTableRow = ({
   i: number
   lift: string
 }) => {
-  const isLifter = +index === lifter.id
+  const isLifter = +index === i
   const lifterId = lifter.id
   const lifterName = lifter?.user?.name
   const lifterWc = lifter?.wc?.split('-')[0] + 'kg'
-  const lifterEquip = lifter?.equipment?.slice(0,1)
-  const gender = lifter?.user?.gender?.slice(0,1)
+  const lifterEquip = lifter?.equipment?.slice(0, 1)
+  const gender = lifter?.user?.gender?.slice(0, 1)
   const lifterSquatRackHeight = lifter?.squarRackHeight || ''
   const lifterBenchRackHeight = lifter?.benchRackHeight || ''
 
@@ -189,10 +189,17 @@ const CompTableRow = ({
   return (
     <TableRow
       key={lifter.id}
-      className={cn(isLifter ? 'bg-secondary/50' : '', 'py-0')}
+      className={cn(
+        isLifter
+          ? 'bg-secondary/30  border-2 border-blue-400/50'
+          : '',
+        'py-0',
+      )}
     >
       <Cell className='p-0 py-0 lg:p-2'>{lifterOrder}</Cell>
-      <Cell className='p-0  py-0 lg:p-2 truncate max-w-[155px]'>{lifterName}</Cell>
+      <Cell className='p-0  py-0 lg:p-2 truncate max-w-[155px]'>
+        {lifterName}
+      </Cell>
       <Cell className='p-0  py-0 capitalize lg:p-2'>{lifterEquip}</Cell>
       <Cell className='p-0  py-0 capitalize lg:p-2'>{gender}</Cell>
       <Cell className='p-0  py-0 lg:p-2'>
@@ -288,7 +295,7 @@ const CompTableRow = ({
         isHighlighted={isDeadliftFour}
       />
       <Cell className='p-0 lg:p-2'>
-        {+index === lifter.id ? (
+        {+index === i ? (
           <Button
             variant='ghost'
             className='cursor-auto text-complete hover:bg-muted/10 hover:text-complete'
@@ -316,15 +323,15 @@ const CompTableRow = ({
             variant='ghost'
             className='hover:text-muted-foreground'
             onClick={() => {
-              setIndex(lifter.id.toString())
+              setIndex(i.toString())
               updateLift({
                 id: competition.id,
                 uuid: competition.uuid || '',
                 round: +round,
                 lift: lift,
                 bracket: +bracket,
-                index: lifter.id,
-                nextIndex: arr[i + 1]?.id || null,
+                index: i,
+                nextIndex: i + 1 || null,
               })
             }}
           >

@@ -49,9 +49,34 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     },
   )
 
-  const lifter = competition?.entries?.find(
-    (entry) => entry.id === Number(index),
-  )
+  const entries = competition?.entries
+    .filter((entry) => {
+      if (liftName === 'squat') {
+        return entry.squatBracket == Number(bracket)
+      } else if (liftName === 'bench') {
+        return entry.benchBracket == Number(bracket)
+      } else if (liftName === 'deadlift') {
+        return (
+          entry.deadliftBracket == Number(bracket)        )
+      }
+      return false
+    })
+    .sort((a, b) => {
+      const orderA =
+        a.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
+          ?.weight || null
+      const orderB =
+        b.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
+          ?.weight || null
+      if (orderA == null || orderA == undefined) return 1
+      if (orderB == null || orderB == undefined) return -1
+
+      return Number(orderA) - Number(orderB)
+    })
+
+  const lifter = entries?.filter(
+    (_entry, i) => i === Number(index),
+  )[0]
 
   const lift = lifter?.lift?.find(
     (item) =>
@@ -67,7 +92,7 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
       item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
   )
 
-  console.log(competition)
+  console.log('comp', competition)
 
   useEffect(() => {
     // console.log('channel', 'competition-' + comp)
@@ -168,14 +193,14 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
     .sort((a, b) => {
       const orderA =
         a.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.order || null
+          ?.weight || null
       const orderB =
         b.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.order || null
+          ?.weight || null
       if (orderA == null || orderA == undefined) return 1
       if (orderB == null || orderB == undefined) return -1
 
-      return orderA - orderB
+      return Number(orderA) - Number(orderB)
     })
     .filter((e) => {
       if (liftName == 'squat') {
@@ -240,13 +265,6 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
             ))}
           </div>
           <div className='relative col-span-1 flex flex-col items-center justify-center'>
-            <div className='absolute right-0 top-0 hidden text-sm'>
-              <div className='capitalize'>{liftName}</div>
-              <div>bracket: {bracket}</div>
-              <div>index: {index}</div>
-              <div>nextIndex: {nextIndex}</div>
-              <div>round: {round}</div>
-            </div>
             <div className='mt-32 flex w-full flex-col items-center gap-12 text-[6rem] font-bold'>
               <div className='flex flex-col items-center'>
                 <div className='uppercase'>{lifter?.user?.name}</div>

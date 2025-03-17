@@ -99,15 +99,10 @@ const Bracket = ({
         entries
           .filter((entry) => entry.squatBracket == bracket)
           .sort((a, b) => {
-            if (Number(a.squatOpener) === 0) return 1
-            if (Number(b.squatOpener) === 0) return -1
+            if (Number(a.squatOpener) === 0 && a.squatOpener !== '0') return 1
+            if (Number(b.squatOpener) === 0 && b.squatOpener !== '0') return -1
             return Number(a.squatOpener) - Number(b.squatOpener)
           })
-          .sort((a, b) => {
-            if (a.squatOrderOne == null) return 1
-            if (b.squatOrderOne == null) return -1
-            return a.squatOrderOne - b.squatOrderOne
-          }),
       )
     }
     if (lift === 'bench') {
@@ -115,15 +110,10 @@ const Bracket = ({
         entries
           .filter((entry) => entry.benchBracket == bracket)
           .sort((a, b) => {
-            if (Number(a.benchOpener) === 0) return 1
-            if (Number(b.benchOpener) === 0) return -1
+            if (Number(a.benchOpener) === 0 && a.benchOpener !== '0') return 1
+            if (Number(b.benchOpener) === 0 && b.benchOpener !== '0') return -1
             return Number(a.benchOpener) - Number(b.benchOpener)
           })
-          .sort((a, b) => {
-            if (a.benchOrderOne == null) return 1
-            if (b.benchOrderOne == null) return -1
-            return a.benchOrderOne - b.benchOrderOne
-          }),
       )
     }
     if (lift === 'deadlift') {
@@ -131,15 +121,10 @@ const Bracket = ({
         entries
           .filter((entry) => entry.deadliftBracket == bracket)
           .sort((a, b) => {
-            if (Number(a.deadliftOpener) === 0) return 1
-            if (Number(b.deadliftOpener) === 0) return -1
+            if (Number(a.deadliftOpener) === 0 && a.deadliftOpener !== '0') return 1
+            if (Number(b.deadliftOpener) === 0 && b.deadliftOpener !== '0') return -1
             return Number(a.deadliftOpener) - Number(b.deadliftOpener)
           })
-          .sort((a, b) => {
-            if (a.deadliftOrderOne == null) return 1
-            if (b.deadliftOrderOne == null) return -1
-            return a.deadliftOrderOne - b.deadliftOrderOne
-          }),
       )
     }
   }, [entries])

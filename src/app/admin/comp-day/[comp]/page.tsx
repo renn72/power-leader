@@ -65,34 +65,31 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   }
 
   const lifters = competition.entries
-    .map((entry) => {
-      return { ...entry }
-    })
     .filter((entry) => {
       if (lift === 'squat') {
-        return entry.squatBracket == Number(bracket) && entry.squatOpener !== ''
+        return entry.squatBracket == Number(bracket)
       } else if (lift === 'bench') {
-        return entry.benchBracket == Number(bracket) && entry.benchOpener !== ''
+        return entry.benchBracket == Number(bracket)
       } else if (lift === 'deadlift') {
         return (
-          entry.deadliftBracket == Number(bracket) &&
-          entry.deadliftOpener !== ''
-        )
+          entry.deadliftBracket == Number(bracket)        )
       }
       return false
     })
     .sort((a, b) => {
       const orderA =
         a.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))
-          ?.order || null
+          ?.weight || null
       const orderB =
         b.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))
-          ?.order || null
+          ?.weight || null
       if (orderA == null || orderA == undefined) return 1
       if (orderB == null || orderB == undefined) return -1
 
-      return orderA - orderB
+      return Number(orderA) - Number(orderB)
     })
+
+  console.log('lifters', lifters)
 
   const lifter = lifters.find((l) => {
     if (lift === 'squat') {

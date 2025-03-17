@@ -111,7 +111,7 @@ const CompTable = ({
             lifters={lifters}
             bracket={Number(bracket)}
           />
-          <TableBody className='overflow-y-auto'>
+          <TableBody className='overflow-y-auto pr-4'>
             {lifters.map((lifter, i, arr) => (
               <CompTableRow
                 key={lifter.id}

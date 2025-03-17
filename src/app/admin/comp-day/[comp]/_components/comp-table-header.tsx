@@ -1,9 +1,7 @@
 'use client'
+
 import { useState } from 'react'
-import { toast } from 'sonner'
-import { TableHead, TableHeader, TableRow } from '~/components/ui/table-scroll'
-import { GetCompetitionEntryById } from '~/lib/types'
-import { api } from '~/trpc/react'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
+import { TableHead, TableHeader, TableRow } from '~/components/ui/table-scroll'
+import { GetCompetitionEntryById } from '~/lib/types'
+import { api } from '~/trpc/react'
+import { toast } from 'sonner'
+
 import CompTableHeaderBracket from './comp-table-header-bracket'
 
 const TH = ({
@@ -34,7 +37,7 @@ const TH = ({
   handleDeleteJudge: (liftName: string, num: number) => void
 }) => {
   return (
-    <TableHead className='px-2'>
+    <TableHead className='px-2 h-10'>
       <DropdownMenu>
         <DropdownMenuTrigger className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -179,12 +182,13 @@ const CompTableHeader = ({
   return (
     <TableHeader className='z-99 bg-secondary'>
       <TableRow>
-        <TableHead>#</TableHead>
-        <TableHead>Name</TableHead>
-        <TableHead>E</TableHead>
-        <TableHead>G</TableHead>
-        <TableHead>WC</TableHead>
-        <TableHead>Squat Rack</TableHead>
+        <TableHead className='h-10'>#</TableHead>
+
+        <TableHead className='h-10'>Name</TableHead>
+        <TableHead className='h-10'>E</TableHead>
+        <TableHead className='h-10'>G</TableHead>
+        <TableHead className='h-10'>WC</TableHead>
+        <TableHead className='h-10'>Squat Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}
@@ -225,7 +229,7 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead>Bench Rack</TableHead>
+        <TableHead className='h-10'>Bench Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}
@@ -306,7 +310,7 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead>Lifting</TableHead>
+        <TableHead className='h-10'>Lifting</TableHead>
       </TableRow>
     </TableHeader>
   )

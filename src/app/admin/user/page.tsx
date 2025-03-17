@@ -42,6 +42,7 @@ export default function Home() {
   const { data: competition } = api.competition.get.useQuery(1)
   const [userId, setUserId] = useState('')
 
+
   return (
     <section className='relative flex w-full flex-col items-center justify-center gap-8'>
       <Select
@@ -52,7 +53,8 @@ export default function Home() {
           <SelectValue placeholder={userId} />
         </SelectTrigger>
         <SelectContent className='max-h-[900px]'>
-          {competition?.entries.map((entry) => (
+          {competition?.entries
+            .map((entry) => (
             <SelectItem
               key={entry.user?.id}
               value={entry.user?.clerkId || ''}
