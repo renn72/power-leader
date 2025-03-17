@@ -44,7 +44,7 @@ const NumberInput = ({
       <Input
         placeholder='...'
         className={cn(
-          'relative w-full text-xl font-medium rounded-lg text-center h-min border-none outline-none rounded-none border-l-0 px-0',
+          'relative w-full text-2xl font-medium rounded-lg text-center h-min border-none outline-none rounded-none border-l-0 px-0 mx-2',
           ' focus-visible:ring-0 focus:border-none focus:border-0 focus:shadow-none py-0 active:border-0 active:ring-0 focus:ring-0',
           'focus-visible:ring-none',
         )}
@@ -55,7 +55,7 @@ const NumberInput = ({
         }}
       />
 
-      <div className='absolute right-16 top-1/2 -translate-y-1/2 text-xs text-muted-foreground flex gap-0 items-start pt-[2px]'>
+      <div className='absolute right-16 top-1/2 -translate-y-1/2 text-sm text-muted-foreground flex gap-0 items-start pt-[2px]'>
         {postfix}
       </div>
 
@@ -71,7 +71,7 @@ const NumberInput = ({
         className='absolute right-0 top-1/2 -translate-y-1/2 text-xs text-secondary-foreground flex gap-0 items-start border-l active:bg-primary/60 rounded-r-lg'
       >
         <div className='h-16 w-14 flex items-center justify-center scale-75'>
-          <PlusIcon size={24} />
+          <PlusIcon size={28} />
         </div>
       </div>
       <div
@@ -83,7 +83,7 @@ const NumberInput = ({
         className='absolute left-0 top-1/2 -translate-y-1/2 text-xs text-secondary-foreground flex gap-0 items-start border-r active:bg-primary/30 rounded-l-lg'
       >
         <div className='h-16 w-14 flex items-center justify-center active:scale-75'>
-          <Minus size={24} />
+          <Minus size={28} />
         </div>
       </div>
     </div>
@@ -114,11 +114,11 @@ const DialogWrapper = ({
             isOpen ? 'scale-90 shadow-none' : '',
           )}
         >
-          <div className='text-muted-foreground text-center text-sm font-semibold'>
+          <div className='text-muted-foreground text-center text-base font-semibold'>
             {title}
           </div>
           {value !== '' && value !== undefined && value !== null ? (
-            <div className={cn('relative')}>{value}</div>
+            <div className={cn('relative text-lg')}>{value}</div>
           ) : (
             <div className='text-muted-foreground'>...</div>
           )}
@@ -142,10 +142,10 @@ const Value = ({ value, title }: { value: string; title: string }) => {
         'flex gap-1 items-center justify-around flex-col bg-secondary px-4 py-1 rounded-md shadow-sm',
       )}
     >
-      <div className='text-muted-foreground text-center text-sm font-semibold'>
+      <div className='text-muted-foreground text-center text-base font-semibold'>
         {title}
       </div>
-      <div className={cn('capitalize ')}>{value}</div>
+      <div className={cn('capitalize text-lg ')}>{value}</div>
     </div>
   )
 }
@@ -264,9 +264,9 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
 
   return (
     <div className='flex flex-col gap-4 px-4'>
-      <h1
-        className='text-center text-3xl font-extrabold text-primary'
-      >WRPF Showdown V</h1>
+      <h1 className='text-center text-3xl font-extrabold text-primary'>
+        WRPF Showdown V
+      </h1>
       <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
         <div className='flex gap-4 w-full justify-around'>
           <Value
@@ -308,8 +308,10 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.squatOpener || ''}
             >
               <DialogHeader>
-                <DialogTitle>Squat Opener</DialogTitle>
-                <DialogDescription>Enter your Squat Opener</DialogDescription>
+                <DialogTitle className='text-xl'>Squat Opener</DialogTitle>
+                <DialogDescription className='text-base'>
+                  Enter your Squat Opener
+                </DialogDescription>
               </DialogHeader>
 
               <div className='flex justify-center '>
@@ -323,7 +325,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -363,8 +365,8 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.squarRackHeight || ''}
             >
               <DialogHeader>
-                <DialogTitle>Squat Rack Height</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className='text-xl'>Squat Rack Height</DialogTitle>
+                <DialogDescription className='text-base'>
                   Enter your Squat Rack Height, your pin height and if you want
                   the arms 'in' or 'out', <br /> eg. '12in' or '4out'
                 </DialogDescription>
@@ -374,6 +376,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               <div className='flex justify-center '>
                 <Input
                   placeholder='eg. 12in or 4out'
+                      className='text-lg'
                   value={squatRackHeight ?? ''}
                   onChange={(e) => {
                     setSquatRackHeight(e.target.value)
@@ -382,7 +385,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -415,8 +418,11 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.squatPB || ''}
             >
               <DialogHeader>
-                <DialogTitle>Personal Best</DialogTitle>
-                <DialogDescription>Enter your PB</DialogDescription>
+                <DialogTitle className='text-xl'>Personal Best</DialogTitle>
+
+                <DialogDescription className='text-base'>
+                  Enter your PB
+                </DialogDescription>
               </DialogHeader>
 
               <div className='flex justify-center '>
@@ -430,7 +436,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -473,8 +479,10 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.benchOpener || ''}
             >
               <DialogHeader>
-                <DialogTitle>Bench Opener</DialogTitle>
-                <DialogDescription>Enter your Bench Opener</DialogDescription>
+                <DialogTitle className='text-xl'>Bench Opener</DialogTitle>
+                <DialogDescription className='text-base'>
+                  Enter your Bench Opener
+                </DialogDescription>
               </DialogHeader>
 
               <div className='flex justify-center '>
@@ -488,7 +496,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -528,8 +536,9 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.benchRackHeight || ''}
             >
               <DialogHeader>
-                <DialogTitle>Bench Rack Height</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className='text-xl'>Bench Rack Height</DialogTitle>
+
+                <DialogDescription className='text-base'>
                   Enter your Bench Rack Height,(safety is optional). e.g. 8/4,
                   or just 8 if you don't want the safety
                 </DialogDescription>
@@ -539,6 +548,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               <div className='flex justify-center '>
                 <Input
                   placeholder='eg. 8/4 or 8'
+                  className='text-lg'
                   value={benchRackHeight ?? ''}
                   onChange={(e) => {
                     setBenchRackHeight(e.target.value)
@@ -547,7 +557,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -580,8 +590,10 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.benchPB || ''}
             >
               <DialogHeader>
-                <DialogTitle>Personal Best</DialogTitle>
-                <DialogDescription>Enter your PB</DialogDescription>
+                <DialogTitle className='text-xl'>Personal Best</DialogTitle>
+                <DialogDescription className='text-base'>
+                  Enter your PB
+                </DialogDescription>
               </DialogHeader>
 
               <div className='flex justify-center '>
@@ -595,7 +607,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -638,8 +650,8 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.deadliftOpener || ''}
             >
               <DialogHeader>
-                <DialogTitle>Deadlift Opener</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className='text-xl'>Deadlift Opener</DialogTitle>
+                <DialogDescription className='text-base'>
                   Enter your Deadlift Opener
                 </DialogDescription>
               </DialogHeader>
@@ -655,7 +667,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
@@ -695,8 +707,10 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               value={entry?.deadliftPB || ''}
             >
               <DialogHeader>
-                <DialogTitle>Personal Best</DialogTitle>
-                <DialogDescription>Enter your PB</DialogDescription>
+                <DialogTitle className='text-xl'>Personal Best</DialogTitle>
+                <DialogDescription className='text-base'>
+                  Enter your PB
+                </DialogDescription>
               </DialogHeader>
 
               <div className='flex justify-center '>
@@ -710,7 +724,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               </div>
               <div className='flex  w-full items-center justify-around'>
                 <DialogClose asChild>
-                  <div className='flex  w-full items-center justify-around'>
+                  <div className=''>
                     <Button
                       variant='default'
                       size='lg'
