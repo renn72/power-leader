@@ -46,9 +46,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   }, [competition])
 
   const syncToCompetition = () => {
-    console.log('sync')
     if (competition) {
-      console.log('syncing')
       setLift(competition.compDayInfo.lift)
       setBracket(competition.compDayInfo.bracket.toString())
       setIndex(competition.compDayInfo.index.toString())
@@ -111,12 +109,6 @@ const Competition = ({ params }: { params: { comp: string } }) => {
     (item) =>
       item.lift === lift.toLowerCase() && item.liftNumber === Number(round),
   )
-
-  // console.log('comp', competition)
-  // console.log('lifter', lifter)
-  // console.log('currentLift', currentLift)
-  // console.log({ lift, bracket, index, round })
-  // console.log('lifters', lifters)
 
   return (
     <div className='relative flex flex-col items-center justify-center gap-2'>

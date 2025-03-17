@@ -203,6 +203,36 @@ export const compEntryRouter = createTRPCRouter({
           squatOpener: input.squatOpener,
         })
         .where(eq(compEntry.id, input.id))
+
+      const l = await ctx.db.query.lift.findFirst({
+        where: (lift, { eq }) =>
+          and(
+            eq(lift.compEntryId, input.id),
+            eq(lift.lift, 'squat'),
+            eq(lift.liftNumber, 1),
+          ),
+      })
+
+      if (l?.id) {
+        await ctx.db
+          .update(lift)
+          .set({
+            weight: input.squatOpener,
+          })
+          .where(eq(lift.id, lift.id))
+      } else {
+        await ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 1,
+          state: 'created',
+          lift: 'squat',
+          gender: '',
+          userWeight: '',
+          weight: input.squatOpener,
+          name: input.userName,
+        })
+      }
+
       return res
     }),
   updateSquatRackHeight: publicProcedure
@@ -227,6 +257,15 @@ export const compEntryRouter = createTRPCRouter({
           squarRackHeight: input.squatRackHeight,
         })
         .where(eq(compEntry.id, input.id))
+      const l = await ctx.db.query.lift.findFirst({
+        where: (lift, { eq }) =>
+          and(
+            eq(lift.compEntryId, input.id),
+            eq(lift.lift, 'squat'),
+            eq(lift.liftNumber, 1),
+          ),
+      })
+
       return res
     }),
   updateSquatPB: publicProcedure
@@ -275,6 +314,37 @@ export const compEntryRouter = createTRPCRouter({
           benchOpener: input.benchOpener,
         })
         .where(eq(compEntry.id, input.id))
+
+      const l = await ctx.db.query.lift.findFirst({
+        where: (lift, { eq }) =>
+          and(
+            eq(lift.compEntryId, input.id),
+            eq(lift.lift, 'bench'),
+            eq(lift.liftNumber, 1),
+          ),
+      })
+
+      if (l?.id) {
+        await ctx.db
+          .update(lift)
+          .set({
+            weight: input.benchOpener,
+          })
+          .where(eq(lift.id, lift.id))
+      } else {
+        await ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 1,
+          state: 'created',
+          lift: 'bench',
+          gender: '',
+          userWeight: '',
+          weight: input.benchOpener,
+          name: input.userName,
+        })
+      }
+
+
       return res
     }),
   updateBenchRackHeight: publicProcedure
@@ -347,6 +417,36 @@ export const compEntryRouter = createTRPCRouter({
           deadliftOpener: input.deadliftOpener,
         })
         .where(eq(compEntry.id, input.id))
+
+      const l = await ctx.db.query.lift.findFirst({
+        where: (lift, { eq }) =>
+          and(
+            eq(lift.compEntryId, input.id),
+            eq(lift.lift, 'deadlift'),
+            eq(lift.liftNumber, 1),
+          ),
+      })
+
+      if (l?.id) {
+        await ctx.db
+          .update(lift)
+          .set({
+            weight: input.deadliftOpener,
+          })
+          .where(eq(lift.id, lift.id))
+      } else {
+        await ctx.db.insert(lift).values({
+          compEntryId: input.id,
+          liftNumber: 1,
+          state: 'created',
+          lift: 'deadlift',
+          gender: '',
+          userWeight: '',
+          weight: input.deadliftOpener,
+          name: input.userName,
+        })
+      }
+
       return res
     }),
   updateDeadliftPB: publicProcedure
