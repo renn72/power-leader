@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { animations } from '@formkit/drag-and-drop'
-import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 import { Badge } from '~/components/ui/badge'
-import { Button } from '~/components/ui/button'
 import {
   Card,
   CardContent,
@@ -25,12 +22,14 @@ const Bracket = ({
   lift,
   title,
   bracket,
+  isAdmin,
 }: {
   entries: GetCompetitionEntryById[]
   competition: GetCompetitionById
   lift: string
   title: string
   bracket: number
+  isAdmin: boolean
 }) => {
   const ctx = api.useUtils()
   const { mutate: updateBracket } = api.compEntry.updateBracket.useMutation({
@@ -102,7 +101,7 @@ const Bracket = ({
             if (Number(a.squatOpener) === 0 && a.squatOpener !== '0') return 1
             if (Number(b.squatOpener) === 0 && b.squatOpener !== '0') return -1
             return Number(a.squatOpener) - Number(b.squatOpener)
-          })
+          }),
       )
     }
     if (lift === 'bench') {
@@ -113,7 +112,7 @@ const Bracket = ({
             if (Number(a.benchOpener) === 0 && a.benchOpener !== '0') return 1
             if (Number(b.benchOpener) === 0 && b.benchOpener !== '0') return -1
             return Number(a.benchOpener) - Number(b.benchOpener)
-          })
+          }),
       )
     }
     if (lift === 'deadlift') {
@@ -121,10 +120,12 @@ const Bracket = ({
         entries
           .filter((entry) => entry.deadliftBracket == bracket)
           .sort((a, b) => {
-            if (Number(a.deadliftOpener) === 0 && a.deadliftOpener !== '0') return 1
-            if (Number(b.deadliftOpener) === 0 && b.deadliftOpener !== '0') return -1
+            if (Number(a.deadliftOpener) === 0 && a.deadliftOpener !== '0')
+              return 1
+            if (Number(b.deadliftOpener) === 0 && b.deadliftOpener !== '0')
+              return -1
             return Number(a.deadliftOpener) - Number(b.deadliftOpener)
-          })
+          }),
       )
     }
   }, [entries])
@@ -168,9 +169,9 @@ const Bracket = ({
         : deadliftBrackets
 
   return (
-    <Card className='relative min-w-[570px]'>
+    <Card className='relative min-w-[350px] max-w-[600px]'>
       <CardHeader className='mb-4'>
-        <CardTitle className='flex items-center justify-around text-3xl'>
+        <CardTitle className='flex items-center justify-around lg:text-3xl'>
           <div className=''>{title}</div>
         </CardTitle>
         <CardDescription className=''></CardDescription>
@@ -190,17 +191,21 @@ const Bracket = ({
                 data-label={entry.id}
                 className={cn('flex items-center gap-1')}
               >
-                <ChevronLeftCircle
-                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
-                  onClick={() => {
-                    if (bracket !== 1) handleBracket(bracket - 1, entry.id)
-                  }}
-                />
+                {isAdmin ? (
+                  <ChevronLeftCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (bracket !== 1) handleBracket(bracket - 1, entry.id)
+                    }}
+                  />
+                ) : (
+                  <div />
+                )}
 
                 <div
                   className={cn(
-                    'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tight',
-                    'rounded-full px-[1px] py-[2px] ',
+                    'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tighter lg:tracking-tight w-full',
+                    'rounded-full px-[1px] py-[2px] text-xs sm:text-sm ',
                     lift === 'squat' &&
                       entry.squatOrderOne !== null &&
                       'border-0 border-complete bg-muted/80',
@@ -215,12 +220,12 @@ const Bracket = ({
                   <div className='font-extrabold tracking-wider text-muted-foreground'>
                     {i + 1}
                   </div>
-                  <Badge className='flex w-16 items-center justify-center'>
+                  <Badge className='flex text-[0.65rem] lg:text-xs py-0 lg:py-0.5  w-8  lg:w-12 items-center justify-center'>
                     {entry.wc?.split('-')[0]}kg
                   </Badge>
                   <div
                     className={cn(
-                      'text-sm font-extrabold ',
+                      'font-extrabold ',
                       entry.gender?.toLowerCase() === 'female'
                         ? 'text-pink-400'
                         : 'text-teal-400',
@@ -230,7 +235,7 @@ const Bracket = ({
                   </div>
                   <div
                     className={cn(
-                      'text-sm font-extrabold ',
+                      'font-extrabold ',
                       entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
                         'open'
                         ? 'text-slate-400'
@@ -245,13 +250,16 @@ const Bracket = ({
                       .toUpperCase() === 'NOVI'
                       ? 'NOVICE'
                       : entry.compEntryToDivisions?.[0]?.division?.name
-                          .slice(0, 4)
-                          .toUpperCase() === 'FIRS' ? 'FIRST' : entry.compEntryToDivisions?.[0]?.division?.name.slice(0, 4).toUpperCase()
-                  }
+                            .slice(0, 4)
+                            .toUpperCase() === 'FIRS'
+                        ? 'FIRST'
+                        : entry.compEntryToDivisions?.[0]?.division?.name
+                            .slice(0, 4)
+                            .toUpperCase()}
                   </div>
                   <div
                     className={cn(
-                      'text-sm font-extrabold ',
+                      'font-extrabold ',
                       entry.equipment?.toLowerCase() === 'classic'
                         ? 'text-orange-400'
                         : entry.equipment?.toLowerCase() === 'raw'
@@ -261,20 +269,24 @@ const Bracket = ({
                   >
                     {entry.equipment?.slice(0, 1).toUpperCase()}
                   </div>
-                  <div className='col-span-3 tracking-tighter truncate'>
+                  <div className='col-span-3 tracking-tighter truncate capitalize'>
                     {entry.user?.name}
                   </div>
                   <div className='col-span-2'>
                     {opener === '' || opener === null ? '-' : opener + 'kg'}
                   </div>
                 </div>
-                <ChevronRightCircle
-                  className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
-                  onClick={() => {
-                    if (bracket !== numberOfBrackets)
-                      handleBracket(bracket + 1, entry.id)
-                  }}
-                />
+                {isAdmin ? (
+                  <ChevronRightCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (bracket !== numberOfBrackets)
+                        handleBracket(bracket + 1, entry.id)
+                    }}
+                  />
+                ) : (
+                  <div />
+                )}
               </div>
             )
           })}

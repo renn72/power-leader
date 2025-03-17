@@ -6,7 +6,13 @@ import { CircleMinus, CirclePlus } from 'lucide-react'
 
 import Bracket from './bracket'
 
-const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
+const CompBracket = ({
+  competition,
+  isAdmin = true,
+}: {
+  competition: GetCompetitionById
+  isAdmin?: boolean
+}) => {
   const ctx = api.useUtils()
   const { mutate: updateSquatBrackets } =
     api.competition.updateSquatBrackets.useMutation({
@@ -108,88 +114,89 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
   const benchPressBrackets = Number(competition.benchPressBrackets)
   const deadliftBrackets = Number(competition.deadliftBrackets)
 
-  console.log('competition', competition)
-
   return (
-    <div className=' flex w-full flex-col  items-center gap-8'>
-      <div className='flex w-full items-center justify-around text-3xl'>
-        <div className='flex items-center gap-16'>
-          <div>Squat Flights</div>
+    <div className='flex lg:w-full flex-col lg:items-center gap-8'>
+      {isAdmin ? (
+        <div className='flex w-full items-center justify-around text-3xl'>
+          <div className='flex items-center gap-16'>
+            <div>Squat Flights</div>
+            <div className='flex items-center gap-4'>
+              <CircleMinus
+                className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
+                onClick={() => {
+                  if (squatBrackets === 1) return
+                  updateSquatBrackets({
+                    id: competition.id,
+                    squatBrackets: (squatBrackets - 1).toString(),
+                  })
+                }}
+              />
+              <div>{squatBrackets}</div>
+              <CirclePlus
+                className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
+                onClick={() => {
+                  updateSquatBrackets({
+                    id: competition.id,
+                    squatBrackets: (squatBrackets + 1).toString(),
+                  })
+                }}
+              />
+            </div>
+          </div>
           <div className='flex items-center gap-4'>
-            <CircleMinus
-              className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
-              onClick={() => {
-                if (squatBrackets === 1) return
-                updateSquatBrackets({
-                  id: competition.id,
-                  squatBrackets: (squatBrackets - 1).toString(),
-                })
-              }}
-            />
-            <div>{squatBrackets}</div>
-            <CirclePlus
-              className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
-              onClick={() => {
-                updateSquatBrackets({
-                  id: competition.id,
-                  squatBrackets: (squatBrackets + 1).toString(),
-                })
-              }}
-            />
+            <div>Bench Press Flights</div>
+            <div className='flex items-center gap-4'>
+              <CircleMinus
+                className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
+                onClick={() => {
+                  if (benchPressBrackets === 1) return
+                  updateBenchPressBrackets({
+                    id: competition.id,
+                    benchPressBrackets: (benchPressBrackets - 1).toString(),
+                  })
+                }}
+              />
+              <div>{benchPressBrackets}</div>
+              <CirclePlus
+                className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
+                onClick={() => {
+                  updateBenchPressBrackets({
+                    id: competition.id,
+                    benchPressBrackets: (benchPressBrackets + 1).toString(),
+                  })
+                }}
+              />
+            </div>
+          </div>
+          <div className='flex items-center gap-4'>
+            <div>Deadlift Flights</div>
+            <div className='flex items-center gap-4'>
+              <CircleMinus
+                className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
+                onClick={() => {
+                  if (deadliftBrackets === 1) return
+                  updateDeadliftBrackets({
+                    id: competition.id,
+                    deadliftBrackets: (deadliftBrackets - 1).toString(),
+                  })
+                }}
+              />
+              <div>{deadliftBrackets}</div>
+              <CirclePlus
+                className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
+                onClick={() => {
+                  updateDeadliftBrackets({
+                    id: competition.id,
+                    deadliftBrackets: (deadliftBrackets + 1).toString(),
+                  })
+                }}
+              />
+            </div>
           </div>
         </div>
-        <div className='flex items-center gap-4'>
-          <div>Bench Press Flights</div>
-          <div className='flex items-center gap-4'>
-            <CircleMinus
-              className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
-              onClick={() => {
-                if (benchPressBrackets === 1) return
-                updateBenchPressBrackets({
-                  id: competition.id,
-                  benchPressBrackets: (benchPressBrackets - 1).toString(),
-                })
-              }}
-            />
-            <div>{benchPressBrackets}</div>
-            <CirclePlus
-              className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
-              onClick={() => {
-                updateBenchPressBrackets({
-                  id: competition.id,
-                  benchPressBrackets: (benchPressBrackets + 1).toString(),
-                })
-              }}
-            />
-          </div>
-        </div>
-        <div className='flex items-center gap-4'>
-          <div>Deadlift Flights</div>
-          <div className='flex items-center gap-4'>
-            <CircleMinus
-              className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
-              onClick={() => {
-                if (deadliftBrackets === 1) return
-                updateDeadliftBrackets({
-                  id: competition.id,
-                  deadliftBrackets: (deadliftBrackets - 1).toString(),
-                })
-              }}
-            />
-            <div>{deadliftBrackets}</div>
-            <CirclePlus
-              className='cursor-pointer hover:scale-110 hover:text-muted-foreground active:scale-90'
-              onClick={() => {
-                updateDeadliftBrackets({
-                  id: competition.id,
-                  deadliftBrackets: (deadliftBrackets + 1).toString(),
-                })
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <div className='flex w-full justify-center gap-16'>
+      ) : null}
+
+      <div className='flex w-full lg:justify-between gap-4'>
         {Array.from(Array(squatBrackets).keys()).map((b) => (
           <Bracket
             entries={competition.entries.filter((e) => {
@@ -204,10 +211,11 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
             title={`Squat ${b + 1}`}
             bracket={b + 1}
             key={b}
+            isAdmin={isAdmin}
           />
         ))}
       </div>
-      <div className='flex w-full justify-center gap-16'>
+      <div className='flex w-full lg:justify-between gap-4'>
         {Array.from(Array(benchPressBrackets).keys()).map((b) => (
           <Bracket
             entries={competition.entries.filter((e) => {
@@ -222,10 +230,11 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
             title={`Bench ${b + 1}`}
             bracket={b + 1}
             key={b}
+            isAdmin={isAdmin}
           />
         ))}
       </div>
-      <div className='flex w-full justify-center gap-16'>
+      <div className='flex w-full lg:justify-between gap-4'>
         {Array.from(Array(deadliftBrackets).keys()).map((b) => (
           <Bracket
             entries={competition.entries.filter((e) => {
@@ -240,6 +249,7 @@ const CompBracket = ({ competition }: { competition: GetCompetitionById }) => {
             title={`Deadlift ${b + 1}`}
             bracket={b + 1}
             key={b}
+            isAdmin={isAdmin}
           />
         ))}
       </div>
