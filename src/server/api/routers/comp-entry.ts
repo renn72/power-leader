@@ -254,7 +254,7 @@ export const compEntryRouter = createTRPCRouter({
       const res = await ctx.db
         .update(compEntry)
         .set({
-          squarRackHeight: input.squatRackHeight,
+          squarRackHeight: input.squatRackHeight.replace(' ', ''),
         })
         .where(eq(compEntry.id, input.id))
       const l = await ctx.db.query.lift.findFirst({
