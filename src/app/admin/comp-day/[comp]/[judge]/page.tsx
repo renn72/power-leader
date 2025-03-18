@@ -9,6 +9,7 @@ import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import { ChevronRightCircle, ThumbsDown, ThumbsUp } from 'lucide-react'
 import { Button } from '~/components/ui/button'
+import { sortEntriesFilter } from '~/lib/comp-day'
 
 const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   const [liftName, setLiftName] = useState('')
@@ -42,32 +43,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
       item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
   )
 
-  const lifters = competition?.entries
-    .filter((entry) => {
-      if (liftName === 'squat') {
-        return entry.squatBracket == Number(bracket) && entry.squatOpener !== ''
-      } else if (liftName === 'bench') {
-        return entry.benchBracket == Number(bracket) && entry.benchOpener !== ''
-      } else if (liftName === 'deadlift') {
-        return (
-          entry.deadliftBracket == Number(bracket) &&
-          entry.deadliftOpener !== ''
-        )
-      }
-      return false
-    })
-    .sort((a, b) => {
-      const orderA =
-        a.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.order || null
-      const orderB =
-        b.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.order || null
-      if (orderA == null || orderA == undefined) return 1
-      if (orderB == null || orderB == undefined) return -1
-
-      return orderA - orderB
-    })
+  const lifters = sortEntriesFilter(competition?.entries, liftName, bracket, round)
 
   const nextLifterIndex =
     lifters?.findIndex((entry) => entry.id === Number(nextIndex)) || 1000

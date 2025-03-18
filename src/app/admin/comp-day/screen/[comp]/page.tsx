@@ -10,7 +10,10 @@ import { cn } from '~/lib/utils'
 import Image from 'next/image'
 import Loading from './loading'
 
+import { GetCompetitionById } from '~/lib/types'
+
 import { calculateDOTS, calculateNewWilks } from '~/lib/utils'
+import { sortEntriesFilter } from '~/lib/comp-day'
 
 const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   const size = 19
@@ -27,7 +30,20 @@ const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   )
 }
 
-const CompDayScreen = ({ params }: { params: { comp: string } }) => {
+const Page = ({ params }: { params: { comp: string } }) => {
+  const { comp } = params
+  const { data: competition } = api.competition.getCompetitionByUuid.useQuery(
+    comp,
+    {
+      refetchInterval: 1000 * 60 * 1,
+    },
+  )
+  if (!competition) return null
+
+  return <CompDayScreen competition={competition} comp={comp} />
+}
+
+const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById, comp: string }) => {
   const [dateNow, setDateNow] = useState<number>(Date.now())
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
@@ -39,40 +55,9 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   const [isGoodThree, setIsGoodThree] = useState<boolean | null | undefined>(
     null,
   )
-  const [timer, setTimer] = useState<number>(60)
-  const { comp } = params
   const ctx = api.useUtils()
-  const { data: competition } = api.competition.getCompetitionByUuid.useQuery(
-    comp,
-    {
-      refetchInterval: 1000 * 60 * 1,
-    },
-  )
 
-  const entries = competition?.entries
-    .filter((entry) => {
-      if (liftName === 'squat') {
-        return entry.squatBracket == Number(bracket)
-      } else if (liftName === 'bench') {
-        return entry.benchBracket == Number(bracket)
-      } else if (liftName === 'deadlift') {
-        return (
-          entry.deadliftBracket == Number(bracket)        )
-      }
-      return false
-    })
-    .sort((a, b) => {
-      const orderA =
-        a.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.weight || null
-      const orderB =
-        b.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.weight || null
-      if (orderA == null || orderA == undefined) return 1
-      if (orderB == null || orderB == undefined) return -1
-
-      return Number(orderA) - Number(orderB)
-    })
+  const entries = sortEntriesFilter(competition?.entries, liftName, bracket, round)
 
   const lifter = entries?.filter(
     (_entry, i) => i === Number(index),
@@ -298,14 +283,12 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
               </div>
             </div>
             <div className='absolute bottom-0 left-[1vw] text-sm'>
-              {lifter2 && lift2 && (
                 <Loading
-                  name={lifter2.user?.name || ''}
-                  weight={Number(lift2.weight)}
-                  rack={lift2.rackHeight || ''}
+                  name={lifter?.user?.name || ''}
+                  weight={Number(lift.weight)}
+                  rack={lift.rackHeight || ''}
                   lift={liftName}
                 />
-              )}
             </div>
           </div>
         </div>
@@ -314,4 +297,4 @@ const CompDayScreen = ({ params }: { params: { comp: string } }) => {
   )
 }
 
-export default CompDayScreen
+export default Page

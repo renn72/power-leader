@@ -208,7 +208,7 @@ const CompBracket = ({
             })}
             competition={competition}
             lift='squat'
-            title={`Squat ${b + 1}`}
+            title={`Squat`}
             bracket={b + 1}
             key={b}
             isAdmin={isAdmin}
@@ -227,7 +227,7 @@ const CompBracket = ({
             })}
             competition={competition}
             lift='bench'
-            title={`Bench ${b + 1}`}
+            title={`Bench`}
             bracket={b + 1}
             key={b}
             isAdmin={isAdmin}
@@ -246,7 +246,7 @@ const CompBracket = ({
             })}
             competition={competition}
             lift='deadlift'
-            title={`Deadlift ${b + 1}`}
+            title={`Deadlift`}
             bracket={b + 1}
             key={b}
             isAdmin={isAdmin}

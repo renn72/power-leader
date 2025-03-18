@@ -170,9 +170,10 @@ const Bracket = ({
 
   return (
     <Card className='relative min-w-[360px] max-w-[600px] shadow-md'>
-      <CardHeader className='mb-4'>
-        <CardTitle className='flex items-center justify-around lg:text-3xl'>
-          <div className=''>{title}</div>
+      <CardHeader className='mb-1'>
+        <CardTitle className='flex items-center flex-col justify-around lg:text-3xl'>
+          <div className='capitalize'>{title}</div>
+          <div className='text-base font-medium'>Flight {bracket}</div>
         </CardTitle>
         <CardDescription className=''></CardDescription>
       </CardHeader>

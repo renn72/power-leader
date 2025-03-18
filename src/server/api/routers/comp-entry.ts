@@ -219,7 +219,7 @@ export const compEntryRouter = createTRPCRouter({
           .set({
             weight: input.squatOpener,
           })
-          .where(eq(lift.id, lift.id))
+          .where(eq(lift.id, l.id))
       } else {
         await ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -257,14 +257,6 @@ export const compEntryRouter = createTRPCRouter({
           squarRackHeight: input.squatRackHeight.replace(' ', ''),
         })
         .where(eq(compEntry.id, input.id))
-      const l = await ctx.db.query.lift.findFirst({
-        where: (lift, { eq }) =>
-          and(
-            eq(lift.compEntryId, input.id),
-            eq(lift.lift, 'squat'),
-            eq(lift.liftNumber, 1),
-          ),
-      })
 
       return res
     }),
@@ -330,7 +322,7 @@ export const compEntryRouter = createTRPCRouter({
           .set({
             weight: input.benchOpener,
           })
-          .where(eq(lift.id, lift.id))
+          .where(eq(lift.id, l.id))
       } else {
         await ctx.db.insert(lift).values({
           compEntryId: input.id,
@@ -433,7 +425,7 @@ export const compEntryRouter = createTRPCRouter({
           .set({
             weight: input.deadliftOpener,
           })
-          .where(eq(lift.id, lift.id))
+          .where(eq(lift.id, l.id))
       } else {
         await ctx.db.insert(lift).values({
           compEntryId: input.id,
