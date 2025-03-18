@@ -14,21 +14,23 @@ import LifterInfo from './_components/lifter-info'
 import MainScreenControl from './_components/main-screen-control'
 import Signals from './_components/signals'
 
+import { GetCompetitionByUuid } from '~/lib/types'
+
 export const dynamic = 'force-dynamic'
 
-const Competition = ({ params }: { params: { comp: string } }) => {
-  const { comp } = params
+const Competition = ({
+  competition,
+  comp,
+}: {
+  competition: GetCompetitionByUuid
+  comp: string
+}) => {
   const competitonUuid = comp
   const [lift, setLift] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState('')
   const [round, setRound] = useState('')
   const [compSet, setCompSet] = useState(false)
-
-  const { data: competition, isLoading: competitionLoading } =
-    api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 60 * 1,
-    })
 
   useEffect(() => {
     if (competition && !compSet) {
@@ -56,26 +58,10 @@ const Competition = ({ params }: { params: { comp: string } }) => {
     }
   }
 
-  if (competitionLoading) return <CompTableSkeletion />
-  if (!competition) {
-    return (
-      <div className='flex flex-col items-center justify-center gap-2'>
-        <div className='font-bold text-destructive'>Competition not found</div>
-      </div>
-    )
-  }
-
   const lifters = sortEntriesFilter(competition.entries, lift, bracket, round)
 
-  const lifter = lifters.find((l) => {
-    if (lift === 'squat') {
-      return l.id == Number(index)
-    } else if (lift === 'bench') {
-      return l.id == Number(index)
-    } else if (lift === 'deadlift') {
-      return l.id == Number(index)
-    }
-    return false
+  const lifter = lifters.find((l, i) => {
+      return i== Number(index)
   })
 
   const currentLift = lifter?.lift?.find(
@@ -88,7 +74,7 @@ const Competition = ({ params }: { params: { comp: string } }) => {
       <Header competition={competition} />
       <Card className=''>
         <CardContent className='flex flex-col gap-2 px-2 py-2'>
-          <div className='grid grid-cols-2 gap-2'>
+          <div className='grid grid-cols-5 gap-2'>
             <MainScreenControl
               competition={competition}
               lift={lift}
@@ -132,4 +118,21 @@ const Competition = ({ params }: { params: { comp: string } }) => {
   )
 }
 
-export default Competition
+const Page = ({ params }: { params: { comp: string } }) => {
+  const { comp } = params
+  const { data: competition, isLoading: competitionLoading } =
+    api.competition.getCompetitionByUuid.useQuery(comp, {
+      refetchInterval: 1000 * 60 * 1,
+    })
+  if (competitionLoading) return <CompTableSkeletion />
+  if (!competition) return null
+
+  return (
+    <Competition
+      competition={competition}
+      comp={comp}
+    />
+  )
+}
+
+export default Page

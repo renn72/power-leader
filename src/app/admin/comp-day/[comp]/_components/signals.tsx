@@ -100,7 +100,7 @@ const Signals = ({
       },
     })
   return (
-    <Card>
+    <Card className='col-span-2'>
       <CardHeader className='p-0'></CardHeader>
       <CardContent className='flex w-full justify-around p-1'>
         <Sign

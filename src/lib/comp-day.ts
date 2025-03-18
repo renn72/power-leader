@@ -1,7 +1,7 @@
-import { GetCompetitionEntryById } from './types'
+import { GetCompetitionEntryById, GetLiftById } from './types'
 
 export function sortEntriesFilter(
-  entries: GetCompetitionEntryById[] | undefined,
+  entries: GetCompetitionEntryById[],
   lift: string,
   bracket: string,
   round: string,
@@ -17,6 +17,18 @@ export function sortEntriesFilter(
       }
       return false
     })
+    .filter((entry) => {
+      if (lift === 'squat') {
+        const lifts = entry.lift.filter((l) => l.lift === 'squat')
+        return lifts.find((l) => l.liftNumber === Number(round))
+      } else if (lift === 'bench') {
+        const lifts = entry.lift.filter((l) => l.lift === 'bench')
+        return lifts.find((l) => l.liftNumber === Number(round))
+      } else if (lift === 'deadlift') {
+        const lifts = entry.lift.filter((l) => l.lift === 'deadlift')
+        return lifts.find((l) => l.liftNumber === Number(round))
+      }
+    })
     .sort((a, b) => {
       const orderA =
         a.lift.find((l) => l.lift == lift && l.liftNumber === Number(round))
@@ -29,4 +41,17 @@ export function sortEntriesFilter(
 
       return Number(orderA) - Number(orderB)
     })
+}
+
+export function liftState(lift: GetLiftById) {
+  const isOne = lift?.isGoodOne
+  const isTwo = lift?.isGoodTwo
+  const isThree = lift?.isGoodThree
+  const isJudged = isOne !== null && isTwo !== null && isThree !== null
+  const isGood = (isOne && isTwo) || (isTwo && isThree) || (isOne && isThree)
+
+  return {
+    isJudged,
+    isGood,
+  }
 }

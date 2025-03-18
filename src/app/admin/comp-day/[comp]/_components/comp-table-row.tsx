@@ -210,89 +210,137 @@ const CompTableRow = ({
         entryId={lifterId}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterSquatOne}
         title='Squat 1'
         lift={lifterSquatOneLift}
         isHighlighted={isSquatOne}
+        liftName='squat'
+        liftNumber={1}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterSquatTwo}
         title='Squat 2'
         previousLift={lifterSquatOneLift}
         lift={lifterSquatTwoLift}
         isHighlighted={isSquatTwo}
+        liftName='squat'
+        liftNumber={2}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterSquatThree}
         title='Squat 3'
         previousLift={lifterSquatTwoLift}
         lift={lifterSquatThreeLift}
         isHighlighted={isSquatThree}
+        liftName='squat'
+        liftNumber={3}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterSquatFour}
         title='Squat 4'
         previousLift={lifterSquatThreeLift}
         lift={lifterSquatFourLift}
         isHighlighted={isSquatFour}
+        liftName='squat'
+        liftNumber={4}
       />
       <BenchRackHeight
         height={lifterBenchRackHeight}
         entryId={lifterId}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterBenchOne}
         title='Bench 1'
         lift={lifterBenchOneLift}
         isHighlighted={isBenchOne}
+        liftName='bench'
+        liftNumber={1}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterBenchTwo}
         title='Bench 2'
         previousLift={lifterBenchOneLift}
         lift={lifterBenchTwoLift}
         isHighlighted={isBenchTwo}
+        liftName='bench'
+        liftNumber={2}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterBenchThree}
         title='Bench 3'
         previousLift={lifterBenchTwoLift}
         lift={lifterBenchThreeLift}
         isHighlighted={isBenchThree}
+        liftName='bench'
+        liftNumber={3}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterBenchFour}
         title='Bench 4'
         previousLift={lifterBenchThreeLift}
         lift={lifterBenchFourLift}
         isHighlighted={isBenchFour}
+        liftName='bench'
+        liftNumber={4}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterDeadliftOne}
         title='Deadlift 1'
         lift={lifterDeadliftOneLift}
         isHighlighted={isDeadliftOne}
+        liftName='deadlift'
+        liftNumber={1}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterDeadliftTwo}
         title='Deadlift 2'
         previousLift={lifterDeadliftOneLift}
         lift={lifterDeadliftTwoLift}
         isHighlighted={isDeadliftTwo}
+        liftName='deadlift'
+        liftNumber={2}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterDeadliftThree}
         title='Deadlift 3'
         previousLift={lifterDeadliftTwoLift}
         lift={lifterDeadliftThreeLift}
         isHighlighted={isDeadliftThree}
+        liftName='deadlift'
+        liftNumber={3}
       />
       <Lift
+        bracket={bracket}
+        lifter={lifter}
         input={lifterDeadliftFour}
         title='Deadlift 4'
         previousLift={lifterDeadliftThreeLift}
         lift={lifterDeadliftFourLift}
         isHighlighted={isDeadliftFour}
+        liftName='deadlift'
+        liftNumber={4}
       />
       <Cell className='p-0 lg:p-2'>
         {+index === i ? (

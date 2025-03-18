@@ -10,21 +10,16 @@ import Image from 'next/image'
 import { ChevronRightCircle, ThumbsDown, ThumbsUp } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { sortEntriesFilter } from '~/lib/comp-day'
+import { GetCompetitionById } from '~/lib/types'
 
-const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
+const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetitionById, comp: string, judgeNumber : number }) => {
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState<number | null | undefined>(null)
   const [nextIndex, setNextIndex] = useState('')
   const [round, setRound] = useState('')
   const [isGood, setIsGood] = useState<boolean | null | undefined>(null)
-  const { comp, judge } = params
-  const judgeNumber = Number(judge.split('-')[1])
   const ctx = api.useUtils()
-  const { data: competition, isLoading: competitionLoading } =
-    api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 10 * 1,
-    })
   const { mutate: startTimer } = api.competitionDay.startTimer.useMutation()
   const { mutate: stopTimer } = api.competitionDay.stopTimer.useMutation()
   const { mutate: resetTimer } = api.competitionDay.resetTimer.useMutation()
@@ -148,8 +143,6 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
     if (judgeNumber === 3) setIsGood(lift?.isGoodThree)
   }, [lift])
 
-  if (!competition) return null
-  if (competitionLoading) return null
   if (!lift) return null
   if (!lifter) return null
   if (!lifter.user) return null
@@ -159,7 +152,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   const name = lifter.user.name
   const weight = lift.weight
 
-  if (params.judge === 'judge-1') {
+  if (judgeNumber === 1) {
     return (
       <div className='flex h-dvh flex-col items-center justify-around text-xl font-semibold text-primary/90'>
         <div className='flex items-center gap-2'>
@@ -170,7 +163,7 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
             height={50}
           />
           <div className='text-3xl font-bold'>
-            Judge {params.judge.split('-')[1]}
+            Judge {judgeNumber }
           </div>
         </div>
         <div className='flex w-full flex-col items-center gap-2'>
@@ -449,4 +442,23 @@ const Judge = ({ params }: { params: { judge: string; comp: string } }) => {
   )
 }
 
-export default Judge
+const Page = ({ params }: { params: { comp: string, judge: string } }) => {
+  const { comp, judge } = params
+  const judgeNumber = Number(judge.split('-')[1])
+  const { data: competition, isLoading: competitionLoading } =
+    api.competition.getCompetitionByUuid.useQuery(comp, {
+      refetchInterval: 1000 * 10 * 1,
+    })
+    if (competitionLoading) return null
+  if (!competition) return null
+
+  return (
+    <Judge
+      competition={competition}
+      comp={comp}
+      judgeNumber={judgeNumber}
+    />
+  )
+}
+
+export default Page

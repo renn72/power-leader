@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { TableCell } from '~/components/ui/table-scroll'
+
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -10,14 +11,16 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
-import { Button } from '~/components/ui/button'
-import { toast } from 'sonner'
+import { TableCell } from '~/components/ui/table-scroll'
+import {
+  GetCompetitionByUuid,
+  GetCompetitionEntryById,
+  GetLiftById,
+} from '~/lib/types'
 import { cn } from '~/lib/utils'
-import { Circle, MinusCircle, PlusCircle } from 'lucide-react'
-
 import { api } from '~/trpc/react'
-
-import { GetLiftById } from '~/lib/types'
+import { Circle, MinusCircle, PlusCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 const Lift = ({
   input,
@@ -25,12 +28,20 @@ const Lift = ({
   lift,
   previousLift,
   isHighlighted = false,
+  liftName,
+  liftNumber,
+  lifter,
+  bracket,
 }: {
   input: string
   title: string
   previousLift?: GetLiftById | undefined
   lift: GetLiftById | undefined
   isHighlighted?: boolean
+  liftName: string
+  liftNumber: number
+  lifter: GetCompetitionEntryById
+  bracket : string
 }) => {
   const [value, setValue] = useState(() => {
     if (!input) return previousLift?.weight || ''
@@ -40,14 +51,7 @@ const Lift = ({
   const [isOpen, setIsOpen] = useState(false)
 
   const ctx = api.useUtils()
-  const { mutate } = api.lift.update.useMutation({
-    onSuccess: () => {
-      toast('Saved')
-      setIsOpen(false)
-      void ctx.competition.getCompetitionByUuid.invalidate()
-    },
-  })
-  const { mutate: createLift } = api.lift.create.useMutation({
+  const { mutate: createUpdateLift } = api.lift.createUpdate.useMutation({
     onSuccess: () => {
       toast('Saved')
       setIsOpen(false)
@@ -63,37 +67,25 @@ const Lift = ({
   const isGood = (isOne && isTwo) || (isTwo && isThree) || (isOne && isThree)
 
   const handleClick = () => {
-    console.log({
-      id: lift?.id,
-      value: value,
-      is4 : title.includes('4'),
+    createUpdateLift({
+      compEntryId: lifter?.id,
+      lift: liftName,
+      gender: lifter?.gender || '',
+      bracket: Number(bracket),
+      userWeight: lifter?.weight || '',
+      weight: value,
+      liftNumber: liftNumber,
+      name: lifter?.user?.name || '',
     })
-    if (title.includes('4')) {
-      if (!previousLift?.compEntryId) return
-      createLift({
-        compEntryId: previousLift?.compEntryId,
-        lift: previousLift?.lift || '',
-        team: previousLift?.team || '',
-        teamLift: previousLift?.teamLift || '',
-        gender: previousLift?.gender || '',
-        bracket: previousLift?.bracket || 1,
-        userWeight: previousLift?.userWeight || '',
-        rackHeight: previousLift?.rackHeight || '',
-        weight: value,
-        liftNumber: 4,
-        state: 'created',
-      })
-      return
-    }
-    if (!lift?.id) return
-    mutate({
-      id: lift.id,
-      value: value,
-    })
+    return
   }
   return (
     <TableCell
-      className={cn(isHighlighted && 'bg-yellow-800/10', 'py-0', 'p-0 lg:p-2 lg:px-1 w-[105px] ', )}
+      className={cn(
+        isHighlighted && 'bg-yellow-800/10',
+        'py-0',
+        'p-0 lg:p-2 lg:px-1 w-[105px] ',
+      )}
     >
       <Dialog
         open={isOpen}
@@ -158,20 +150,24 @@ const Lift = ({
             />
           </div>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className='select-none'
+        >
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className='text-center'>{title}</DialogTitle>
           </DialogHeader>
           <div className='flex items-center justify-between'>
             <MinusCircle
               className='cursor-pointer'
               size={48}
               onClick={() => {
-                setValue((Number(value) - 2.5).toFixed(2))
+                let c = Math.floor(Number(value) / 2.5)
+                setValue(((c * 2.5) - 2.5).toFixed(2))
               }}
             />
             <Input
-              className='h-full w-52 py-4 text-center text-4xl '
+              className='h-full w-52 py-4 text-center md:text-2xl font-bold'
               value={value}
               onChange={(e) => {
                 setValue(e.target.value)
@@ -182,7 +178,8 @@ const Lift = ({
               focusable
               size={48}
               onClick={() => {
-                setValue((Number(value) + 2.5).toFixed(2))
+                let c = Math.floor(Number(value) / 2.5)
+                setValue(((c * 2.5) + 2.5).toFixed(2))
               }}
             />
           </div>

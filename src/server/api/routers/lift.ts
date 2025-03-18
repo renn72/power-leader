@@ -1,12 +1,10 @@
-import { z } from 'zod'
-import { eq } from 'drizzle-orm'
-
+import { TRPCError } from '@trpc/server'
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
-
 import { lift } from '~/server/db/schema'
+import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { getCurrentUser } from './user'
-import { TRPCError } from '@trpc/server'
 
 function isTuple<T>(array: T[]): array is [T, ...T[]] {
   return array.length > 0
@@ -55,6 +53,63 @@ export const liftRouter = createTRPCRouter({
         .where(eq(lift.id, input.id))
 
       return res
+    }),
+  createUpdate: publicProcedure
+    .input(
+      z.object({
+        compEntryId: z.number(),
+        lift: z.string(),
+        bracket: z.number(),
+        gender: z.string(),
+        userWeight: z.string(),
+        weight: z.string(),
+        liftNumber: z.number(),
+        state: z.string().optional(),
+        name: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      const oldLift = await ctx.db.query.lift.findFirst({
+        where: (lift, { eq, and }) =>
+          and(
+            eq(lift.compEntryId, input.compEntryId),
+            eq(lift.lift, input.lift),
+            eq(lift.liftNumber, input.liftNumber),
+          ),
+      })
+
+      if (oldLift?.id) {
+        const res = await ctx.db
+          .update(lift)
+          .set({
+            weight: input.weight,
+            state: 'updated',
+          })
+          .where(eq(lift.id, oldLift.id))
+        return res
+      } else {
+        await ctx.db
+          .insert(lift)
+          .values({
+            compEntryId: input.compEntryId,
+            liftNumber: input.liftNumber,
+            state: 'created',
+            lift: input.lift,
+            gender: input.gender,
+            userWeight: input.userWeight,
+            weight: input.weight,
+            name: input.name,
+          })
+          .returning({ id: lift.id, weight: lift.weight })
+      }
     }),
   create: publicProcedure
     .input(

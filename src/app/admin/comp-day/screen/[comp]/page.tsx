@@ -1,19 +1,18 @@
 'use client'
 
-import Countdown from 'react-countdown'
-import { api } from '~/trpc/react'
-import { useEffect, useState, useRef } from 'react'
-import { env } from '~/env'
-import Pusher from 'pusher-js'
+import { useEffect, useRef, useState } from 'react'
 
-import { cn } from '~/lib/utils'
 import Image from 'next/image'
-import Loading from './loading'
 
-import { GetCompetitionById } from '~/lib/types'
-
-import { calculateDOTS, calculateNewWilks } from '~/lib/utils'
+import { env } from '~/env'
 import { sortEntriesFilter } from '~/lib/comp-day'
+import { GetCompetitionById } from '~/lib/types'
+import { calculateDOTS, calculateNewWilks, cn } from '~/lib/utils'
+import { api } from '~/trpc/react'
+import Pusher from 'pusher-js'
+import Countdown from 'react-countdown'
+
+import Loading from './loading'
 
 const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   const size = 19
@@ -40,10 +39,21 @@ const Page = ({ params }: { params: { comp: string } }) => {
   )
   if (!competition) return null
 
-  return <CompDayScreen competition={competition} comp={comp} />
+  return (
+    <CompDayScreen
+      competition={competition}
+      comp={comp}
+    />
+  )
 }
 
-const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById, comp: string }) => {
+const CompDayScreen = ({
+  competition,
+  comp,
+}: {
+  competition: GetCompetitionById
+  comp: string
+}) => {
   const [dateNow, setDateNow] = useState<number>(Date.now())
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
@@ -57,11 +67,14 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
   )
   const ctx = api.useUtils()
 
-  const entries = sortEntriesFilter(competition?.entries, liftName, bracket, round)
+  const entries = sortEntriesFilter(
+    competition?.entries,
+    liftName,
+    bracket,
+    round,
+  )
 
-  const lifter = entries?.filter(
-    (_entry, i) => i === Number(index),
-  )[0]
+  const lifter = entries?.filter((_entry, i) => i === Number(index))[0]
 
   const lift = lifter?.lift?.find(
     (item) =>
@@ -227,8 +240,7 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
   }
   return (
     <div className={cn('dark relative h-full h-screen w-full')}>
-      <div className='absolute left-1/2 top-6 -translate-x-1/2 text-center text-muted-foreground'>
-      </div>
+      <div className='absolute left-1/2 top-6 -translate-x-1/2 text-center text-muted-foreground'></div>
       {!lift ? null : (
         <div className='grid h-full w-full'>
           <div className='absolute left-10 top-4 flex hidden flex-col items-center gap-[1.3vh] '>
@@ -264,9 +276,33 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
                 </div>
               </div>
               <div className='relative flex w-full justify-center gap-24'>
-                <Sign isGood={isGoodOne === null || isGoodTwo === null || isGoodThree === null ? null : isGoodOne} />
-                <Sign isGood={isGoodOne === null || isGoodTwo === null || isGoodThree === null ? null : isGoodTwo} />
-                <Sign isGood={isGoodOne === null || isGoodTwo === null || isGoodThree === null ? null : isGoodThree} />
+                <Sign
+                  isGood={
+                    isGoodOne === null ||
+                    isGoodTwo === null ||
+                    isGoodThree === null
+                      ? null
+                      : isGoodOne
+                  }
+                />
+                <Sign
+                  isGood={
+                    isGoodOne === null ||
+                    isGoodTwo === null ||
+                    isGoodThree === null
+                      ? null
+                      : isGoodTwo
+                  }
+                />
+                <Sign
+                  isGood={
+                    isGoodOne === null ||
+                    isGoodTwo === null ||
+                    isGoodThree === null
+                      ? null
+                      : isGoodThree
+                  }
+                />
                 {lift?.rackHeight && (
                   <div className='absolute right-12 top-1/2 -translate-y-1/2 text-center text-4xl text-muted-foreground'>
                     {lift?.rackHeight}
@@ -283,12 +319,12 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
               </div>
             </div>
             <div className='absolute bottom-0 left-[1vw] text-sm'>
-                <Loading
-                  name={lifter?.user?.name || ''}
-                  weight={Number(lift.weight)}
-                  rack={lift.rackHeight || ''}
-                  lift={liftName}
-                />
+              <Loading
+                name={lifter?.user?.name || ''}
+                weight={Number(lift.weight)}
+                rack={lift.rackHeight || ''}
+                lift={liftName}
+              />
             </div>
           </div>
         </div>
