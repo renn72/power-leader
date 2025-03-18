@@ -19,10 +19,6 @@ export default function Home() {
     return null
   }
 
-  const { data: user } = api.user.isAdmin.useQuery()
-
-  console.log(user)
-
   return (
     <section className='flex h-[100svh] w-full flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white'>
       <Image
@@ -49,14 +45,6 @@ export default function Home() {
           >
             <Button className='bg-white/90 text-black'>Flights</Button>
           </Link>
-          {user === true ? (
-            <Link
-              href='/user?user=user_2uIX1uaa1SjoQPXAEeCBJzKqsWH'
-              className=''
-            >
-              <Button className='bg-white/90 text-black'>user test</Button>
-            </Link>
-          ) : null}
         </div>
 
         <Link

@@ -9,8 +9,6 @@ const Page = () => {
   const { data: competition, isLoading: competitionsLoading } =
     api.competition.get.useQuery(1)
 
-  const isAdmin = true
-
   if (competitionsLoading) return null
   if (!competition) return null
 
