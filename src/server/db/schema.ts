@@ -1,13 +1,11 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
+  index,
   int,
+  integer,
   sqliteTableCreator,
   text,
-  integer,
-  index,
 } from 'drizzle-orm/sqlite-core'
-import { relations } from 'drizzle-orm'
-
 import { createInsertSchema } from 'drizzle-zod'
 
 export const createTable = sqliteTableCreator((name) => `pb_${name}`)
@@ -163,6 +161,7 @@ export const lift = createTable(
     team: text('team'),
     teamLift: text('team_lift'),
     name: text('name'),
+    isRecord: int('is_record', { mode: 'boolean' }),
     createdAt: text('created_at')
       .default(sql`(CURRENT_TIMESTAMP)`)
       .notNull(),

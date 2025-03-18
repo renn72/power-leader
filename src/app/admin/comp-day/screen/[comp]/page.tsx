@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
 import { env } from '~/env'
-import { sortEntriesFilter } from '~/lib/comp-day'
+import { liftState, sortEntriesFilter } from '~/lib/comp-day'
 import { GetCompetitionById } from '~/lib/types'
 import { calculateDOTS, calculateNewWilks, cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
@@ -75,6 +75,18 @@ const CompDayScreen = ({
   )
 
   const lifter = entries?.filter((_entry, i) => i === Number(index))[0]
+
+  const previousLifts = lifter?.lift?.filter((l, i) => {
+    if (
+      l.lift === liftName.toLowerCase() &&
+      l.liftNumber === Number(round) &&
+      i === Number(index)
+    ) {
+      return false
+    }
+    const s = liftState(l)
+    return s.isJudged
+  })
 
   const lift = lifter?.lift?.find(
     (item) =>
@@ -175,44 +187,6 @@ const CompDayScreen = ({
     setIsGoodThree(lift?.isGoodThree)
   }, [lift])
 
-  const bracketList = competition?.entries
-    ?.filter((e) => {
-      if (liftName == 'squat') {
-        return e.squatBracket === Number(bracket)
-      }
-      if (liftName == 'deadlift') {
-        return e.deadliftBracket === Number(bracket)
-      }
-      if (liftName == 'bench') {
-        return e.benchBracket === Number(bracket)
-      }
-      return false
-    })
-    .sort((a, b) => {
-      const orderA =
-        a.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.weight || null
-      const orderB =
-        b.lift.find((l) => l.lift == liftName && l.liftNumber === Number(round))
-          ?.weight || null
-      if (orderA == null || orderA == undefined) return 1
-      if (orderB == null || orderB == undefined) return -1
-
-      return Number(orderA) - Number(orderB)
-    })
-    .filter((e) => {
-      if (liftName == 'squat') {
-        return e.squatOpener !== ''
-      }
-      if (liftName == 'deadlift') {
-        return e.deadliftOpener !== ''
-      }
-      if (liftName == 'bench') {
-        return e.benchOpener !== ''
-      }
-      return false
-    })
-
   const dots = calculateDOTS(
     Number(lift?.userWeight),
     Number(lift?.weight),
@@ -238,36 +212,64 @@ const CompDayScreen = ({
       return <span>{seconds}</span>
     }
   }
+
+  const pb =
+    liftName === 'squat'
+      ? lifter?.squatPB
+      : liftName === 'bench'
+        ? lifter?.benchPB
+        : lifter?.deadliftPB
+
+  const isPb = pb !== null && Number(pb) < Number(lift?.weight)
+
+  console.log({pb, isPb})
+
+
   return (
     <div className={cn('dark relative h-full h-screen w-full')}>
       <div className='absolute left-1/2 top-6 -translate-x-1/2 text-center text-muted-foreground'></div>
       {!lift ? null : (
         <div className='grid h-full w-full'>
-          <div className='absolute left-10 top-4 flex hidden flex-col items-center gap-[1.3vh] '>
-            <div className='text-xl font-bold text-muted-foreground'>
-              Round: {round}
-            </div>
-            {bracketList?.map((entry) => (
-              <div
-                key={entry.id}
-                className={cn(
-                  'w-full rounded-full border border-4 border-muted p-0 text-center text-lg font-semibold tracking-tighter',
-                  index == entry.id
-                    ? 'border-yellow-400 bg-yellow-400 font-black text-black'
-                    : 'bg-muted',
-                )}
-              >
-                {entry.user?.name}
-              </div>
-            ))}
-          </div>
           <div className='relative col-span-1 flex flex-col items-center justify-center'>
-            <div className='mt-32 flex w-full flex-col items-center gap-12 text-[6rem] font-bold'>
+            <div className='absolute left-10 top-4 flex  flex-col items-center'>
+              {previousLifts?.map((l) => {
+                const s = liftState(l)
+                return (
+                  <div
+                    key={l.id}
+                    className={cn(
+                      'grid grid-cols-4 place-items-center text-2xl',
+                    )}
+                  >
+                    <div className='capitalize'>{l.lift}</div>
+                    <div>{l.liftNumber}</div>
+                    <div>{l.weight}kg</div>
+                    <div>
+                      {s.isGood ? (
+                        <div className='rounded-full h-5 w-5 bg-white' />
+                      ) : (
+                        <div className='rounded-full h-4 w-4 bg-red-500' />
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className='mt-32 flex w-full flex-col items-center gap-12 text-[6rem] font-bold relative'>
+              <div className='absolute -top-48 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4'>
+                {lift.isRecord ? (
+                  <div className='text-center text-5xl text-yellow-500 ring-2 ring-yellow-500 rounded-full py-4 px-8'>
+                    Record Attempt
+                  </div>
+                ) : null}
+                {isPb ? (
+                  <div className='text-center text-5xl ring-2 ring-green-500 rounded-full py-4 px-8'>
+                    Personal Best
+                  </div>
+                ) : null}
+              </div>
               <div className='flex flex-col items-center'>
                 <div className='uppercase'>{lifter?.user?.name}</div>
-                {lift?.team ? (
-                  <div className='text-3xl uppercase'>{lift.team}</div>
-                ) : null}
               </div>
               <div className='relative flex w-full justify-center'>
                 <div className='font-extrabold'>{lift?.weight}kg</div>

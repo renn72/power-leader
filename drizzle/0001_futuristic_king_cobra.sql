@@ -1,0 +1,1 @@
+ALTER TABLE `pb_lift` ADD `is_record` integer;
