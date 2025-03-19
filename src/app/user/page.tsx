@@ -15,13 +15,26 @@ const Entry = ({ userId }: { userId: number }) => {
   const { data: compEntries } =
     api.compEntry.getUserCompEntries.useQuery(userId)
 
+  const { data: competition } = api.competition.get.useQuery(1, {
+      refetchInterval: 1000 * 360 * 1,
+    })
+
+  console.log(competition)
+
+
+
   if (!compEntries) return null
+  if (!competition) return null
+
+  const isStart = competition.isStarted === true
+
+  console.log(isStart)
 
   const entry = compEntries[0]
 
   if (!entry) return null
 
-  return <EntryForm entry={entry} />
+  return <EntryForm entry={entry} isStarted={isStart} />
 }
 
 const User = ({ userId }: { userId: string }) => {

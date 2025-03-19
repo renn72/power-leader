@@ -94,31 +94,47 @@ const DialogWrapper = ({
   children,
   title,
   value,
+  isStarted = false,
+  isPrefix = true,
 }: {
   children: React.ReactNode
   title: string
   value: string
   fixed?: number
+  isStarted?: boolean
+  isPrefix?: boolean
 }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const isDisabled = isStarted === true
   return (
     <Dialog
       open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <DialogTrigger asChild>
+      <DialogTrigger disabled={isDisabled}>
         <div
           className={cn(
             'flex gap-1 items-center justify-around flex-col bg-secondary px-4 py-1 rounded-md shadow-sm',
             'active:scale-90 active:shadow-none transition-transform cursor-pointer',
             isOpen ? 'scale-90 shadow-none' : '',
+            isDisabled ? 'bg-secondary/30' : '',
           )}
         >
           <div className='text-muted-foreground text-center text-base font-semibold'>
             {title}
           </div>
           {value !== '' && value !== undefined && value !== null ? (
-            <div className={cn('relative text-lg')}>{value}</div>
+            <div
+              className={cn(
+                'relative text-lg',
+                isDisabled ? 'font-black' : '',
+              )}
+            >
+              {value}
+              {isPrefix ? (
+                <span className='text-xs font-thin'>kg</span>
+              ) : null}
+            </div>
           ) : (
             <div className='text-muted-foreground'>...</div>
           )}
@@ -150,7 +166,13 @@ const Value = ({ value, title }: { value: string; title: string }) => {
   )
 }
 
-const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
+const EntryForm = ({
+  entry,
+  isStarted,
+}: {
+  entry: GetCompetitionEntryById
+  isStarted: boolean
+}) => {
   const ctx = api.useUtils()
 
   const [squatOpener, setSquatOpener] = useState<number | null>(
@@ -264,11 +286,13 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
 
   return (
     <div className='flex flex-col gap-4 px-4'>
-    <div className='flex flex-col gap-0'>
-      <h1 className='text-center text-3xl font-extrabold text-primary'>
-        WRPF Showdown V
-      </h1>
-      <div className='text-xs text-center font-light'>(you can update this as many times as you wish)</div>
+      <div className='flex flex-col gap-0'>
+        <h1 className='text-center text-3xl font-extrabold text-primary'>
+          WRPF Showdown V
+        </h1>
+        <div className='text-xs text-center font-light'>
+          (you can update this as many times as you wish)
+        </div>
       </div>
       <div className='flex flex-col gap-3 p-2 border border-border rounded-xl shadow-md'>
         <div className='flex gap-4 w-full justify-around'>
@@ -309,6 +333,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
             <DialogWrapper
               title='Opener'
               value={entry?.squatOpener || ''}
+              isStarted={isStarted}
             >
               <DialogHeader>
                 <DialogTitle className='text-xl'>Squat Opener</DialogTitle>
@@ -366,6 +391,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
             <DialogWrapper
               title='Rack'
               value={entry?.squarRackHeight || ''}
+              isPrefix={false}
             >
               <DialogHeader>
                 <DialogTitle className='text-xl'>Squat Rack Height</DialogTitle>
@@ -379,7 +405,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
               <div className='flex justify-center '>
                 <Input
                   placeholder='eg. 12in or 4out'
-                      className='text-lg'
+                  className='text-lg'
                   value={squatRackHeight ?? ''}
                   onChange={(e) => {
                     setSquatRackHeight(e.target.value)
@@ -480,6 +506,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
             <DialogWrapper
               title='Opener'
               value={entry?.benchOpener || ''}
+              isStarted={isStarted}
             >
               <DialogHeader>
                 <DialogTitle className='text-xl'>Bench Opener</DialogTitle>
@@ -537,6 +564,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
             <DialogWrapper
               title='Rack'
               value={entry?.benchRackHeight || ''}
+              isPrefix={false}
             >
               <DialogHeader>
                 <DialogTitle className='text-xl'>Bench Rack Height</DialogTitle>
@@ -651,6 +679,7 @@ const EntryForm = ({ entry }: { entry: GetCompetitionEntryById }) => {
             <DialogWrapper
               title='Opener'
               value={entry?.deadliftOpener || ''}
+              isStarted={isStarted}
             >
               <DialogHeader>
                 <DialogTitle className='text-xl'>Deadlift Opener</DialogTitle>
