@@ -117,7 +117,7 @@ const DialogWrapper = ({
             'flex gap-1 items-center justify-around flex-col bg-secondary px-4 py-1 rounded-md shadow-sm',
             'active:scale-90 active:shadow-none transition-transform cursor-pointer',
             isOpen ? 'scale-90 shadow-none' : '',
-            isDisabled ? 'bg-secondary/30' : '',
+            isDisabled ? 'bg-secondary/30 ring-2 ring-primary/20' : '',
           )}
         >
           <div className='text-muted-foreground text-center text-base font-semibold'>
@@ -132,7 +132,7 @@ const DialogWrapper = ({
             >
               {value}
               {isPrefix ? (
-                <span className='text-xs font-thin'>kg</span>
+                <span className='text-xs font-medium'>kg</span>
               ) : null}
             </div>
           ) : (
