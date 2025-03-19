@@ -1,5 +1,9 @@
 'use client'
 
+import { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
+import { cn, getTotalDots, getTotalWilks } from '~/lib/utils'
+
+import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Table,
   TableBody,
@@ -7,10 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
+
 import LeaderBoardRow from './leader-board-row'
-import { getTotalDots, getTotalWilks } from '~/lib/utils'
-import { cn } from '~/lib/utils'
 
 const LeaderBoard = ({
   competition,
@@ -56,8 +58,8 @@ const LeaderBoard = ({
   const check = entries.map((e) => getTotalWilks(e))
 
   return (
-    <Table className='h-vh'>
-      <TableHeader className='z-99 sticky top-0 bg-muted'>
+    <Table className=''>
+      <TableHeader className='z-[99] top-0 bg-muted'>
         <TableRow className='text-base tracking-tighter'>
           <TableHead className=''>Name</TableHead>
           <TableHead>Squat</TableHead>
@@ -74,16 +76,16 @@ const LeaderBoard = ({
           <TableHead>Rank</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {entries.map((entry, index) => (
-          <LeaderBoardRow
-            entry={entry}
-            entries={entries}
-            index={index}
-            key={entry.id}
-          />
-        ))}
-      </TableBody>
+        <TableBody className=''>
+          {entries.map((entry, index) => (
+            <LeaderBoardRow
+              entry={entry}
+              entries={entries}
+              index={index}
+              key={entry.id}
+            />
+          ))}
+        </TableBody>
     </Table>
   )
 }
