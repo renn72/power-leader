@@ -117,18 +117,6 @@ const Navbar = () => {
           </NavigationMenuItem>
           {isAdmin ? (
             <NavigationMenuItem>
-              <Button
-                onClick={() => onSendEmail()}
-                size='sm'
-                className=''
-                variant='secondary'
-              >
-                Email
-              </Button>
-            </NavigationMenuItem>
-          ) : null}
-          {isAdmin ? (
-            <NavigationMenuItem>
               <Link
                 href='/admin/bracket'
                 legacyBehavior
@@ -150,6 +138,19 @@ const Navbar = () => {
               >
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Comp Day
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
+          {isAdmin ? (
+            <NavigationMenuItem>
+              <Link
+                href='/admin/screens'
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Screens
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>

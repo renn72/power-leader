@@ -1,16 +1,108 @@
-import { z } from 'zod'
-import { eq } from 'drizzle-orm'
-
-import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
-
-import { lift, compDayInfo } from '~/server/db/schema'
-
+import { TRPCError } from '@trpc/server'
 import { pusherServer } from '~/server/api/pusher'
+import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
+import { compDayInfo, lift } from '~/server/db/schema'
+import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { getCurrentUser } from './user'
-import { TRPCError } from '@trpc/server'
 
 export const competitionDayRouter = createTRPCRouter({
+  updateScreen: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        uuid: z.string(),
+        screen1: z.string().optional(),
+        screen1Size: z.string().optional(),
+        screen2: z.string().optional(),
+        screen2Size: z.string().optional(),
+        screen3: z.string().optional(),
+        screen3Size: z.string().optional(),
+        screen4: z.string().optional(),
+        screen4Size: z.string().optional(),
+        screen5: z.string().optional(),
+        screen5Size: z.string().optional(),
+        screen6: z.string().optional(),
+        screen6Size: z.string().optional(),
+        screen7: z.string().optional(),
+        screen7Size: z.string().optional(),
+        screen8: z.string().optional(),
+        screen8Size: z.string().optional(),
+        screen9: z.string().optional(),
+        screen9Size: z.string().optional(),
+        screen10: z.string().optional(),
+        screen10Size: z.string().optional(),
+        screen11: z.string().optional(),
+        screen11Size: z.string().optional(),
+        screen12: z.string().optional(),
+        screen12Size: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await getCurrentUser()
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'You are not authorized to access this resource.',
+        })
+      }
+
+      console.log('input', input)
+
+      const res = await ctx.db
+        .update(compDayInfo)
+        .set({
+          screen1: input.screen1,
+          screen1Size: input.screen1Size,
+          screen2: input.screen2,
+          screen2Size: input.screen2Size,
+          screen3: input.screen3,
+          screen3Size: input.screen3Size,
+          screen4: input.screen4,
+          screen4Size: input.screen4Size,
+          screen5: input.screen5,
+          screen5Size: input.screen5Size,
+          screen6: input.screen6,
+          screen6Size: input.screen6Size,
+          screen7: input.screen7,
+          screen7Size: input.screen7Size,
+          screen8: input.screen8,
+          screen8Size: input.screen8Size,
+          screen9: input.screen9,
+          screen9Size: input.screen9Size,
+          screen10: input.screen10,
+          screen10Size: input.screen10Size,
+          screen11: input.screen11,
+          screen11Size: input.screen11Size,
+          screen12: input.screen12,
+          screen12Size: input.screen12Size,
+        })
+        .where(eq(compDayInfo.compId, input.id))
+        .returning({
+          lift: compDayInfo.lift,
+          round: compDayInfo.round,
+          bracket: compDayInfo.bracket,
+          index: compDayInfo.index,
+          nextIndex: compDayInfo.nextIndex,
+        })
+
+      console.log('res', res)
+
+      const info = res?.[0]
+
+      if (info) {
+        await pusherServer.trigger('competition-' + input.uuid, 'update', {
+          lift: info.lift,
+          round: info.round,
+          bracket: info.bracket,
+          index: info.index,
+          nextIndex: info.nextIndex,
+        })
+      }
+
+      return res
+    }),
   updateLift: publicProcedure
     .input(
       z.object({
@@ -162,39 +254,39 @@ export const competitionDayRouter = createTRPCRouter({
 
       let state = 'judged'
 
-        const res = await ctx.db
-          .update(lift)
-          .set({
-            isGoodOne: null,
-            isGoodTwo: null,
-            isGoodThree: null,
-            updatedAt: Date.now().toString(),
-            state: state,
-          })
-          .where(eq(lift.id, input.id))
-          .returning({
-            isGoodOne: lift.isGoodOne,
-          })
+      const res = await ctx.db
+        .update(lift)
+        .set({
+          isGoodOne: null,
+          isGoodTwo: null,
+          isGoodThree: null,
+          updatedAt: Date.now().toString(),
+          state: state,
+        })
+        .where(eq(lift.id, input.id))
+        .returning({
+          isGoodOne: lift.isGoodOne,
+        })
 
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 1,
-          isGood: null,
-        })
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 2,
-          isGood: null,
-        })
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 3,
-          isGood: null,
-        })
-        return res
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 1,
+        isGood: null,
+      })
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 2,
+        isGood: null,
+      })
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 3,
+        isGood: null,
+      })
+      return res
     }),
   headJudgePassLift: publicProcedure
     .input(
@@ -216,39 +308,39 @@ export const competitionDayRouter = createTRPCRouter({
       console.log('input', input)
       let state = 'judged'
 
-        const res = await ctx.db
-          .update(lift)
-          .set({
-            isGoodOne: true,
-            isGoodTwo: true,
-            isGoodThree: true,
-            updatedAt: Date.now().toString(),
-            state: state,
-          })
-          .where(eq(lift.id, input.id))
-          .returning({
-            isGoodOne: lift.isGoodOne,
-          })
+      const res = await ctx.db
+        .update(lift)
+        .set({
+          isGoodOne: true,
+          isGoodTwo: true,
+          isGoodThree: true,
+          updatedAt: Date.now().toString(),
+          state: state,
+        })
+        .where(eq(lift.id, input.id))
+        .returning({
+          isGoodOne: lift.isGoodOne,
+        })
 
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 1,
-          isGood: true,
-        })
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 2,
-          isGood: true,
-        })
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 3,
-          isGood: true,
-        })
-        return res
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 1,
+        isGood: true,
+      })
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 2,
+        isGood: true,
+      })
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 3,
+        isGood: true,
+      })
+      return res
     }),
   headJudgeFailLift: publicProcedure
     .input(
@@ -270,39 +362,39 @@ export const competitionDayRouter = createTRPCRouter({
       console.log('input', input)
       let state = 'judged'
 
-        const res = await ctx.db
-          .update(lift)
-          .set({
-            isGoodOne: false,
-            isGoodTwo: false,
-            isGoodThree: false,
-            updatedAt: Date.now().toString(),
-            state: state,
-          })
-          .where(eq(lift.id, input.id))
-          .returning({
-            isGoodOne: lift.isGoodOne,
-          })
+      const res = await ctx.db
+        .update(lift)
+        .set({
+          isGoodOne: false,
+          isGoodTwo: false,
+          isGoodThree: false,
+          updatedAt: Date.now().toString(),
+          state: state,
+        })
+        .where(eq(lift.id, input.id))
+        .returning({
+          isGoodOne: lift.isGoodOne,
+        })
 
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 1,
-          isGood: false,
-        })
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 2,
-          isGood: false,
-        })
-        await pusherServer.trigger('competition-' + input.uuid, 'judge', {
-          id: input.id,
-          entryId: input.entryId,
-          judge: 3,
-          isGood: false,
-        })
-        return res
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 1,
+        isGood: false,
+      })
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 2,
+        isGood: false,
+      })
+      await pusherServer.trigger('competition-' + input.uuid, 'judge', {
+        id: input.id,
+        entryId: input.entryId,
+        judge: 3,
+        isGood: false,
+      })
+      return res
     }),
   updateIsLiftGood: publicProcedure
     .input(

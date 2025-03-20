@@ -1,6 +1,7 @@
 'use client'
 
 import { api } from '~/trpc/react'
+
 import { CompDayScreen } from '../admin/comp-day/screen/[comp]/comp-day-screen'
 
 export default function Home() {
@@ -10,9 +11,13 @@ export default function Home() {
   const comp = 'Show-Down-22-3-2025'
   if (!competition) return null
   return (
-    <CompDayScreen
-      competition={competition}
-      comp={comp}
-    />
+    <div className='w-full h-screen overflow-hidden'>
+      <div className='scale-[1]'>
+        <CompDayScreen
+          competition={competition}
+          comp={comp}
+        />
+      </div>
+    </div>
   )
 }
