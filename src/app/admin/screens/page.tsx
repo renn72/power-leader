@@ -204,7 +204,7 @@ const Screens = () => {
   })
   if (!competition) return null
   return (
-    <div className='max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 relative'>
+    <div className='max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 relative px-4 lg:px-0'>
       <RefreshCcw
         className={cn('absolute -right-10 top-0 active:scale-75 cursor-pointer transition-transform',
         )}
