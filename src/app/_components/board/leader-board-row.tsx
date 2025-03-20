@@ -1,25 +1,33 @@
 'use client'
 
-import { TableCell, TableRow } from '@/components/ui/table'
 import {
-  GetCompetitionEntryById,
   GetCompetitionByUuid,
+  GetCompetitionEntryById,
   GetLiftById,
 } from '~/lib/types'
-import { calculateDOTS, getliftDots, calculateNewWilks, getliftWilks } from '~/lib/utils'
-import { cn } from '~/lib/utils'
+import {
+  calculateNewWilks,
+  cn,
+  getliftWilks,
+} from '~/lib/utils'
+
+import {
+  calculateDOTS,
+  getliftDots,
+} from '~/lib/dots'
+
+import { TableCell, TableRow } from '@/components/ui/table'
 
 const LeaderBoardRow = ({
   entry,
   entries,
   index,
-  isTeam = false,
 }: {
   entry: GetCompetitionEntryById
   entries: GetCompetitionEntryById[]
   index: number
-  isTeam?: boolean
 }) => {
+  const userWeight = Number(entry.weight)
   const squats = entry.lift.filter((l) => l.lift == 'squat')
 
   const isSquatting = squats?.length > 0
@@ -38,24 +46,10 @@ const LeaderBoardRow = ({
     },
     { weight: '0' } as GetLiftById,
   )
-  const squatDots = calculateNewWilks(
-    Number(squat?.userWeight),
+  const squatDots = calculateDOTS(
+    userWeight,
     Number(squat?.weight),
     squat.gender?.toLowerCase() == 'female',
-  )
-
-  const projectedSquat = squats?.reduce(
-    (a, b) => {
-      const isGood = b.liftNumber == 1
-      if (isGood && Number(b.weight) > Number(a.weight)) return b
-      return a
-    },
-    { weight: '0' } as GetLiftById,
-  )
-  const projectedSquatDots = calculateNewWilks(
-    Number(projectedSquat?.userWeight),
-    Number(projectedSquat?.weight),
-    projectedSquat.gender?.toLowerCase() == 'female',
   )
 
   const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
@@ -75,26 +69,10 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const benchDots = calculateNewWilks(
-    Number(bench?.userWeight),
+  const benchDots = calculateDOTS(
+    userWeight,
     Number(bench?.weight),
     bench.gender?.toLowerCase() == 'female',
-  )
-
-  const projectedBench = entry.lift
-    .filter((l) => l.lift == 'bench')
-    .reduce(
-      (a, b) => {
-        const isGood = b.liftNumber == 1
-        if (isGood && Number(b.weight) > Number(a.weight)) return b
-        return a
-      },
-      { weight: '0' } as GetLiftById,
-    )
-  const projectedBenchDots = calculateNewWilks(
-    Number(projectedBench?.userWeight),
-    Number(projectedBench?.weight),
-    projectedBench.gender?.toLowerCase() == 'female',
   )
 
   const isDeadlifting =
@@ -115,49 +93,32 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const deadliftDots = calculateNewWilks(
-    Number(deadlift?.userWeight),
+  const deadliftDots = calculateDOTS(
+    userWeight,
     Number(deadlift?.weight),
     deadlift.gender?.toLowerCase() == 'female',
   )
 
-  const projectedDeadlift = entry.lift
-    .filter((l) => l.lift == 'deadlift')
-    .reduce(
-      (a, b) => {
-        const isGood = b.liftNumber == 1
-        if (isGood && Number(b.weight) > Number(a.weight)) return b
-        return a
-      },
-      { weight: '0' } as GetLiftById,
-    )
 
-  const liftsDots = entries?.map((e) => getliftWilks(e))
-  const check = liftsDots
-    ?.filter((l) => l.squat !== 0 && !isNaN(l.squat))
-    // .sort((a, b) => b.squat - a.squat)
-    // .map((l, i) => ({ id: l.id, place: i + 1 }))
+  const liftsDots = entries?.map((e) => getliftDots(e))
+  const check = liftsDots?.filter((l) => l.squat !== 0 && !isNaN(Number(l.squat)))
+  .sort((a, b) => Number(b.squat) - Number(a.squat))
+  .map((l, i) => ({ id: l.id, place: i + 1 }))
   const squatPlaceDots = liftsDots
-    ?.filter((l) => l.squat !== 0 && !isNaN(l.squat))
-    .sort((a, b) => b.squat - a.squat)
+    ?.filter((l) => l.squat !== 0 && !isNaN(Number(l.squat)))
+    .sort((a, b) => Number(b.squat) - Number(a.squat))
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const benchPlaceDots = liftsDots
-    ?.filter((l) => l.bench !== 0 && !isNaN(l.bench))
-    .sort((a, b) => b.bench - a.bench)
+    ?.filter((l) => l.bench !== 0 && !isNaN(Number(l.bench)))
+    .sort((a, b) => Number(b.bench) - Number(a.bench))
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const deadliftPlaceDots = liftsDots
-    ?.filter((l) => l.deadlift !== 0 && !isNaN(l.deadlift))
-    .sort((a, b) => b.deadlift - a.deadlift)
+    ?.filter((l) => l.deadlift !== 0 && !isNaN(Number(l.deadlift)))
+    .sort((a, b) => Number(b.deadlift) - Number(a.deadlift))
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
-
-  const projectedDeadliftDots = calculateNewWilks(
-    Number(projectedDeadlift?.userWeight),
-    Number(projectedDeadlift?.weight),
-    projectedDeadlift.gender?.toLowerCase() == 'female',
-  )
 
   const squatTotalDots = isSquatting ? (hasSquat ? Number(squatDots) : 0) : 0
   const benchTotalDots = isBenching ? (hasBench ? Number(benchDots) : 0) : 0
@@ -184,9 +145,12 @@ const LeaderBoardRow = ({
         'text-sm md:text-xl font-extrabold uppercase leading-5 tracking-tightest',
       )}
     >
-      <TableCell className='py-0 truncate'>
-        {entry.user?.name?.split(' ')[0]}{' '}
-        {entry.user?.name?.split(' ')[1]}
+      <TableCell className='py-0 truncate sticky left-0 z-20 bg-background'>
+        {entry.user?.name?.split(' ')[0]?.slice(0, 1)}{' '}
+        {entry.user?.name?.split(' ')[1] &&
+        (entry.user.name.split(' ')[1]?.length ?? 0) > 8
+          ? entry.user?.name?.split(' ')[1]?.slice(0, 8) +'..'
+          : entry.user?.name?.split(' ')[1]}
       </TableCell>
       {hasSquat ? (
         <>
@@ -196,16 +160,14 @@ const LeaderBoardRow = ({
           <TableCell className='lowercase text-yellow-500'>
             {isNaN(+squatDots) ? '' : squatDots}
           </TableCell>
-          <TableCell className='font-semibold'>
+          <TableCell className='font-semibold text-center'>
             {squatPlaceDots?.place}
           </TableCell>
         </>
       ) : (
         <>
-          <TableCell className='font-medium lowercase text-foreground/80'>
-          </TableCell>
-          <TableCell className='font-medium text-foreground/80'>
-          </TableCell>
+          <TableCell className='font-medium lowercase text-foreground/80'></TableCell>
+          <TableCell className='font-medium text-foreground/80'></TableCell>
           <TableCell></TableCell>
         </>
       )}
@@ -217,16 +179,14 @@ const LeaderBoardRow = ({
           <TableCell className='text-yellow-500'>
             {isNaN(+benchDots) ? '' : benchDots}
           </TableCell>
-          <TableCell className='font-semibold'>
+          <TableCell className='font-semibold text-center'>
             {benchPlaceDots?.place}
           </TableCell>
         </>
       ) : (
         <>
-          <TableCell className='font-medium lowercase text-foreground/80'>
-          </TableCell>
-          <TableCell className='font-medium text-foreground/80'>
-          </TableCell>
+          <TableCell className='font-medium lowercase text-foreground/80'></TableCell>
+          <TableCell className='font-medium text-foreground/80'></TableCell>
           <TableCell></TableCell>
         </>
       )}
@@ -238,16 +198,14 @@ const LeaderBoardRow = ({
           <TableCell className='text-yellow-500'>
             {isNaN(+deadliftDots) ? '' : deadliftDots}
           </TableCell>
-          <TableCell className='font-semibold'>
+          <TableCell className='font-semibold text-center'>
             {deadliftPlaceDots?.place}
           </TableCell>
         </>
       ) : (
         <>
-          <TableCell className='font-medium lowercase text-foreground/80'>
-          </TableCell>
-          <TableCell className='font-medium text-foreground/80'>
-          </TableCell>
+          <TableCell className='font-medium lowercase text-foreground/80'></TableCell>
+          <TableCell className='font-medium text-foreground/80'></TableCell>
           <TableCell></TableCell>
         </>
       )}

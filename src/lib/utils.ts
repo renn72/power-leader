@@ -382,6 +382,10 @@ export const getTotalWilks = (entry: GetCompetitionEntryById) => {
 export const getliftDots = (entry: GetCompetitionEntryById) => {
   const squats = entry.lift.filter((l) => l.lift == 'squat')
 
+  if (entry.weight == '') return 0
+  if (entry.weight == undefined) return 0
+  if (isNaN(Number(entry.weight))) return 0
+
   const isSquatting = squats?.length > 0
   const hasSquat = squats?.reduce(
     (a, b) => (b.state == 'judged' ? true : a),
@@ -523,6 +527,10 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
 
 export const getTotalDots = (entry: GetCompetitionEntryById) => {
   const squats = entry.lift.filter((l) => l.lift == 'squat')
+
+  if (entry.weight == '') return 0
+  if (entry.weight == undefined) return 0
+  if (isNaN(Number(entry.weight))) return 0
 
   const isSquatting = squats?.length > 0
   const hasSquat = squats?.reduce(

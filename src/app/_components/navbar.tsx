@@ -17,8 +17,8 @@ import { toast } from 'sonner'
 
 import { ModeToggle } from './mode-toggle'
 
-function sleep(ms : number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 const Navbar = () => {
@@ -39,18 +39,22 @@ const Navbar = () => {
 
   const onSendEmail = async () => {
     if (!competition) return
-    for (const entry of competition.entries.filter((e) => e.user?.email !== 'anthonyx@harpersbathroom.com.au' && e.user?.email !== 'akcornish2@gmail.com')) {
-      if (!entry.user?.email) continue
-      if (!entry.user?.clerkId) continue
-      if (!entry.user?.name) continue
-      email({
-        email: entry.user?.email,
-        link: entry.user?.clerkId,
-        name: entry.user?.name,
-      })
-      await sleep(1100)
-    }
+    const entry = competition.entries.find(
+      (e) => e.user?.email === '26wbevis@stpatricks.tas.edu.au',
+    )
 
+    if (!entry) return
+    if (!entry.user?.email) return
+    if (!entry.user?.clerkId) return
+    if (!entry.user?.name) return
+
+    toast.info('Sending email...')
+
+    email({
+      email: entry.user.email,
+      link: entry.user.clerkId,
+      name: entry.user.name,
+    })
   }
 
   const { data: isAdmin } = api.user.isAdmin.useQuery()
@@ -113,6 +117,18 @@ const Navbar = () => {
           </NavigationMenuItem>
           {isAdmin ? (
             <NavigationMenuItem>
+              <Button
+                onClick={() => onSendEmail()}
+                size='sm'
+                className=''
+                variant='secondary'
+              >
+                Email
+              </Button>
+            </NavigationMenuItem>
+          ) : null}
+          {isAdmin ? (
+            <NavigationMenuItem>
               <Link
                 href='/admin/bracket'
                 legacyBehavior
@@ -138,7 +154,6 @@ const Navbar = () => {
               </Link>
             </NavigationMenuItem>
           ) : null}
-
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>

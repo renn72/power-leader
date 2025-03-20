@@ -2,13 +2,10 @@
 
 import { useState } from 'react'
 
-import { useSearchParams } from 'next/navigation'
-
 import LeaderBoard from '~/app/_components/board/leader-board'
 import { wcFData, wcMData } from '~/lib/store'
 import { api } from '~/trpc/react'
 
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Select,
   SelectContent,
@@ -27,7 +24,6 @@ const Board = () => {
   const { data } = api.competition.get.useQuery(1, {
     refetchInterval: 60000,
   })
-  console.log(new Date().getMinutes())
 
   if (!data) return null
 
@@ -46,8 +42,9 @@ const Board = () => {
           <SelectContent>
             <SelectItem value='all'>All</SelectItem>
             <SelectItem value='open'>Open</SelectItem>
-            <SelectItem value='teen'>Teen</SelectItem>
-            <SelectItem value='master'>Master</SelectItem>
+            <SelectItem value='pro'>Pro</SelectItem>
+            <SelectItem value='novice'>Novice</SelectItem>
+            <SelectItem value='first-timers'>First Timer</SelectItem>
           </SelectContent>
         </Select>
         <Select
@@ -74,22 +71,34 @@ const Board = () => {
               <SelectValue placeholder='wc' />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem
+                value={'all'}
+              >
+                All
+              </SelectItem>
               {wcFData.map((i) => {
-                return <SelectItem value={i.toString()}>{i}</SelectItem>
+                return (
+                  <SelectItem
+                    key={i}
+                    value={i.toString()}
+                  >
+                    {i}
+                  </SelectItem>
+                )
               })}
             </SelectContent>
           </Select>
         </Select>
       </div>
 
-    <div className='w-full'>
-      <LeaderBoard
-        competition={data}
-        table={table}
-        gender={g}
-        wc={wc}
-      />
-    </div>
+      <div className='w-full'>
+        <LeaderBoard
+          competition={data}
+          table={table}
+          gender={g}
+          wc={wc}
+        />
+      </div>
     </div>
   )
 }

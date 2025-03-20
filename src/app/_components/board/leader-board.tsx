@@ -1,7 +1,8 @@
 'use client'
 
 import { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
-import { cn, getTotalDots, getTotalWilks } from '~/lib/utils'
+import { cn, getTotalWilks } from '~/lib/utils'
+import { getTotalDots, } from '~/lib/dots'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
@@ -46,47 +47,56 @@ const LeaderBoard = ({
     })
     .filter((entry) => {
       if (wc === '') return true
+      if (wc === 'all') return true
       return entry.wc?.split('-')[0]?.toLowerCase() === wc.toLowerCase()
     })
     .sort((a, b) => {
-      if (getTotalWilks(a) == 0) return 1
-      if (isNaN(getTotalWilks(a))) return 1
-      if (getTotalWilks(b) == 0) return -1
-      return getTotalWilks(b) - getTotalWilks(a)
+      if (getTotalDots(a) == 0) return 1
+      if (isNaN(getTotalDots(a))) return 1
+      if (getTotalDots(b) == 0) return -1
+      if (isNaN(getTotalDots(b))) return -1
+      return getTotalDots(a) - getTotalDots(b)
     })
 
-  const check = entries.map((e) => getTotalWilks(e))
+  const check = entries.map((e) => getTotalDots(e))
+  console.log('e',check)
 
   return (
-    <Table className=''>
-      <TableHeader className='z-[99] top-0 bg-muted'>
-        <TableRow className='text-base tracking-tighter'>
-          <TableHead className=''>Name</TableHead>
-          <TableHead>Squat</TableHead>
-          <TableHead>WILKS</TableHead>
-          <TableHead>Place</TableHead>
-          <TableHead>Bench</TableHead>
-          <TableHead>WILKS</TableHead>
-          <TableHead>Place</TableHead>
-          <TableHead>DL</TableHead>
-          <TableHead>WILKS</TableHead>
-          <TableHead>Place</TableHead>
-          <TableHead>Total</TableHead>
-          <TableHead>WILKS</TableHead>
-          <TableHead>Rank</TableHead>
-        </TableRow>
-      </TableHeader>
-        <TableBody className=''>
-          {entries.map((entry, index) => (
-            <LeaderBoardRow
-              entry={entry}
-              entries={entries}
-              index={index}
-              key={entry.id}
-            />
-          ))}
-        </TableBody>
-    </Table>
+    <>
+      <div className='w-full overflow-auto'>
+        <div className='h-[calc(100vh-40px)] overflow-auto'>
+          <Table>
+            <TableHeader className='bg-muted'>
+              <TableRow className='text-base tracking-tighter'>
+                <TableHead className=''>Name</TableHead>
+                <TableHead>Squat</TableHead>
+                <TableHead>DOTS</TableHead>
+                <TableHead>Place</TableHead>
+                <TableHead>Bench</TableHead>
+                <TableHead>DOTS</TableHead>
+                <TableHead>Place</TableHead>
+                <TableHead>DL</TableHead>
+                <TableHead>DOTS</TableHead>
+                <TableHead>Place</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>DOTS</TableHead>
+                <TableHead>Rank</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className=''>
+              {entries.map((entry, index) => (
+                <LeaderBoardRow
+                  entry={entry}
+                  entries={entries}
+                  index={index}
+                  key={entry.id}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    </>
   )
 }
 
