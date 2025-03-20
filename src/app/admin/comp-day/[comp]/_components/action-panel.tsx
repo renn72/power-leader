@@ -45,7 +45,7 @@ const ActionPanel = ({
         : Number(competition.deadliftBrackets)
 
   return (
-    <div className='grid grid-cols-3 gap-2'>
+    <div className='grid  lg:grid-cols-3 gap-2'>
       <div className='flex items-center justify-around rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Lift</div>
         <ToggleGroup
