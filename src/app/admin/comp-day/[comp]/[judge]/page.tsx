@@ -207,7 +207,7 @@ const Judge = ({
               width: '100vw',
               height: '100vw',
             }}
-            className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-10'
+            className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-20'
           />
           <div className='text-3xl font-bold z-50'>Judge {judgeNumber}</div>
         </div>
@@ -399,7 +399,7 @@ const Judge = ({
           width: '100vw',
           height: '100vw',
         }}
-        className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-10'
+        className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-20'
       />
       <div className='text-3xl font-bold'>Judge {judgeNumber}</div>
       <div className='flex flex-col items-center gap-2'>
