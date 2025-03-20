@@ -40,7 +40,7 @@ export default async function RootLayout({
   }
 
   return (
-    <div className={`flex h-dvh flex-col `}>
+    <div className={`sm:flex sm:h-dvh sm:flex-col `}>
       <Navbar />
       <div className='xl:min-h-[calc(100vh-7.8rem)]'>{children}</div>
     </div>
