@@ -174,7 +174,6 @@ const Judge = ({
   //   if (judgeNumber === 3) setIsGood(lift?.isGoodThree)
   // }, [lift])
 
-  console.log('ll', lift, lifter)
 
   if (!lift) return null
   if (!lifter) return null
@@ -505,7 +504,7 @@ const Page = ({ params }: { params: { comp: string; judge: string } }) => {
   const judgeNumber = Number(judge.split('-')[1])
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 100 * 1,
+      refetchInterval: 1000 * 30 * 1,
     })
   if (competitionLoading) return null
   if (!competition) return null

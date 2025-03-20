@@ -37,6 +37,7 @@ export const calculateDOTS = (
 export const getliftDots = (entry: GetCompetitionEntryById) => {
 
   const userWeight = Number(entry.weight)
+  const userGender = entry.user?.gender?.toLowerCase()
 
   const squats = entry.lift.filter((l) => l.lift == 'squat')
 
@@ -59,7 +60,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
   const squatDots = calculateDOTS(
     Number(userWeight),
     Number(squat?.weight),
-    squat.gender?.toLowerCase() == 'female',
+    userGender == 'female',
   )
 
   const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
@@ -82,7 +83,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
   const benchDots = calculateDOTS(
     Number(userWeight),
     Number(bench?.weight),
-    bench.gender?.toLowerCase() == 'female',
+    userGender == 'female',
   )
 
   const isDeadlifting =
@@ -106,7 +107,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
   const deadliftDots = calculateDOTS(
     Number(userWeight),
     Number(deadlift?.weight),
-    deadlift.gender?.toLowerCase() == 'female',
+    userGender == 'female',
   )
 
   return {
@@ -121,6 +122,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
 export const getTotalDots = (entry: GetCompetitionEntryById) => {
 
   const userWeight = Number(entry.weight)
+  const userGender = entry.user?.gender?.toLowerCase()
 
 
   const squats = entry.lift.filter((l) => l.lift == 'squat')
@@ -144,7 +146,7 @@ export const getTotalDots = (entry: GetCompetitionEntryById) => {
   const squatDots = calculateDOTS(
     userWeight,
     Number(squat?.weight),
-    squat.gender?.toLowerCase() == 'female',
+    userGender == 'female',
   )
 
   const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
@@ -167,7 +169,7 @@ export const getTotalDots = (entry: GetCompetitionEntryById) => {
   const benchDots = calculateDOTS(
     userWeight,
     Number(bench?.weight),
-    bench.gender?.toLowerCase() == 'female',
+    userGender == 'female',
   )
 
   const isDeadlifting =
@@ -191,7 +193,7 @@ export const getTotalDots = (entry: GetCompetitionEntryById) => {
   const deadliftDots = calculateDOTS(
     Number(userWeight),
     Number(deadlift?.weight),
-    deadlift.gender?.toLowerCase() == 'female',
+    userGender == 'female',
   )
 
   const totalDots =

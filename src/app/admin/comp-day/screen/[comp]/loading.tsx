@@ -107,7 +107,7 @@ const Loading = ({
   i = i % 1
   let micro = Math.floor(i / 0.5)
 
-  console.log(red, blue, yellow, green, white, black, gray)
+  // console.log(red, blue, yellow, green, white, black, gray)
 
   return (
     <div className='ml-4 flex flex-col items-center justify-center gap-1 text-5xl'>
