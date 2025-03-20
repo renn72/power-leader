@@ -47,8 +47,8 @@ const NumberInput = ({
   scale: number
   postfix?: string
 }) => {
-  const fixed = 2
-  const scale = 0.1
+  const fixed = _fixed
+  const scale = _scale
   return (
     <div className='w-60 relative border rounded-lg h-16 flex items-center'>
       <Input
@@ -76,7 +76,7 @@ const NumberInput = ({
             return
           }
           const m = Math.floor(Number(value) / scale)
-          setValue(m * scale + scale)
+          setValue(Number((m * scale).toFixed(0)) + scale)
         }}
         className='absolute right-0 top-1/2 -translate-y-1/2 text-xs text-secondary-foreground flex gap-0 items-start border-l active:bg-primary/60 rounded-r-lg'
       >
@@ -88,7 +88,7 @@ const NumberInput = ({
         onClick={() => {
           if (!value) return
           const m = Math.floor(Number(value) / scale)
-          setValue(m * scale - scale)
+          setValue(Number((m * scale).toFixed(0)) - scale)
         }}
         className='absolute left-0 top-1/2 -translate-y-1/2 text-xs text-secondary-foreground flex gap-0 items-start border-r active:bg-primary/30 rounded-l-lg'
       >
@@ -164,8 +164,8 @@ const Screen = ({
         <NumberInput
           value={size}
           setValue={setSize}
-          fixed={2}
-          scale={0.1}
+          fixed={0}
+          scale={5}
         />
         <div className='flex gap-4 w-full justify-around'>
           <Button
@@ -175,7 +175,7 @@ const Screen = ({
                 id: compId,
                 uuid: uuid,
                 screen1: type,
-                screen1Size: size.toString(),
+                screen1Size: size.toFixed(0),
               })
             }}
           >

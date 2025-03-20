@@ -177,17 +177,18 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
           )
         })}
       </div>
-      <div className='relative col-span-1 my-[2vh] flex h-dvh w-full flex-col items-center justify-around text-xl font-bold'>
-        <div className='absolute left-1/2 top-0 -translate-x-1/2 text-center'>
+      <div className='relative col-span-1 mt-[2vh] flex h-dvh w-full flex-col items-start justify-around text-xl font-bold pl-20'>
+        <div className='absolute left-1/2 top-1 -translate-x-1/2 z-[-10]'>
           <Image
             src='/showdown.jpeg'
             alt='RawWar Logo'
-            width={100}
-            height={100}
-            className='w-[4vw]'
+            width={1440}
+            height={1440}
+            style={{ width: '10vw', height: '100%' }}
           />
+
         </div>
-        <div className='text-sm'>
+        <div className='text-sm mt-44'>
           {lifter && lift && (
             <Loading
               isLifting={true}
