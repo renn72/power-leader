@@ -1,24 +1,23 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 
-import { api } from '~/trpc/react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, FormProvider } from 'react-hook-form'
-import { z } from 'zod'
-
 import { Button } from '~/components/ui/button'
 import { Form } from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
+import { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
+import { api } from '~/trpc/react'
+import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { z } from 'zod'
 
+import Divisions from './_components/divisions'
 import Equipment from './_components/equipment'
 import Events from './_components/events'
-import Divisions from './_components/divisions'
 import LiftInfo from './_components/lift-info'
 import Notes from './_components/notes'
 import WeighIn from './_components/weigh-in'
-
-import { GetCompetitionEntryById, GetCompetitionById } from '~/lib/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,6 +58,8 @@ const WeighInForm = ({
   const [isPending, setIsPending] = useState(false)
   const [submitText, setSubmitText] = useState('Submit')
 
+  const [email, setEmail] = useState('')
+
   const ctx = api.useUtils()
   const { mutate: updateAndLock } = api.compEntry.updateAndLock.useMutation({
     onMutate: () => {
@@ -76,6 +77,11 @@ const WeighInForm = ({
     },
     onError: () => {
       toast.error('Error Submitting Weight In')
+    },
+  })
+  const { mutate: sendEmail } = api.competition.email.useMutation({
+    onSuccess: () => {
+      toast.success('Email sent!')
     },
   })
 
@@ -174,6 +180,7 @@ const WeighInForm = ({
         notes: entry?.notes ? entry.notes : '',
       })
     }
+    setEmail(entry?.user?.email || '')
     console.log('formData', form.getValues())
   }, [entry])
 
@@ -182,6 +189,23 @@ const WeighInForm = ({
   }
 
   if (!entry) return <div>Entry not found</div>
+
+  const onSendEmail = async () => {
+    if (!competition) return
+
+    if (!entry) return
+    if (!entry.user?.email) return
+    if (!entry.user?.clerkId) return
+    if (!entry.user?.name) return
+
+    toast.info('Sending email...')
+
+    sendEmail({
+      email: email,
+      link: entry.user.clerkId,
+      name: entry.user.name,
+    })
+  }
 
   return (
     <>
@@ -213,6 +237,23 @@ const WeighInForm = ({
                 )}
                 {submitText}
               </Button>
+              <div className='flex w-full flex-col items-center gap-0 p-8 border rounded-md'>
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className='w-full'
+                />
+                <Button
+                  className='mt-4 w-min min-w-[170px]'
+                  variant='secondary'
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onSendEmail()
+                  }}
+                >
+                  Send Email
+                </Button>
+              </div>
             </form>
           </Form>
         </FormProvider>
