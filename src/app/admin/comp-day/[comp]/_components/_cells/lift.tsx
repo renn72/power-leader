@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 
+import { Label } from '~/components/ui/label'
+import { Checkbox } from '~/components/ui/checkbox'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -50,6 +52,8 @@ const Lift = ({
 
   const [isOpen, setIsOpen] = useState(false)
 
+  const [isRecord, setIsRecord] = useState(() => lift?.isRecord)
+
   const ctx = api.useUtils()
   const { mutate: createUpdateLift } = api.lift.createUpdate.useMutation({
     onSuccess: () => {
@@ -76,6 +80,7 @@ const Lift = ({
       weight: value,
       liftNumber: liftNumber,
       name: lifter?.user?.name || '',
+      isRecord: isRecord,
     })
     return
   }
@@ -180,6 +185,19 @@ const Lift = ({
               onClick={() => {
                 let c = Math.floor(Number(value) / 2.5)
                 setValue(((c * 2.5) + 2.5).toFixed(2))
+              }}
+            />
+          </div>
+          <div className={cn('flex items-center justify-center gap-1 mx-auto border-2 rounded-lg px-4 py-4 ',
+            isRecord === true ? 'border-primary' : '',
+          )}>
+            <Label className='text-sm'>Record</Label>
+            <Checkbox
+
+              checked={isRecord}
+              onCheckedChange={(e) => {
+                if (e === true) setIsRecord(true)
+                if (e === false) setIsRecord(false)
               }}
             />
           </div>

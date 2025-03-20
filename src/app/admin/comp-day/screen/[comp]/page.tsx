@@ -7,7 +7,8 @@ import Image from 'next/image'
 import { env } from '~/env'
 import { liftState, sortEntriesFilter } from '~/lib/comp-day'
 import { GetCompetitionById } from '~/lib/types'
-import { calculateDOTS, calculateNewWilks, cn } from '~/lib/utils'
+import { cn } from '~/lib/utils'
+import { calculateDOTS,  } from '~/lib/dots'
 import { api } from '~/trpc/react'
 import Pusher from 'pusher-js'
 import Countdown from 'react-countdown'
@@ -192,11 +193,11 @@ const CompDayScreen = ({
     Number(lift?.weight),
     lift?.gender?.toLowerCase() === 'female',
   )
-  const wilks = calculateNewWilks(
-    Number(lift?.userWeight),
-    Number(lift?.weight),
-    lift?.gender?.toLowerCase() === 'female',
-  )
+  // const wilks = calculateNewWilks(
+  //   Number(lift?.userWeight),
+  //   Number(lift?.weight),
+  //   lift?.gender?.toLowerCase() === 'female',
+  // )
 
   const countdownRef = useRef<any>()
   // @ts-ignore
@@ -274,7 +275,7 @@ const CompDayScreen = ({
               <div className='relative flex w-full justify-center'>
                 <div className='font-extrabold'>{lift?.weight}kg</div>
                 <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-xl text-muted-foreground'>
-                  WILKS: {wilks}
+                  DOTS: {dots}
                 </div>
               </div>
               <div className='relative flex w-full justify-center gap-24'>
@@ -322,10 +323,11 @@ const CompDayScreen = ({
             </div>
             <div className='absolute bottom-0 left-[1vw] text-sm'>
               <Loading
-                name={lifter?.user?.name || ''}
+                name={''}
                 weight={Number(lift.weight)}
                 rack={lift.rackHeight || ''}
                 lift={liftName}
+                isLifting={true}
               />
             </div>
           </div>

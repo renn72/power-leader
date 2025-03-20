@@ -66,6 +66,7 @@ export const liftRouter = createTRPCRouter({
         liftNumber: z.number(),
         state: z.string().optional(),
         name: z.string(),
+        isRecord: z.boolean().optional().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -91,7 +92,7 @@ export const liftRouter = createTRPCRouter({
           .update(lift)
           .set({
             weight: input.weight,
-            state: 'updated',
+            isRecord: input.isRecord,
           })
           .where(eq(lift.id, oldLift.id))
         return res

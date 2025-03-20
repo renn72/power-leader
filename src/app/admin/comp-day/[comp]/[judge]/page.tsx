@@ -1,53 +1,78 @@
 'use client'
-import { useEffect, useState } from 'react'
-export const dynamic = 'force-dynamic'
-import { api } from '~/trpc/react'
-import { env } from '~/env'
-import Pusher from 'pusher-js'
 
-import { cn } from '~/lib/utils'
+import { useEffect, useState } from 'react'
+
 import Image from 'next/image'
-import { ChevronRightCircle, ThumbsDown, ThumbsUp } from 'lucide-react'
+
 import { Button } from '~/components/ui/button'
+import { env } from '~/env'
 import { sortEntriesFilter } from '~/lib/comp-day'
 import { GetCompetitionById } from '~/lib/types'
+import { cn } from '~/lib/utils'
+import { api } from '~/trpc/react'
+import {
+  ChevronRightCircle,
+  LoaderCircle,
+  ThumbsDown,
+  ThumbsUp,
+} from 'lucide-react'
+import Pusher from 'pusher-js'
+import { toast } from 'sonner'
 
-const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetitionById, comp: string, judgeNumber : number }) => {
-  const [liftName, setLiftName] = useState('')
-  const [bracket, setBracket] = useState('')
-  const [index, setIndex] = useState<number | null | undefined>(null)
-  const [nextIndex, setNextIndex] = useState('')
-  const [round, setRound] = useState('')
-  const [isGood, setIsGood] = useState<boolean | null | undefined>(null)
+import Loading from './loading'
+
+export const dynamic = 'force-dynamic'
+
+const Judge = ({
+  competition,
+  comp,
+  judgeNumber,
+}: {
+  competition: GetCompetitionById
+  comp: string
+  judgeNumber: number
+}) => {
+  // const [liftName, setLiftName] = useState('')
+  // const [bracket, setBracket] = useState('')
+  // const [index, setIndex] = useState<number | null | undefined>(null)
+  // const [nextIndex, setNextIndex] = useState('')
+  // const [round, setRound] = useState('')
+  // const [isGood, setIsGood] = useState<boolean | null | undefined>(null)
+
+  const [isVoting, setIsVoting] = useState(false)
   const ctx = api.useUtils()
+
   const { mutate: startTimer } = api.competitionDay.startTimer.useMutation()
   const { mutate: stopTimer } = api.competitionDay.stopTimer.useMutation()
   const { mutate: resetTimer } = api.competitionDay.resetTimer.useMutation()
 
   const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
     onSettled: () => {
+      setIsVoting(false)
       ctx.competition.getCompetitionByUuid.refetch()
     },
   })
-  const lifter = competition?.entries?.find(
-    (entry) => entry.id === Number(index),
+
+  const liftName = competition?.compDayInfo.lift || ''
+  const bracket = competition?.compDayInfo.bracket.toString() || ''
+  const index = competition?.compDayInfo.index
+  const nextIndex = competition?.compDayInfo?.nextIndex?.toString() || ''
+  const round = competition?.compDayInfo.round.toString() || ''
+
+  const lifters = sortEntriesFilter(
+    competition?.entries,
+    liftName,
+    bracket,
+    round,
   )
+  const lifter = lifters?.find((entry, i) => i === Number(index))
 
   const lift = lifter?.lift?.find(
     (item) =>
       item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
   )
 
-  const lifters = sortEntriesFilter(competition?.entries, liftName, bracket, round)
-
-  const nextLifterIndex =
-    lifters?.findIndex((entry) => entry.id === Number(nextIndex)) || 1000
-  const newNextLifterId = lifters?.[nextLifterIndex + 1]?.id || null
-  console.log('newNextLifterId', newNextLifterId)
-  console.log('nextIndex', nextIndex)
-  console.log('nextLifterIndex', nextLifterIndex)
-
-  console.log('lifters', lifters)
+  const newNextLifterId = Number(nextIndex) + 1
 
   const updateLifter = () => {
     if (!competition) return
@@ -68,8 +93,14 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
 
   const { mutate: updateIsLiftGood } =
     api.competitionDay.updateIsLiftGood.useMutation({
-      onSettled: () => {
+      onSettled: async () => {
         ctx.competition.getCompetitionByUuid.refetch()
+        setTimeout(() => {
+          setIsVoting(false)
+        }, 200)
+      },
+      onMutate: () => {
+        setIsVoting(true)
       },
     })
 
@@ -115,11 +146,11 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
         if (data.timerStarted) return
         if (data.timerReset) return
         if (data.timerStopped) return
-        setLiftName(data.lift)
-        setBracket(data.bracket)
-        setIndex(data.index)
-        setRound(data.round)
-        setNextIndex(data.nextIndex?.toString() || '')
+        // setLiftName(data.lift)
+        // setBracket(data.bracket)
+        // setIndex(data.index)
+        // setRound(data.round)
+        // setNextIndex(data.nextIndex?.toString() || '')
         ctx.competition.getCompetitionByUuid.refetch()
       },
     )
@@ -129,19 +160,21 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
     }
   }, [comp])
 
-  useEffect(() => {
-    setLiftName(competition?.compDayInfo.lift || '')
-    setBracket(competition?.compDayInfo.bracket.toString() || '')
-    setIndex(competition?.compDayInfo.index)
-    setNextIndex(competition?.compDayInfo?.nextIndex?.toString() || '')
-    setRound(competition?.compDayInfo.round.toString() || '')
-  }, [competition])
+  // useEffect(() => {
+  //   // setLiftName(competition?.compDayInfo.lift || '')
+  //   // setBracket(competition?.compDayInfo.bracket.toString() || '')
+  //   // setIndex(competition?.compDayInfo.index)
+  //   // setNextIndex(competition?.compDayInfo?.nextIndex?.toString() || '')
+  //   // setRound(competition?.compDayInfo.round.toString() || '')
+  // }, [competition])
 
-  useEffect(() => {
-    if (judgeNumber === 1) setIsGood(lift?.isGoodOne)
-    if (judgeNumber === 2) setIsGood(lift?.isGoodTwo)
-    if (judgeNumber === 3) setIsGood(lift?.isGoodThree)
-  }, [lift])
+  // useEffect(() => {
+  //   if (judgeNumber === 1) setIsGood(lift?.isGoodOne)
+  //   if (judgeNumber === 2) setIsGood(lift?.isGoodTwo)
+  //   if (judgeNumber === 3) setIsGood(lift?.isGoodThree)
+  // }, [lift])
+
+  console.log('ll', lift, lifter)
 
   if (!lift) return null
   if (!lifter) return null
@@ -149,35 +182,50 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
   if (judgeNumber !== 1 && judgeNumber !== 2 && judgeNumber !== 3)
     return <div>Not Found</div>
 
+  const isGood =
+    judgeNumber === 1 ? lift?.isGoodOne : lift?.isGoodTwo || lift?.isGoodThree
   const name = lifter.user.name
   const weight = lift.weight
 
   if (judgeNumber === 1) {
     return (
-      <div className='flex h-dvh flex-col items-center justify-around text-xl font-semibold text-primary/90'>
-        <div className='flex items-center gap-2'>
-          <Image
-            src='/atlas.png'
-            alt='RawWar Logo'
-            width={50}
-            height={50}
-          />
-          <div className='text-3xl font-bold'>
-            Judge {judgeNumber }
+      <div className='flex h-dvh flex-col items-center justify-around text-xl font-semibold text-primary/90 relative'>
+        {isVoting ? (
+          <div className='absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center h-screen w-screen z-[100] bg-black/60'>
+            <LoaderCircle
+              size={96}
+              className='text-primary animate-spin'
+            />
           </div>
+        ) : null}
+        <div className='flex items-center gap-2 '>
+          <Image
+            src='/showdown.jpeg'
+            alt='RawWar Logo'
+            width={350}
+            height={350}
+            style={{
+              width: '100vw',
+              height: '100vw',
+            }}
+            className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-10'
+          />
+          <div className='text-3xl font-bold z-50'>Judge {judgeNumber}</div>
         </div>
         <div className='flex w-full flex-col items-center gap-2'>
           <div className='relative flex w-full items-center justify-center'>
-            <div className='rounded-full bg-muted px-4 py-2 text-yellow-400'>
-              {name}
-            </div>
-            {nextIndex ? (
-              <ChevronRightCircle
-                size={36}
-                className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground'
-                onClick={updateLifter}
+            <div className='flex gap-2 items-center'>
+              <div className='rounded-full bg-muted px-4 py-2 text-yellow-400 capitalize'>
+                {name}
+              </div>
+              <Loading
+                name={''}
+                weight={Number(weight)}
+                rack={''}
+                lift={liftName}
+                isLifting={false}
               />
-            ) : null}
+            </div>
           </div>
           <div className='flex gap-4'>
             <div>{weight}kg</div>
@@ -237,9 +285,6 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
               if (!competition.uuid) return
               let field = ''
               if (judgeNumber === 1) field = 'isGoodOne'
-              if (judgeNumber === 2) field = 'isGoodTwo'
-              if (judgeNumber === 3) field = 'isGoodThree'
-              setIsGood(true)
               updateIsLiftGood({
                 id: lift.id,
                 entryId: lifter.id,
@@ -256,9 +301,6 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
               if (!competition.uuid) return
               let field = ''
               if (judgeNumber === 1) field = 'isGoodOne'
-              if (judgeNumber === 2) field = 'isGoodTwo'
-              if (judgeNumber === 3) field = 'isGoodThree'
-              setIsGood(false)
               updateIsLiftGood({
                 id: lift.id,
                 entryId: lifter.id,
@@ -280,9 +322,6 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
             if (!competition.uuid) return
             let field = ''
             if (judgeNumber === 1) field = 'isGoodOne'
-            if (judgeNumber === 2) field = 'isGoodTwo'
-            if (judgeNumber === 3) field = 'isGoodThree'
-            setIsGood(null)
             updateIsLiftGood({
               id: lift.id,
               entryId: lifter.id,
@@ -298,7 +337,6 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
           <Button
             onClick={() => {
               if (!competition.uuid) return
-              setIsGood(true)
               headJudgePassLift({
                 id: lift.id,
                 entryId: lifter.id,
@@ -313,7 +351,6 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
           <Button
             onClick={() => {
               if (!competition.uuid) return
-              setIsGood(false)
               headJudgeFailLift({
                 id: lift.id,
                 entryId: lifter.id,
@@ -328,7 +365,6 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
           <Button
             onClick={() => {
               if (!competition.uuid) return
-              setIsGood(null)
               headJudgeClearLift({
                 id: lift.id,
                 entryId: lifter.id,
@@ -346,19 +382,39 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
   }
 
   return (
-    <div className='flex h-dvh flex-col items-center justify-around text-xl font-semibold text-primary/90'>
+    <div className='flex h-dvh flex-col items-center justify-around text-xl font-semibold text-primary/90 relative'>
+        {isVoting ? (
+          <div className='absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center h-screen w-screen z-[100] bg-black/60'>
+            <LoaderCircle
+              size={96}
+              className='text-primary animate-spin'
+            />
+          </div>
+        ) : null}
       <Image
-        src='/atlas.png'
+        src='/showdown.jpeg'
         alt='RawWar Logo'
-        width={50}
-        height={50}
+        width={350}
+        height={350}
+        style={{
+          width: '100vw',
+          height: '100vw',
+        }}
+        className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-10'
       />
-      <div className='text-3xl font-bold'>
-        Judge {params.judge.split('-')[1]}
-      </div>
+      <div className='text-3xl font-bold'>Judge {judgeNumber}</div>
       <div className='flex flex-col items-center gap-2'>
-        <div className='rounded-full bg-muted px-4 py-2 text-yellow-400'>
-          {name}
+        <div className='flex gap-2 items-center'>
+          <div className='rounded-full bg-muted px-4 py-2 text-yellow-400 capitalize'>
+            {name}
+          </div>
+          <Loading
+            name={''}
+            weight={Number(weight)}
+            rack={''}
+            lift={liftName}
+            isLifting={false}
+          />
         </div>
         <div className='flex gap-4'>
           <div>{weight}kg</div>
@@ -368,23 +424,29 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
       </div>
       <div
         className={cn(
-          'flex h-32 w-32 items-center justify-center rounded-full border border-4 border-white/60',
+          'flex h-32 w-32 items-center justify-center rounded-full border border-4 border-white/60 relative',
           isGood !== null
             ? isGood
               ? 'border-white bg-white '
               : 'border-red-500 bg-red-500'
             : '',
         )}
-      />
+      >
+        {lift?.isRecord === true ? (
+          <div className='absolute top-0 -right-24 bottom-0 flex items-center justify-center'>
+            <div className='text-2xl font-black text-yellow-500 h-10 w-10 rounded-full border-2 border-yellow-500 flex items-center justify-center'>
+              R
+            </div>
+          </div>
+        ) : null}
+      </div>
       <div className='flex w-full justify-around'>
         <div
           onClick={() => {
             if (!competition.uuid) return
             let field = ''
-            if (judgeNumber === 1) field = 'isGoodOne'
             if (judgeNumber === 2) field = 'isGoodTwo'
             if (judgeNumber === 3) field = 'isGoodThree'
-            setIsGood(true)
             updateIsLiftGood({
               id: lift.id,
               entryId: lifter.id,
@@ -400,10 +462,8 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
           onClick={() => {
             if (!competition.uuid) return
             let field = ''
-            if (judgeNumber === 1) field = 'isGoodOne'
             if (judgeNumber === 2) field = 'isGoodTwo'
             if (judgeNumber === 3) field = 'isGoodThree'
-            setIsGood(false)
             updateIsLiftGood({
               id: lift.id,
               entryId: lifter.id,
@@ -424,10 +484,8 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
         onClick={() => {
           if (!competition.uuid) return
           let field = ''
-          if (judgeNumber === 1) field = 'isGoodOne'
           if (judgeNumber === 2) field = 'isGoodTwo'
           if (judgeNumber === 3) field = 'isGoodThree'
-          setIsGood(null)
           updateIsLiftGood({
             id: lift.id,
             entryId: lifter.id,
@@ -442,14 +500,14 @@ const Judge = ({ competition, comp, judgeNumber }: { competition: GetCompetition
   )
 }
 
-const Page = ({ params }: { params: { comp: string, judge: string } }) => {
+const Page = ({ params }: { params: { comp: string; judge: string } }) => {
   const { comp, judge } = params
   const judgeNumber = Number(judge.split('-')[1])
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 10 * 1,
+      refetchInterval: 1000 * 100 * 1,
     })
-    if (competitionLoading) return null
+  if (competitionLoading) return null
   if (!competition) return null
 
   return (
