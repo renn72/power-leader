@@ -2,7 +2,7 @@
 
 import { api } from '~/trpc/react'
 
-import CompBracket from '@/app/admin/bracket/_components/comp-bracket'
+import CompBracket from './_components/comp-bracket'
 import { ModeToggle } from '@/app/_components/mode-toggle'
 
 const Page = () => {
