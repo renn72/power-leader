@@ -2,19 +2,24 @@
 
 import { useEffect, useState } from 'react'
 
-
 import Image from 'next/image'
 
 import { sortEntriesFilter } from '~/lib/comp-day'
+import { calculateDOTS } from '~/lib/dots'
 import { pusherClient } from '~/lib/pusher'
-import { calculateDOTS,  } from '~/lib/dots'
+import { GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 
 import Loading from './loading'
-import { GetCompetitionById } from '~/lib/types'
 
-const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById, comp: string }) => {
+const CompDayScreen = ({
+  competition,
+  comp,
+}: {
+  competition: GetCompetitionById
+  comp: string
+}) => {
   const [liftName, setLiftName] = useState('')
   const [bracket, setBracket] = useState('')
   const [index, setIndex] = useState<number | null | undefined>(null)
@@ -32,18 +37,14 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
     round,
   )
 
-  const lifter = entries?.filter(
-    (_entry, i) => i === Number(index),
-  )[0]
+  const lifter = entries?.filter((_entry, i) => i === Number(index))[0]
 
   const lift = lifter?.lift?.find(
     (item) =>
       item.lift === liftName.toLowerCase() && item.liftNumber === Number(round),
   )
 
-  const lifter2 = entries?.filter(
-    (_entry, i) => i === Number(index) + 1,
-  )[0]
+  const lifter2 = entries?.filter((_entry, i) => i === Number(index) + 1)[0]
 
   const lift2 = lifter2?.lift?.find(
     (item) =>
@@ -96,22 +97,29 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
       setLiftName(competition?.compDayInfo.lift)
     if (competition?.compDayInfo.bracket)
       setBracket(competition?.compDayInfo.bracket.toString())
-    if (Number.isInteger(competition?.compDayInfo.index)) setIndex(competition?.compDayInfo.index)
+    if (Number.isInteger(competition?.compDayInfo.index))
+      setIndex(competition?.compDayInfo.index)
     if (competition?.compDayInfo?.nextIndex)
       setNextIndex(competition?.compDayInfo?.nextIndex?.toString())
     if (competition?.compDayInfo.round)
       setRound(competition?.compDayInfo.round.toString())
   }, [competition])
 
-  const bracketList = entries
-  .map((e) => {
+  const bracketList = entries.map((e) => {
     const lift = e.lift.find(
       (l) => l.lift == liftName && l.liftNumber === Number(round),
     )
+    const pb =
+      liftName === 'squat'
+        ? e?.squatPB
+        : liftName === 'bench'
+          ? e?.benchPB
+          : e?.deadliftPB
     return {
       id: e.id,
       name: e.user?.name || '',
       lift: lift,
+      pb: pb,
     }
   })
 
@@ -140,6 +148,8 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
             entry.lift?.gender === 'female',
           )
 
+          const isPb = Number(entry?.lift?.weight) > Number(entry?.pb)
+
           const isOne = entry.lift?.isGoodOne
           const isTwo = entry.lift?.isGoodTwo
           const isThree = entry.lift?.isGoodThree
@@ -154,7 +164,7 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
               key={entry.id}
               className={cn(
                 'w-full rounded-full border border-4 border-muted py-1 text-2xl font-semibold leading-7 tracking-tighter',
-                'grid grid-cols-5 items-center gap-0',
+                'grid grid-cols-7 items-center gap-0',
                 index == i
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
                   : 'bg-muted',
@@ -173,6 +183,22 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
               <div className='col-span-2 capitalize'>{entry.name}</div>
               <div>{entry.lift?.weight}kg</div>
               <div>{entry.lift?.rackHeight}</div>
+              <div>
+                {isPb ? (
+                  <div className='rounded-full h-10 w-10 text-green-500 border-2 border-green-500 flex items-center justify-center'>
+                    PB
+                  </div>
+                ) : null}
+              </div>
+              <div>
+                {entry.lift?.isRecord === true ? (
+                  <div className={cn('rounded-full h-10 w-10 text-yellow-500 border-2 flex items-center justify-center text-center',
+                    index == i ? 'text-black' : 'border-yellow-500',
+                  )}>
+                    R
+                  </div>
+                ) : null}
+              </div>
             </div>
           )
         })}
@@ -186,7 +212,6 @@ const CompDayScreen = ({ competition, comp }: { competition: GetCompetitionById,
             height={1440}
             style={{ width: '10vw', height: '100%' }}
           />
-
         </div>
         <div className='text-sm mt-44'>
           {lifter && lift && (
