@@ -2,17 +2,21 @@
 
 import { useEffect } from 'react'
 
+import BenchBracket from '@/app/flights2/_components/bench-bracket'
+import CompBracket from '@/app/flights2/_components/comp-bracket'
+import DeadBracket from '@/app/flights2/_components/dead-bracket'
+import SquatBracket from '@/app/flights2/_components/squat-bracket'
 import { env } from '~/env'
 import { api } from '~/trpc/react'
 import Pusher from 'pusher-js'
 
-import { CompDayScreen as Screen } from '../admin/comp-day/screen/[comp]/comp-day-screen'
 import { CompDayScreen as Loading } from '../admin/comp-day/loading/[comp]/comp-day-screen'
+import { CompDayScreen as Screen } from '../admin/comp-day/screen/[comp]/comp-day-screen'
 
 export default function Home() {
   const ctx = api.useUtils()
   const { data: competition } = api.competition.get.useQuery(1, {
-    refetchInterval: 1000 * 160 * 1,
+    refetchInterval: 1000 * 60 * 1,
   })
   const comp = 'Show-Down-22-3-2025'
 
@@ -39,14 +43,33 @@ export default function Home() {
     <div className='w-full h-screen overflow-hidden'>
       <div className={`scale-${screenSize}`}>
         {screen === 'nil' ? null : null}
-        {screen === 'screen' ? <Screen
-          competition={competition}
-          comp={comp}
-        /> : null}
-        {screen === 'loading' ? <Loading
-          competition={competition}
-          comp={comp}
-        /> : null}
+        {screen === 'screen' ? (
+          <Screen
+            competition={competition}
+            comp={comp}
+          />
+        ) : null}
+        {screen === 'loading' ? (
+          <Loading
+            competition={competition}
+            comp={comp}
+          />
+        ) : null}
+        {screen === 'comp-bracket' ? (
+          <CompBracket competition={competition} />
+        ) : null}
+        {screen === 'squat-bracket' ? (
+          <SquatBracket competition={competition} />
+        ) : null}
+        {screen === 'bench-bracket' ? (
+          <BenchBracket competition={competition} />
+        ) : null}
+
+        {screen === 'dead-bracket' ? (
+          <DeadBracket
+            competition={competition}
+          />
+        ) : null}
       </div>
     </div>
   )

@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 
-import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { api } from '~/trpc/react'
 import { Minus, PlusIcon, RefreshCcw } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,7 +32,15 @@ const screens = [
   'screen12',
 ]
 
-const types = ['nil', 'screen', 'loading']
+const types = [
+  'nil',
+  'screen',
+  'loading',
+  'comp-bracket',
+  'squat-bracket',
+  'bench-bracket',
+  'dead-bracket',
+]
 
 const NumberInput = ({
   value,
@@ -199,14 +207,15 @@ const Screen = ({
 
 const Screens = () => {
   const ctx = api.useUtils()
-  const { data: competition, } = api.competition.get.useQuery(1, {
+  const { data: competition } = api.competition.get.useQuery(1, {
     refetchInterval: 1000 * 160 * 1,
   })
   if (!competition) return null
   return (
     <div className='max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 relative px-4 lg:px-0'>
       <RefreshCcw
-        className={cn('absolute -right-10 top-0 active:scale-75 cursor-pointer transition-transform',
+        className={cn(
+          'absolute -right-10 top-0 active:scale-75 cursor-pointer transition-transform',
         )}
         onClick={() => {
           void ctx.competition.invalidate()

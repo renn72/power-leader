@@ -205,7 +205,7 @@ const Bracket = ({
 
                 <div
                   className={cn(
-                    'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tighter lg:tracking-tight w-full',
+                    'grid grid-cols-11 place-items-center gap-1 border border-input text-base tracking-tighter lg:tracking-tight w-full',
                     'rounded-full px-[1px] py-[2px] text-xs sm:text-sm ',
                     lift === 'squat' &&
                       entry.squatOrderOne !== null &&
@@ -247,16 +247,27 @@ const Bracket = ({
                     )}
                   >
                     {entry.compEntryToDivisions?.[0]?.division?.name
-                      .slice(0, 4)
-                      .toUpperCase() === 'NOVI'
-                      ? 'NOVICE'
-                      : entry.compEntryToDivisions?.[0]?.division?.name
-                            .slice(0, 4)
-                            .toUpperCase() === 'FIRS'
-                        ? 'FIRST'
-                        : entry.compEntryToDivisions?.[0]?.division?.name
-                            .slice(0, 4)
-                            .toUpperCase()}
+                      .slice(0, 1).toUpperCase()}
+                  </div>
+                  <div
+                    className={cn(
+                      'font-extrabold ',
+                      entry.events?.[0]?.event?.name.toLowerCase() ===
+                        'open'
+                        ? 'text-slate-400'
+                        : entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
+                            'pro'
+                          ? 'text-red-500'
+                          : 'text-green-600',
+                    )}
+                  >
+                    {entry.events?.[0]?.event?.name == 'Squat, Bench, Deadlift'
+                      ? 'SBD'
+                      : entry.events?.[0]?.event?.name == 'Push Pull'
+                        ? 'BD'
+                        : entry.events?.[0]?.event?.name == 'Deadlift only'
+                          ? 'D'
+                          : entry.events?.[0]?.event?.name == 'Bench only' ? 'B' : ''}
                   </div>
                   <div
                     className={cn(
