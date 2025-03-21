@@ -199,7 +199,6 @@ const CompTableRow = ({
       <Cell className='p-0 tracking-tightest xl:tracking-tight  py-0 xl:p-2 truncate max-w-[80px] xl:max-w-[155px] capitalize'>
         {lifterName}
       </Cell>
-      <Cell className='p-0  py-0 capitalize xl:p-2 text-center'>{gender}</Cell>
       <Cell className='p-0  py-0 xl:p-2'>
         <Badge className='w-12 items-center justify-center'>{lifterWc}</Badge>
       </Cell>

@@ -100,7 +100,7 @@ const Lift = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between gap-0 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[55px] min-h-[40px]',
+            'flex w-full cursor-pointer items-center justify-between gap-0 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[52px] min-h-[40px]',
             input === '' ? '' : 'rounded-md outline outline-border',
             isJudged
               ? isGood
@@ -109,7 +109,7 @@ const Lift = ({
               : '',
           )}
         >
-          <div className='mr-0 xl:mr-4 tracking-tightest xl:tracking-tighter'>
+          <div className='mr-0 xl:mr-4 tracking-tightest xl:tracking-tighter text-base xl:text-lg'>
             {input + (input !== '' ? 'kg' : '')}
           </div>
           <div

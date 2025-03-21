@@ -186,7 +186,6 @@ const CompTableHeader = ({
       <TableRow>
 
         <TableHead className='h-10 px-2'>Name</TableHead>
-        <TableHead className='h-10 px-2 '>G</TableHead>
         <TableHead className='h-10 px-2'>WC</TableHead>
         <TableHead className='h-10 px-2'>Rack</TableHead>
         <TH
