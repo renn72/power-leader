@@ -6,6 +6,7 @@ import BenchBracket from '@/app/flights2/_components/bench-bracket'
 import CompBracket from '@/app/flights2/_components/comp-bracket'
 import DeadBracket from '@/app/flights2/_components/dead-bracket'
 import SquatBracket from '@/app/flights2/_components/squat-bracket'
+import LeaderBoard from '~/app/_components/board/leader-board'
 import { env } from '~/env'
 import { api } from '~/trpc/react'
 import Pusher from 'pusher-js'
@@ -66,8 +67,38 @@ export default function Home() {
         ) : null}
 
         {screen === 'dead-bracket' ? (
-          <DeadBracket
+          <DeadBracket competition={competition} />
+        ) : null}
+        {screen === 'board-pro' ? (
+          <LeaderBoard
             competition={competition}
+            table={'pro'}
+            gender={''}
+            wc={''}
+          />
+        ) : null}
+        {screen === 'board-novice' ? (
+          <LeaderBoard
+            competition={competition}
+            table={'novice'}
+            gender={''}
+            wc={''}
+          />
+        ) : null}
+        {screen === 'board-first-timers' ? (
+          <LeaderBoard
+            competition={competition}
+            table={'first-timers'}
+            gender={''}
+            wc={''}
+          />
+        ) : null}
+        {screen === 'board-open' ? (
+          <LeaderBoard
+            competition={competition}
+            table={'open'}
+            gender={''}
+            wc={''}
           />
         ) : null}
       </div>

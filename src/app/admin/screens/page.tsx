@@ -40,6 +40,10 @@ const types = [
   'squat-bracket',
   'bench-bracket',
   'dead-bracket',
+  'board-pro',
+  'board-novice',
+  'board-first-timers',
+  'board-open',
 ]
 
 const NumberInput = ({
