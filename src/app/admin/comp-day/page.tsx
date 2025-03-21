@@ -111,7 +111,7 @@ const CompDay = () => {
         </Link>
       </div>
 
-      <div className='flex gap-8'>
+      <div className='flex gap-8 hidden'>
         <Link href={`comp-day/${compId}/board?table=open`}>
           <Button
             size='lg'
