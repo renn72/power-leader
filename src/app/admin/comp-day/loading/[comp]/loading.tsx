@@ -1,31 +1,31 @@
 import { Dot } from 'lucide-react'
 
 const Red = () => (
-  <div className='flex h-72 w-12 items-center justify-center bg-red-600 '>
+  <div className='flex h-52 w-8 items-center justify-center bg-red-600 '>
     25
   </div>
 )
 
 const Blue = () => (
-  <div className='flex h-72 w-12 items-center justify-center bg-blue-500 '>
+  <div className='flex h-52 w-8 items-center justify-center bg-blue-500 '>
     20
   </div>
 )
 
 const Yellow = () => (
-  <div className='flex h-64 w-10 items-center justify-center bg-yellow-500 '>
+  <div className='flex h-48 w-8 items-center justify-center bg-yellow-500 '>
     15
   </div>
 )
 
 const Green = () => (
-  <div className='flex h-56 w-8 items-center justify-center bg-green-500 '>
+  <div className='flex h-40 w-8 items-center justify-center bg-green-500 '>
     10
   </div>
 )
 
 const White = () => (
-  <div className='flex h-40 w-8 items-center justify-center bg-white '>5</div>
+  <div className='flex h-36 w-8 items-center justify-center bg-white '>5</div>
 )
 
 const Black = () => (
@@ -111,11 +111,11 @@ const Loading = ({
   // console.log(red, blue, yellow, green, white, black, gray)
 
   return (
-    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-5xl'>
+    <div className='ml-4 flex flex-col items-center justify-center gap-1 text-2xl'>
       {isLifting ? (
-        <div className='uppercase'>Lifting: {name}</div>
+        <div className='uppercase'>{name}</div>
       ) : (
-        <div className='uppercase'>Up Next: {name}</div>
+        <div className='uppercase'>Next: {name}</div>
       )}
       <div>{weight}kg</div>
       <div className='flex w-full items-center gap-4'>

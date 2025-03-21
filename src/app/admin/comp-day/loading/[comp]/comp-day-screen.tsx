@@ -163,8 +163,8 @@ const CompDayScreen = ({
             <div
               key={entry.id}
               className={cn(
-                'w-full rounded-full border border-4 border-muted py-1 text-2xl font-semibold leading-7 tracking-tighter',
-                'grid grid-cols-7 items-center gap-0',
+                'w-full rounded-full border border-1 border-muted py-1 text-xl font-semibold leading-7 tracking-tighter',
+                'grid grid-cols-8 items-center gap-0',
                 index == i
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
                   : 'bg-muted',
@@ -180,19 +180,19 @@ const CompDayScreen = ({
                     : '',
                 )}
               />
-              <div className='col-span-2 capitalize'>{entry.name}</div>
+              <div className='col-span-3 capitalize truncate'>{entry.name}</div>
               <div>{entry.lift?.weight}kg</div>
               <div>{entry.lift?.rackHeight}</div>
               <div>
                 {isPb ? (
-                  <div className='rounded-full h-10 w-10 text-green-500 border-2 border-green-500 flex items-center justify-center'>
+                  <div className='rounded-full h-6 w-6 text-base bg-green-500 text-black border-2 border-green-500 flex items-center justify-center'>
                     PB
                   </div>
                 ) : null}
               </div>
               <div>
                 {entry.lift?.isRecord === true ? (
-                  <div className={cn('rounded-full h-10 w-10 text-yellow-500 border-2 flex items-center justify-center text-center',
+                  <div className={cn('rounded-full h-5 w-6 bg-yellow-500 border-2 text-black flex items-center justify-center text-center',
                     index == i ? 'text-black' : 'border-yellow-500',
                   )}>
                     R
