@@ -126,7 +126,7 @@ const LeaderBoard = ({
       if (isNaN(getTotalDots(a))) return 1
       if (getTotalDots(b) == 0) return -1
       if (isNaN(getTotalDots(b))) return -1
-      return getTotalDots(a) - getTotalDots(b)
+      return getTotalDots(b) - getTotalDots(a)
     })
 
   const check = entries.map((e) => getTotalDots(e))

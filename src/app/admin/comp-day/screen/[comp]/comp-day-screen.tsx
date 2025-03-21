@@ -238,7 +238,7 @@ const CompDayScreen = ({
                   >
                     <div className='capitalize'>{l.lift}</div>
                     <div>{l.liftNumber}</div>
-                    <div>{l.weight}kg</div>
+                    <div>{Number(l.weight).toFixed(2)}kg</div>
                     <div>
                       {s.isGood ? (
                         <div className='rounded-full h-5 w-5 bg-white' />
