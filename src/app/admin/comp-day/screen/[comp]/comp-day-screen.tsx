@@ -249,15 +249,15 @@ const CompDayScreen = ({
                 )
               })}
             </div>
-            <div className='mt-32 flex w-full flex-col items-center gap-12 text-5xl font-bold relative'>
-              <div className='absolute -top-48 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4'>
+            <div className='mt-0 flex w-full flex-col items-center gap-12 text-5xl font-bold relative'>
+              <div className='absolute -top-40 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4'>
                 {lift.isRecord ? (
-                  <div className='text-center text-2xl text-yellow-500 ring-2 ring-yellow-500 rounded-full py-4 px-8'>
+                  <div className='text-center text-2xl bg-yellow-500 text-black ring-2 ring-yellow-500 rounded-full py-4 px-8'>
                     Record Attempt
                   </div>
                 ) : null}
                 {isPb ? (
-                  <div className='text-center text-2xl ring-2 ring-green-500 rounded-full py-4 px-8'>
+                  <div className='text-center text-2xl ring-2 ring-green-500 bg-green-500 text-black rounded-full py-4 px-8'>
                     Personal Best
                   </div>
                 ) : null}
