@@ -1,18 +1,18 @@
 import '~/styles/globals.css'
 
-import { TRPCReactProvider } from '~/trpc/react'
-
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
-
 import { ThemeProvider } from '~/app/_components/theme-provider'
-
 import { Toaster } from '~/components/ui/sonner'
+import { TRPCReactProvider } from '~/trpc/react'
 
 export const metadata = {
   title: 'Scoreboard',
   description: 'Scoreboard for a game',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
+  appleWebApp: {
+    title: 'Scoreboard',
+  },
 }
 
 export default function RootLayout({
@@ -36,7 +36,9 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <main className={`sm:min-h-screen w-full`}>
-                <div className='sm:min-h-[calc(100vh-7.8rem)] w-full'>{children}</div>
+                <div className='sm:min-h-[calc(100vh-7.8rem)] w-full'>
+                  {children}
+                </div>
                 <Toaster />
               </main>
             </ThemeProvider>
