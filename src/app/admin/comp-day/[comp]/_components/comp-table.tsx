@@ -105,13 +105,12 @@ const CompTable = ({
 
   return (
     <div className='rounded-md border border-input p-1 w-full'>
-      <ScrollArea className='h-[75vh]'>
         <Table className='text-sm tracking-tighter lg:text-lg'>
           <CompTableHeader
             lifters={lifters}
             bracket={Number(bracket)}
           />
-          <TableBody className='overflow-y-auto pr-4'>
+          <TableBody className='pr-4'>
             {lifters.map((lifter, i, arr) => (
               <CompTableRow
                 key={lifter.id}
@@ -129,7 +128,6 @@ const CompTable = ({
             ))}
           </TableBody>
         </Table>
-      </ScrollArea>
     </div>
   )
 }

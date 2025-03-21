@@ -39,7 +39,9 @@ const TH = ({
   return (
     <TableHead className='px-2 h-10'>
       <DropdownMenu>
-        <DropdownMenuTrigger className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          disabled
+          className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className='cursor-pointer hover:bg-muted hover:text-primary'>
             <CompTableHeaderBracket
