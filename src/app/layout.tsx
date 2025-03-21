@@ -12,6 +12,7 @@ export const metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
   appleWebApp: {
     title: 'Scoreboard',
+    statusBarStyle: 'black-translucent',
   },
 }
 
