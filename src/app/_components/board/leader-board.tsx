@@ -2,7 +2,7 @@
 
 import { getTotalDots } from '~/lib/dots'
 import { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
-import { cn, getTotalWilks } from '~/lib/utils'
+import { cn, getAge, getTotalWilks } from '~/lib/utils'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
@@ -14,6 +14,55 @@ import {
 } from '@/components/ui/table'
 
 import LeaderBoardRow from './leader-board-row'
+
+const ages =  [
+  {
+    name : 'teen',
+    min : 14,
+    max : 16,
+  },
+  {
+    name : 'sub-junior',
+    min: 17,
+    max: 19,
+
+  },
+  {
+    name : 'junior',
+    min: 20,
+    max: 23,
+  },
+  {
+    name : 'open',
+    min: 24,
+    max: 39,
+  },
+  {
+    name : 'm1',
+    min: 40,
+    max: 49,
+  },
+  {
+    name : 'm2',
+    min: 50,
+    max: 59,
+  },
+  {
+    name : 'm3',
+    min: 60,
+    max: 69,
+  },
+  {
+    name : 'm4',
+    min: 70,
+    max: 79,
+  },
+  {
+    name : 'm5',
+    min: 80,
+    max: 999,
+  },
+]
 
 const HeadWrapper = ({
   children,
@@ -63,6 +112,12 @@ const LeaderBoard = ({
       if (wc === '') return true
       if (wc === 'all') return true
       return entry.wc?.split('-')[0]?.toLowerCase() === wc.toLowerCase()
+    })
+    .filter((entry) => {
+      if (age === '') return true
+      if (age === 'all') return true
+      const userAge = getAge(entry.birthDate)
+      return (ages.find((a) => a.name === age)?.min ?? 999) <= userAge && userAge <= (ages.find((a) => a.name === age)?.max ?? 0)
     })
     .sort((a, b) => {
       if (getTotalDots(a) == 0) return 1
