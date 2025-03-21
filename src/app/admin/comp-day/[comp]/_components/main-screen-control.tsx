@@ -61,11 +61,23 @@ const MainScreenControl = ({
 
     const { isJudged, isGood } = liftState(curentEntryLift)
 
-    console.log('isJudged', isJudged, !isTicking, Number(index)+1, entries.length, isAuto)
+    console.log(
+      'isJudged',
+      isJudged,
+      !isTicking,
+      Number(index) + 1,
+      entries.length,
+      isAuto,
+    )
 
-    console.log(isJudged && !isTicking && (Number(index+1) < entries.length))
+    console.log(isJudged && !isTicking && Number(index) + 1 < entries.length)
 
-    if (isJudged && !isTicking && (Number(index+1) < entries.length) && isAuto) {
+    if (
+      isJudged &&
+      !isTicking &&
+      Number(index) + 1 < entries.length &&
+      isAuto
+    ) {
       setIsTicking(true)
       setTimeout(() => {
         console.log('tick')
@@ -80,11 +92,11 @@ const MainScreenControl = ({
           index: Number(index) + 1,
           nextIndex: Number(index) + 2,
         })
-      }, 5000)
+      }, 6000)
     } else {
       console.log('not tick')
     }
-  }, [isAuto, competition, index, round, bracket, lift])
+  }, [isAuto, competition, index, round, bracket, lift, isTicking])
 
   const brackets =
     lift === 'squat'
