@@ -22,10 +22,12 @@ const LeaderBoardRow = ({
   entry,
   entries,
   index,
+  isShrink = false,
 }: {
   entry: GetCompetitionEntryById
   entries: GetCompetitionEntryById[]
   index: number
+  isShrink?: boolean
 }) => {
   const userWeight = Number(entry.weight)
   const squats = entry.lift.filter((l) => l.lift == 'squat')
@@ -143,6 +145,7 @@ const LeaderBoardRow = ({
       key={entry.id}
       className={cn(
         'text-sm md:text-lg font-extrabold uppercase leading-4 tracking-tightest',
+        isShrink ? 'md:text-base' : '',
       )}
     >
       <TableCell className='py-0 truncate sticky left-0 z-20 bg-background'>

@@ -82,12 +82,14 @@ const LeaderBoard = ({
   gender,
   wc,
   age = '',
+  isHeader = false,
 }: {
   competition: GetCompetitionByUuid
   table: string
   gender: string | null
   wc: string
   age?: string
+  isHeader?: boolean
 }) => {
   if (table === '') return null
 
@@ -128,12 +130,18 @@ const LeaderBoard = ({
     })
 
   const check = entries.map((e) => getTotalDots(e))
-  console.log('e', check)
 
+  console.log('entries', isHeader)
   return (
     <>
       <div className='w-full overflow-auto'>
-        <div className='h-[calc(100vh-40px)] overflow-auto'>
+        <div className='h-[calc(100vh-10px)] overflow-auto'>
+          {
+            isHeader ? (
+              <div
+              className='w-full bg-yellow-500 text-xl font-extrabold text-black capitalize text-center'>{table}</div>
+            ) : null
+          }
           <Table>
             <TableHeader className='bg-muted'>
               <TableRow className='text-base tracking-tighter bg-yellow-500 text-black font-bold'>
@@ -159,6 +167,7 @@ const LeaderBoard = ({
                   entries={entries}
                   index={index}
                   key={entry.id}
+                  isShrink={table === 'novice' || table === 'first-timers'}
                 />
               ))}
             </TableBody>

@@ -11,6 +11,8 @@ import { CompDayScreen as Loading } from '@/app/admin/comp-day/loading/[comp]/co
 import { CompDayScreen as MainScreen } from '@/app/admin/comp-day/screen/[comp]/comp-day-screen'
 import { GetCompetitionByUuid } from '~/lib/types'
 
+export const dynamic = 'force-dynamic'
+
 const Screen = ({ screen, screenSize, competition } : { screen: string | null, screenSize: string | null, competition: GetCompetitionByUuid }) => {
   const comp = 'Show-Down-22-3-2025'
 
@@ -54,6 +56,7 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
             table={'pro'}
             gender={''}
             wc={''}
+            isHeader={true}
           />
         ) : null}
         {screen === 'board-novice' ? (
@@ -62,6 +65,7 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
             table={'novice'}
             gender={''}
             wc={''}
+            isHeader={true}
           />
         ) : null}
         {screen === 'board-first-timers' ? (
@@ -70,6 +74,7 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
             table={'first-timers'}
             gender={''}
             wc={''}
+            isHeader={true}
           />
         ) : null}
         {screen === 'board-open' ? (
@@ -78,6 +83,7 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
             table={'open'}
             gender={''}
             wc={''}
+            isHeader={true}
           />
         ) : null}
         {screen === 'board-results' ? (
