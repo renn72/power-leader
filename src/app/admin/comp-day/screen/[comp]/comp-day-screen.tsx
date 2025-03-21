@@ -19,11 +19,11 @@ const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   return (
     <div>
       {isGood === null ? (
-        <div className=' h-[19vh] w-[19vh] rounded-full border border-4 border-white/60 '></div>
+        <div className=' h-[25vh] w-[25vh] rounded-full border border-4 border-white/60 '></div>
       ) : isGood ? (
-        <div className='good-lift  h-[19vh] w-[19vh] rounded-full '></div>
+        <div className='good-lift  h-[25vh] w-[25vh] rounded-full '></div>
       ) : (
-        <div className='bad-lift  h-[19vh] w-[19vh] rounded-full '></div>
+        <div className='bad-lift  h-[25vh] w-[25vh] rounded-full '></div>
       )}
     </div>
   )
@@ -219,7 +219,7 @@ const CompDayScreen = ({
             width: '70%',
             height: '',
           }}
-          className='opacity-10'
+          className='opacity-25'
         />
       </div>
       {!lift ? null : (
@@ -249,8 +249,8 @@ const CompDayScreen = ({
                 )
               })}
             </div>
-            <div className='mt-0 flex w-full flex-col items-center gap-12 text-5xl font-bold relative'>
-              <div className='absolute -top-40 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4'>
+            <div className='mt-10 flex w-full flex-col items-center gap-12 text-7xl font-bold relative'>
+              <div className='absolute -top-48 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4'>
                 {lift.isRecord ? (
                   <div className='text-center text-2xl bg-yellow-500 text-black ring-2 ring-yellow-500 rounded-full py-4 px-8'>
                     Record Attempt
