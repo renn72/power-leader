@@ -225,14 +225,15 @@ const CompDayScreen = ({
       {!lift ? null : (
         <div className='grid h-full w-full'>
           <div className='relative col-span-1 flex flex-col items-center justify-center'>
-            <div className='absolute left-10 top-4 flex  flex-col items-center'>
+            <div className='absolute left-10 top-4 flex  flex-col items-center gap-1'>
               {previousLifts?.map((l) => {
                 const s = liftState(l)
                 return (
                   <div
                     key={l.id}
                     className={cn(
-                      'grid grid-cols-4 place-items-center text-2xl',
+                      'grid grid-cols-4 place-items-center text-2xl font-semibold',
+                      s.isGood ? '' : 'text-muted-foreground',
                     )}
                   >
                     <div className='capitalize'>{l.lift}</div>

@@ -20,11 +20,13 @@ const LeaderBoard = ({
   table,
   gender,
   wc,
+  age = '',
 }: {
   competition: GetCompetitionByUuid
   table: string
   gender: string | null
   wc: string
+  age?: string
 }) => {
   if (table === '') return null
 
