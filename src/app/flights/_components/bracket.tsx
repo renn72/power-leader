@@ -87,22 +87,18 @@ const Bracket = ({
       return i== Number(index)
   })
 
-  const isFlight = bracket.toString() === currentBracket && currentLift === lift
-
 
 
   return (
-    <Card className='relative min-w-[270px] max-w-[600px] shadow-md'>
-      <CardHeader className='mb-0 pb-0 pt-2'>
-        <CardTitle className='flex items-center flex-col justify-around lg:text-3xl pb-0'>
+    <Card className='relative min-w-[360px] max-w-[600px] shadow-md'>
+      <CardHeader className='mb-1 pb-0'>
+        <CardTitle className='flex items-center flex-col justify-around lg:text-3xl'>
           <div className='capitalize'>{title}</div>
-          <div className={cn('text-lg font-medium rounded-full px-8 py-1',
-            isFlight ? 'text-black bg-yellow-500' : ''
-          )}>Flight {bracket}</div>
+          <div className='text-base font-medium'>Flight {bracket}</div>
         </CardTitle>
         <CardDescription className=''></CardDescription>
       </CardHeader>
-      <CardContent className='px-2 pb-2'>
+      <CardContent className='px-2'>
         <div className='flex flex-col gap-1'>
           {entryList.map((entry, i) => {
             const opener =
@@ -119,7 +115,7 @@ const Bracket = ({
               >
                 <div
                   className={cn(
-                    'grid grid-cols-8 place-items-center gap-0 border border-input text-base tracking-tighter lg:tracking-tight w-full',
+                    'grid grid-cols-10 place-items-center gap-1 border border-input text-base tracking-tighter lg:tracking-tight w-full',
                     'rounded-full px-[1px] py-[2px] text-xs sm:text-sm ',
                     entry.id === lifter?.id && currentLift === lift && currentBracket == bracket.toString() ? 'border-yellow-500 bg-black' : '',
                   )}
@@ -127,7 +123,7 @@ const Bracket = ({
                   <div className='font-extrabold tracking-wider text-muted-foreground'>
                     {i + 1}
                   </div>
-                  <Badge className='flex text-[0.60rem] lg:text-xs py-0 lg:py-0.5 w-8 tracking-tighter lg:w-12 items-center justify-center hidden'>
+                  <Badge className='flex text-[0.60rem] lg:text-xs py-0 lg:py-0.5 w-8 tracking-tighter lg:w-12 items-center justify-center'>
                     {entry.wc?.split('-')[0]}kg
                   </Badge>
                   <div
@@ -168,10 +164,10 @@ const Bracket = ({
                   >
                     {entry.equipment?.slice(0, 1).toUpperCase()}
                   </div>
-                  <div className='col-span-2 tracking-tighter truncate capitalize overflow-hidden'>
-                    {entry.user?.name?.split(' ')[0]?.slice(0, 1)}{' '}
-                    {entry.user?.name?.split(' ')[1]?.slice(0, 1).toUpperCase()}
-                    {entry.user?.name?.split(' ')[1]?.slice(1, 9)}
+                  <div className='col-span-3 tracking-tighter truncate capitalize overflow-hidden'>
+                    {entry.user?.name && entry.user?.name.length > 18
+                      ? entry.user?.name.slice(0, 15) + '...'
+                      : entry.user?.name}
                   </div>
                   <div className='col-span-2'>
                     {opener === '' || opener === null ? '-' : opener + 'kg'}
