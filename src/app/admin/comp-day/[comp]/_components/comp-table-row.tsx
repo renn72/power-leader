@@ -376,7 +376,7 @@ const CompTableRow = ({
                 lift: lift,
                 bracket: +bracket,
                 index: i,
-                nextIndex: i + 1 || null,
+                nextIndex: i + 1,
               })
             }}
           >

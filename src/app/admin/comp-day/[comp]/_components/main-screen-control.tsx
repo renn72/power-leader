@@ -61,7 +61,9 @@ const MainScreenControl = ({
 
     const { isJudged, isGood } = liftState(curentEntryLift)
 
-    if (isJudged && !isTicking && Number(index+1) < entries.length && isAuto) {
+    console.log('isJudged', isJudged, index+1, entries.length)
+
+    if (isJudged && !isTicking && (Number(index+1) < entries.length) && isAuto) {
       setIsTicking(true)
       setTimeout(() => {
         console.log('tick')
@@ -74,6 +76,7 @@ const MainScreenControl = ({
           lift: competition.compDayInfo.lift,
           bracket: competition.compDayInfo.bracket,
           index: Number(index) + 1,
+          nextIndex: Number(index) + 2,
         })
       }, 5000)
     } else {
