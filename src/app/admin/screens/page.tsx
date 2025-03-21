@@ -112,7 +112,7 @@ const NumberInput = ({
   const fixed = _fixed
   const scale = _scale
   return (
-    <div className='w-60 relative border rounded-lg h-16 flex items-center'>
+    <div className='w-60 relative border rounded-lg h-10 flex items-center'>
       <Input
         placeholder='...'
         className={cn(
@@ -142,7 +142,7 @@ const NumberInput = ({
         }}
         className='absolute right-0 top-1/2 -translate-y-1/2 text-xs text-secondary-foreground flex gap-0 items-start border-l active:bg-primary/60 rounded-r-lg'
       >
-        <div className='h-16 w-14 flex items-center justify-center scale-75'>
+        <div className='h-10 w-14 flex items-center justify-center scale-75'>
           <PlusIcon size={28} />
         </div>
       </div>
@@ -154,7 +154,7 @@ const NumberInput = ({
         }}
         className='absolute left-0 top-1/2 -translate-y-1/2 text-xs text-secondary-foreground flex gap-0 items-start border-r active:bg-primary/30 rounded-l-lg'
       >
-        <div className='h-16 w-14 flex items-center justify-center active:scale-75'>
+        <div className='h-10 w-14 flex items-center justify-center active:scale-75'>
           <Minus size={28} />
         </div>
       </div>
@@ -193,9 +193,9 @@ const Screen = ({
   })
 
   return (
-    <div className='flex flex-col items-center justify-center gap-4 rounded-lg border p-4 min-h-[20vh] w-full'>
-      <div className='flex flex-col items-center justify-start gap-4'>
-        <div className='text-4xl font-bold'>Screen {index + 1}</div>
+    <div className='flex flex-col items-center justify-center gap-2 rounded-lg border p-2 min-h-[10vh] w-full'>
+      <div className='flex flex-col items-center justify-start gap-2'>
+        <div className='text-2xl font-bold'>Screen {index + 1}</div>
         <Select
           onValueChange={setType}
           value={type}
@@ -203,7 +203,7 @@ const Screen = ({
         >
           <SelectTrigger
             className={cn(
-              'w-full capitalize text-2xl h-16 font-bold ',
+              'w-full capitalize text-xl h-10 font-bold ',
               type.toLowerCase() === 'nil'
                 ? 'text-muted-foreground/60 font-normal'
                 : '',
@@ -236,8 +236,8 @@ const Screen = ({
               updateScreen({
                 id: compId,
                 uuid: uuid,
-                screen1: type,
-                screen1Size: size.toFixed(0),
+                [`${screen}`]: type,
+                [`${screen}Size`]: size.toFixed(0),
               })
             }}
           >
@@ -524,7 +524,6 @@ const Screens = () => {
         <ResultsGender competition={competition} />
         <ResultsWC competition={competition} />
         <ResultsDiv competition={competition} />
-        <span>men 52-140 women 44-140</span>
       </div>
       <div className='max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 relative px-4 lg:px-0'>
         <RefreshCcw
