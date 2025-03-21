@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react'
 
-import { sortEntriesFilter, liftState } from '~/lib/comp-day'
 import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
 import { Switch } from '~/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group-bold'
+import { liftState, sortEntriesFilter } from '~/lib/comp-day'
+import { GetCompetitionByUuid } from '~/lib/types'
 import { api } from '~/trpc/react'
 import { toast } from 'sonner'
-
-import { GetCompetitionByUuid } from '~/lib/types'
 
 const MainScreenControl = ({
   competition,
@@ -45,7 +44,7 @@ const MainScreenControl = ({
     },
   })
 
-  console.log({competition, lift, bracket, round, index})
+  console.log({ competition, lift, bracket, round, index })
 
   useEffect(() => {
     const entries = sortEntriesFilter(competition.entries, lift, bracket, round)
@@ -53,7 +52,9 @@ const MainScreenControl = ({
     console.log('curentEntry', curentEntry)
 
     const curentEntryLift = curentEntry?.lift.find(
-      (l) => l.lift === competition.compDayInfo.lift && l.liftNumber === Number(round),
+      (l) =>
+        l.lift === competition.compDayInfo.lift &&
+        l.liftNumber === Number(round),
     )
     console.log('curentEntryLift', curentEntryLift)
 
@@ -77,14 +78,10 @@ const MainScreenControl = ({
           bracket: competition.compDayInfo.bracket,
           index: Number(index) + 1,
         })
-
       }, 5000)
     } else {
       console.log('not tick')
     }
-
-
-
   }, [isAuto, competition, index, round, bracket, lift])
 
   const brackets =
@@ -100,7 +97,6 @@ const MainScreenControl = ({
         <ToggleGroup
           type='single'
           variant='outline'
-          size='lg'
           defaultValue={competition.compDayInfo.lift.toLowerCase()}
           onValueChange={(value) => {
             if (value === '') return
@@ -115,16 +111,31 @@ const MainScreenControl = ({
             })
           }}
         >
-          <ToggleGroupItem value='squat'>Squat</ToggleGroupItem>
-          <ToggleGroupItem value='bench'>Bench</ToggleGroupItem>
-          <ToggleGroupItem value='deadlift'>Deadlift</ToggleGroupItem>
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='squat'
+          >
+            Squat
+          </ToggleGroupItem>
+
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='bench'
+          >
+            Bench
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='deadlift'
+          >
+            Deadlift
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
       <div className='flex  items-center justify-around gap-2 rounded-md border border-input p-2'>
         <div className='text-lg font-bold'>Rnd</div>
         <ToggleGroup
           type='single'
-          size='lg'
           variant='outline'
           defaultValue={competition.compDayInfo.round.toString()}
           onValueChange={(value) => {
@@ -140,16 +151,35 @@ const MainScreenControl = ({
             })
           }}
         >
-          <ToggleGroupItem value='1'>1</ToggleGroupItem>
-          <ToggleGroupItem value='2'>2</ToggleGroupItem>
-          <ToggleGroupItem value='3'>3</ToggleGroupItem>
-          <ToggleGroupItem value='4'>4</ToggleGroupItem>
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='1'
+          >
+            1
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='2'
+          >
+            2
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='3'
+          >
+            3
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            className='h-8 xl:h-12'
+            value='4'
+          >
+            4
+          </ToggleGroupItem>
         </ToggleGroup>
       </div>
       <div className='flex  items-center justify-around gap-2 rounded-md border border-input p-2'>
         <ToggleGroup
           type='single'
-          size='lg'
           variant='outline'
           defaultValue={competition.compDayInfo.bracket.toString() || '1'}
           onValueChange={(value) => {
@@ -167,6 +197,7 @@ const MainScreenControl = ({
         >
           {Array.from({ length: brackets }, (_, i) => i + 1).map((bracket) => (
             <ToggleGroupItem
+              className='h-8 xl:h-12'
               key={bracket}
               value={bracket.toString()}
             >
@@ -177,14 +208,14 @@ const MainScreenControl = ({
       </div>
       <div className='flex justify-around gap-2 mx-auto'>
         <Button
-          className='h-12 w-12 rounded-full text-white'
+          className='h-8 w-8 xl:h-12 xl:w-12 rounded-full text-white'
           variant='outline'
           onClick={syncToCompetition}
         >
           Sync
         </Button>
         <Button
-          className='h-12 w-12 rounded-full bg-blue-600/80 font-extrabold text-slate-900'
+          className='h-8 w-8 xl:h-12 xl:w-12 rounded-full bg-blue-600/80 font-extrabold text-slate-900'
           variant='outline'
           onClick={() => {
             updateLift({
@@ -200,7 +231,7 @@ const MainScreenControl = ({
           Ping
         </Button>
         <div className='flex flex-col items-center'>
-          <Label className='text-sm'>Auto</Label>
+          <Label className='text-xs xl:text-sm'>Auto</Label>
           <Switch
             checked={isAuto}
             onCheckedChange={(value) => {

@@ -70,10 +70,10 @@ const Competition = ({
   )
 
   return (
-    <div className='relative flex flex-col sm:items-center gap-2 w-full'>
+    <div className='relative flex flex-col sm:items-center gap-1 xl:gap-2 w-full'>
       <Header competition={competition} />
       <Card className='w-full max-w-full'>
-        <CardContent className='flex flex-col gap-2 px-2 py-2 w-full max-w-full'>
+        <CardContent className='flex flex-col gap-1 xl:gap-2 px-2 py-2 w-full max-w-full'>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 w-full'>
             <MainScreenControl
               competition={competition}

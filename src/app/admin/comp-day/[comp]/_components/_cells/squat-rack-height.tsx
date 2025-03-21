@@ -53,7 +53,7 @@ const SquatRackHeight = ({
     })
   }
   return (
-    <TableCell className={cn(isHighlighted && 'bg-accent', 'p-0 py-0 sm:p-2')}>
+    <TableCell className={cn(' h-8 xl:h-10 ',isHighlighted && 'bg-accent', 'p-0 py-0 xl:p-2')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {

@@ -47,7 +47,7 @@ const BenchRackHeight = ({
   }
   return (
     <TableCell
-      className={cn(isHighlighted && 'bg-accent', 'py-0 px-0', 'p-0 xl:p-2')}
+      className={cn(isHighlighted && 'bg-accent', 'py-0 px-0', 'p-0 xl:p-2  h-8 xl:h-10 ')}
     >
       <Dialog
         open={isOpen}

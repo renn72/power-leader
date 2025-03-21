@@ -37,7 +37,7 @@ const TH = ({
   handleDeleteJudge: (liftName: string, num: number) => void
 }) => {
   return (
-    <TableHead className='px-2 h-10'>
+    <TableHead className='px-2 h-6 xl:h-10 '>
       <DropdownMenu>
         <DropdownMenuTrigger
           disabled
@@ -185,9 +185,9 @@ const CompTableHeader = ({
     <TableHeader className='z-99 bg-secondary'>
       <TableRow>
 
-        <TableHead className='h-10 px-2'>Name</TableHead>
-        <TableHead className='h-10 px-2'>WC</TableHead>
-        <TableHead className='h-10 px-2'>Rack</TableHead>
+        <TableHead className='h-6 xl:h-10 px-2'>Name</TableHead>
+        <TableHead className='h-6 xl:h-10  px-2'>WC</TableHead>
+        <TableHead className='h-6 xl:h-10  px-2'>Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}
@@ -228,7 +228,7 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead className='h-10 px-[2px]'>Rack</TableHead>
+        <TableHead className='h-6 xl:h-10  px-[2px]'>Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}
@@ -309,7 +309,7 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead className='h-10'>Lifting</TableHead>
+        <TableHead className='h-6 xl:h-10 '>Lifting</TableHead>
       </TableRow>
     </TableHeader>
   )

@@ -2,9 +2,8 @@
 
 import { useState } from 'react'
 
-import { Label } from '~/components/ui/label'
-import { Checkbox } from '~/components/ui/checkbox'
 import { Button } from '~/components/ui/button'
+import { Checkbox } from '~/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
@@ -13,6 +12,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import { TableCell } from '~/components/ui/table-scroll'
 import {
   GetCompetitionByUuid,
@@ -43,7 +43,7 @@ const Lift = ({
   liftName: string
   liftNumber: number
   lifter: GetCompetitionEntryById
-  bracket : string
+  bracket: string
 }) => {
   const [value, setValue] = useState(() => {
     if (!input) return previousLift?.weight || ''
@@ -89,7 +89,7 @@ const Lift = ({
       className={cn(
         isHighlighted && 'bg-yellow-800/10',
         'py-0',
-        'p-0 lg:p-2 lg:px-1',
+        'p-0 xl:p-2 lg:px-1  h-8 xl:h-10 ',
       )}
     >
       <Dialog
@@ -100,7 +100,7 @@ const Lift = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between gap-0 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[52px] min-h-[40px]',
+            'flex w-full cursor-pointer items-center justify-between gap-0 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[52px] min-h-[30px]',
             input === '' ? '' : 'rounded-md outline outline-border',
             isJudged
               ? isGood
@@ -109,7 +109,7 @@ const Lift = ({
               : '',
           )}
         >
-          <div className='mr-0 xl:mr-4 tracking-tightest xl:tracking-tighter text-base xl:text-lg'>
+          <div className='mr-0 xl:mr-4 tracking-tightest xl:tracking-tighter text-sm xl:text-lg'>
             {input + (input !== '' ? 'kg' : '')}
           </div>
           <div
@@ -168,7 +168,7 @@ const Lift = ({
               size={48}
               onClick={() => {
                 let c = Math.floor(Number(value) / 2.5)
-                setValue(((c * 2.5) - 2.5).toFixed(2))
+                setValue((c * 2.5 - 2.5).toFixed(2))
               }}
             />
             <Input
@@ -184,16 +184,18 @@ const Lift = ({
               size={48}
               onClick={() => {
                 let c = Math.floor(Number(value) / 2.5)
-                setValue(((c * 2.5) + 2.5).toFixed(2))
+                setValue((c * 2.5 + 2.5).toFixed(2))
               }}
             />
           </div>
-          <div className={cn('flex items-center justify-center gap-1 mx-auto border-2 rounded-lg px-4 py-4 ',
-            isRecord === true ? 'border-primary' : '',
-          )}>
+          <div
+            className={cn(
+              'flex items-center justify-center gap-1 mx-auto border-2 rounded-lg px-4 py-4 ',
+              isRecord === true ? 'border-primary' : '',
+            )}
+          >
             <Label className='text-sm'>Record</Label>
             <Checkbox
-
               checked={isRecord ?? false}
               onCheckedChange={(e) => {
                 if (e === true) setIsRecord(true)

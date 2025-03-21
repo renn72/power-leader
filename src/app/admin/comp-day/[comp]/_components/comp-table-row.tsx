@@ -196,11 +196,11 @@ const CompTableRow = ({
         'py-0',
       )}
     >
-      <Cell className='p-0 tracking-tightest xl:tracking-tight  py-0 xl:p-2 truncate max-w-[80px] xl:max-w-[155px] capitalize'>
+      <Cell className='p-0 tracking-tightest xl:tracking-tight  py-0 xl:p-2 truncate max-w-[80px] xl:max-w-[155px] capitalize h-8 xl:h-10'>
         {lifterName}
       </Cell>
-      <Cell className='p-0  py-0 xl:p-2'>
-        <Badge className='w-12 items-center justify-center'>{lifterWc}</Badge>
+      <Cell className='p-0  h-8 xl:h-10 py-0 xl:p-2'>
+        <Badge className='w-9  xl:w-12 items-center justify-center'>{lifterWc}</Badge>
       </Cell>
       <SquatRackHeight
         height={lifterSquatRackHeight}
@@ -339,14 +339,14 @@ const CompTableRow = ({
         liftName='deadlift'
         liftNumber={4}
       />
-      <Cell className='p-0 lg:p-2'>
+      <Cell className='p-0 xl:p-2  h-12'>
         {+index === i ? (
           <Button
             variant='ghost'
             className='cursor-auto text-complete hover:bg-muted/10 hover:text-complete'
           >
             <UserCheck
-              size={32}
+              size={20}
               strokeWidth={3}
               className={cn('cursor-pointer')}
               onClick={() => {
@@ -381,7 +381,7 @@ const CompTableRow = ({
             }}
           >
             <User
-              size={24}
+              size={20}
               className={cn('')}
             />
           </Button>

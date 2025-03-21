@@ -107,7 +107,7 @@ const config = {
         '200': '2',
       },
       letterSpacing: {
-        tightest: '-0.075em',
+        tightest: '-0.080em',
       },
       colors: {
         border: 'hsl(var(--border))',

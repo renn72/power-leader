@@ -22,11 +22,10 @@ const Sign = ({
   field: string
 }) => {
   return (
-    <div className='flex flex-col items-center gap-2 lg:gap-1'>
+    <div className='flex flex-row xl:flex-col items-center gap-2 lg:gap-1'>
       <div className='flex items-center justify-center gap-2'>
         <Check
-          size={36}
-          className='cursor-pointer'
+          className='cursor-pointer h-5 w-5 xl:h-10 xl:w-10 '
           onClick={() => {
             updateIsLiftGood({
               id: currentLift?.id || -1,
@@ -40,20 +39,19 @@ const Sign = ({
           {currentLift ? (
             <div>
               {isGood === null ? (
-                <div className='h-8 w-8 rounded-full border border-4 border-white/60 lg:h-12 lg:w-12 '></div>
+                <div className='h-4 w-4 rounded-full border border-4 border-white/60 xl:h-12 xl:w-12 '></div>
               ) : isGood ? (
-                <div className='good-lift h-8 w-8 rounded-full lg:h-12 lg:w-12 '></div>
+                <div className='good-lift h-4 w-4 rounded-full xl:h-12 xl:w-12 '></div>
               ) : (
-                <div className='bad-lift h-8 w-8 rounded-full lg:h-12 lg:w-12 '></div>
+                <div className='bad-lift h-4 w-4 rounded-full xl:h-12 xl:w-12 '></div>
               )}
             </div>
           ) : (
-            <div className=' h-12 w-12 rounded-full border border-4 border-white/60 '></div>
+            <div className='h-4 w-4 xl:h-12 xl:w-12  rounded-full border border-4 border-white/60 '></div>
           )}
         </div>
         <X
-          className='cursor-pointer'
-          size={36}
+          className='cursor-pointer h-5 w-5 xl:h-10 xl:w-10 '
           onClick={() => {
             updateIsLiftGood({
               id: currentLift?.id || -1,
