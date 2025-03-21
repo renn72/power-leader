@@ -163,7 +163,7 @@ const CompDayScreen = ({
             <div
               key={entry.id}
               className={cn(
-                'w-full rounded-full border border-1 border-muted py-1 text-xl font-semibold leading-7 tracking-tighter',
+                'w-full rounded-full border border-1 border-muted py-[2px] text-xl font-semibold leading-7 tracking-tighter',
                 'grid grid-cols-8 items-center gap-0',
                 index == i
                   ? 'border-yellow-400 bg-yellow-400 font-black text-black'
@@ -203,17 +203,8 @@ const CompDayScreen = ({
           )
         })}
       </div>
-      <div className='relative col-span-1 mt-[2vh] flex h-dvh w-full flex-col items-start justify-around text-xl font-bold pl-20'>
-        <div className='absolute left-1/2 top-1 -translate-x-1/2 z-[-10]'>
-          <Image
-            src='/showdown.jpeg'
-            alt='RawWar Logo'
-            width={1440}
-            height={1440}
-            style={{ width: '10vw', height: '100%' }}
-          />
-        </div>
-        <div className='text-sm mt-44'>
+      <div className='relative col-span-1 mt-[2vh] flex h-dvh w-full flex-col items-start justify-around text-xl font-bold pl-40'>
+        <div className='text-sm mt-0'>
           {lifter && lift && (
             <Loading
               isLifting={true}
