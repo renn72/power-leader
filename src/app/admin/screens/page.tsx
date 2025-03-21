@@ -1,8 +1,10 @@
 'use client'
 
+import { wcFData, wcMData } from '~/lib/store'
 import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
+import { GetCompetitionByUuid } from '~/lib/types'
 import { api } from '~/trpc/react'
 import { Minus, PlusIcon, RefreshCcw } from 'lucide-react'
 import { toast } from 'sonner'
@@ -17,6 +19,53 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+const ages = [
+  {
+    name: 'teen',
+    min: 14,
+    max: 16,
+  },
+  {
+    name: 'sub-junior',
+    min: 17,
+    max: 19,
+  },
+  {
+    name: 'junior',
+    min: 20,
+    max: 23,
+  },
+  {
+    name: 'open',
+    min: 24,
+    max: 39,
+  },
+  {
+    name: 'm1',
+    min: 40,
+    max: 49,
+  },
+  {
+    name: 'm2',
+    min: 50,
+    max: 59,
+  },
+  {
+    name: 'm3',
+    min: 60,
+    max: 69,
+  },
+  {
+    name: 'm4',
+    min: 70,
+    max: 79,
+  },
+  {
+    name: 'm5',
+    min: 80,
+    max: 999,
+  },
+]
 const screens = [
   'screen1',
   'screen2',
@@ -44,6 +93,7 @@ const types = [
   'board-novice',
   'board-first-timers',
   'board-open',
+  'board-results',
 ]
 
 const NumberInput = ({
@@ -209,6 +259,258 @@ const Screen = ({
   )
 }
 
+const ResultsAge = ({ competition }: { competition: GetCompetitionByUuid }) => {
+  const [age, setAge] = useState(() => competition.compDayInfo.resultAge || '')
+  const ctx = api.useUtils()
+  const { mutate: updateScreen } = api.competitionDay.updateScreen.useMutation({
+    onError: (err) => {
+      console.log(err)
+    },
+    onSuccess: (e) => {
+      console.log(e)
+      toast.success('Screen saved!')
+      void ctx.competition.invalidate()
+    },
+  })
+
+  return (
+    <div className='flex flex-col items-center justify-center gap-4 rounded-lg border p-4 min-h-[10vh]'>
+      <div className='flex flex-col items-center justify-start gap-4'>
+        <div className='text-xl font-bold'>Results Age</div>
+        <Select
+          onValueChange={setAge}
+          value={age}
+          defaultValue={competition.compDayInfo.resultAge || ''}
+        >
+          <SelectTrigger
+            className={cn(
+              'w-full capitalize text-2xl h-10 font-bold ',
+              age.toLowerCase() === 'open'
+                ? 'text-muted-foreground/60 font-normal'
+                : '',
+            )}
+          >
+            <SelectValue placeholder={age} />
+          </SelectTrigger>
+          <SelectContent>
+            {ages.map((a) => (
+              <SelectItem
+                key={a.name}
+                value={a.name}
+                className='capitalize'
+              >
+                {a.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <div className='flex gap-4 w-full justify-around'>
+          <Button
+            size='sm'
+            onClick={() => {
+              updateScreen({
+                id: competition.id,
+                uuid: competition.uuid || '',
+                resultAge: age,
+              })
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+const ResultsGender = ({ competition }: { competition: GetCompetitionByUuid }) => {
+  const [gender, setGender] = useState(() => competition.compDayInfo.resultGender || '')
+  const ctx = api.useUtils()
+  const { mutate: updateScreen } = api.competitionDay.updateScreen.useMutation({
+    onError: (err) => {
+      console.log(err)
+    },
+    onSuccess: (e) => {
+      console.log(e)
+      toast.success('Screen saved!')
+      void ctx.competition.invalidate()
+    },
+  })
+  return (
+    <div className='flex flex-col items-center justify-center gap-4 rounded-lg border p-4 min-h-[10vh]'>
+      <div className='flex flex-col items-center justify-start gap-4'>
+        <div className='text-xl font-bold'>Results Gender</div>
+        <Select
+          onValueChange={setGender}
+          value={gender}
+          defaultValue={competition.compDayInfo.resultGender || ''}
+        >
+          <SelectTrigger
+            className={cn(
+              'w-full capitalize text-2xl h-10 font-bold ',
+              gender.toLowerCase() === 'open'
+                ? 'text-muted-foreground/60 font-normal'
+                : '',
+            )}
+          >
+            <SelectValue placeholder={gender} />
+          </SelectTrigger>
+          <SelectContent>
+            {['male', 'female'].map((a) => (
+              <SelectItem
+                key={a}
+                value={a}
+                className='capitalize'
+              >
+                {a}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <div className='flex gap-4 w-full justify-around'>
+          <Button
+            size='sm'
+            onClick={() => {
+              updateScreen({
+                id: competition.id,
+                uuid: competition.uuid || '',
+                resultGender: gender,
+              })
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ResultsWC = ({ competition }: { competition: GetCompetitionByUuid }) => {
+  const [wc, setWC] = useState(() => competition.compDayInfo.resultWC || '')
+  const ctx = api.useUtils()
+  const { mutate: updateScreen } = api.competitionDay.updateScreen.useMutation({
+    onError: (err) => {
+      console.log(err)
+    },
+    onSuccess: (e) => {
+      console.log(e)
+      toast.success('Screen saved!')
+      void ctx.competition.invalidate()
+    },
+  })
+  return (
+    <div className='flex flex-col items-center justify-center gap-4 rounded-lg border p-4 min-h-[10vh]'>
+      <div className='flex flex-col items-center justify-start gap-4'>
+        <div className='text-xl font-bold'>Results WC</div>
+        <Select
+          onValueChange={setWC}
+          value={wc}
+          defaultValue={competition.compDayInfo.resultWC || ''}
+        >
+          <SelectTrigger
+            className={cn(
+              'w-full capitalize text-2xl h-10 font-bold ',
+              wc.toLowerCase() === 'open'
+                ? 'text-muted-foreground/60 font-normal'
+                : '',
+            )}
+          >
+            <SelectValue placeholder={wc} />
+          </SelectTrigger>
+          <SelectContent>
+            {wcFData.map((a) => (
+              <SelectItem
+                key={a}
+                value={a.toString()}
+                className='capitalize'
+              >
+                {a}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <div className='flex gap-4 w-full justify-around'>
+          <Button
+            size='sm'
+            onClick={() => {
+              updateScreen({
+                id: competition.id,
+                uuid: competition.uuid || '',
+                resultWC: wc,
+              })
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ResultsDiv = ({ competition }: { competition: GetCompetitionByUuid }) => {
+  const [div, setDiv] = useState(() => competition.compDayInfo.resultDiv || '')
+  const ctx = api.useUtils()
+  const { mutate: updateScreen } = api.competitionDay.updateScreen.useMutation({
+    onError: (err) => {
+      console.log(err)
+    },
+    onSuccess: (e) => {
+      console.log(e)
+      toast.success('Screen saved!')
+      void ctx.competition.invalidate()
+    },
+  })
+  return (
+    <div className='flex flex-col items-center justify-center gap-4 rounded-lg border p-4 min-h-[10vh]'>
+      <div className='flex flex-col items-center justify-start gap-4'>
+        <div className='text-xl font-bold'>Results Div</div>
+        <Select
+          onValueChange={setDiv}
+          value={div}
+          defaultValue={competition.compDayInfo.resultDiv || ''}
+        >
+          <SelectTrigger
+            className={cn(
+              'w-full capitalize text-2xl h-10 font-bold ',
+              div.toLowerCase() === 'open'
+                ? 'text-muted-foreground/60 font-normal'
+                : '',
+            )}
+          >
+            <SelectValue placeholder={div} />
+          </SelectTrigger>
+          <SelectContent>
+            {['pro', 'novice', 'first-timers', 'open'].map((a) => (
+              <SelectItem
+                key={a}
+                value={a}
+                className='capitalize'
+              >
+                {a}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <div className='flex gap-4 w-full justify-around'>
+          <Button
+            size='sm'
+            onClick={() => {
+              updateScreen({
+                id: competition.id,
+                uuid: competition.uuid || '',
+                resultDiv: div,
+              })
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const Screens = () => {
   const ctx = api.useUtils()
   const { data: competition } = api.competition.get.useQuery(1, {
@@ -216,32 +518,41 @@ const Screens = () => {
   })
   if (!competition) return null
   return (
-    <div className='max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 relative px-4 lg:px-0'>
-      <RefreshCcw
-        className={cn(
-          'absolute -right-10 top-0 active:scale-75 cursor-pointer transition-transform',
-        )}
-        onClick={() => {
-          void ctx.competition.invalidate()
-        }}
-      />
-      {screens.map((screen, i) => {
-        // @ts-ignore
-        const screenType = competition?.compDayInfo?.[`${screen}`] || 'nil'
-        // @ts-ignore
-        const screenSize = competition?.compDayInfo?.[`${screen}Size`] || 'nil'
-        return (
-          <Screen
-            uuid={competition?.uuid || ''}
-            compId={competition.id}
-            screenType={screenType}
-            screenSize={screenSize}
-            screen={screen}
-            index={i}
-            key={screen}
-          />
-        )
-      })}
+    <div className='max-w-screen-xl mx-auto flex flex-col my-2'>
+      <div className='flex gap-4 flex-wrap justify-center'>
+        <ResultsAge competition={competition} />
+        <ResultsGender competition={competition} />
+        <ResultsWC competition={competition} />
+        <ResultsDiv competition={competition} />
+        <span>men 52-140 women 44-140</span>
+      </div>
+      <div className='max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4 relative px-4 lg:px-0'>
+        <RefreshCcw
+          className={cn(
+            'absolute -right-10 top-0 active:scale-75 cursor-pointer transition-transform',
+          )}
+          onClick={() => {
+            void ctx.competition.invalidate()
+          }}
+        />
+        {screens.map((screen, i) => {
+          // @ts-ignore
+          const screenType = competition?.compDayInfo?.[`${screen}`] || 'nil'
+          // @ts-ignore
+          const screenSize = competition?.compDayInfo?.[`${screen}Size`] || 'nil'
+          return (
+            <Screen
+              uuid={competition?.uuid || ''}
+              compId={competition.id}
+              screenType={screenType}
+              screenSize={screenSize}
+              screen={screen}
+              index={i}
+              key={screen}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }

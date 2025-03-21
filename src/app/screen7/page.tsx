@@ -30,8 +30,8 @@ export default function Home() {
   }, [comp])
   if (!competition) return null
 
-  const screen = competition.compDayInfo.screen1
-  const screenSize = competition.compDayInfo.screen1Size
+  const screen = competition.compDayInfo.screen7
+  const screenSize = competition.compDayInfo.screen7Size
 
   return (
     <Screen
