@@ -48,8 +48,8 @@ const Judge = ({
 
   const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
     onSettled: () => {
-      setIsVoting(false)
       ctx.competition.getCompetitionByUuid.refetch()
+      setIsVoting(false)
     },
     onError: () => {
       toast('Error Updating Lift')
@@ -185,7 +185,7 @@ const Judge = ({
     return <div>Not Found</div>
 
   const isGood =
-    judgeNumber === 1 ? lift?.isGoodOne : lift?.isGoodTwo || lift?.isGoodThree
+    judgeNumber === 1 ? lift?.isGoodOne : judgeNumber === 2 ? lift?.isGoodTwo : lift?.isGoodThree
   const name = lifter.user.name
   const weight = lift.weight
 
@@ -518,6 +518,8 @@ const Page = ({ params }: { params: { comp: string; judge: string } }) => {
     })
   if (competitionLoading) return null
   if (!competition) return null
+
+  console.log('refresh')
 
   return (
     <Judge
