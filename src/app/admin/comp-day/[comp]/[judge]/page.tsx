@@ -157,12 +157,6 @@ const Judge = ({
         ctx.competition.getCompetitionByUuid.refetch()
       },
     )
-    channel.bind(
-      'judge',
-      () => {
-        ctx.competition.getCompetitionByUuid.refetch()
-      },
-    )
     return () => {
       pusherClient.unsubscribe('competition-' + comp)
       pusherClient.disconnect()
@@ -520,7 +514,7 @@ const Page = ({ params }: { params: { comp: string; judge: string } }) => {
   const judgeNumber = Number(judge.split('-')[1])
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 1 * 1,
+      refetchInterval: 1000 * 5 * 1,
     })
   if (competitionLoading) return null
   if (!competition) return null
