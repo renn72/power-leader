@@ -11,7 +11,7 @@ const CompDay = () => {
 
   return (
     <div className='flex flex-col gap-8 p-4 items-center justify-center mt-10'>
-      <Link href={`comp-day/${compId}/judge-1`}>
+      <Link href={`${compId}/judge-1`}>
         <Button
           size='lg'
           variant='secondary'
@@ -19,7 +19,7 @@ const CompDay = () => {
           Judge 1
         </Button>
       </Link>
-      <Link href={`comp-day/${compId}/judge-2`}>
+      <Link href={`${compId}/judge-2`}>
         <Button
           size='lg'
           variant='secondary'
@@ -27,7 +27,7 @@ const CompDay = () => {
           Judge 2
         </Button>
       </Link>
-      <Link href={`comp-day/${compId}/judge-3`}>
+      <Link href={`${compId}/judge-3`}>
         <Button
           size='lg'
           variant='secondary'
