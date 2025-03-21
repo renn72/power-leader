@@ -35,8 +35,8 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main className={`sm:min-h-screen`}>
-                <div className='sm:min-h-[calc(100vh-7.8rem)]'>{children}</div>
+              <main className={`sm:min-h-screen w-full`}>
+                <div className='sm:min-h-[calc(100vh-7.8rem)] w-full'>{children}</div>
                 <Toaster />
               </main>
             </ThemeProvider>

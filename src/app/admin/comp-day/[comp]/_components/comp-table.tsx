@@ -105,7 +105,7 @@ const CompTable = ({
 
   return (
     <div className='rounded-md border border-input p-1 w-full'>
-        <Table className='text-sm tracking-tighter lg:text-lg'>
+        <Table className='text-sm tracking-tighter md:text-base xl:text-lg'>
           <CompTableHeader
             lifters={lifters}
             bracket={Number(bracket)}

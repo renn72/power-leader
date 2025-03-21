@@ -41,7 +41,7 @@ const TH = ({
       <DropdownMenu>
         <DropdownMenuTrigger
           disabled
-          className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift} ${round}`}</DropdownMenuTrigger>
+          className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift.slice(0,1)} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className='cursor-pointer hover:bg-muted hover:text-primary'>
             <CompTableHeaderBracket
@@ -184,13 +184,11 @@ const CompTableHeader = ({
   return (
     <TableHeader className='z-99 bg-secondary'>
       <TableRow>
-        <TableHead className='h-10'>#</TableHead>
 
-        <TableHead className='h-10'>Name</TableHead>
-        <TableHead className='h-10'>E</TableHead>
-        <TableHead className='h-10'>G</TableHead>
-        <TableHead className='h-10'>WC</TableHead>
-        <TableHead className='h-10'>Squat Rack</TableHead>
+        <TableHead className='h-10 px-2'>Name</TableHead>
+        <TableHead className='h-10 px-2 '>G</TableHead>
+        <TableHead className='h-10 px-2'>WC</TableHead>
+        <TableHead className='h-10 px-2'>Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}
@@ -231,7 +229,7 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead className='h-10'>Bench Rack</TableHead>
+        <TableHead className='h-10'>Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}

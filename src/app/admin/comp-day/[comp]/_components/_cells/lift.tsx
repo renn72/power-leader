@@ -100,7 +100,7 @@ const Lift = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between gap-1 px-1 py-2 tracling-tighter',
+            'flex w-full cursor-pointer items-center justify-between gap-1 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[56px] min-h-[40px]',
             input === '' ? '' : 'rounded-md outline outline-border',
             isJudged
               ? isGood
@@ -109,7 +109,7 @@ const Lift = ({
               : '',
           )}
         >
-          <div className='mr-1 sm:mr-4'>
+          <div className='mr-0 xl:mr-4 tracking-tightest xl:tracking-tighter'>
             {input + (input !== '' ? 'kg' : '')}
           </div>
           <div
@@ -194,7 +194,7 @@ const Lift = ({
             <Label className='text-sm'>Record</Label>
             <Checkbox
 
-              checked={isRecord}
+              checked={isRecord ?? false}
               onCheckedChange={(e) => {
                 if (e === true) setIsRecord(true)
                 if (e === false) setIsRecord(false)
