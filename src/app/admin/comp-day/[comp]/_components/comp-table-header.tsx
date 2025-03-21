@@ -229,7 +229,7 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead className='h-10'>Rack</TableHead>
+        <TableHead className='h-10 px-[2px]'>Rack</TableHead>
         <TH
           bracket={bracket}
           lifters={lifters}

@@ -104,6 +104,7 @@ const MainScreenControl = ({
           defaultValue={competition.compDayInfo.lift.toLowerCase()}
           onValueChange={(value) => {
             if (value === '') return
+            setLift(value)
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
@@ -153,6 +154,7 @@ const MainScreenControl = ({
           defaultValue={competition.compDayInfo.bracket.toString() || '1'}
           onValueChange={(value) => {
             if (value === '') return
+            setBracket(value)
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',

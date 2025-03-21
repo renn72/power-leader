@@ -89,7 +89,7 @@ const Lift = ({
       className={cn(
         isHighlighted && 'bg-yellow-800/10',
         'py-0',
-        'p-0 lg:p-2 lg:px-1 w-[105px] ',
+        'p-0 lg:p-2 lg:px-1',
       )}
     >
       <Dialog
@@ -100,7 +100,7 @@ const Lift = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between gap-1 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[56px] min-h-[40px]',
+            'flex w-full cursor-pointer items-center justify-between gap-0 px-[2px] xl:px-1 py-1 xl:py-2 tracking-tighter min-w-[55px] min-h-[40px]',
             input === '' ? '' : 'rounded-md outline outline-border',
             isJudged
               ? isGood
