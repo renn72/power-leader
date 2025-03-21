@@ -61,7 +61,9 @@ const MainScreenControl = ({
 
     const { isJudged, isGood } = liftState(curentEntryLift)
 
-    console.log('isJudged', isJudged, index+1, entries.length)
+    console.log('isJudged', isJudged, !isTicking, Number(index)+1, entries.length, isAuto)
+
+    console.log(isJudged && !isTicking && (Number(index+1) < entries.length))
 
     if (isJudged && !isTicking && (Number(index+1) < entries.length) && isAuto) {
       setIsTicking(true)
