@@ -68,7 +68,7 @@ const LeaderBoard = ({
           <Table>
             <TableHeader className='bg-muted'>
               <TableRow className='text-base tracking-tighter'>
-                <TableHead className=''>Name</TableHead>
+                <TableHead className='h-8'>Name</TableHead>
                 <TableHead>Squat</TableHead>
                 <TableHead>DOTS</TableHead>
                 <TableHead>Place</TableHead>

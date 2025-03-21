@@ -142,7 +142,7 @@ const LeaderBoardRow = ({
     <TableRow
       key={entry.id}
       className={cn(
-        'text-sm md:text-xl font-extrabold uppercase leading-5 tracking-tightest',
+        'text-sm md:text-lg font-extrabold uppercase leading-5 tracking-tightest',
       )}
     >
       <TableCell className='py-0 truncate sticky left-0 z-20 bg-background'>
