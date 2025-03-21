@@ -51,6 +51,9 @@ const Judge = ({
       setIsVoting(false)
       ctx.competition.getCompetitionByUuid.refetch()
     },
+    onError: () => {
+      toast('Error Updating Lift')
+    },
   })
 
   const liftName = competition?.compDayInfo.lift || ''
@@ -151,6 +154,12 @@ const Judge = ({
         // setIndex(data.index)
         // setRound(data.round)
         // setNextIndex(data.nextIndex?.toString() || '')
+        ctx.competition.getCompetitionByUuid.refetch()
+      },
+    )
+    channel.bind(
+      'judge',
+      () => {
         ctx.competition.getCompetitionByUuid.refetch()
       },
     )
@@ -270,7 +279,7 @@ const Judge = ({
         </div>
         <div
           className={cn(
-            'flex h-32 w-32 items-center justify-center rounded-full border border-4 border-white/60',
+            'flex h-32 w-32 items-center justify-center rounded-full border border-4 border-white/60 relative',
             isGood !== null
               ? isGood
                 ? 'border-white bg-white '
@@ -278,6 +287,13 @@ const Judge = ({
               : '',
           )}
         />
+        {lift?.isRecord === true ? (
+          <div className='absolute top-0 -right-24 bottom-0 flex items-center justify-center'>
+            <div className='text-2xl font-black text-yellow-500 h-10 w-10 rounded-full border-2 border-yellow-500 flex items-center justify-center'>
+              R
+            </div>
+          </div>
+        ) : null}
         <div className='flex w-full justify-around'>
           <div
             onClick={() => {
@@ -504,7 +520,7 @@ const Page = ({ params }: { params: { comp: string; judge: string } }) => {
   const judgeNumber = Number(judge.split('-')[1])
   const { data: competition, isLoading: competitionLoading } =
     api.competition.getCompetitionByUuid.useQuery(comp, {
-      refetchInterval: 1000 * 30 * 1,
+      refetchInterval: 1000 * 1 * 1,
     })
   if (competitionLoading) return null
   if (!competition) return null
