@@ -55,7 +55,7 @@ export const equipmentData = [
 export const wcMData = [52, 56, 60, 67.5, 75, 82.5, 90, 100, 110, 125, 140]
 
 export const wcFData = [
-  44, 48, 52, 56, 60, 67.5, 75, 82.5, 90, 100, 110, 125, 140,
+  44, 48, 52, 56, 60, 67.5, 75, 82.5, 90, 100, 110, 125, 140, '140+',
 ]
 
 export const winnerFormular = ['Total', 'Dots', 'Wilks']

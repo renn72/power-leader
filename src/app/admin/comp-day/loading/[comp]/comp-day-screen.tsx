@@ -120,6 +120,7 @@ const CompDayScreen = ({
       name: e.user?.name || '',
       lift: lift,
       pb: pb,
+      benchRackHeight: e?.benchRackHeight,
     }
   })
 
@@ -182,7 +183,7 @@ const CompDayScreen = ({
               />
               <div className='col-span-3 capitalize truncate'>{entry.name}</div>
               <div>{entry.lift?.weight}kg</div>
-              <div>{entry.lift?.rackHeight}</div>
+              <div>{entry?.benchRackHeight}</div>
               <div>
                 {isPb ? (
                   <div className='rounded-full h-6 w-6 text-base bg-green-500 text-black border-2 border-green-500 flex items-center justify-center'>

@@ -39,7 +39,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
   const userWeight = Number(entry.weight)
   const userGender = entry.user?.gender?.toLowerCase()
 
-  const squats = entry.lift.filter((l) => l.lift == 'squat')
+  const squats = entry.lift.filter((l) => l.lift == 'squat').slice(0, 3)
 
   const isSquatting = squats?.length > 0
   const hasSquat = squats?.reduce(
@@ -68,7 +68,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
     .filter((l) => l.lift == 'bench')
     .reduce((a, b) => (b.state == 'judged' ? true : a), false)
   const bench = entry.lift
-    .filter((l) => l.lift == 'bench')
+    .filter((l) => l.lift == 'bench').slice(0, 3)
     .reduce(
       (a, b) => {
         const isGood =
@@ -92,7 +92,7 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
     .filter((l) => l.lift == 'deadlift')
     .reduce((a, b) => (b.state == 'judged' ? true : a), false)
   const deadlift = entry.lift
-    .filter((l) => l.lift == 'deadlift')
+    .filter((l) => l.lift == 'deadlift').slice(0, 3)
     .reduce(
       (a, b) => {
         const isGood =
@@ -125,7 +125,7 @@ export const getTotalDots = (entry: GetCompetitionEntryById) => {
   const userGender = entry.user?.gender?.toLowerCase()
 
 
-  const squats = entry.lift.filter((l) => l.lift == 'squat')
+  const squats = entry.lift.filter((l) => l.lift == 'squat').slice(0, 3)
 
   const isSquatting = squats?.length > 0
   const hasSquat = squats?.reduce(
@@ -154,7 +154,7 @@ export const getTotalDots = (entry: GetCompetitionEntryById) => {
     .filter((l) => l.lift == 'bench')
     .reduce((a, b) => (b.state == 'judged' ? true : a), false)
   const bench = entry.lift
-    .filter((l) => l.lift == 'bench')
+    .filter((l) => l.lift == 'bench').slice(0, 3)
     .reduce(
       (a, b) => {
         const isGood =
@@ -178,7 +178,7 @@ export const getTotalDots = (entry: GetCompetitionEntryById) => {
     .filter((l) => l.lift == 'deadlift')
     .reduce((a, b) => (b.state == 'judged' ? true : a), false)
   const deadlift = entry.lift
-    .filter((l) => l.lift == 'deadlift')
+    .filter((l) => l.lift == 'deadlift').slice(0, 3)
     .reduce(
       (a, b) => {
         const isGood =
