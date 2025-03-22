@@ -17,6 +17,7 @@ const MainScreenControl = ({
   bracket,
   round,
   index,
+  setIndex,
   setLift,
   setBracket,
   setRound,
@@ -27,6 +28,7 @@ const MainScreenControl = ({
   bracket: string
   round: string
   index: string
+  setIndex: (index: string) => void
   setLift: (lift: string) => void
   setBracket: (bracket: string) => void
   setRound: (round: string) => void
@@ -155,13 +157,14 @@ const MainScreenControl = ({
           onValueChange={(value) => {
             if (value === '') return
             setRound(value)
+            setIndex('0')
             updateLift({
               id: competition.id,
               uuid: competition.uuid || '',
               round: +value,
               lift: competition.compDayInfo.lift,
               bracket: competition.compDayInfo.bracket,
-              index: competition.compDayInfo.index,
+              index: 0,
             })
           }}
         >

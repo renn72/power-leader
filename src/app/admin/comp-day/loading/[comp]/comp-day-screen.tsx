@@ -134,10 +134,10 @@ const CompDayScreen = ({
   return (
     <div
       className={cn(
-        'dark relative grid h-dvh w-dvw grid-cols-2 overflow-hidden',
+        'dark relative grid h-dvh w-dvw grid-cols-5 overflow-hidden',
       )}
     >
-      <div className='col-span-1 mt-4 flex flex-col items-center gap-2'>
+      <div className='col-span-3 mt-4 flex flex-col items-center gap-2'>
         <div className='text-2xl font-bold text-muted-foreground'>
           Round: {round}
         </div>
@@ -203,7 +203,7 @@ const CompDayScreen = ({
           )
         })}
       </div>
-      <div className='relative col-span-1 mt-[2vh] flex h-dvh w-full flex-col items-start justify-around text-xl font-bold pl-40'>
+      <div className='relative col-span-2 mt-[2vh] flex h-dvh w-full flex-col items-start justify-around text-xl font-bold pl-20'>
         <div className='text-sm mt-0'>
           {lifter && lift && (
             <Loading

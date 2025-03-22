@@ -81,6 +81,7 @@ const Competition = ({
               bracket={bracket}
               round={round}
               index={index}
+              setIndex={setIndex}
               setLift={setLift}
               setBracket={setBracket}
               setRound={setRound}
