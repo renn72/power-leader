@@ -149,11 +149,7 @@ const LeaderBoardRow = ({
       )}
     >
       <TableCell className='py-0 truncate sticky left-0 z-20 bg-background'>
-        {entry.user?.name?.split(' ')[0]?.slice(0, 1)}{' '}
-        {entry.user?.name?.split(' ')[1] &&
-        (entry.user.name.split(' ')[1]?.length ?? 0) > 8
-          ? entry.user?.name?.split(' ')[1]?.slice(0, 8) +'..'
-          : entry.user?.name?.split(' ')[1]}
+        {entry.user?.name?.slice(0, 20)}
       </TableCell>
       {hasSquat ? (
         <>
