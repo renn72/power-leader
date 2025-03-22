@@ -232,7 +232,7 @@ const CompDayScreen = ({
                   <div
                     key={l.id}
                     className={cn(
-                      'grid grid-cols-4 place-items-center text-2xl font-semibold',
+                      'grid grid-cols-4 place-items-center text-3xl font-semibold',
                       s.isGood ? '' : 'text-muted-foreground',
                     )}
                   >
@@ -250,20 +250,20 @@ const CompDayScreen = ({
                 )
               })}
             </div>
-            <div className='mt-10 flex w-full flex-col items-center gap-12 text-7xl font-bold relative'>
+            <div className='mt-10 flex w-full flex-col items-center gap-12 text-7xl font-extrabold relative'>
               <div className='absolute -top-48 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4'>
                 {lift.isRecord ? (
-                  <div className='text-center text-2xl bg-yellow-500 text-black ring-2 ring-yellow-500 rounded-full py-4 px-8'>
+                  <div className='text-center text-5xl bg-yellow-500 text-black ring-2 ring-yellow-500 rounded-full py-4 px-8'>
                     Record Attempt
                   </div>
                 ) : null}
                 {isPb ? (
-                  <div className='text-center text-2xl ring-2 ring-green-500 bg-green-500 text-black rounded-full py-4 px-8'>
+                  <div className='text-center text-5xl ring-2 ring-green-500 bg-green-500 text-black rounded-full py-4 px-8'>
                     Personal Best
                   </div>
                 ) : null}
               </div>
-              <div className='flex flex-col items-center'>
+              <div className='flex flex-col items-center mt-44'>
                 <div className='uppercase'>{lifter?.user?.name}</div>
               </div>
               <div className='relative flex w-full justify-center'>
