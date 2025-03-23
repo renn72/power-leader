@@ -4,10 +4,11 @@ import { env } from '~/env'
 
 export default {
   schema: './src/server/db/schema.ts',
-  dialect: 'turso',
+  // dialect: 'turso',
+  dialect: 'sqlite',
   dbCredentials: {
-    url: env.DATABASE_SYNC_URL,
-    authToken: env.DATABASE_AUTH_TOKEN,
+    url: env.DATABASE_URL,
+    // authToken: env.DATABASE_AUTH_TOKEN,
   },
 } satisfies Config
 
