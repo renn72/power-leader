@@ -100,12 +100,17 @@ const Judge = ({
         ctx.competition.getCompetitionByUuid.refetch()
         setTimeout(() => {
           setIsVoting(false)
-        }, 200)
+        }, 1000)
       },
       onMutate: () => {
         setIsVoting(true)
       },
     })
+
+  useEffect(() => {
+    if (!isVoting) return
+    setIsVoting(false)
+  }, [competition])
 
   const { mutate: headJudgeFailLift } =
     api.competitionDay.headJudgeFailLift.useMutation({
