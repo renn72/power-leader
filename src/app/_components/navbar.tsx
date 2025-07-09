@@ -115,6 +115,17 @@ const Navbar = () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link
+              href='/admin/csv'
+              legacyBehavior
+              passHref
+            >
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                csv
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
           {isAdmin ? (
             <NavigationMenuItem>
               <Link

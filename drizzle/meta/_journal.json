@@ -15,6 +15,13 @@
       "when": 1742292736646,
       "tag": "0001_futuristic_king_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1752025016099,
+      "tag": "0002_abandoned_reaper",
+      "breakpoints": true
     }
   ]
 }
