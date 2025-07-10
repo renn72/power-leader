@@ -93,6 +93,7 @@ const Board = () => {
             <SelectItem value='open'>Open</SelectItem>
             <SelectItem value='teen'>Teen</SelectItem>
             <SelectItem value='master'>Master</SelectItem>
+            <SelectItem value='first-timers'>First Timer</SelectItem>
           </SelectContent>
         </Select>
         <Select

@@ -161,6 +161,32 @@ const Navbar = () => {
               </Link>
             </NavigationMenuItem>
           ) : null}
+          {isAdmin ? (
+            <NavigationMenuItem className='pl-10'>
+              <Link
+                href='/admin/comp-day/Blackout-12-7-2025'
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  comp-admin
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
+          {isAdmin ? (
+            <NavigationMenuItem>
+              <Link
+                href='/admin/comp-day/Blackout-12-7-2025/full-list'
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  full-list
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>
