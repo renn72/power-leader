@@ -8,7 +8,7 @@ const Page = ({ params }: { params: { comp: string } }) => {
   const { data: competition } = api.competition.getCompetitionByUuid.useQuery(
     comp,
     {
-      refetchInterval: 1000 * 60 * 1,
+      refetchInterval: 1000 * 6 * 1,
     },
   )
   if (!competition) return null

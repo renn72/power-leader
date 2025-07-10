@@ -10,7 +10,7 @@ import { Screen } from '../_components/screen/screen'
 export default function Home() {
   const ctx = api.useUtils()
   const { data: competition } = api.competition.get.useQuery(1, {
-    refetchInterval: 1000 * 60 * 1,
+    refetchInterval: 1000 * 600 * 1,
   })
   const comp = 'Blackout-12-7-2025'
 

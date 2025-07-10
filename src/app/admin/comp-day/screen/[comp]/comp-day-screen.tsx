@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { env } from '~/env'
 import { liftState, sortEntriesFilter } from '~/lib/comp-day'
 import { calculateDOTS } from '~/lib/dots'
-import { GetCompetitionById } from '~/lib/types'
+import type { GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import Pusher from 'pusher-js'
@@ -19,11 +19,11 @@ const Sign = ({ isGood }: { isGood: boolean | null | undefined }) => {
   return (
     <div>
       {isGood === null ? (
-        <div className=' h-[25vh] w-[25vh] rounded-full border border-4 border-white/60 '></div>
+        <div className=' h-[25vh] w-[25vh] rounded-full border border-4 border-white/60 '/>
       ) : isGood ? (
-        <div className='good-lift  h-[25vh] w-[25vh] rounded-full '></div>
+        <div className='good-lift  h-[25vh] w-[25vh] rounded-full '/>
       ) : (
-        <div className='bad-lift  h-[25vh] w-[25vh] rounded-full '></div>
+        <div className='bad-lift  h-[25vh] w-[25vh] rounded-full '/>
       )}
     </div>
   )
@@ -180,20 +180,20 @@ const CompDayScreen = ({
   //   lift?.gender?.toLowerCase() === 'female',
   // )
 
-  const countdownRef = useRef<any>()
-  // @ts-ignore
-  const renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return <>0</>
-    } else {
-      // Render a countdown
-      if (minutes > 0) {
-        return <span>{minutes}:00</span>
-      }
-      return <span>{seconds}</span>
-    }
-  }
+  // const countdownRef = useRef<any>()
+  // // @ts-ignore
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //   if (completed) {
+  //     // Render a completed state
+  //     return <>0</>
+  //   } else {
+  //     // Render a countdown
+  //     if (minutes > 0) {
+  //       return <span>{minutes}:00</span>
+  //     }
+  //     return <span>{seconds}</span>
+  //   }
+  // }
 
   const pb =
     liftName === 'squat'
@@ -202,7 +202,7 @@ const CompDayScreen = ({
         ? lifter?.benchPB
         : lifter?.deadliftPB
 
-  const isPb = pb !== null && Number(pb) < Number(lift?.weight)
+  const isPb = pb === null || pb === '' ? false :  Number(pb) < Number(lift?.weight)
 
   console.log({ pb, isPb })
 
@@ -210,16 +210,16 @@ const CompDayScreen = ({
     <div className={cn('dark relative h-full h-screen w-full')}>
       <div className='absolute left-1/2 -translate-x-1/2 w-screen h-screen flex items-center justify-center'>
         <Image
-          src='/showdown.jpeg'
+          src='/atlas.png'
           alt='board'
-          width={1440}
+          width={1000}
           height={1440}
           style={{
             objectFit: 'cover',
-            width: '70%',
+            width: '60%',
             height: '',
           }}
-          className='opacity-25'
+          className='opacity-15'
         />
       </div>
       {!lift ? null : (
@@ -307,12 +307,14 @@ const CompDayScreen = ({
                 )}
               </div>
               <div className='text-3xl text-muted-foreground'>
-                <Countdown
-                  autoStart={false}
-                  ref={countdownRef}
-                  date={dateNow + 60000}
-                  renderer={renderer}
-                />
+                {
+                // <Countdown
+                //   autoStart={false}
+                //   ref={countdownRef}
+                //   date={dateNow + 60000}
+                //   renderer={renderer}
+                // />
+                }
               </div>
             </div>
             <div className='absolute bottom-0 left-[1vw] text-sm'>
