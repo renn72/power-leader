@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import { TableHead, TableHeader, TableRow } from '~/components/ui/table-scroll'
-import { GetCompetitionEntryById } from '~/lib/types'
+import type { GetCompetitionEntryById } from '~/lib/types'
 import { api } from '~/trpc/react'
 import { toast } from 'sonner'
 
@@ -186,6 +186,8 @@ const CompTableHeader = ({
       <TableRow>
 
         <TableHead className='h-6 xl:h-10 px-2'>Name</TableHead>
+        <TableHead className='h-6 xl:h-10 px-2 text-center'>Gender</TableHead>
+        <TableHead className='h-6 xl:h-10 px-2 text-center'>Equip</TableHead>
         <TableHead className='h-6 xl:h-10  px-2'>WC</TableHead>
         <TableHead className='h-6 xl:h-10  px-2'>Rack</TableHead>
         <TH
@@ -309,7 +311,6 @@ const CompTableHeader = ({
           handleDeleteWeight={handleDeleteWeight}
           handleDeleteJudge={handleDeleteJudge}
         />
-        <TableHead className='h-6 xl:h-10 '>Lifting</TableHead>
       </TableRow>
     </TableHeader>
   )

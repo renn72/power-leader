@@ -46,8 +46,6 @@ const MainScreenControl = ({
     },
   })
 
-  console.log({ competition, lift, bracket, round, index })
-
   useEffect(() => {
     const entries = sortEntriesFilter(competition.entries, lift, bracket, round)
     const curentEntry = entries.find((e, i) => i === Number(index))

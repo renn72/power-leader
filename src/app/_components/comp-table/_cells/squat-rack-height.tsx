@@ -68,7 +68,7 @@ const SquatRackHeight = ({
           )}
         >
           <div className={cn('cursor-pointer rounded-md text-center')}>
-            {height}
+            {height === '' ? '-' : height}
           </div>
         </DialogTrigger>
         <DialogContent>

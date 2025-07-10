@@ -34,14 +34,6 @@ const CompTable = ({
   competitonUuid: string
 }) => {
   const ctx = api.useUtils()
-  const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
-    onSettled: () => {
-      ctx.competition.getCompetitionByUuid.refetch()
-    },
-    onSuccess: (e) => {
-      toast(JSON.stringify(e))
-    },
-  })
 
   useEffect(() => {
     const pusherClient = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
@@ -118,7 +110,6 @@ const CompTable = ({
                 round={round}
                 bracket={bracket}
                 setIndex={setIndex}
-                updateLift={updateLift}
                 competition={competition}
                 arr={arr}
                 i={i}
