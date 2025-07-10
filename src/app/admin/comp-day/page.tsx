@@ -16,7 +16,7 @@ import {
 import { api } from '~/trpc/react'
 
 const CompDay = () => {
-  const [compId, setCompId] = useState('Show-Down-22-3-2025')
+  const [compId, setCompId] = useState('Blackout-12-7-2025')
   const { isLoaded: isAuthLoaded, userId } = useAuth()
 
   const { data: competitions, isLoading: competitionsLoading } =

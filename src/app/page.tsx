@@ -19,18 +19,20 @@ export default function Home() {
   }
 
   return (
-    <section className='flex h-[100svh] w-full flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white'>
+    <section className='flex h-[100svh] w-[100vw] flex-col items-center justify-between gap-8 overflow-hidden bg-black from-black to-yellow-500 px-4 py-6 text-white relative'>
+      <div className='absolute z-[5] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50 pb-40'>
       <Image
-        src='/showdown.jpeg'
+        src='/atlas.png'
         alt='board'
-        width={1040}
-        height={1040}
+        width={550}
+        height={1940}
         style={{
           objectFit: 'cover',
-          height: '50vh',
+          height: 'lg:50vh',
         }}
       />
-      <div className='flex flex-col items-center justify-between gap-4 h-[30vh]'>
+      </div>
+      <div className='flex flex-col items-center justify-between gap-4 h-[30vh] z-[10] mt-[50vh]'>
         <div className='flex items-center justify-center gap-4'>
           <Link
             href='/scoreboard'

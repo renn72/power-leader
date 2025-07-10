@@ -73,12 +73,6 @@ const screens = [
   'screen4',
   'screen5',
   'screen6',
-  'screen7',
-  'screen8',
-  'screen9',
-  'screen10',
-  'screen11',
-  'screen12',
 ]
 
 const types = [

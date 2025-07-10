@@ -58,26 +58,6 @@ const WeighIn = () => {
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='hidden'>
-        <Select
-          onValueChange={setCompId}
-          defaultValue={compId}
-        >
-          <SelectTrigger className='w-[180px]'>
-            <SelectValue placeholder={competitions?.[0]?.name} />
-          </SelectTrigger>
-          <SelectContent>
-            {competitions?.map((competition) => (
-              <SelectItem
-                key={competition.id}
-                value={competition.id.toString()}
-              >
-                {competition.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
       <Sheet
         open={isOpen}
         onOpenChange={setIsOpen}

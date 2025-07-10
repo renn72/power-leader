@@ -9,12 +9,12 @@ import LeaderBoardResults from '~/app/_components/board-results/leader-board-res
 
 import { CompDayScreen as Loading } from '@/app/admin/comp-day/loading/[comp]/comp-day-screen'
 import { CompDayScreen as MainScreen } from '@/app/admin/comp-day/screen/[comp]/comp-day-screen'
-import { GetCompetitionByUuid } from '~/lib/types'
+import type { GetCompetitionByUuid } from '~/lib/types'
 
 export const dynamic = 'force-dynamic'
 
 const Screen = ({ screen, screenSize, competition } : { screen: string | null, screenSize: string | null, competition: GetCompetitionByUuid }) => {
-  const comp = 'Show-Down-22-3-2025'
+  const comp = 'Blackout-12-7-2025'
 
   const resultsAge = competition.compDayInfo.resultAge
   const resultsGender = competition.compDayInfo.resultGender

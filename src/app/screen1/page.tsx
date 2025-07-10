@@ -12,7 +12,7 @@ export default function Home() {
   const { data: competition } = api.competition.get.useQuery(1, {
     refetchInterval: 1000 * 60 * 1,
   })
-  const comp = 'Show-Down-22-3-2025'
+  const comp = 'Blackout-12-7-2025'
 
   useEffect(() => {
     // console.log('channel', 'competition-' + comp)
