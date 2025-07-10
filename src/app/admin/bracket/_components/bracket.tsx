@@ -20,6 +20,7 @@ const Bracket = ({
 	title,
 	bracket,
 	isAdmin,
+  isLocked,
 }: {
 	entries: GetCompetitionEntryById[]
 	competition: GetCompetitionById
@@ -27,6 +28,7 @@ const Bracket = ({
 	title: string
 	bracket: number
 	isAdmin: boolean
+    isLocked: boolean
 }) => {
 
 	const [entryList, setEntryList] = useState<GetCompetitionEntryById[]>(
@@ -91,6 +93,8 @@ const Bracket = ({
 							lift={lift}
 							i={i}
 							isAdmin={isAdmin}
+              isLocked={isLocked}
+              bracket={bracket}
 						/>
 					))}
 				</div>

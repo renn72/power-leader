@@ -1,8 +1,13 @@
 'use client'
 
+import { useState } from 'react'
+
 import type { GetCompetitionById } from '~/lib/types'
 import { api } from '~/trpc/react'
 import { CircleMinus, CirclePlus } from 'lucide-react'
+
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 
 import Bracket from './bracket'
 
@@ -13,6 +18,7 @@ const CompBracket = ({
 	competition: GetCompetitionById
 	isAdmin?: boolean
 }) => {
+	const [isLocked, setIsLocked] = useState(true)
 	const ctx = api.useUtils()
 	const { mutate: updateSquatBrackets } =
 		api.competition.updateSquatBrackets.useMutation({
@@ -118,6 +124,15 @@ const CompBracket = ({
 		<div className='flex lg:w-full flex-col lg:items-center gap-4'>
 			{isAdmin ? (
 				<div className='flex w-full items-center justify-around text-3xl'>
+					<div className='flex items-center gap-2'>
+            <Label className='text-lg'>Lock</Label>
+					<Switch
+						checked={isLocked}
+						onCheckedChange={(checked) => {
+							setIsLocked(checked)
+						}}
+					/>
+          </div>
 					<div className='flex items-center gap-16'>
 						<div>Squat Flights</div>
 						<div className='flex items-center gap-4'>
@@ -212,6 +227,7 @@ const CompBracket = ({
 						bracket={b + 1}
 						key={b}
 						isAdmin={isAdmin}
+            isLocked={isLocked}
 					/>
 				))}
 			</div>
@@ -231,6 +247,7 @@ const CompBracket = ({
 						bracket={b + 1}
 						key={b}
 						isAdmin={isAdmin}
+            isLocked={isLocked}
 					/>
 				))}
 			</div>
@@ -250,6 +267,7 @@ const CompBracket = ({
 						bracket={b + 1}
 						key={b}
 						isAdmin={isAdmin}
+            isLocked={isLocked}
 					/>
 				))}
 			</div>

@@ -1,18 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Badge } from '~/components/ui/badge'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '~/components/ui/card'
 import type { GetCompetitionById, GetCompetitionEntryById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
+import { ChevronLeftCircle, ChevronRightCircle } from 'lucide-react'
 import { toast } from 'sonner'
 
 import {
@@ -29,12 +23,16 @@ const Entry = ({
 	lift,
 	i,
 	isAdmin,
+	isLocked,
+	bracket,
 }: {
 	entry: GetCompetitionEntryById
 	competition: GetCompetitionById
 	lift: string
 	i: number
 	isAdmin: boolean
+	isLocked: boolean
+	bracket: number
 }) => {
 	const ctx = api.useUtils()
 	const { mutate: updateBracket } = api.compEntry.updateBracket.useMutation({
@@ -83,7 +81,7 @@ const Entry = ({
 	})
 
 	const handleBracket = (bracket: number, id: number) => {
-		if (lift === 'squat') {
+		if (isLocked) {
 			updateBracket({
 				id: id,
 				bracket: {
@@ -92,12 +90,18 @@ const Entry = ({
 					deadliftBracket: bracket,
 				},
 			})
+		} else if (lift === 'squat') {
+			updateBracket({
+				id: id,
+				bracket: {
+					squatBracket: bracket,
+				},
+			})
 		} else if (lift === 'bench') {
 			updateBracket({
 				id: id,
 				bracket: {
 					benchBracket: bracket,
-					deadliftBracket: bracket,
 				},
 			})
 		} else if (lift === 'deadlift') {
@@ -140,6 +144,16 @@ const Entry = ({
 				: entry.deadliftOpener
 	return (
 		<div data-label={entry.id} className={cn('flex items-center gap-1')}>
+			{isAdmin ? (
+				<ChevronLeftCircle
+					className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+					onClick={() => {
+						if (bracket !== 1) handleBracket(bracket - 1, entry.id)
+					}}
+				/>
+			) : (
+				<div />
+			)}
 			<div
 				className={cn(
 					'grid grid-cols-12 place-items-center gap-1 border border-input text-base tracking-tighter lg:tracking-tight w-full',
@@ -176,10 +190,10 @@ const Entry = ({
 						'font-extrabold ',
 						entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
 							'open'
-							? 'text-slate-400'
+							? 'text-stone-500'
 							: entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
-									'pro'
-								? 'text-red-500'
+									'teen'
+								? 'text-red-600/80'
 								: 'text-green-600',
 					)}
 				>
@@ -190,18 +204,18 @@ const Entry = ({
 				<div
 					className={cn(
 						'font-extrabold ',
-						entry.events?.[0]?.event?.name.toLowerCase() === 'open'
+						entry.events?.[0]?.event?.name.toLowerCase() === 'squat, bench, deadlift'
 							? 'text-slate-400'
 							: entry.compEntryToDivisions?.[0]?.division?.name.toLowerCase() ===
 									'pro'
 								? 'text-red-500'
-								: 'text-green-600',
+						: entry.events?.[0]?.event?.name === 'Push Pull' ? 'text-sky-700' : 'text-green-600',
 					)}
 				>
 					{entry.events?.[0]?.event?.name === 'Squat, Bench, Deadlift'
 						? 'SBD'
 						: entry.events?.[0]?.event?.name === 'Push Pull'
-							? 'BD'
+							? 'PP'
 							: entry.events?.[0]?.event?.name === 'Deadlift only'
 								? 'D'
 								: entry.events?.[0]?.event?.name === 'Bench only'
@@ -215,7 +229,7 @@ const Entry = ({
 						'font-extrabold ',
 						entry.equipment?.toLowerCase() === 'classic'
 							? 'text-orange-400'
-							: entry.equipment?.toLowerCase() === 'raw'
+							: entry.equipment?.toLowerCase() === 'raw' || entry.equipment?.toLowerCase() === 'unequipped'
 								? 'text-indigo-400'
 								: 'text-emerald-500',
 					)}
@@ -236,10 +250,11 @@ const Entry = ({
 						onValueChange={(value) => {
 							if (value) {
 								setSelectedBracket(Number(value))
+								handleBracket(Number(value), entry.id)
 							}
 						}}
 					>
-						<SelectTrigger className='rounded-full px-2 py-0 text-xs sm:text-sm h-full'>
+						<SelectTrigger className='rounded-full px-1 py-0 text-xs sm:text-sm h-full'>
 							<SelectValue placeholder='flight' />
 						</SelectTrigger>
 						<SelectContent>
@@ -254,6 +269,17 @@ const Entry = ({
 					<div />
 				)}
 			</div>
+{isAdmin ? (
+                  <ChevronRightCircle
+                    className='cursor-pointer text-muted-foreground/50 hover:scale-110 hover:text-muted-foreground active:scale-90'
+                    onClick={() => {
+                      if (bracket !== numberOfBrackets)
+                        handleBracket(bracket + 1, entry.id)
+                    }}
+                  />
+                ) : (
+                  <div />
+                )}
 		</div>
 	)
 }
