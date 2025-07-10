@@ -1,7 +1,7 @@
 'use client'
 
 import { getTotalDots } from '~/lib/dots'
-import { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
+import type { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
 import { cn, getAge, getTotalWilks } from '~/lib/utils'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -144,7 +144,7 @@ const LeaderBoard = ({
           }
           <Table>
             <TableHeader className='bg-muted'>
-              <TableRow className='text-base tracking-tighter bg-yellow-500 text-black font-bold'>
+              <TableRow className='text-base tracking-tighter bg-yellow-500 text-black font-bold hover:bg-yellow-500'>
                 <HeadWrapper>Name</HeadWrapper>
                 <HeadWrapper>Squat</HeadWrapper>
                 <HeadWrapper>DOTS</HeadWrapper>
