@@ -53,7 +53,7 @@ const SquatRackHeight = ({
     })
   }
   return (
-    <TableCell className={cn(' h-8 xl:h-10 ',isHighlighted && 'bg-accent', 'p-0 py-0 xl:p-2')}>
+    <TableCell className={cn(' h-8  ',isHighlighted && 'bg-accent', 'p-0 py-0 lg:px-4')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {
@@ -63,7 +63,7 @@ const SquatRackHeight = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full justify-center',
+            'flex w-full justify-center rounded-full border-2 border-input py-1 px-2 hover:bg-accent',
             isHighlighted && 'bg-accent',
           )}
         >

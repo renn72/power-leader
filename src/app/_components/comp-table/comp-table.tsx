@@ -103,12 +103,11 @@ const CompTable = ({
   }, [])
 
   return (
-    <div className='rounded-md border border-input py-1 mx-auto'>
-        <Table className='text-sm md:text-base xl:text-lg'>
+    <div className='rounded-md border border-input p-1 w-full'>
+        <Table className='text-sm tracking-tighter md:text-base xl:text-lg'>
           <CompTableHeader
             lifters={lifters}
             bracket={Number(bracket)}
-            lift={lift}
           />
           <TableBody className='pr-4'>
             {lifters.map((lifter, i, arr) => (

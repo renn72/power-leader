@@ -46,9 +46,7 @@ const BenchRackHeight = ({
     })
   }
   return (
-    <TableCell
-      className={cn(isHighlighted && 'bg-accent', 'py-0 px-0', 'p-0 xl:p-2  h-8 xl:h-10 ')}
-    >
+    <TableCell className={cn(' h-8 ',isHighlighted && 'bg-accent', 'p-0 py-0 lg:py-0 lg:px-4')}>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {
@@ -58,7 +56,7 @@ const BenchRackHeight = ({
       >
         <DialogTrigger
           className={cn(
-            'flex w-full justify-center',
+            'flex w-full justify-center rounded-full border-2 border-input py-1 px-2 hover:bg-accent',
             isHighlighted && 'bg-accent',
           )}
         >
