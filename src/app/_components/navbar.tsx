@@ -24,11 +24,6 @@ function sleep(ms: number) {
 const Navbar = () => {
   const pathname = usePathname()
   const ctx = api.useUtils()
-  const { mutate: sync } = api.user.sync.useMutation({
-    onSuccess: () => {
-      ctx.invalidate()
-    },
-  })
   const { data: competition } = api.competition.get.useQuery(1)
 
   const { mutate: email } = api.competition.email.useMutation({
@@ -93,7 +88,7 @@ const Navbar = () => {
           {isAdmin ? (
             <NavigationMenuItem>
               <Link
-                href='/admin/comp-admin/Show-Down-22-3-2025'
+                href='/admin/comp-admin/Blackout-12-7-2025'
                 legacyBehavior
                 passHref
               >
@@ -169,16 +164,6 @@ const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
       <div className='flex items-center gap-4'>
-        {isAdmin ? (
-          <Button
-            onClick={() => sync()}
-            size='sm'
-            className=''
-            variant='ghost'
-          >
-            Sync
-          </Button>
-        ) : null}
         <ModeToggle />
         <div className='flex w-8 items-center'>
           <SignedIn>

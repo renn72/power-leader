@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '~/components/ui/button'
-import { api } from '~/trpc/react'
 
 export const dynamic = 'force-dynamic'
 

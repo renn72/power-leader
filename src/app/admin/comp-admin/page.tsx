@@ -24,7 +24,7 @@ const Competitions = () => {
 
   const router = useRouter()
 
-  router.replace('admin/comp-admin/Show-Down-22-3-2025')
+  router.replace('admin/comp-admin/Blackout-12-7-2025')
 
   return (
     <section className='min-h-[calc(100vh - 10rem)] grid w-full grid-cols-1 place-content-between gap-4'>

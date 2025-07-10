@@ -1,56 +1,53 @@
-'use client'
-import { Card, CardContent, CardHeader } from '~/components/ui/card'
-import { cn } from '~/lib/utils'
+"use client";
 
-import Entry from './entry'
-import EntryForm from './entry_form'
-import DeleteAllEntries from './delete_all_entries'
-import AddShowdownUsers from './add_showdown-users'
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import type { GetCompetitionByUuid } from "~/lib/types";
+import { cn } from "~/lib/utils";
 
-import type { GetCompetitionByUuid } from '~/lib/types'
+import AddBlackoutUsers from "./add_blackout_users";
+import DeleteAllEntries from "./delete_all_entries";
+import Entry from "./entry";
+import EntryForm from "./entry_form";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 const Entries = ({
-  competition,
-  className,
+	competition,
+	className,
 }: {
-  competition: GetCompetitionByUuid
-  className?: string
+	competition: GetCompetitionByUuid;
+	className?: string;
 }) => {
-  console.log({ competition })
+	console.log({ competition });
 
-  return (
-    <div
-      className={cn(
-        className,
-        'flex w-full flex-col items-center gap-2 text-lg font-medium',
-      )}
-    >
-      <Card className='w-full'>
-        <CardHeader>Entries {competition.entries?.length}</CardHeader>
-        <CardContent>
-          <div className='flex w-full flex-col gap-4'>
-            <div className='flex w-full justify-end gap-4'>
-              <EntryForm competition={competition} />
-              <AddShowdownUsers competition={competition} />
-            </div>
-            {competition.entries
-              ?.sort((a, b) =>
-                (a.user?.name ?? '') > (b.user?.name ?? '') ? 1 : -1,
-              )
-              ?.map((entry) => (
-              <Entry
-                key={entry.id}
-                entry={entry}
-              />
-            ))}
-            <DeleteAllEntries compId={competition.id} />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
+	return (
+		<div
+			className={cn(
+				className,
+				"flex w-full flex-col items-center gap-2 text-lg font-medium",
+			)}
+		>
+			<Card className="w-full">
+				<CardHeader>Entries {competition.entries?.length}</CardHeader>
+				<CardContent>
+					<div className="flex w-full flex-col gap-4">
+						<div className="flex w-full justify-end gap-4">
+							<EntryForm competition={competition} />
+							<AddBlackoutUsers competition={competition} />
+						</div>
+						{competition.entries
+							?.sort((a, b) =>
+								(a.user?.name ?? "") > (b.user?.name ?? "") ? 1 : -1,
+							)
+							?.map((entry) => (
+								<Entry key={entry.id} entry={entry} />
+							))}
+						<DeleteAllEntries compId={competition.id} />
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	);
+};
 
-export default Entries
+export default Entries;

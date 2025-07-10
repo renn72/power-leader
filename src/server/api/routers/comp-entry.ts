@@ -504,8 +504,6 @@ export const compEntryRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       let userId = input.userId
 
-      const clerkUser = await createClerkUser(input.email, input.name)
-
       const isUser = await ctx.db.query.users.findFirst({
         where: (users, { eq }) => eq(users.email, input.email || ''),
       })
@@ -522,7 +520,7 @@ export const compEntryRouter = createTRPCRouter({
             gender: input.gender,
             address: input.address,
             phone: input.phone,
-            clerkId: clerkUser?.id || '',
+            clerkId: '',
           })
           .returning({ id: users.id })
 

@@ -4,7 +4,7 @@ import { TRPCError } from '@trpc/server'
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
 import { users } from '~/server/db/schema'
 
-import { client, db } from '~/server/db'
+import { db } from '~/server/db'
 import { eq } from 'drizzle-orm'
 
 import { generateFullName, generateName } from '~/lib/utils'
@@ -26,7 +26,6 @@ const createSchema = z.object({
 
 export const userRouter = createTRPCRouter({
   sync: publicProcedure.mutation(async () => {
-    await client.sync()
     return true
   }),
   getUser: publicProcedure
