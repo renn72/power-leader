@@ -480,8 +480,6 @@ const Page = ({ params }: { params: { comp: string; judge: string } }) => {
   if (competitionLoading) return null
   if (!competition) return null
 
-  console.log('refresh')
-
   return (
     <Judge
       competition={competition}
