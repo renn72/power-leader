@@ -91,9 +91,8 @@ const Board = () => {
           <SelectContent>
             <SelectItem value='all'>All</SelectItem>
             <SelectItem value='open'>Open</SelectItem>
-            <SelectItem value='pro'>Pro</SelectItem>
-            <SelectItem value='novice'>Novice</SelectItem>
-            <SelectItem value='first-timers'>First Timer</SelectItem>
+            <SelectItem value='teen'>Teen</SelectItem>
+            <SelectItem value='master'>Master</SelectItem>
           </SelectContent>
         </Select>
         <Select
