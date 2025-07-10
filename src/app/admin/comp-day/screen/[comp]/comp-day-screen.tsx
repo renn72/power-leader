@@ -280,7 +280,7 @@ const CompDayScreen = ({
                     isGoodTwo === null ||
                     isGoodThree === null
                       ? null
-                      : isGoodOne
+                      : isGoodTwo
                   }
                 />
                 <Sign
@@ -289,7 +289,7 @@ const CompDayScreen = ({
                     isGoodTwo === null ||
                     isGoodThree === null
                       ? null
-                      : isGoodTwo
+                      : isGoodOne
                   }
                 />
                 <Sign

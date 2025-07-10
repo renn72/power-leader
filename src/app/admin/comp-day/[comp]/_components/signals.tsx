@@ -102,20 +102,20 @@ const Signals = ({
       <CardHeader className='p-0'></CardHeader>
       <CardContent className='flex w-full justify-around p-1'>
         <Sign
-          isGood={currentLift?.isGoodOne}
-          updateIsLiftGood={updateIsLiftGood}
-          currentLift={currentLift}
-          lifter={lifter}
-          uuid={uuid}
-          field='isGoodOne'
-        />
-        <Sign
           isGood={currentLift?.isGoodTwo}
           updateIsLiftGood={updateIsLiftGood}
           currentLift={currentLift}
           lifter={lifter}
           uuid={uuid}
           field='isGoodTwo'
+        />
+        <Sign
+          isGood={currentLift?.isGoodOne}
+          updateIsLiftGood={updateIsLiftGood}
+          currentLift={currentLift}
+          lifter={lifter}
+          uuid={uuid}
+          field='isGoodOne'
         />
         <Sign
           isGood={currentLift?.isGoodThree}

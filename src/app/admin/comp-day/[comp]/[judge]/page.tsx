@@ -42,10 +42,6 @@ const Judge = ({
   const [isVoting, setIsVoting] = useState(false)
   const ctx = api.useUtils()
 
-  const { mutate: startTimer } = api.competitionDay.startTimer.useMutation()
-  const { mutate: stopTimer } = api.competitionDay.stopTimer.useMutation()
-  const { mutate: resetTimer } = api.competitionDay.resetTimer.useMutation()
-
   const { mutate: updateLift } = api.competitionDay.updateLift.useMutation({
     onSettled: () => {
       ctx.competition.getCompetitionByUuid.refetch()
@@ -87,10 +83,6 @@ const Judge = ({
       bracket: +bracket,
       index: Number(nextIndex),
       nextIndex: newNextLifterId,
-    })
-    resetTimer({
-      id: competition.id,
-      uuid: competition.uuid || '',
     })
   }
 
@@ -206,18 +198,18 @@ const Judge = ({
           </div>
         ) : null}
         <div className='flex items-center gap-2 '>
-          <Image
-            src='/showdown.jpeg'
-            alt='RawWar Logo'
-            width={350}
-            height={350}
-            style={{
-              width: '100vw',
-              height: '100vw',
-            }}
-            className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-20'
-          />
-          <div className='text-3xl font-bold z-50'>Judge {judgeNumber}</div>
+      <Image
+        src='/atlas.png'
+        alt='RawWar Logo'
+        width={350}
+        height={650}
+        style={{
+          objectFit: 'cover',
+          width: '100vw',
+        }}
+        className='absolute top-20 left-1/2 -translate-x-1/2 z-[-10] opacity-15'
+      />
+          <div className='text-3xl font-bold z-50'>Middle Judge</div>
         </div>
         <div className='flex w-full flex-col items-center gap-2'>
           <div className='relative flex w-full items-center justify-center'>
@@ -238,42 +230,6 @@ const Judge = ({
             <div>{weight}kg</div>
             <div className='capitalize'>{liftName}</div>
             <div>Rd: {round}</div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div>Timer</div>
-            <Button
-              onClick={() => {
-                startTimer({
-                  id: competition.id,
-                  uuid: competition.uuid || '',
-                })
-              }}
-              variant='secondary'
-            >
-              Start
-            </Button>
-            <Button
-              onClick={() => {
-                resetTimer({
-                  id: competition.id,
-                  uuid: competition.uuid || '',
-                })
-              }}
-              variant='secondary'
-            >
-              Reset
-            </Button>
-            <Button
-              onClick={() => {
-                stopTimer({
-                  id: competition.id,
-                  uuid: competition.uuid || '',
-                })
-              }}
-              variant='secondary'
-            >
-              Stop
-            </Button>
           </div>
         </div>
         <div
@@ -406,17 +362,17 @@ const Judge = ({
           </div>
         ) : null}
       <Image
-        src='/showdown.jpeg'
+        src='/atlas.png'
         alt='RawWar Logo'
         width={350}
-        height={350}
+        height={650}
         style={{
+          objectFit: 'cover',
           width: '100vw',
-          height: '100vw',
         }}
-        className='absolute top-0 left-1/2 -translate-x-1/2 z-[-10] opacity-20'
+        className='absolute top-20 left-1/2 -translate-x-1/2 z-[-10] opacity-15'
       />
-      <div className='text-3xl font-bold'>Judge {judgeNumber}</div>
+      <div className='text-3xl font-bold'>{judgeNumber === 2 ? 'Left' : 'Right'} Judge</div>
       <div className='flex flex-col items-center gap-2'>
         <div className='flex gap-2 items-center'>
           <div className='rounded-full bg-muted px-4 py-2 text-yellow-400 capitalize'>
