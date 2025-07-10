@@ -1,16 +1,14 @@
 'use client'
 
-import {
-  GetCompetitionByUuid,
+import type {
   GetCompetitionEntryById,
   GetLiftById,
 } from '~/lib/types'
 import {
-  calculateNewWilks,
   cn,
-  getliftWilks,
 } from '~/lib/utils'
 
+import { getliftWilks, calculateNewWilks } from '~/lib/wilks'
 import {
   calculateDOTS,
   getliftDots,
@@ -48,7 +46,7 @@ const LeaderBoardRow = ({
     },
     { weight: '0' } as GetLiftById,
   )
-  const squatDots = calculateDOTS(
+  const squatDots = calculateNewWilks(
     userWeight,
     Number(squat?.weight),
     squat.gender?.toLowerCase() == 'female',
@@ -71,7 +69,7 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const benchDots = calculateDOTS(
+  const benchDots = calculateNewWilks(
     userWeight,
     Number(bench?.weight),
     bench.gender?.toLowerCase() == 'female',
@@ -95,29 +93,26 @@ const LeaderBoardRow = ({
       },
       { weight: '0' } as GetLiftById,
     )
-  const deadliftDots = calculateDOTS(
+  const deadliftDots = calculateNewWilks(
     userWeight,
     Number(deadlift?.weight),
     deadlift.gender?.toLowerCase() == 'female',
   )
 
 
-  const liftsDots = entries?.map((e) => getliftDots(e))
-  const check = liftsDots?.filter((l) => l.squat !== 0 && !isNaN(Number(l.squat)))
-  .sort((a, b) => Number(b.squat) - Number(a.squat))
-  .map((l, i) => ({ id: l.id, place: i + 1 }))
+  const liftsDots = entries?.map((e) => getliftWilks(e))
   const squatPlaceDots = liftsDots
-    ?.filter((l) => l.squat !== 0 && !isNaN(Number(l.squat)))
+    ?.filter((l) => l.squat !== 0 && !Number.isNaN(Number(l.squat)))
     .sort((a, b) => Number(b.squat) - Number(a.squat))
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const benchPlaceDots = liftsDots
-    ?.filter((l) => l.bench !== 0 && !isNaN(Number(l.bench)))
+    ?.filter((l) => l.bench !== 0 && !Number.isNaN(Number(l.bench)))
     .sort((a, b) => Number(b.bench) - Number(a.bench))
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
   const deadliftPlaceDots = liftsDots
-    ?.filter((l) => l.deadlift !== 0 && !isNaN(Number(l.deadlift)))
+    ?.filter((l) => l.deadlift !== 0 && !Number.isNaN(Number(l.deadlift)))
     .sort((a, b) => Number(b.deadlift) - Number(a.deadlift))
     .map((l, i) => ({ id: l.id, place: i + 1 }))
     .find((l) => l.id == entry.id)
@@ -131,9 +126,9 @@ const LeaderBoardRow = ({
     : 0
 
   const totalDots =
-    (isNaN(squatTotalDots) ? 0 : squatTotalDots) +
-    (isNaN(benchTotalDots) ? 0 : benchTotalDots) +
-    (isNaN(deadliftTotalDots) ? 0 : deadliftTotalDots)
+    (Number.isNaN(squatTotalDots) ? 0 : squatTotalDots) +
+    (Number.isNaN(benchTotalDots) ? 0 : benchTotalDots) +
+    (Number.isNaN(deadliftTotalDots) ? 0 : deadliftTotalDots)
 
   const totalWeight =
     (hasSquat ? Number(squat?.weight) : 0) +
@@ -157,7 +152,7 @@ const LeaderBoardRow = ({
             {squat?.weight == '0' ? '' : squat?.weight + 'kg'}
           </TableCell>
           <TableCell className='lowercase text-yellow-500'>
-            {isNaN(+squatDots) ? '' : squatDots}
+            {Number.isNaN(+squatDots) ? '' : squatDots}
           </TableCell>
           <TableCell className='font-semibold text-center'>
             {squatPlaceDots?.place}
@@ -165,9 +160,9 @@ const LeaderBoardRow = ({
         </>
       ) : (
         <>
-          <TableCell className='font-medium lowercase text-foreground/80'></TableCell>
-          <TableCell className='font-medium text-foreground/80'></TableCell>
-          <TableCell></TableCell>
+          <TableCell className='font-medium lowercase text-foreground/80'/>
+          <TableCell className='font-medium text-foreground/80'/>
+          <TableCell/>
         </>
       )}
       {hasBench ? (
@@ -176,7 +171,7 @@ const LeaderBoardRow = ({
             {bench?.weight == '0' ? '' : bench?.weight + 'kg'}
           </TableCell>
           <TableCell className='text-yellow-500'>
-            {isNaN(+benchDots) ? '' : benchDots}
+            {Number.isNaN(+benchDots) ? '' : benchDots}
           </TableCell>
           <TableCell className='font-semibold text-center'>
             {benchPlaceDots?.place}
@@ -184,9 +179,9 @@ const LeaderBoardRow = ({
         </>
       ) : (
         <>
-          <TableCell className='font-medium lowercase text-foreground/80'></TableCell>
-          <TableCell className='font-medium text-foreground/80'></TableCell>
-          <TableCell></TableCell>
+          <TableCell className='font-medium lowercase text-foreground/80'/>
+          <TableCell className='font-medium text-foreground/80'/>
+          <TableCell/>
         </>
       )}
       {hasDeadlift ? (
@@ -195,7 +190,7 @@ const LeaderBoardRow = ({
             {deadlift?.weight == '0' ? '' : deadlift?.weight + 'kg'}
           </TableCell>
           <TableCell className='text-yellow-500'>
-            {isNaN(+deadliftDots) ? '' : deadliftDots}
+            {Number.isNaN(+deadliftDots) ? '' : deadliftDots}
           </TableCell>
           <TableCell className='font-semibold text-center'>
             {deadliftPlaceDots?.place}
@@ -203,16 +198,16 @@ const LeaderBoardRow = ({
         </>
       ) : (
         <>
-          <TableCell className='font-medium lowercase text-foreground/80'></TableCell>
-          <TableCell className='font-medium text-foreground/80'></TableCell>
-          <TableCell></TableCell>
+          <TableCell className='font-medium lowercase text-foreground/80'/>
+          <TableCell className='font-medium text-foreground/80'/>
+          <TableCell/>
         </>
       )}
       <TableCell className='lowercase text-white'>
         {totalWeight == 0 ? '' : totalWeight + 'kg'}
       </TableCell>
       <TableCell className='text-white'>
-        {isNaN(+totalDots) ? '' : totalDots.toFixed(2)}
+        {Number.isNaN(+totalDots) ? '' : totalDots.toFixed(2)}
       </TableCell>
       <TableCell>{index + 1}</TableCell>
     </TableRow>

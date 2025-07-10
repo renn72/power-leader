@@ -31,7 +31,8 @@
 			"recommended": true,
 			"style": {
 				"useConst": "off",
-        "useTemplate": "off"
+        "useTemplate": "off",
+        "useExponentiationOperator": "off"
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off",

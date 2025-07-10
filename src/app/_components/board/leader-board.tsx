@@ -1,10 +1,10 @@
 'use client'
 
 import { getTotalDots } from '~/lib/dots'
+import { getTotalWilks } from '~/lib/wilks'
 import type { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
-import { cn, getAge, getTotalWilks } from '~/lib/utils'
+import { cn, getAge, } from '~/lib/utils'
 
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Table,
   TableBody,
@@ -122,16 +122,13 @@ const LeaderBoard = ({
       return (ages.find((a) => a.name === age)?.min ?? 999) <= userAge && userAge <= (ages.find((a) => a.name === age)?.max ?? 0)
     })
     .sort((a, b) => {
-      if (getTotalDots(a) == 0) return 1
-      if (isNaN(getTotalDots(a))) return 1
-      if (getTotalDots(b) == 0) return -1
-      if (isNaN(getTotalDots(b))) return -1
-      return getTotalDots(b) - getTotalDots(a)
+      if (getTotalWilks(a) == 0) return 1
+      if (Number.isNaN(getTotalWilks(a))) return 1
+      if (getTotalWilks(b) == 0) return -1
+      if (Number.isNaN(getTotalWilks(b))) return -1
+      return getTotalWilks(b) - getTotalWilks(a)
     })
 
-  const check = entries.map((e) => getTotalDots(e))
-
-  console.log('entries', isHeader)
   return (
     <>
       <div className='w-full overflow-auto'>
@@ -147,16 +144,16 @@ const LeaderBoard = ({
               <TableRow className='text-base tracking-tighter bg-yellow-500 text-black font-bold hover:bg-yellow-500'>
                 <HeadWrapper>Name</HeadWrapper>
                 <HeadWrapper>Squat</HeadWrapper>
-                <HeadWrapper>DOTS</HeadWrapper>
+                <HeadWrapper>WILKS</HeadWrapper>
                 <HeadWrapper>Place</HeadWrapper>
                 <HeadWrapper>Bench</HeadWrapper>
-                <HeadWrapper>DOTS</HeadWrapper>
+                <HeadWrapper>WILKS</HeadWrapper>
                 <HeadWrapper>Place</HeadWrapper>
                 <HeadWrapper>DL</HeadWrapper>
-                <HeadWrapper>DOTS</HeadWrapper>
+                <HeadWrapper>WILKS</HeadWrapper>
                 <HeadWrapper>Place</HeadWrapper>
                 <HeadWrapper>Total</HeadWrapper>
-                <HeadWrapper>DOTS</HeadWrapper>
+                <HeadWrapper>WILKS</HeadWrapper>
                 <HeadWrapper>Rank</HeadWrapper>
               </TableRow>
             </TableHeader>

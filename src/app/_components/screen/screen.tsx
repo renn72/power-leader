@@ -50,28 +50,10 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
         {screen === 'dead-bracket' ? (
           <DeadBracket competition={competition} />
         ) : null}
-        {screen === 'board-pro' ? (
+        {screen === 'board-teen' ? (
           <LeaderBoard
             competition={competition}
-            table={'pro'}
-            gender={''}
-            wc={''}
-            isHeader={true}
-          />
-        ) : null}
-        {screen === 'board-novice' ? (
-          <LeaderBoard
-            competition={competition}
-            table={'novice'}
-            gender={''}
-            wc={''}
-            isHeader={true}
-          />
-        ) : null}
-        {screen === 'board-first-timers' ? (
-          <LeaderBoard
-            competition={competition}
-            table={'first-timers'}
+            table={'teen'}
             gender={''}
             wc={''}
             isHeader={true}
@@ -81,6 +63,15 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
           <LeaderBoard
             competition={competition}
             table={'open'}
+            gender={''}
+            wc={''}
+            isHeader={true}
+          />
+        ) : null}
+        {screen === 'board-master' ? (
+          <LeaderBoard
+            competition={competition}
+            table={'master'}
             gender={''}
             wc={''}
             isHeader={true}

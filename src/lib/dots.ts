@@ -1,5 +1,4 @@
-
-import { GetCompetitionEntryById, GetLiftById } from '~/lib/types'
+import type { GetCompetitionEntryById, GetLiftById } from '~/lib/types'
 
 
 
@@ -20,7 +19,6 @@ export const calculateDOTS = (
   if (!denominator) return '0.00'
   const coeff = isFemale ? femaleCoeff : maleCoeff
   const maxbw = isFemale ? 150 : 210
-  // const bw = Math.min(Math.max(bodyWeight, 40), maxbw)
   const bw = Math.min(Math.max(bodyWeight, 40), maxbw)
 
   for (let i = 1; i < coeff.length; i++) {
@@ -41,11 +39,6 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
 
   const squats = entry.lift.filter((l) => l.lift == 'squat').slice(0, 3)
 
-  const isSquatting = squats?.length > 0
-  const hasSquat = squats?.reduce(
-    (a, b) => (b.state == 'judged' ? true : a),
-    false,
-  )
   const squat = squats?.reduce(
     (a, b) => {
       const isGood =
@@ -63,10 +56,6 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
     userGender == 'female',
   )
 
-  const isBenching = entry.lift.filter((l) => l.lift == 'bench').length > 0
-  const hasBench = entry.lift
-    .filter((l) => l.lift == 'bench')
-    .reduce((a, b) => (b.state == 'judged' ? true : a), false)
   const bench = entry.lift
     .filter((l) => l.lift == 'bench').slice(0, 3)
     .reduce(
@@ -86,11 +75,6 @@ export const getliftDots = (entry: GetCompetitionEntryById) => {
     userGender == 'female',
   )
 
-  const isDeadlifting =
-    entry.lift.filter((l) => l.lift == 'deadlift').length > 0
-  const hasDeadlift = entry.lift
-    .filter((l) => l.lift == 'deadlift')
-    .reduce((a, b) => (b.state == 'judged' ? true : a), false)
   const deadlift = entry.lift
     .filter((l) => l.lift == 'deadlift').slice(0, 3)
     .reduce(

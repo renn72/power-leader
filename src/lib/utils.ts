@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
-import { GetCompetitionEntryById, GetLiftById } from '~/lib/types'
+import type { GetCompetitionEntryById, GetLiftById } from '~/lib/types'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -81,7 +81,7 @@ export const calculateNewWilks = (
 
   // @ts-ignore
   let score = (600 / denominator) * weightLifted
-  return score.toFixed(2)
+  return Number(score.toFixed(2))
 }
 
 export const calculateDOTS = (

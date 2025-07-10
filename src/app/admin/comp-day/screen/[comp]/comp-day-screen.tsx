@@ -1,17 +1,18 @@
 'use client'
 
+
 import { useEffect, useRef, useState } from 'react'
 
 import Image from 'next/image'
 
 import { env } from '~/env'
 import { liftState, sortEntriesFilter } from '~/lib/comp-day'
-import { calculateDOTS } from '~/lib/dots'
+import { calculateDOTS, } from '~/lib/dots'
+import { calculateNewWilks } from '~/lib/wilks'
 import type { GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import Pusher from 'pusher-js'
-import Countdown from 'react-countdown'
 
 import Loading from './loading'
 
@@ -106,16 +107,16 @@ const CompDayScreen = ({
       }) => {
         console.log('update', data)
         if (data.timerStarted) {
-          countdownRef.current?.start()
+          // countdownRef.current?.start()
           return
         }
         if (data.timerReset) {
-          countdownRef.current?.stop()
+          // countdownRef.current?.stop()
           setDateNow(Date.now())
           return
         }
         if (data.timerStopped) {
-          countdownRef.current?.pause()
+          // countdownRef.current?.pause()
           return
         }
         setLiftName(data.lift)
@@ -174,11 +175,11 @@ const CompDayScreen = ({
     Number(lift?.weight),
     lift?.gender?.toLowerCase() === 'female',
   )
-  // const wilks = calculateNewWilks(
-  //   Number(lift?.userWeight),
-  //   Number(lift?.weight),
-  //   lift?.gender?.toLowerCase() === 'female',
-  // )
+  const wilks = calculateNewWilks(
+    Number(lift?.userWeight),
+    Number(lift?.weight),
+    lift?.gender?.toLowerCase() === 'female',
+  )
 
   // const countdownRef = useRef<any>()
   // // @ts-ignore
@@ -269,7 +270,7 @@ const CompDayScreen = ({
               <div className='relative flex w-full justify-center'>
                 <div className='font-extrabold'>{lift?.weight}kg</div>
                 <div className='absolute right-24 top-1/2 -translate-y-1/2 text-center text-xl text-muted-foreground'>
-                  DOTS: {dots}
+                  WILKS: {wilks}
                 </div>
               </div>
               <div className='relative flex w-full justify-center gap-24'>
