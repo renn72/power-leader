@@ -9,9 +9,8 @@ import { env } from '~/env'
 import Pusher from 'pusher-js'
 
 import { toast } from 'sonner'
-import { ScrollArea } from '~/components/ui/scroll-area'
 import { Table, TableBody } from '~/components/ui/table-scroll'
-import { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
+import type { GetCompetitionEntryById, GetCompetitionByUuid } from '~/lib/types'
 import CompTableHeader from './comp-table-header'
 import CompTableRow from './comp-table-row'
 

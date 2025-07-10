@@ -48,14 +48,6 @@ export default function Home() {
           </Link>
         </div>
 
-        <Link
-          href='/admin'
-          className=''
-        >
-          <Button className='bg-black text-slate-200 border-slate-200/20 border hover:text-black'>
-            Admin
-          </Button>
-        </Link>
       </div>
     </section>
   )

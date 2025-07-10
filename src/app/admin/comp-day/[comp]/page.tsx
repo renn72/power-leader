@@ -10,11 +10,10 @@ import ActionPanel from './_components/action-panel'
 import CompTable from './_components/comp-table'
 import CompTableSkeletion from './_components/comp-table-skeletion'
 import Header from './_components/header'
-import LifterInfo from './_components/lifter-info'
 import MainScreenControl from './_components/main-screen-control'
 import Signals from './_components/signals'
 
-import { GetCompetitionByUuid } from '~/lib/types'
+import type { GetCompetitionByUuid } from '~/lib/types'
 
 export const dynamic = 'force-dynamic'
 
