@@ -61,7 +61,7 @@ const CellBadge = ({
       <div className='text-xs text-muted-foreground'>{title}</div>
       {info && (
         <Badge className='flex w-[52px] items-center justify-center'>
-          {info}kg
+          {info === 'SHW' ? 'SHW' : `${info}kg`}
         </Badge>
       )}
     </div>

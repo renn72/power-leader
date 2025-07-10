@@ -734,28 +734,6 @@ export const compEntryRouter = createTRPCRouter({
         })
       }
       const weight = Number(input.weight)
-      const wc_female = competition.wc_female
-        ?.split('/')
-        .map((item) => Number(item))
-      const wc_male = competition.wc_male
-        ?.split('/')
-        .map((item) => Number(item))
-      let wc = ''
-      if (input?.gender?.toLowerCase() == 'female' && wc_female) {
-        wc =
-          wc_female
-            .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
-            .toString() + '-f'
-      } else {
-        if (wc_male && input?.gender?.toLowerCase() !== 'female') {
-          wc =
-            wc_male
-              .reduce((a, c) => (weight <= c && weight > a ? c : a), 0)
-              .toString() + '-m'
-        }
-      }
-
-      input.wc = wc == '0-f' || wc == '0-m' ? null : wc
       const { isFake, events, divisions, ...rest } = input
 
       const res = true

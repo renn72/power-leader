@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react'
 
-import Image from 'next/image'
-
 import { sortEntriesFilter } from '~/lib/comp-day'
 import { calculateDOTS } from '~/lib/dots'
 import { pusherClient } from '~/lib/pusher'
-import { GetCompetitionById } from '~/lib/types'
+import type { GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 
@@ -25,8 +23,6 @@ const CompDayScreen = ({
   const [index, setIndex] = useState<number | null | undefined>(null)
   const [nextIndex, setNextIndex] = useState('')
   const [round, setRound] = useState('')
-
-  // console.log({liftName, bracket, index, nextIndex, round})
 
   const ctx = api.useUtils()
 
@@ -115,12 +111,17 @@ const CompDayScreen = ({
         : liftName === 'bench'
           ? e?.benchPB
           : e?.deadliftPB
+    const rack = liftName === 'squat'
+        ? e?.squarRackHeight
+        : liftName === 'bench'
+          ? e?.benchRackHeight
+          : ''
     return {
       id: e.id,
       name: e.user?.name || '',
       lift: lift,
       pb: pb,
-      benchRackHeight: e?.benchRackHeight,
+      rack: rack,
     }
   })
 
@@ -135,21 +136,15 @@ const CompDayScreen = ({
   return (
     <div
       className={cn(
-        'dark relative grid h-dvh w-dvw grid-cols-5 overflow-hidden',
+        'dark relative grid h-dvh w-dvw grid-cols-4 overflow-hidden',
       )}
     >
-      <div className='col-span-3 mt-4 flex flex-col items-center gap-2'>
+      <div className='col-span-2 mt-4 flex flex-col items-center gap-2'>
         <div className='text-2xl font-bold text-muted-foreground'>
           Round: {round}
         </div>
         {bracketList?.map((entry, i) => {
-          const dots = calculateDOTS(
-            Number(entry.lift?.userWeight),
-            Number(entry.lift?.weight),
-            entry.lift?.gender === 'female',
-          )
-
-          const isPb = Number(entry?.lift?.weight) > Number(entry?.pb)
+          const isPb = entry.pb === null || entry.pb === '' ? false :  Number(entry?.lift?.weight) > Number(entry?.pb)
 
           const isOne = entry.lift?.isGoodOne
           const isTwo = entry.lift?.isGoodTwo
@@ -183,7 +178,7 @@ const CompDayScreen = ({
               />
               <div className='col-span-3 capitalize truncate'>{entry.name}</div>
               <div>{entry.lift?.weight}kg</div>
-              <div>{entry?.benchRackHeight}</div>
+              <div>{entry?.rack}</div>
               <div>
                 {isPb ? (
                   <div className='rounded-full h-6 w-6 text-base bg-green-500 text-black border-2 border-green-500 flex items-center justify-center'>

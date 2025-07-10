@@ -44,7 +44,8 @@
         "noUselessTernary": "off"
       },
       "suspicious": {
-        "noAssignInExpressions": "off"
+        "noAssignInExpressions": "off",
+        "noDoubleEquals": "off"
       }
 		}
 	},

@@ -18,5 +18,5 @@ export default function Admin() {
   if (user?.id === 230) router.push('/admin/weigh-in')
   if (user?.id === 231) router.push('/admin/comp-day/judge')
 
-  return <section className='mt-8 flex h-full grow flex-col gap-8'></section>
+  return <section className='mt-8 flex h-full grow flex-col gap-8'/>
 }

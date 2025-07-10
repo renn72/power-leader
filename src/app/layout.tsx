@@ -10,10 +10,6 @@ export const metadata = {
   title: 'Scoreboard',
   description: 'Scoreboard for a game',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
-  appleWebApp: {
-    title: 'Scoreboard',
-    statusBarStyle: 'black-translucent',
-  },
 }
 
 export default function RootLayout({
@@ -36,7 +32,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <main className={`sm:min-h-screen w-full`}>
+              <main className='sm:min-h-screen w-full'>
                 <div className='sm:min-h-[calc(100vh-7.8rem)] w-full'>
                   {children}
                 </div>

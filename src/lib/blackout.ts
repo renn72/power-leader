@@ -72,7 +72,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 35,
 		sex: 'm',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'riley.leitch@gmail.com',
@@ -162,7 +162,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 26,
 		sex: 'm',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'callum.robertson@gmail.com',
@@ -267,7 +267,7 @@ export const users = [
 		div: 'Masters M2 50-59 yrs',
 		age: 52,
 		sex: 'm',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'christopher.demarte@gmail.com',
@@ -372,7 +372,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 36,
 		sex: 'm',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'mark.gilbert@gmail.com',
@@ -642,7 +642,7 @@ export const users = [
 		div: 'Masters M1 40-49 yrs',
 		age: 44,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'brooke.rice@gmail.com',
@@ -657,7 +657,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 33,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'toni.perkins@gmail.com',
@@ -732,7 +732,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 35,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'bronwyn.bates@gmail.com',
@@ -777,7 +777,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 30,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'holly.miller@gmail.com',
@@ -792,7 +792,7 @@ export const users = [
 		div: 'Sub-Junior 17-19 yrs',
 		age: 19,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'rosie.reed@gmail.com',
@@ -822,7 +822,7 @@ export const users = [
 		div: 'Open 24-39 yrs',
 		age: 29,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'alison.dann@gmail.com',
@@ -927,7 +927,7 @@ export const users = [
 		div: 'Masters M2 50-59 yrs',
 		age: 58,
 		sex: 'f',
-		equip: 'unequipped',
+		equip: 'raw',
 	},
 	{
 		email: 'gina.oliver@gmail.com',

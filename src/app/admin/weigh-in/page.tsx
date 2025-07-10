@@ -4,19 +4,13 @@ import { api } from '~/trpc/react'
 
 import WeighInForm from './_components/form'
 import Entry from './_components/entry'
+import RandomWeighIn from './_components/random-weigh-in'
 
 import {
   ToggleGroup,
   ToggleGroupItem,
 } from '~/components/ui/toggle-group'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
 import {
   Sheet,
   SheetContent,
@@ -73,6 +67,7 @@ const WeighIn = () => {
             <ToggleGroupItem value='notWeight'>Not Weighed In</ToggleGroupItem>
             <ToggleGroupItem value='weight'>Weighed In</ToggleGroupItem>
           </ToggleGroup>
+          <RandomWeighIn competition={competition} />
 
         </div>
         {competition && (

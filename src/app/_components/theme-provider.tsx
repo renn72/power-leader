@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
-import { type ThemeProviderProps } from 'next-themes/dist/types'
+import type {  ThemeProviderProps } from 'next-themes/dist/types'
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   // Ensure that the component renders the same content server-side as it does during the initial client-side render to prevent a hydration mismatch.
