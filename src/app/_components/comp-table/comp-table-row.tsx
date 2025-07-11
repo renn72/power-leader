@@ -1,9 +1,23 @@
 'use client'
 
+import { useState } from 'react'
+
 import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
 import { TableCell as Cell, TableRow } from '~/components/ui/table-scroll'
 import type { GetCompetitionByUuid, GetCompetitionEntryById } from '~/lib/types'
 import { cn } from '~/lib/utils'
+import { api } from '~/trpc/react'
+
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
 
 import BenchRackHeight from './_cells/bench-rack-height'
 import Lift from './_cells/lift'
@@ -182,6 +196,46 @@ const CompTableRow = ({
 			)?.weight || ''
 		: ''
 
+	const ctx = api.useUtils()
+	const [userName, setUserName] = useState(lifter.user?.name || '')
+	const [isOpenUserName, setIsOpenUserName] = useState(false)
+
+	const [userGender, setUserGender] = useState(lifter.user?.gender || '')
+	const [isOpenUserGender, setIsOpenUserGender] = useState(false)
+
+	const [userEquip, setUserEquip] = useState(lifter.equipment || '')
+	const [isOpenUserEquip, setIsOpenUserEquip] = useState(false)
+
+	const [userWC, setUserWC] = useState(lifter.wc || '')
+	const [isOpenUserWC, setIsOpenUserWC] = useState(false)
+
+	const { mutate: updateName } = api.compEntry.updateUserName.useMutation({
+		onSettled: () => {
+			ctx.competition.getCompetitionByUuid.refetch()
+			setIsOpenUserName(false)
+		},
+	})
+	const { mutate: updateGender } = api.compEntry.updateUserGender.useMutation({
+		onSettled: () => {
+			ctx.competition.getCompetitionByUuid.refetch()
+			setIsOpenUserGender(false)
+		},
+	})
+	const { mutate: updateEquipment } = api.compEntry.updateEquipment.useMutation(
+		{
+			onSettled: () => {
+				ctx.competition.getCompetitionByUuid.refetch()
+				setIsOpenUserEquip(false)
+			},
+		},
+	)
+	const { mutate: updateWC } = api.compEntry.updateWC.useMutation({
+		onSettled: () => {
+			ctx.competition.getCompetitionByUuid.refetch()
+			setIsOpenUserWC(false)
+		},
+	})
+
 	return (
 		<TableRow
 			key={lifter.id}
@@ -190,25 +244,177 @@ const CompTableRow = ({
 				'py-0',
 			)}
 		>
-			<Cell className='p-0 tracking-tightest xl:tracking-tight  py-0 xl:p-2 truncate max-w-[80px] xl:max-w-[155px] capitalize h-8 lg:h-12'>
-				{lifterName}
-			</Cell>
-			<Cell
-				className={cn(
-					'p-0  h-8 xl:h-10 py-0 xl:p-2 text-center text-sm ',
-					gender === 'm' ? 'text-sky-400' : 'text-rose-400',
-				)}
+			<Dialog
+				open={isOpenUserName}
+				onOpenChange={(open) => {
+					setIsOpenUserName(open)
+				}}
 			>
-				{gender}
-			</Cell>
-			<Cell className='p-0  h-8 xl:h-10 py-0 xl:p-2  text-center text-sm'>
-				{lifterEquip}
-			</Cell>
-			<Cell className='p-0  h-8 xl:h-10 py-0 xl:p-2'>
-				<Badge className='w-9  xl:w-12 items-center justify-center'>
-					{lifterWc === 'SHWkg' ? 'SHW' : lifterWc}
-				</Badge>
-			</Cell>
+				<DialogTrigger asChild>
+					<Cell className='p-0 tracking-tightest xl:tracking-tight  py-0 xl:p-2 truncate max-w-[80px] xl:max-w-[155px] capitalize h-8 lg:h-12 cursor-pointer'>
+						{lifterName}
+					</Cell>
+				</DialogTrigger>
+				<DialogContent
+					onOpenAutoFocus={(e) => {
+						e.preventDefault()
+					}}
+				>
+					<DialogHeader>
+						<DialogTitle>Update Name</DialogTitle>
+						<DialogDescription>new name</DialogDescription>
+					</DialogHeader>
+					<Input
+						value={userName}
+						onChange={(e) => {
+							setUserName(e.target.value)
+						}}
+					/>
+					<Button
+						className='w-full'
+						onClick={() => {
+							if (!userName) return
+							if (!lifter.user?.id) return
+							updateName({
+								id: lifter.user.id,
+								userName: userName,
+							})
+						}}
+					>
+						Update
+					</Button>
+				</DialogContent>
+			</Dialog>
+			<Dialog
+				open={isOpenUserGender}
+				onOpenChange={(open) => {
+					setIsOpenUserGender(open)
+				}}
+			>
+				<DialogTrigger asChild>
+					<Cell
+						className={cn(
+							'p-0  h-8 xl:h-10 py-0 xl:p-2 text-center text-sm cursor-pointer',
+							gender === 'm' ? 'text-sky-400' : 'text-rose-400',
+						)}
+					>
+						{gender}
+					</Cell>
+				</DialogTrigger>
+				<DialogContent
+					onOpenAutoFocus={(e) => {
+						e.preventDefault()
+					}}
+				>
+					<DialogHeader>
+						<DialogTitle>Update gender</DialogTitle>
+						<DialogDescription>new gender</DialogDescription>
+					</DialogHeader>
+					<Input
+						value={userGender}
+						onChange={(e) => {
+							setUserGender(e.target.value)
+						}}
+					/>
+					<Button
+						className='w-full'
+						onClick={() => {
+							if (!userGender) return
+							if (!lifter.user?.id) return
+							updateGender({
+								userGender: userGender,
+								userId: lifter.user.id,
+							})
+						}}
+					>
+						Update
+					</Button>
+				</DialogContent>
+			</Dialog>
+			<Dialog
+				open={isOpenUserEquip}
+				onOpenChange={(open) => {
+					setIsOpenUserEquip(open)
+				}}
+			>
+				<DialogTrigger asChild>
+					<Cell className='p-0  h-8 xl:h-10 py-0 xl:p-2  text-center text-sm cursor-pointer'>
+						{lifterEquip}
+					</Cell>
+				</DialogTrigger>
+				<DialogContent
+					onOpenAutoFocus={(e) => {
+						e.preventDefault()
+					}}
+				>
+					<DialogHeader>
+						<DialogTitle>Update equipment</DialogTitle>
+						<DialogDescription>new equipment</DialogDescription>
+					</DialogHeader>
+					<Input
+						value={userEquip}
+						onChange={(e) => {
+							setUserEquip(e.target.value)
+						}}
+					/>
+					<Button
+						className='w-full'
+						onClick={() => {
+							if (!userEquip) return
+							if (!lifter.user?.id) return
+							updateEquipment({
+								equipment: userEquip,
+								userId: lifter.user.id,
+							})
+						}}
+					>
+						Update
+					</Button>
+				</DialogContent>
+			</Dialog>
+			<Dialog
+				open={isOpenUserWC}
+				onOpenChange={(open) => {
+					setIsOpenUserWC(open)
+				}}
+			>
+				<DialogTrigger asChild>
+					<Cell className='p-0  h-8 xl:h-10 py-0 xl:p-2 cursor-pointer'>
+						<Badge className='w-9  xl:w-12 items-center justify-center'>
+							{lifterWc === 'SHWkg' ? 'SHW' : lifterWc}
+						</Badge>
+					</Cell>
+				</DialogTrigger>
+				<DialogContent
+					onOpenAutoFocus={(e) => {
+						e.preventDefault()
+					}}
+				>
+					<DialogHeader>
+						<DialogTitle>Update wc</DialogTitle>
+						<DialogDescription>new wc</DialogDescription>
+					</DialogHeader>
+					<Input
+						value={userWC}
+						onChange={(e) => {
+							setUserWC(e.target.value)
+						}}
+					/>
+					<Button
+						className='w-full'
+						onClick={() => {
+							if (!userWC) return
+							if (!lifter.user?.id) return
+              updateWC({
+                wc: userWC,
+                userId: lifter.user.id,
+              })
+						}}
+					>
+						Update
+					</Button>
+				</DialogContent>
+			</Dialog>
 			{lifterSquatOneLift ? (
 				<>
 					<SquatRackHeight height={lifterSquatRackHeight} entryId={lifterId} />
