@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server'
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc'
-import { lift } from '~/server/db/schema'
+import { lift, compEntry } from '~/server/db/schema'
+
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 
@@ -86,6 +87,24 @@ export const liftRouter = createTRPCRouter({
             eq(lift.liftNumber, input.liftNumber),
           ),
       })
+
+      if (input.liftNumber === 1) {
+        if (input.lift === 'squat') {
+          await ctx.db.update(compEntry).set({
+            squatOpener: input.weight,
+          }).where(eq(compEntry.id, input.compEntryId))
+        }
+        if (input.lift === 'bench') {
+          await ctx.db.update(compEntry).set({
+            benchOpener: input.weight,
+          }).where(eq(compEntry.id, input.compEntryId))
+        }
+        if (input.lift === 'deadlift') {
+          await ctx.db.update(compEntry).set({
+            deadliftOpener: input.weight,
+          }).where(eq(compEntry.id, input.compEntryId))
+        }
+      }
 
       if (oldLift?.id) {
         const res = await ctx.db
