@@ -83,9 +83,12 @@ const types = [
 	'squat-bracket',
 	'bench-bracket',
 	'dead-bracket',
-	'board-teen',
-	'board-open',
-	'board-master',
+	'board-teen-b',
+	'board-teen-g',
+	'board-open-b',
+	'board-open-g',
+	'board-master-b',
+	'board-master-g',
 	'board-results',
 ]
 
@@ -722,10 +725,6 @@ const Screens = () => {
 	const gender = competition.compDayInfo.resultGender
 	const wc = competition.compDayInfo.resultWC
 
-	console.log('competition', competition)
-	console.log('gender', gender)
-	console.log('wc', wc)
-
 	const selectLifts = competition.entries
 		.filter((entry) => gender === '' || entry.gender === gender)
 		.filter((entry) => wc === '' || entry.wc === wc)
@@ -753,9 +752,6 @@ const Screens = () => {
 		.map((entry) => entry.wc || '')
 		.filter((wc, i, arr) => arr.indexOf(wc) === i)
 		.sort((a, b) => Number(a) - Number(b))
-
-  console.log('lifts', selectLifts)
-	console.log('wc', wcs)
 
 	return (
 		<div className='max-w-screen-xl mx-auto flex flex-col my-2'>

@@ -40,18 +40,8 @@ const TH = ({
     <TableHead className='px-2 h-6 xl:h-10 '>
       <DropdownMenu>
         <DropdownMenuTrigger
-          disabled
           className='z-999 cursor-pointer capitalize hover:text-primary'>{`${lift.slice(0,1)} ${round}`}</DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel className='cursor-pointer hover:bg-muted hover:text-primary'>
-            <CompTableHeaderBracket
-              lifters={lifters}
-              round={round}
-              lift={lift}
-              bracket={bracket}
-            />
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
           <DropdownMenuLabel
             className='cursor-pointer hover:bg-muted hover:text-primary'
             onClick={() => handleWieght(lift, round)}

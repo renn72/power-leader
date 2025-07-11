@@ -126,7 +126,7 @@ const LeaderBoardResults = ({
 			if (Number.isNaN(getTotalWilks(a))) return 1
 			if (getTotalWilks(b) == 0) return -1
 			if (Number.isNaN(getTotalWilks(b))) return -1
-			return getTotalWilks(a) - getTotalWilks(b)
+			return getTotalWilks(b) - getTotalWilks(a)
 		})
 		.slice(0, 3)
 
