@@ -8,7 +8,23 @@ import { api } from '~/trpc/react'
 import { toast } from 'sonner'
 
 export const dynamic = 'force-dynamic'
-
+const u = [
+	{
+		email: 'connor.haley@gmail.com',
+		name: 'connor haley',
+		category: 'open',
+		isBench: false,
+		isDeadlift: false,
+		isSquat: false,
+		isPushPull: false,
+		is3Lift: true,
+		wc: 90,
+		div: 'Junior 20-23 yrs',
+		age: 22,
+		sex: 'm',
+		equip: 'raw',
+	},
+]
 const AddBlackoutUsers = ({
 	competition,
 	className,
@@ -40,7 +56,7 @@ const AddBlackoutUsers = ({
 			name: event.name,
 		}))
 
-		for (const user of users) {
+		for (const user of u) {
 			const bench = events.find(
 				(e) => e.name.toLowerCase() === 'bench only',
 			)?.id
