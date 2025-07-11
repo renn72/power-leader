@@ -50,7 +50,7 @@ const CompTable = ({
     const channel = pusherClient.subscribe('competition-' + competitonUuid)
 
     channel.bind('update', () => {
-      ctx.competition.getCompetitionByUuid.refetch()
+      ctx.competition.invalidate()
     })
     channel.bind(
       'judge',

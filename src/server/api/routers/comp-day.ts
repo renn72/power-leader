@@ -134,8 +134,6 @@ export const competitionDayRouter = createTRPCRouter({
         })
       }
 
-      console.log('input', input)
-
       const res = await ctx.db
         .update(compDayInfo)
         .set({

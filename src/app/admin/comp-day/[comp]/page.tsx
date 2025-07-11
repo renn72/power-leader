@@ -69,7 +69,7 @@ const Competition = ({
   )
 
   return (
-    <div className='relative flex flex-col sm:items-center gap-1 xl:gap-2 w-full'>
+    <div className='relative flex flex-col sm:items-center gap-1 xl:gap-2 w-full px-2'>
       <Header competition={competition} />
       <Card className='w-full max-w-full'>
         <CardContent className='flex flex-col gap-1 xl:gap-2 px-2 py-2 w-full max-w-full'>
@@ -92,16 +92,19 @@ const Competition = ({
               uuid={competition.uuid || ''}
             />
           </div>
-          <ActionPanel
-            competition={competition}
-            lift={lift}
-            bracket={bracket}
-            round={round}
-            index={index}
-            setLift={setLift}
-            setBracket={setBracket}
-            setRound={setRound}
-          />
+          {
+          // <ActionPanel
+          //   competition={competition}
+          //   lift={lift}
+          //   bracket={bracket}
+          //   round={round}
+          //   index={index}
+          //   setLift={setLift}
+          //   setBracket={setBracket}
+          //   setRound={setRound}
+          // />
+
+          }
           <CompTable
             competitonUuid={competitonUuid}
             lifters={lifters}

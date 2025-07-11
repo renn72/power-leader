@@ -186,8 +186,6 @@ const CompTableRow = ({
 			)?.weight || ''
 		: ''
 
-  console.log({lifterSquatOneLift, lifterSquatTwoLift, lifterSquatThreeLift, lifterSquatFourLift})
-
 	return (
 		<TableRow
 			key={lifter.id}
