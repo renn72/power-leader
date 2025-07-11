@@ -90,7 +90,7 @@ const CompDay = () => {
             size='lg'
             variant='secondary'
           >
-            Judge 1
+            Judge Middle
           </Button>
         </Link>
         <Link href={`comp-day/${compId}/judge-2`}>
@@ -98,7 +98,7 @@ const CompDay = () => {
             size='lg'
             variant='secondary'
           >
-            Judge 2
+            Judge Left
           </Button>
         </Link>
         <Link href={`comp-day/${compId}/judge-3`}>
@@ -106,7 +106,7 @@ const CompDay = () => {
             size='lg'
             variant='secondary'
           >
-            Judge 3
+            Judge Right
           </Button>
         </Link>
       </div>
