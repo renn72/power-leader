@@ -41,6 +41,8 @@ export const competitionDayRouter = createTRPCRouter({
         resultGender: z.string().optional(),
         resultWC: z.string().optional(),
         resultDiv: z.string().optional(),
+        resultsReveal: z.string().optional(),
+        resultsLift: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -85,6 +87,8 @@ export const competitionDayRouter = createTRPCRouter({
           resultGender: input.resultGender,
           resultWC: input.resultWC,
           resultDiv: input.resultDiv,
+          resultsReveal: input.resultsReveal,
+          resultsLift: input.resultsLift,
         })
         .where(eq(compDayInfo.compId, input.id))
         .returning({
@@ -94,8 +98,6 @@ export const competitionDayRouter = createTRPCRouter({
           index: compDayInfo.index,
           nextIndex: compDayInfo.nextIndex,
         })
-
-      console.log('res', res)
 
       const info = res?.[0]
 

@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Button } from '~/components/ui/button'
 import { env } from '~/env'
 import { sortEntriesFilter } from '~/lib/comp-day'
-import { GetCompetitionById } from '~/lib/types'
+import type { GetCompetitionById } from '~/lib/types'
 import { cn } from '~/lib/utils'
 import { api } from '~/trpc/react'
 import {

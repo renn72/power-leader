@@ -1,0 +1,1 @@
+ALTER TABLE `pb_comp_day_info` ADD `results_lift` text;

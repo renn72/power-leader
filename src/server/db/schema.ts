@@ -460,6 +460,8 @@ export const compDayInfo = createTable(
     resultGender: text('result_gender'),
     resultWC: text('result_wc'),
     resultAge: text('result_age'),
+    resultsReveal: text('results_reveal'),
+    resultsLift: text('results_lift'),
     screen1: text('screen1'),
     screen1Size: text('screen1_size'),
     screen2: text('screen2'),
