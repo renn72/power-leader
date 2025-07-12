@@ -50,6 +50,15 @@ const Screen = ({ screen, screenSize, competition } : { screen: string | null, s
         {screen === 'dead-bracket' ? (
           <DeadBracket competition={competition} />
         ) : null}
+        {screen === 'board-all' ? (
+          <LeaderBoard
+            competition={competition}
+            table={''}
+            gender={''}
+            wc={''}
+            isHeader={true}
+          />
+        ) : null}
         {screen === 'board-teen-b' ? (
           <LeaderBoard
             competition={competition}

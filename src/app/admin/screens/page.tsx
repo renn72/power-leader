@@ -83,6 +83,7 @@ const types = [
 	'squat-bracket',
 	'bench-bracket',
 	'dead-bracket',
+  'board-all',
 	'board-teen-b',
 	'board-teen-g',
 	'board-open-b',
