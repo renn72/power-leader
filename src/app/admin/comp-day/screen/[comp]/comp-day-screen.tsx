@@ -233,7 +233,7 @@ const CompDayScreen = ({
                   <div
                     key={l.id}
                     className={cn(
-                      'grid grid-cols-4 place-items-center text-3xl font-semibold',
+                      'grid grid-cols-4 place-items-center text-3xl font-semibold w-[500px]',
                       s.isGood ? '' : 'text-muted-foreground',
                     )}
                   >
